@@ -63,18 +63,24 @@ document.addEventListener("DOMContentLoaded", function () {
       <h2>${question.question}</h2>
 
       <div class="choices">
-        ${question.choices
-          .map(
-            (choice, index) => `
-              <button
-                class="choice-button"
-                data-index="${index}"
-              >
-                ${choice}
-              </button>
-            `
-          )
-          .join("")}
+${question.choices
+  .map(
+    (choice, index) => `
+      <button
+        class="choice-button"
+        data-index="${index}"
+      >
+        <span class="choice-label">
+          ${String.fromCharCode(65 + index)}
+        </span>
+
+        <span class="choice-text">
+          ${choice}
+        </span>
+      </button>
+    `
+  )
+  .join("")}
       </div>
 
       <div id="answer-area"></div>
