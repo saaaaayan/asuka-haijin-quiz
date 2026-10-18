@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
     quizCard.innerHTML = `
       <div class="question-meta">
         <span>
-          第${currentQuestionIndex + 1}問 / ${quizQuestions.length}問
+          第${currentQuestionIndex + 1}問 / 全${quizQuestions.length}問
         </span>
 
         <span class="category">
