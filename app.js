@@ -1,4 +1,13 @@
+const SUPABASE_URL = "https://eiseszhremqmeodxbcuc.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_1mtFdVK6HheU4pVZ7D2wxg_7tb_9PDO";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
 document.addEventListener("DOMContentLoaded", function () {
+  ensureAnonymousUser();
   const startButton = document.querySelector(".start-button");
   const quizCard = document.querySelector(".quiz-card");
 
@@ -259,3 +268,33 @@ document.addEventListener("DOMContentLoaded", function () {
     return array;
   }
 });
+
+async function ensureAnonymousUser() {
+  const {
+    data: { session },
+    error: sessionError
+  } = await supabaseClient.auth.getSession();
+
+  if (sessionError) {
+    console.error("セッション確認エラー:", sessionError);
+    return;
+  }
+
+  if (session) {
+    console.log("すでに匿名ログイン済み:", session.user.id);
+    return;
+  }
+
+  const { data, error } =
+    await supabaseClient.auth.signInAnonymously();
+
+  if (error) {
+    console.error("匿名ログインエラー:", error);
+    return;
+  }
+
+  console.log(
+    "匿名ログイン成功:",
+    data.user.id
+  );
+}
