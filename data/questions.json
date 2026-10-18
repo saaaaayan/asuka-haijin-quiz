@@ -66,56 +66,2313 @@
   },
   {
     "id": 4,
-  "category": "状態異常・速度",
-  "difficulty_author": 5,
-  "type": "multiple",
-  "instruction": "正しいものをすべて選べ",
-  "question": "すばやさの種の仕様について、正しいものをすべて選べ。",
-  "choices": [
-    "1個目を飲むと倍速になる。",
-    "倍速中に2個目を飲むと3倍速になる。",
-    "3倍速中にさらに飲むと4倍速になる。",
-    "倍速中に2個目を飲むタイミングを遅らせることで、高速状態でいられる総時間を伸ばせる。"
-  ],
-  "answer": [
-    0,
-    1,
-    3
-  ],
-  "explanation": "A・B・Dが正しい。1個目で倍速、倍速中の2個目で3倍速になるが、4倍速にはならない。また、2個目を飲むと効果時間のカウントがリセットされるため、飲むタイミングを遅らせることで高速状態でいられる総時間を伸ばせる。",
-  "tags": [
-    "すばやさの種",
-    "倍速",
-    "3倍速",
-    "ターン処理"
-  ],
-  "verification": "confirmed"
-},
-{
-  "id": 5,
-  "category": "複合仕様",
-  "difficulty_author": 5,
-  "type": "multiple",
-  "instruction": "間違っているものをすべて選べ",
-  "question": "次の記述のうち、間違っているものをすべて選べ。",
-  "choices": [
-    "倍速のモンスターを封印すると、等速になる。",
-    "封印すると、すでに付与されている鈍足状態も解除される。",
-    "高とび草を飲んだ場合、必ず別のマスへ移動する。",
-    "識別の壺の中に、未識別のアイテムが存在する状態は作りうる。"
-  ],
-  "answer": [
-    1,
-    2
-  ],
-  "explanation": "B・Cが間違い。封印によって倍速モンスターは等速になるが、すでに付与されている鈍足状態そのものまで解除されるわけではない。また、高とび草は有効な着地点が存在しなければ、高とびの演出だけ発生して移動しないことがある。識別の壺の中に未識別アイテムが存在する状態も作ることができる。",
-  "tags": [
-    "封印",
-    "鈍足",
-    "高とび草",
-    "識別の壺",
-    "例外仕様"
-  ],
-  "verification": "confirmed"
-}
+    "category": "状態異常・速度",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "すばやさの種の仕様について、正しいものをすべて選べ。",
+    "choices": [
+      "1個目を飲むと倍速になる。",
+      "倍速中に2個目を飲むと3倍速になる。",
+      "3倍速中にさらに飲むと4倍速になる。",
+      "倍速中に2個目を飲むタイミングを遅らせることで、高速状態でいられる総時間を伸ばせる。"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explanation": "A・B・Dが正しい。1個目で倍速、倍速中の2個目で3倍速になるが、4倍速にはならない。また、2個目を飲むと効果時間のカウントがリセットされるため、飲むタイミングを遅らせることで高速状態でいられる総時間を伸ばせる。",
+    "tags": [
+      "すばやさの種",
+      "倍速",
+      "3倍速",
+      "ターン処理"
+    ],
+    "verification": "confirmed"
+  },
+  {
+    "id": 5,
+    "category": "複合仕様",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "間違っているものをすべて選べ",
+    "question": "次の記述のうち、間違っているものをすべて選べ。",
+    "choices": [
+      "倍速のモンスターを封印すると、等速になる。",
+      "封印すると、すでに付与されている鈍足状態も解除される。",
+      "高とび草を飲んだ場合、必ず別のマスへ移動する。",
+      "識別の壺の中に、未識別のアイテムが存在する状態は作りうる。"
+    ],
+    "answer": [
+      1,
+      2
+    ],
+    "explanation": "B・Cが間違い。封印によって倍速モンスターは等速になるが、すでに付与されている鈍足状態そのものまで解除されるわけではない。また、高とび草は有効な着地点が存在しなければ、高とびの演出だけ発生して移動しないことがある。識別の壺の中に未識別アイテムが存在する状態も作ることができる。",
+    "tags": [
+      "封印",
+      "鈍足",
+      "高とび草",
+      "識別の壺",
+      "例外仕様"
+    ],
+    "verification": "confirmed"
+  },
+  {
+    "id": 6,
+    "category": "杖・反射",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "壁に向かって杖を振ったとき、光弾が壁で反射する条件として正しいものは？",
+    "choices": [
+      "縦横方向に振ったときだけ反射する",
+      "斜め方向に振ったときだけ反射する",
+      "方向に関係なく必ず1回反射する",
+      "祝福された杖だけ反射する"
+    ],
+    "answer": 1,
+    "explanation": "杖の光弾が壁で反射するのは斜めに振った場合のみ。反射回数も1回まで。",
+    "tags": [
+      "杖",
+      "反射",
+      "壁"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/12.html"
+  },
+  {
+    "id": 7,
+    "category": "杖・反射",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "壁の角に向かって斜めに杖を振った。光弾はアスカから見てどちらへ反射する？",
+    "choices": [
+      "右",
+      "左",
+      "後方",
+      "ランダム"
+    ],
+    "answer": 1,
+    "explanation": "壁の角に杖を振った場合、光弾はアスカから見て左方向へ反射する。",
+    "tags": [
+      "杖",
+      "反射",
+      "角"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/12.html"
+  },
+  {
+    "id": 8,
+    "category": "杖・反射",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "モンスターAが反射した杖の光弾がモンスターBに当たった。この光弾の『使用者』として扱われるのは誰？",
+    "choices": [
+      "アスカ",
+      "最初に光弾を反射したモンスターA",
+      "命中したモンスターB",
+      "使用者なし"
+    ],
+    "answer": 1,
+    "explanation": "モンスターが反射した光弾が別のモンスターに当たると、反射したモンスターが杖を振ったものとして処理される。",
+    "tags": [
+      "杖",
+      "反射",
+      "処理"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/12.html"
+  },
+  {
+    "id": 9,
+    "category": "杖・反射",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "一度モンスターに反射された杖の光弾が、さらに杖反射能力を持つ別のモンスターへ飛んだ。どうなる？",
+    "choices": [
+      "もう一度反射する",
+      "反射せず命中する",
+      "光弾が消える",
+      "50%で再反射する"
+    ],
+    "answer": 1,
+    "explanation": "一度モンスターに反射された光弾は、通常なら杖を反射するモンスターでも再反射できない。",
+    "tags": [
+      "杖",
+      "反射",
+      "再反射"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/12.html"
+  },
+  {
+    "id": 10,
+    "category": "杖・ふきとばし",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "間違っているものをすべて選べ",
+    "question": "ふきとばしの杖について、間違っているものをすべて選べ。",
+    "choices": [
+      "モンスターは10マス先まで吹き飛ばせる",
+      "アイテムや罠も10マス先まで吹き飛ばせる",
+      "階段は水路を越えて吹き飛ばせる",
+      "階段は遮るものがある場所まで吹き飛ぶ"
+    ],
+    "answer": [
+      2
+    ],
+    "explanation": "Cが間違い。モンスター・アイテム・罠は10マス先まで。階段は遮蔽物まで移動するが、水路を越えて吹き飛ばすことはできない。",
+    "tags": [
+      "ふきとばしの杖",
+      "階段",
+      "水路"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/12.html"
+  },
+  {
+    "id": 11,
+    "category": "杖・爆弾",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "ばくだんの杖で爆弾状態になった対象について、正しいものをすべて選べ。",
+    "choices": [
+      "爆弾状態のモンスターを封印すると爆発しない",
+      "爆弾状態の封印アスカは爆発する",
+      "爆弾状態のモンスターの爆発で敵を倒すとアスカに経験値が入る",
+      "爆弾状態のアスカの爆発で敵を倒すと経験値が入る"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explanation": "封印された爆弾モンスターは爆発しないが、封印アスカは爆発する。またモンスター爆発による撃破ではアスカに経験値は入らない一方、アスカ自身の爆発なら経験値を得る。",
+    "tags": [
+      "ばくだんの杖",
+      "封印",
+      "経験値"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/12.html"
+  },
+  {
+    "id": 12,
+    "category": "杖・場所がえ",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "水路上のモンスターと場所がえし、元のモンスター位置にアスカがそのまま着地できない場合、代替着地点は何に従って決まる？",
+    "choices": [
+      "アイテム落下順",
+      "モンスター落下順",
+      "高とびの着地点優先順位",
+      "完全ランダム"
+    ],
+    "answer": 1,
+    "explanation": "場所がえ先にアスカが落下できない場合は、モンスター落下順に従って着地点が決まる。",
+    "tags": [
+      "場所がえの杖",
+      "水路",
+      "モンスター落下順"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/12.html"
+  },
+  {
+    "id": 13,
+    "category": "杖・引き寄せ",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "間違っているものをすべて選べ",
+    "question": "引き寄せの杖について、間違っているものをすべて選べ。",
+    "choices": [
+      "モンスター・アイテム・罠・階段をアスカの一歩手前まで引き寄せられる",
+      "階段も水路越しに引き寄せられる",
+      "杖そのものを投げた場合でもアイテムや罠を引き寄せられる",
+      "部屋の角を越えて対象を移動させることがある"
+    ],
+    "answer": [
+      1,
+      2
+    ],
+    "explanation": "階段は水路を越えて引き寄せられない。また引き寄せの杖を投げた場合、モンスターは引き寄せるがアイテム・罠には当たらない。角越え移動は可能。",
+    "tags": [
+      "引き寄せの杖",
+      "水路",
+      "投擲"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/12.html"
+  },
+  {
+    "id": 14,
+    "category": "杖・引き寄せ",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "未発見のワナを挟んだ先に階段がある。引き寄せの杖を振った場合の挙動として正しいものは？",
+    "choices": [
+      "光弾が未発見ワナで止まる",
+      "光弾も階段もワナを完全に無視する",
+      "光弾は通過するが、引き寄せられた階段はワナの位置で止まる",
+      "未発見ワナそのものが引き寄せられる"
+    ],
+    "answer": 2,
+    "explanation": "不可視のワナは光弾を通すが、引き寄せられた階段は不可視のワナに引っかかって止まる。",
+    "tags": [
+      "引き寄せの杖",
+      "未発見ワナ",
+      "階段"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/12.html"
+  },
+  {
+    "id": 15,
+    "category": "杖・一時しのぎ",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "反射などを利用してアスカ自身に一時しのぎの杖の効果を当てた場合、どうなる？",
+    "choices": [
+      "階段上へワープするだけ",
+      "階段上へワープし、かなしばり状態になる",
+      "ランダムな部屋へ高とびする",
+      "その場でかなしばりになるだけ"
+    ],
+    "answer": 1,
+    "explanation": "アスカ自身に一時しのぎの効果が入ると、階段上へワープしてかなしばり状態になる。",
+    "tags": [
+      "一時しのぎの杖",
+      "反射",
+      "かなしばり"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/12.html"
+  },
+  {
+    "id": 16,
+    "category": "杖・いかずち",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "間違っているものをすべて選べ",
+    "question": "いかずちの杖の電撃が伝導しうる条件として間違っているものをすべて選べ。",
+    "choices": [
+      "ぬれた床",
+      "水路",
+      "帯電したモンスターに隣接するモンスター",
+      "乾いた床だけでつながった経路"
+    ],
+    "answer": [
+      3
+    ],
+    "explanation": "Dが間違い。電撃はぬれた床・水路を伝い、帯電したモンスターから隣接モンスターへも伝導する。乾いた床だけでは伝わらない。",
+    "tags": [
+      "いかずちの杖",
+      "水路",
+      "ぬれた床",
+      "伝導"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/12.html"
+  },
+  {
+    "id": 17,
+    "category": "杖・火ばしら",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "火ばしらの杖について、正しいものをすべて選べ。",
+    "choices": [
+      "倍速状態のアスカでは、敵が火柱内を進む間に受けるダメージを増やせることがある",
+      "倍速モンスターは火柱内でも1ターンに2マス移動する",
+      "倍速モンスターは火柱内では移動が擬似的に等速になる",
+      "火柱内でアスカに隣接した倍速モンスターは2回攻撃することがある"
+    ],
+    "answer": [
+      0,
+      2,
+      3
+    ],
+    "explanation": "火柱内では倍速モンスターの移動は1ターン1マスになるが、攻撃回数まで等速化するわけではない。アスカ側が倍速なら火柱ダメージを稼ぎやすい。",
+    "tags": [
+      "火ばしらの杖",
+      "倍速",
+      "ターン処理"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/12.html"
+  },
+  {
+    "id": 18,
+    "category": "草・共通仕様",
+    "difficulty_author": 3,
+    "type": "single",
+    "question": "草を飲んだとき、草固有の効果とは別に共通して起こることは？",
+    "choices": [
+      "満腹度が5%回復する",
+      "HPが5回復する",
+      "最大HPが1増える",
+      "ちからが1回復する"
+    ],
+    "answer": 0,
+    "explanation": "アスカではすべての草を飲むと満腹度が5%回復する。",
+    "tags": [
+      "草",
+      "満腹度"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/13.html"
+  },
+  {
+    "id": 19,
+    "category": "草・キグニ族の種",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "キグニ族の種をモンスターに投げた場合について、正しいものをすべて選べ。",
+    "choices": [
+      "アスカ以外のモンスターや店主も攻撃対象になる",
+      "防御力が0になる",
+      "攻撃力が1.5倍になる",
+      "特技を積極的に使うようになる"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "キグニ状態のモンスターは他モンスターや店主も攻撃し、防御0・攻撃1.5倍となる一方、特技は使わなくなる。",
+    "tags": [
+      "キグニ族の種",
+      "モンスター",
+      "状態異常"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/13.html"
+  },
+  {
+    "id": 20,
+    "category": "草・キグニ族の種",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "間違っているものをすべて選べ",
+    "question": "アスカがキグニ族の種を飲んだ場合について、間違っているものをすべて選べ。",
+    "choices": [
+      "20ターン操作不能になる",
+      "防御力が0になる",
+      "混乱していると敵へまっすぐ向かえなくなる",
+      "アイテムに化けているンドゥバの上を素通りできる"
+    ],
+    "answer": [
+      2
+    ],
+    "explanation": "キグニ状態では20ターン操作不能、防御0、攻撃1.5倍。混乱中でも敵へまっすぐ向かい、アイテム状態のンドゥバも素通りする。",
+    "tags": [
+      "キグニ族の種",
+      "アスカ",
+      "ンドゥバ"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/13.html"
+  },
+  {
+    "id": 21,
+    "category": "草・レベル低下",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "くねくね草などでアスカのレベルが下がったとき、現在HPが15以下だった場合どうなる？",
+    "choices": [
+      "HP1になる",
+      "HP15になる",
+      "HPは変化しない",
+      "最大HPの半分になる"
+    ],
+    "answer": 1,
+    "explanation": "レベル低下時にHPが15以下なら、現在HPは15まで回復する。",
+    "tags": [
+      "くねくね草",
+      "レベルダウン",
+      "HP"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/13.html"
+  },
+  {
+    "id": 22,
+    "category": "草・命の草",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "命の草を飲んだ際のHP処理として正しいものは？",
+    "choices": [
+      "最大HP上昇と同時に現在HPも同量回復する",
+      "最大HPは上がるが、その上昇分だけ現在HPが増えるわけではない",
+      "現在HPだけ増える",
+      "最大HPと現在HPが必ず満タンになる"
+    ],
+    "answer": 1,
+    "explanation": "命の草は薬草・弟切草と異なり、最大HP上昇に伴って現在HPが増えるわけではない。",
+    "tags": [
+      "命の草",
+      "HP",
+      "最大HP"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/13.html"
+  },
+  {
+    "id": 23,
+    "category": "草・毒消し",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "毒消し草をしおいやん系へ遠投で当てた場合の特殊仕様として正しいものは？",
+    "choices": [
+      "通常投擲と同じ50ダメージ",
+      "100ダメージ",
+      "なぜか50ダメージ効果が発生しない",
+      "即死する"
+    ],
+    "answer": 2,
+    "explanation": "毒消し草は通常投擲ならしおいやん系へ50ダメージだが、遠投ではなぜかそのダメージを与えられない。",
+    "tags": [
+      "毒消し草",
+      "しおいやん",
+      "遠投"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/13.html"
+  },
+  {
+    "id": 24,
+    "category": "草・超不幸",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "超不幸の種について、正しいものをすべて選べ。",
+    "choices": [
+      "おうごんマムルには効かない",
+      "レベルが下がらなければHP1化も起きない",
+      "必ずHP1にしてからレベルを下げる",
+      "レベル低下に伴いHPが15以下なら15になるケースがある"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explanation": "おうごんマムルには無効。レベルが下がらないとHP1化も起こらず、レベル低下処理ではHP15保障が絡む場合がある。",
+    "tags": [
+      "超不幸の種",
+      "おうごんマムル",
+      "レベル"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/13.html"
+  },
+  {
+    "id": 25,
+    "category": "草・ドラゴン草",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "間違っているものをすべて選べ",
+    "question": "ドラゴン草・火炎草を攻撃に使った場合について、間違っているものをすべて選べ。",
+    "choices": [
+      "通常投擲は40ダメージ",
+      "通常で飲んで攻撃すると70ダメージ",
+      "祝福投擲は80ダメージ",
+      "よくきき草の倍化は投擲にも適用される"
+    ],
+    "answer": [
+      3
+    ],
+    "explanation": "Dが間違い。投擲40、飲用攻撃70。祝福時は投擲80・飲用100。よくきき草による倍化は飲んだ場合にだけ適用される。",
+    "tags": [
+      "ドラゴン草",
+      "火炎草",
+      "祝福",
+      "よくきき草"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/13.html"
+  },
+  {
+    "id": 26,
+    "category": "草・毒草",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "ゲイズに操られて毒草を飲まされた直後のターン処理として正しいものは？",
+    "choices": [
+      "通常通りゲイズのターンになる",
+      "アスカのターンになる",
+      "両者1回休みになる",
+      "毒草だけ無効化される"
+    ],
+    "answer": 1,
+    "explanation": "通常はゲイズに操られた行動後にゲイズ側のターンになるが、毒草を飲まされた場合は例外的にアスカのターンになる。",
+    "tags": [
+      "ゲイズ",
+      "毒草",
+      "ターン処理"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/13.html"
+  },
+  {
+    "id": 27,
+    "category": "草・無敵",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "無敵状態について、正しいものをすべて選べ。",
+    "choices": [
+      "無敵モンスターを回復剣で殴ってもモンスターのHPは減らない",
+      "その攻撃でもアスカ側の回復効果は発生しうる",
+      "アスカの衰弱ダメージは無敵草で完全に防げる",
+      "敵側の衰弱ダメージは無敵草で防げる"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explanation": "無敵モンスターへの回復剣では対象HPは減らないが、本来ダメージに応じた回復は発生する。衰弱は、アスカ側では無敵で防げず、敵側では防げる。",
+    "tags": [
+      "無敵草",
+      "回復剣",
+      "衰弱"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/13.html"
+  },
+  {
+    "id": 28,
+    "category": "フェイ問・乱数",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "間違っているものをすべて選べ",
+    "question": "フェイの問題における基本的な乱数処理について、間違っているものをすべて選べ。",
+    "choices": [
+      "アスカの通常攻撃は常に命中する",
+      "モンスターの通常攻撃は常に命中する",
+      "アスカが投げたアイテムは常に命中する",
+      "眠印など乱数を使う処理は一切存在しない"
+    ],
+    "answer": [
+      3
+    ],
+    "explanation": "Dが間違い。フェイ問では攻撃・投擲・罠発動など多くの乱数が固定化されるが、眠印など乱数処理が残る場面もある。",
+    "tags": [
+      "フェイの問題",
+      "乱数",
+      "命中"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/14.html"
+  },
+  {
+    "id": 29,
+    "category": "フェイ問・乱数",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "フェイ問で、同じ問題をやり直して全く同じ行動順を再現した場合、眠印などの乱数結果はどうなる？",
+    "choices": [
+      "毎回完全に変化する",
+      "同じ結果を再現できる",
+      "2回目以降だけ固定される",
+      "装備を外さない限りランダム"
+    ],
+    "answer": 1,
+    "explanation": "フェイ問では乱数を使う場面でも、アスカの行動が同じなら乱数進行も同じになり、同一結果を再現できる。",
+    "tags": [
+      "フェイの問題",
+      "乱数",
+      "再現性"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/14.html"
+  },
+  {
+    "id": 30,
+    "category": "回復・ターン処理",
+    "difficulty_author": 4,
+    "type": "single",
+    "question": "最大HP100のアスカが自然回復だけでHPを1回復するのに必要なターン数は？",
+    "choices": [
+      "1ターン",
+      "2ターン",
+      "5ターン",
+      "10ターン"
+    ],
+    "answer": 1,
+    "explanation": "自然回復は1ターンにつき最大HPの0.5%を蓄積する。最大HP100なら1ターン0.5なので2ターンでHP1回復。",
+    "tags": [
+      "自然回復",
+      "最大HP",
+      "ターン"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/14.html"
+  },
+  {
+    "id": 31,
+    "category": "回復・壁内",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "自然回復の内部カウントについて、壁の中で経過したターンはどう扱われる？",
+    "choices": [
+      "通常通り加算される",
+      "半分だけ加算される",
+      "計算に含まれない",
+      "壁から出た瞬間に全回復する"
+    ],
+    "answer": 2,
+    "explanation": "壁の中で過ごしたターンは自然回復の計算に含まれない。",
+    "tags": [
+      "自然回復",
+      "壁",
+      "ターン処理"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/14.html"
+  },
+  {
+    "id": 32,
+    "category": "落下順・アイテム",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "投げたアイテムの本来の落下地点が埋まっていた場合、代替地点を決める『アイテム落下順』について正しいものは？",
+    "choices": [
+      "アスカの向きで回転する",
+      "対象モンスターの向きで回転する",
+      "向きに依存しない固定順序",
+      "毎回ランダム"
+    ],
+    "answer": 2,
+    "explanation": "アイテム落下順は向きに依存しない固定順序で探索される。",
+    "tags": [
+      "アイテム落下順",
+      "処理順"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/14.html"
+  },
+  {
+    "id": 33,
+    "category": "落下順・アイテム",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "アイテム落下順で用意された周囲の候補マスがすべて埋まった場合、そのアイテムはどうなる？",
+    "choices": [
+      "アスカの足元に戻る",
+      "高とびする",
+      "どこかに消失する",
+      "階段上に落ちる"
+    ],
+    "answer": 2,
+    "explanation": "アイテム落下順の候補を使い切ると『どこかに消えてしまった…』となり消失する。",
+    "tags": [
+      "アイテム落下順",
+      "消失"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/14.html"
+  },
+  {
+    "id": 34,
+    "category": "落下順・モンスター",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "モンスターの代替落下位置を探す際、順序の基準になるものは？",
+    "choices": [
+      "アスカの向き",
+      "モンスター自身の向き",
+      "階段の方向",
+      "フロア生成時の方角"
+    ],
+    "answer": 1,
+    "explanation": "モンスター落下順はモンスター自身の向きを基準に決まる。",
+    "tags": [
+      "モンスター落下順",
+      "向き"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/14.html"
+  },
+  {
+    "id": 35,
+    "category": "落下順・モンスター",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "モンスターの落下候補が多数必要になった場合、18体目以降の処理として知られているものは？",
+    "choices": [
+      "消滅する",
+      "階段へ移動する",
+      "高とびする",
+      "アスカの隣に強制配置される"
+    ],
+    "answer": 2,
+    "explanation": "モンスター落下順では候補を使い切った18体目以降は高とび処理になる。",
+    "tags": [
+      "モンスター落下順",
+      "高とび"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/14.html"
+  },
+  {
+    "id": 36,
+    "category": "高とび・着地点",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "通常、着地点として選ばれないものをすべて選べ",
+    "question": "アスカ自身の高とび先として通常選ばれない場所をすべて選べ。",
+    "choices": [
+      "現在いる部屋（複数部屋フロア）",
+      "ぬれた床",
+      "階段の上",
+      "別の部屋の乾いた通常床"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "アスカの高とびは、複数部屋なら現在の部屋、ぬれた床、階段上を着地点に選ばない。",
+    "tags": [
+      "高とび",
+      "着地点",
+      "ぬれた床",
+      "階段"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/14.html"
+  },
+  {
+    "id": 37,
+    "category": "高とび・アイテム",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "アイテムがバネなどで高とびした際の着地点優先について、正しいものをすべて選べ。",
+    "choices": [
+      "まずアスカのいる部屋以外の視界外が優先される",
+      "次にアスカのいる部屋以外の視界内が候補になる",
+      "その次に現在の部屋の視界外が候補になる",
+      "常にアスカの足元が最優先される"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "アイテム高とびは『別部屋の視界外→別部屋の視界内→現在部屋の視界外』の順に優先される。",
+    "tags": [
+      "アイテム",
+      "高とび",
+      "着地点"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/14.html"
+  },
+  {
+    "id": 38,
+    "category": "投擲・毒矢",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "拾った毒矢をモンスターに3回撃ち込んだ場合、ちからは元の何%程度になる？",
+    "choices": [
+      "約80%",
+      "約64%",
+      "約51%",
+      "0%"
+    ],
+    "answer": 2,
+    "explanation": "毒矢は1発ごとにちからを20%低下させる乗算処理。0.8×0.8×0.8=0.512なので約51.2%。",
+    "tags": [
+      "毒矢",
+      "ちから",
+      "投擲"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/18.html"
+  },
+  {
+    "id": 39,
+    "category": "投擲・銀の矢",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "床に置いた銀の矢を、ふきとばしの杖などで吹き飛ばした場合の挙動として正しいものは？",
+    "choices": [
+      "壁やモンスターを貫通して飛ぶ",
+      "最初のモンスターに当たって止まる",
+      "壁に当たるとアスカ側へ跳ね返る",
+      "その場で消滅する"
+    ],
+    "answer": 0,
+    "explanation": "床に置いた銀の矢を吹き飛ばすと、壁やモンスターを貫通して飛んでいく特殊挙動になる。",
+    "tags": [
+      "銀の矢",
+      "ふきとばし",
+      "貫通"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/18.html"
+  },
+  {
+    "id": 40,
+    "category": "投擲・かまいたちの矢",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "間違っているものをすべて選べ",
+    "question": "かまいたちの矢について、間違っているものをすべて選べ。",
+    "choices": [
+      "呪われた状態で通常射撃すると三方向に分かれない",
+      "呪われた状態で通常射撃すると壁・モンスターを貫通しない",
+      "床に置いて吹き飛ばした場合は三方向に分かれて飛ぶ",
+      "床置きを吹き飛ばした場合、呪われていると絶対に三方向化しない"
+    ],
+    "answer": [
+      3
+    ],
+    "explanation": "呪われたかまいたちの矢は通常射撃では三方向化・貫通を失うが、床に置いて吹き飛ばすと呪い状態でも三方向に分かれて貫通する。",
+    "tags": [
+      "かまいたちの矢",
+      "呪い",
+      "ふきとばし"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/18.html"
+  },
+  {
+    "id": 41,
+    "category": "投擲・大砲の弾",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "大砲の弾を転がしたとき、軌道上のワナが実際に発動するタイミングは？",
+    "choices": [
+      "弾がワナの上を通過した瞬間",
+      "弾が爆発・停止した後",
+      "次のアスカのターン開始時",
+      "ワナは発動しない"
+    ],
+    "answer": 1,
+    "explanation": "厳密には大砲の弾が爆発・停止した後、転がった軌道上のワナが発動する。",
+    "tags": [
+      "大砲の弾",
+      "ワナ",
+      "処理順"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/18.html"
+  },
+  {
+    "id": 42,
+    "category": "投擲・大砲の弾",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "大砲の弾でワナを発動させた場合、ワナ側では誰が踏んだ扱いになる？",
+    "choices": [
+      "アイテムが落下した扱い",
+      "アスカが踏んだ扱い",
+      "モンスターが踏んだ扱い",
+      "発動者なし"
+    ],
+    "answer": 1,
+    "explanation": "大砲の弾でワナを発動させる場合はアスカが踏んだ判定になる。矢などでの発動とは扱いが異なる。",
+    "tags": [
+      "大砲の弾",
+      "ワナ",
+      "発動判定"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/18.html"
+  },
+  {
+    "id": 43,
+    "category": "投擲・デブータの石",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "デブータの石について、正しいものをすべて選べ。",
+    "choices": [
+      "水中の敵にも当てられる",
+      "壁の中の敵にも当てられる",
+      "床のワナに当てて発動させられる",
+      "壁の中の敵には絶対に当たらない"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "デブータの石は水中・壁内の敵にも命中し、床のワナを発動させる用途にも使える。",
+    "tags": [
+      "デブータの石",
+      "水中",
+      "壁内",
+      "ワナ"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/18.html"
+  },
+  {
+    "id": 44,
+    "category": "投擲・武器",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "武器をモンスターへ投げた際のダメージ計算に関係するものをすべて選べ。",
+    "choices": [
+      "アスカのレベル",
+      "アスカのちから",
+      "武器の強さ",
+      "ファイトの巻物の効果"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "武器投擲ダメージにはレベル・ちから・武器の強さ・ち印・祝呪・相手防御力などが関係するが、ファイトの巻物やアスカのイカリ状態は影響しない。",
+    "tags": [
+      "武器投擲",
+      "ダメージ計算"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/15.html"
+  },
+  {
+    "id": 45,
+    "category": "投擲・盾",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "盾をモンスターへ投げたときのダメージとして参照される数値は？",
+    "choices": [
+      "盾アイテム本体の基本防御力だけ",
+      "装備画面の『盾』欄",
+      "ステータスの『防御力』欄に表示される数値（鉄扇上昇分は無視）",
+      "アスカの攻撃力"
+    ],
+    "answer": 2,
+    "explanation": "盾投擲ダメージはステータスの『防御力』欄の数値に等しい。ただし鉄扇で上がった分は無視される。",
+    "tags": [
+      "盾投擲",
+      "防御力",
+      "鉄扇"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/16.html"
+  },
+  {
+    "id": 46,
+    "category": "罠・移動",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "罠を投げる・吹き飛ばす・引き寄せるなどして移動させた場合、着地点の探索は何に従う？",
+    "choices": [
+      "モンスター落下順",
+      "アイテム落下順",
+      "アスカの向きだけで決定",
+      "ランダム"
+    ],
+    "answer": 1,
+    "explanation": "移動させた罠の落下位置はアイテム落下順に従う。",
+    "tags": [
+      "罠",
+      "アイテム落下順"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/23.html"
+  },
+  {
+    "id": 47,
+    "category": "罠・ペリカン",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "アスカが罠師状態ではないとき、罠を怪盗ペリカンへ吹き飛ばすとどうなる？",
+    "choices": [
+      "罠がペリカンに当たって発動する",
+      "ペリカンが罠を食べる",
+      "罠が消えるだけ",
+      "罠はペリカンをすり抜ける"
+    ],
+    "answer": 1,
+    "explanation": "罠師状態でないアスカが罠をペリカンへ吹き飛ばすと、ペリカンはその罠を食べる。",
+    "tags": [
+      "罠",
+      "怪盗ペリカン",
+      "罠師"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/23.html"
+  },
+  {
+    "id": 48,
+    "category": "罠・ペリカン",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "アスカが罠師状態のとき、罠を怪盗ペリカンへ吹き飛ばすとどうなる？",
+    "choices": [
+      "ペリカンが罠を吸い込む",
+      "罠はぶつかって消失し、ペリカンに少量のダメージ",
+      "罠が足元に設置される",
+      "ペリカンが即死する"
+    ],
+    "answer": 1,
+    "explanation": "罠師状態では、罠はペリカンにぶつかって消失し、少量のダメージを与える。非罠師時の『食べる』挙動とは異なる。",
+    "tags": [
+      "罠",
+      "怪盗ペリカン",
+      "罠師"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/23.html"
+  },
+  {
+    "id": 49,
+    "category": "罠・火柱",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "火柱の上へ罠を移動させた場合、火柱はどうなる？",
+    "choices": [
+      "そのまま残る",
+      "火が消える",
+      "罠だけ燃えて消える",
+      "火柱のダメージが倍になる"
+    ],
+    "answer": 1,
+    "explanation": "火柱の上に罠を移動させると、火柱は消える。",
+    "tags": [
+      "罠",
+      "火柱"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/23.html"
+  },
+  {
+    "id": 50,
+    "category": "罠・飛来方向",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "間違っているものをすべて選べ",
+    "question": "木の矢・鉄の矢・毒矢・丸太のワナで、アスカの右方向から飛来する条件をすべて選べ。",
+    "choices": [
+      "アスカ自身がワナを踏んだ",
+      "アスカが投げたアイテムで発動させた",
+      "モンスターが通常の投擲物を投げて発動させた",
+      "モンスターが自分でワナを踏んだ"
+    ],
+    "answer": [
+      3
+    ],
+    "explanation": "Dが間違い。アスカが踏む、アスカ投擲で発動、モンスター投擲（デブータの石以外）で発動の場合はアスカ基準の右から飛ぶ。モンスター自身が踏む場合はモンスター基準。",
+    "tags": [
+      "矢のワナ",
+      "丸太のワナ",
+      "方向"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/23.html"
+  },
+  {
+    "id": 51,
+    "category": "罠・毒矢",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "アスカが毒矢のワナを踏み、その毒矢をモンスターに当てた場合の効果は？",
+    "choices": [
+      "通常の毒矢と同じ20%低下だけ",
+      "固定4ダメージ＋ちから0",
+      "固定10ダメージ＋ちから半減",
+      "ダメージなし＋鈍足"
+    ],
+    "answer": 1,
+    "explanation": "毒矢のワナから飛んだ毒矢をモンスターへ当てると、固定4ダメージを与え、ちからを0にする。",
+    "tags": [
+      "毒矢のワナ",
+      "ちから",
+      "固定ダメージ"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/23.html"
+  },
+  {
+    "id": 52,
+    "category": "罠・地雷",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "地雷・大型地雷の誘爆条件として正しいものをすべて選べ。",
+    "choices": [
+      "隣接した地雷の爆発",
+      "隣接した爆弾状態モンスターの爆発",
+      "離れた部屋の地雷の爆発",
+      "同じフロアなら距離に関係なく誘爆"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "地雷・大型地雷は隣接した地雷や爆弾状態モンスターの爆発によって誘爆する。",
+    "tags": [
+      "地雷",
+      "大型地雷",
+      "誘爆"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/23.html"
+  },
+  {
+    "id": 53,
+    "category": "罠・モンスターのワナ",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "モンスターのワナについて、正しいものをすべて選べ。",
+    "choices": [
+      "アイテムをワナ上へ落下させて発動すると、そのアイテムがモンスターになる",
+      "発動時にワナ上にアイテムがあればそのアイテムが変化する",
+      "ワナ上にアイテムがない状態で発動すると、部屋内のアイテムがモンスター化する",
+      "アイテム状態のンドゥバも必ず別モンスターへ変化する"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "モンスターのワナは上のアイテム、または上に無ければ部屋内アイテムをモンスター化する。ただしアイテム状態のンドゥバは例外的に別モンスターへ変化しない。",
+    "tags": [
+      "モンスターのワナ",
+      "アイテム",
+      "ンドゥバ"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/23.html"
+  },
+  {
+    "id": 54,
+    "category": "罠・召喚スイッチ",
+    "difficulty_author": 4,
+    "type": "single",
+    "question": "召喚スイッチは一度発動した後どうなる？",
+    "choices": [
+      "必ず残る",
+      "50%で消える",
+      "100%消える",
+      "3回発動すると消える"
+    ],
+    "answer": 2,
+    "explanation": "召喚スイッチは一度発動すると100%消える。",
+    "tags": [
+      "召喚スイッチ",
+      "罠"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/23.html"
+  },
+  {
+    "id": 55,
+    "category": "罠・トラバサミ",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "トラバサミにかかった後の解除について、正しいものをすべて選べ。",
+    "choices": [
+      "罠けしの巻物でトラバサミを消すとすぐ動ける",
+      "水たまりで罠を上書きすればすぐ動ける",
+      "ワナの巻物などで罠を消すとすぐ動ける",
+      "水で上書きしても拘束効果が残る"
+    ],
+    "answer": [
+      0,
+      2,
+      3
+    ],
+    "explanation": "罠そのものを罠けし・ワナの巻物等で消すと即解除されるが、水たまりで上書きした場合は拘束効果が残る。",
+    "tags": [
+      "トラバサミ",
+      "罠けし",
+      "水たまり"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/23.html"
+  },
+  {
+    "id": 56,
+    "category": "壺・水がめ",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "水がめを敵へ投げたときの挙動として正しいものは？",
+    "choices": [
+      "空でも水入りでも同じダメージ",
+      "空なら数ダメージ、水入りなら割れて水が落ちるだけ",
+      "水入りだけダメージを与える",
+      "必ず敵をぬれ状態にしてダメージ"
+    ],
+    "answer": 1,
+    "explanation": "空の水がめは敵へ投げると数ダメージを与えるが、水入りでは割れて水が落ちるだけ。",
+    "tags": [
+      "水がめ",
+      "投擲"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/17.html"
+  },
+  {
+    "id": 57,
+    "category": "壺・水がめ",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "ダメージを受けている対象へ水がめの水をかけると『回復＋力アップ』が発生しうるものをすべて選べ。",
+    "choices": [
+      "水棲系の仲間モンスター",
+      "プルン系",
+      "怪盗ペリカン系",
+      "おばけ大根系"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explanation": "水棲系の仲間、プルン系、ペリカン系、おばけ大根系には水による回復＋力アップが発生する。",
+    "tags": [
+      "水がめ",
+      "水棲系",
+      "ペリカン",
+      "プルン"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/17.html"
+  },
+  {
+    "id": 58,
+    "category": "壺・換金",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "修正値-10以下の武器・盾を換金の壺へ入れた場合、どうなる？",
+    "choices": [
+      "通常どおり売値相当のギタンになる",
+      "買値相当のギタンになる",
+      "金銭的価値がないため換金されない",
+      "壺ごと消える"
+    ],
+    "answer": 2,
+    "explanation": "-10以下の武器・盾は金銭的価値がないため、換金の壺へ入れても換金されない。",
+    "tags": [
+      "換金の壺",
+      "修正値",
+      "武器",
+      "盾"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/17.html"
+  },
+  {
+    "id": 59,
+    "category": "壺・変化",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "フェイの問題で変化の壺にアイテムを入れた場合、生成されるものは？",
+    "choices": [
+      "通常ダンジョン同様にランダムアイテム",
+      "雑草のみ",
+      "ギタンのみ",
+      "何も生成されない"
+    ],
+    "answer": 1,
+    "explanation": "フェイ問では新規生成アイテムが雑草化する仕様があり、変化の壺からは雑草しか出ない。",
+    "tags": [
+      "変化の壺",
+      "フェイの問題",
+      "雑草"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/17.html"
+  },
+  {
+    "id": 60,
+    "category": "壺・やりすごし",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "モンスターにやりすごしの壺をかぶせた場合について、正しいものをすべて選べ。",
+    "choices": [
+      "他のモンスターから認識されなくなる",
+      "割れない壺をかぶっていてもアスカから攻撃できる",
+      "そのモンスターが死ぬと壺も消える",
+      "店主に壺をかぶせてアイテムをぶつけると必ず敵対する"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "壺をかぶったモンスターは他モンスターに認識されず、割れない壺でも攻撃可能。死亡時は壺も消える。店主へ壺をかぶせた状態で物をぶつけても、壺が割れるだけなら敵対しない。",
+    "tags": [
+      "やりすごしの壺",
+      "モンスター",
+      "店主"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/17.html"
+  },
+  {
+    "id": 61,
+    "category": "壺・識別",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "『識別の壺の中に未識別アイテムがある』状態を成立させうる方法をすべて選べ。",
+    "choices": [
+      "未識別のぬれた巻物を入れ、壺の中で乾かす",
+      "物忘れの草で識別情報を失わせる",
+      "識別の壺へ普通の未識別アイテムを入れただけ",
+      "保存の壺から移し替えるだけ"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "ぬれた未識別巻物を入れてから乾燥させる方法や、物忘れの草で識別情報を失わせる方法なら、識別の壺内に未識別品が存在しうる。",
+    "tags": [
+      "識別の壺",
+      "ぬれた巻物",
+      "物忘れの草"
+    ],
+    "verification": "user_confirmed",
+    "source": "https://w.atwiki.jp/feimon_db/pages/17.html"
+  },
+  {
+    "id": 62,
+    "category": "壺・底抜け",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "底抜けの壺を割ったとき、生成される落とし穴の数は何を基準にする？",
+    "choices": [
+      "入れたアイテム数",
+      "壺の残り容量",
+      "壺の元の容量に関係なく1個",
+      "フロア階数"
+    ],
+    "answer": 1,
+    "explanation": "底抜けの壺を割ると、残り容量に応じた数の落とし穴が生成される。",
+    "tags": [
+      "底抜けの壺",
+      "落とし穴",
+      "容量"
+    ],
+    "verification": "source_checked",
+    "source": "https://shurefushidan.nusutto.jp/aitem.html"
+  },
+  {
+    "id": 63,
+    "category": "巻物・ゾワゾワ",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "ゾワゾワの巻物の効果を受けたモンスターについて、正しいものをすべて選べ。",
+    "choices": [
+      "特技を使わなくなる",
+      "逃げる行動もしなくなる",
+      "必ず倍速になる",
+      "必ずかなしばりになる"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "ゾワゾワ状態では特技を使わなくなり、逃げることもしなくなる。",
+    "tags": [
+      "ゾワゾワの巻物",
+      "モンスター",
+      "特技"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/19.html"
+  },
+  {
+    "id": 64,
+    "category": "巻物・必中",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "アスカがからぶり状態のときに必中の巻物を読んだ。どうなる？",
+    "choices": [
+      "からぶり状態は残る",
+      "からぶり状態を打ち消せる",
+      "必中とからぶりが交互に発動する",
+      "攻撃力だけ上がる"
+    ],
+    "answer": 1,
+    "explanation": "必中の巻物はからぶり状態を打ち消すことができる。",
+    "tags": [
+      "必中の巻物",
+      "からぶり"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/19.html"
+  },
+  {
+    "id": 65,
+    "category": "巻物・飛ばず",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "飛ばずの巻物を読んだ後、効果が切れるまでの間に10ターンだけエレキを装着した場合、装着していたエレキ側の飛ばず効果はどうなる？",
+    "choices": [
+      "他のモンスターと同時に切れる",
+      "他のモンスターより10ターン遅れて切れる",
+      "装着した瞬間に解除される",
+      "永続する"
+    ],
+    "answer": 1,
+    "explanation": "エレキ装着中は効果ターンの進行がずれ、10ターン装着すれば他モンスターより10ターン遅れて飛ばず効果が切れる。",
+    "tags": [
+      "飛ばずの巻物",
+      "エレキ",
+      "ターン"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/19.html"
+  },
+  {
+    "id": 66,
+    "category": "巻物・モンスターハウス",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "モンスターハウスの巻物について、正しいものをすべて選べ。",
+    "choices": [
+      "フロア内の敵を眠り状態で同じ部屋へ引き寄せる",
+      "引き寄せられた敵は読んだターン中に起きてそのまま行動する",
+      "フロアに敵がいない場合は必ず何も起こらない",
+      "マムルをねだやしていても、敵0体ならマムルが現れることがある"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explanation": "フロア内の敵を眠り状態で集めるが、そのターン中に起きて行動する。敵が0体なら、ねだやし済みでもマムルが現れる特殊処理がある。",
+    "tags": [
+      "モンスターハウスの巻物",
+      "マムル",
+      "ねだやし"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/19.html"
+  },
+  {
+    "id": 67,
+    "category": "巻物・処理",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "間違っているものをすべて選べ",
+    "question": "次の巻物関連の記述のうち、間違っているものをすべて選べ。",
+    "choices": [
+      "ゾワゾワ状態の敵は特技を使わない",
+      "必中の巻物でからぶり状態を打ち消せる",
+      "飛ばずの巻物の効果ターンはエレキ装着中も通常通り消費される",
+      "モンスターハウスの巻物で集められた敵は、そのターンは必ず眠ったまま"
+    ],
+    "answer": [
+      2,
+      3
+    ],
+    "explanation": "飛ばず効果はエレキ装着によって実質延長される。またMH巻物で集められた敵は読んだターン中に起きて行動する。",
+    "tags": [
+      "巻物",
+      "ゾワゾワ",
+      "必中",
+      "飛ばず",
+      "モンスターハウス"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/19.html"
+  },
+  {
+    "id": 68,
+    "category": "腕輪・うけながし",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "うけながしの腕輪装備中に、まずそうなおにぎりによる自傷ダメージを受け流した場合、受け流されるダメージ量は？",
+    "choices": [
+      "通常の4ダメージ",
+      "アスカのパンチ1発分のダメージ",
+      "固定10ダメージ",
+      "相手の最大HPの半分"
+    ],
+    "answer": 1,
+    "explanation": "まずそうなおにぎりの自傷も受け流せるが、相手へ流れるダメージは元の4ではなく、その時のアスカのパンチ1発分。",
+    "tags": [
+      "うけながしの腕輪",
+      "まずそうなおにぎり",
+      "ダメージ"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/20.html"
+  },
+  {
+    "id": 69,
+    "category": "腕輪・うけながし",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "うけながしの腕輪でダメージを流す相手について、角の向こう側にいる敵は対象になりうる？",
+    "choices": [
+      "ならない",
+      "なりうる",
+      "壁を壊したときだけなる",
+      "店主だけなる"
+    ],
+    "answer": 1,
+    "explanation": "うけながしの腕輪は角の向こうにいる敵へもダメージを受け流せる。",
+    "tags": [
+      "うけながしの腕輪",
+      "角",
+      "壁"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/20.html"
+  },
+  {
+    "id": 70,
+    "category": "腕輪・百発百中",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "百発百中の腕輪を装備してアイテムを投げた場合、身かわし回路付きエレキへの命中はどうなる？",
+    "choices": [
+      "必ずかわされる",
+      "命中させられる",
+      "50%で命中",
+      "エレキが停止中だけ命中"
+    ],
+    "answer": 1,
+    "explanation": "百発百中の腕輪があれば、身かわし回路付きエレキにもアイテムを当てられる。",
+    "tags": [
+      "百発百中の腕輪",
+      "身かわし回路",
+      "エレキ"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/20.html"
+  },
+  {
+    "id": 71,
+    "category": "腕輪・まがり",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "まがりの腕輪を装備し、一マスへこんだ壁へ斜めにアイテムを投げるとどうなる？",
+    "choices": [
+      "その場に落ちる",
+      "90度曲がって飛ぶ",
+      "180度反射する",
+      "必ず消滅する"
+    ],
+    "answer": 1,
+    "explanation": "まがりの腕輪では、一マスへこんだ壁へ斜め投げすることで90度曲げ、実質的に斜め方向へ投擲できる。",
+    "tags": [
+      "まがりの腕輪",
+      "投擲",
+      "壁"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/20.html"
+  },
+  {
+    "id": 72,
+    "category": "食料・にぎりみならい",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "にぎりみならい系へおにぎりを投げる場合について、正しいものをすべて選べ。",
+    "choices": [
+      "呪われていないおにぎりなら種類を問わず一撃で倒せる",
+      "遠投状態でも同じく一撃で倒せる",
+      "呪われたおにぎりでも同じ特殊即死が保証される",
+      "遠投では特殊な一撃死効果が発生しない"
+    ],
+    "answer": [
+      0,
+      3
+    ],
+    "explanation": "呪われていないおにぎりはにぎりみならい系を一撃で倒すが、遠投状態ではその特殊効果が働かない。",
+    "tags": [
+      "おにぎり",
+      "にぎりみならい",
+      "遠投"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/21.html"
+  },
+  {
+    "id": 73,
+    "category": "モンスター・おうごんマムル",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "間違っているものをすべて選べ",
+    "question": "おうごんマムルについて、間違っているものをすべて選べ。",
+    "choices": [
+      "封印状態でも受けるダメージは1に強制される",
+      "ねだやしの巻物が有効",
+      "爆発でも1ダメージしか受けない",
+      "聖域の巻物の効果は有効"
+    ],
+    "answer": [
+      1
+    ],
+    "explanation": "Bが間違い。おうごんマムルは封印しても被ダメージ1の特性が残り、爆発でも1ダメージ。読むタイプの巻物は効かないが、聖域の巻物は有効。",
+    "tags": [
+      "おうごんマムル",
+      "封印",
+      "爆発",
+      "聖域"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/24.html"
+  },
+  {
+    "id": 74,
+    "category": "モンスター・おうごんマムル",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "おうごんマムルに一時しのぎの杖を当てた場合の挙動は？",
+    "choices": [
+      "完全無効",
+      "階段へワープし、かなしばりになる",
+      "階段へワープするが、かなしばりにはならない",
+      "ランダムな部屋へワープする"
+    ],
+    "answer": 2,
+    "explanation": "おうごんマムルには移動系の杖が効く。一時しのぎでは階段上へ飛ばせるが、かなしばり状態にはならない。",
+    "tags": [
+      "おうごんマムル",
+      "一時しのぎの杖"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/24.html"
+  },
+  {
+    "id": 75,
+    "category": "モンスター・店主",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "店主系について、正しいものをすべて選べ。",
+    "choices": [
+      "敵対していなければダッシュで位置を入れ替えられる",
+      "場所がえの杖では不動扱い",
+      "店長は杖の光弾を乱反射する",
+      "大店長には固定ダメージなら通常通り入る"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "非敵対店主とはダッシュ入れ替えが可能だが、場所がえの杖には不動。店長は杖を乱反射し、大店長は固定ダメージを含め被ダメージを1にする。",
+    "tags": [
+      "店主",
+      "店長",
+      "大店長",
+      "場所がえ"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/32.html"
+  },
+  {
+    "id": 76,
+    "category": "モンスター・大店長",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "大店長に有効な状態変化として例外的に挙げられるものは？",
+    "choices": [
+      "混乱",
+      "鈍足",
+      "倍速",
+      "封印"
+    ],
+    "answer": 2,
+    "explanation": "大店長はおうごんマムル同様、多くの状態異常を無効化するが、倍速は例外。",
+    "tags": [
+      "大店長",
+      "状態異常",
+      "倍速"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/32.html"
+  },
+  {
+    "id": 77,
+    "category": "モンスター・うしわか丸",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "金縛り状態のうしわか丸系へ通常アイテムを投げ、反射された場合、金縛りはどうなる？",
+    "choices": [
+      "必ず解除される",
+      "解除されない",
+      "50%で解除",
+      "反射せず命中する"
+    ],
+    "answer": 1,
+    "explanation": "通常アイテムを反射しただけでは金縛りは解けない。一方、デブータの石を反射した場合は解除されるという例外がある。",
+    "tags": [
+      "うしわか丸",
+      "金縛り",
+      "反射"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/29.html"
+  },
+  {
+    "id": 78,
+    "category": "モンスター・うしわか丸",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "うしわか丸系と無敵・衰弱の仕様について、正しいものをすべて選べ。",
+    "choices": [
+      "アスカの衰弱ダメージは無敵草では防げない",
+      "敵側の衰弱ダメージは無敵草で防げる",
+      "アスカ側も敵側も無敵なら衰弱を完全に防ぐ",
+      "衰弱は無敵状態と無関係に必ず通る"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "アスカ側の衰弱ダメージは無敵草で防げないが、敵側の衰弱ダメージは無敵状態で防げる。",
+    "tags": [
+      "うしわか丸",
+      "衰弱",
+      "無敵草"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/29.html"
+  },
+  {
+    "id": 79,
+    "category": "モンスター・シューベル",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "イカリ状態のシューベル系が、モンスター数上限に達しているか周囲8マスに召喚場所がない場合、どう行動する？",
+    "choices": [
+      "何もせずターンを消費",
+      "召喚を試み続ける",
+      "通常攻撃をしてくる",
+      "自爆する"
+    ],
+    "answer": 2,
+    "explanation": "召喚不能な状況では、イカリ状態でも通常攻撃を行う。",
+    "tags": [
+      "シューベル",
+      "イカリ",
+      "召喚"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/29.html"
+  },
+  {
+    "id": 80,
+    "category": "モンスター・とおせんりゅう",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "とおせんりゅう系が100%特技を使う条件として正しいものをすべて選べ。",
+    "choices": [
+      "アスカに隣接している",
+      "背後3マスのどこかに起きている別モンスターがいる",
+      "アスカの向こう側にスペースがある",
+      "背後のモンスターは眠っていてもよい"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "隣接、背後3マスの起きた別モンスター、アスカの向こう側の空きスペースが条件。背後の敵が眠っていると反応しない。",
+    "tags": [
+      "とおせんりゅう",
+      "特技",
+      "配置"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/33.html"
+  },
+  {
+    "id": 81,
+    "category": "モンスター・ひまガッパ",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "アスカと隣接していないひまガッパ系の行動について、正しいものをすべて選べ。",
+    "choices": [
+      "同じ部屋にアイテムがあるとそのアイテムへ向かう",
+      "複数アイテムがあれば最も近いものへ向かう",
+      "アイテムへの移動より常にアスカ追跡が優先される",
+      "武器や盾を装備してしまうことがある"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explanation": "非隣接時は同室アイテムへ向かい、複数なら最寄りを選ぶ。武器・盾を装備してしまう仕様もある。",
+    "tags": [
+      "ひまガッパ",
+      "アイテム",
+      "装備"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/38.html"
+  },
+  {
+    "id": 82,
+    "category": "モンスター・ンドゥバ",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "アイテムに化けているンドゥバがモンスターのワナの対象になった場合の例外処理は？",
+    "choices": [
+      "別のモンスターへ変化する",
+      "アイテム状態のまま、別モンスターには変化しない",
+      "即座に正体を現してレベルアップする",
+      "消滅する"
+    ],
+    "answer": 1,
+    "explanation": "ンドゥバは姿を現すまではアイテム扱いだが、アイテム状態でモンスターのワナにかかっても別モンスターへ変化しない例外がある。",
+    "tags": [
+      "ンドゥバ",
+      "モンスターのワナ",
+      "例外"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/25.html"
+  },
+  {
+    "id": 83,
+    "category": "秘技・水蜘蛛",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "秘技『水蜘蛛』を使い、水上に立ったまま31ターン目を迎えた場合どうなる？",
+    "choices": [
+      "即死する",
+      "その場に留まる",
+      "モンスター落下順に従ったワープが発生する",
+      "階段へワープする"
+    ],
+    "answer": 2,
+    "explanation": "水蜘蛛は30ターン有効。水上で31ターン目を迎えると、モンスター落下順に従ったワープが発生する。",
+    "tags": [
+      "秘技",
+      "水蜘蛛",
+      "モンスター落下順"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/22.html"
+  },
+  {
+    "id": 84,
+    "category": "秘技・結界",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "間違っているものをすべて選べ",
+    "question": "秘技『結界』について、間違っているものをすべて選べ。",
+    "choices": [
+      "10ターン直接攻撃を受けなくなる",
+      "移動すると消える",
+      "ワナの上や水上でも発動できる",
+      "状態異常も完全に防ぐ"
+    ],
+    "answer": [
+      3
+    ],
+    "explanation": "Dが間違い。結界は10ターン直接攻撃を防ぎ、移動すると消える。聖域と違ってワナ上・水上でも発動可能。状態異常全般を防ぐ効果ではない。",
+    "tags": [
+      "秘技",
+      "結界",
+      "直接攻撃"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/22.html"
+  },
+  {
+    "id": 85,
+    "category": "秘技・無敵",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "秘技『無敵』について正しいものは？",
+    "choices": [
+      "10ターン、ダメージも状態変化もすべて無効",
+      "10ターン、ダメージは受けないが状態変化は防げない",
+      "フロア永続でダメージ無効",
+      "直接攻撃だけを無効"
+    ],
+    "answer": 1,
+    "explanation": "無敵は10ターンの間ダメージを受けなくなるが、状態変化までは防げない。",
+    "tags": [
+      "秘技",
+      "無敵",
+      "状態異常"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/22.html"
+  },
+  {
+    "id": 86,
+    "category": "秘技・身かわし系",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "秘技『身かわし』『跳返』について、正しいものをすべて選べ。",
+    "choices": [
+      "身かわしは上から落ちてくるものを避けられない",
+      "跳返は10ターン続く",
+      "跳返は上から落ちてきた物まで跳ね返す",
+      "跳返は身かわしから閃く上級秘技"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explanation": "身かわしは上からの落下物は避けられない。跳返は身かわし派生の上級秘技で10ターン、上から落ちる物以外を跳ね返す。",
+    "tags": [
+      "秘技",
+      "身かわし",
+      "跳返"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/22.html"
+  },
+  {
+    "id": 87,
+    "category": "秘技・投擲",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "間違っているものをすべて選べ",
+    "question": "強肩・遠投・軟投・暇投げに共通する制限として間違っているものをすべて選べ。",
+    "choices": [
+      "壺の中のアイテムは選べない",
+      "足元のアイテムは選べない",
+      "所持品は一切選べない",
+      "装備中のアイテムだけ選べる"
+    ],
+    "answer": [
+      2,
+      3
+    ],
+    "explanation": "C・Dが間違い。これらの投擲系秘技は壺の中や足元にあるアイテムを選択できない。",
+    "tags": [
+      "秘技",
+      "強肩",
+      "遠投",
+      "軟投",
+      "暇投げ"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/22.html"
+  },
+  {
+    "id": 88,
+    "category": "秘技・暇投げ",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "暇投げを水中の敵に向かって使ったときの特殊挙動として正しいものは？",
+    "choices": [
+      "必ず命中する",
+      "アイテムは当たらず足元に落ちるが、眠り解除・金縛り解除の効果だけは起こりうる",
+      "アイテムが消滅する",
+      "水中の敵が高とびする"
+    ],
+    "answer": 1,
+    "explanation": "水中の敵には暇投げのアイテム自体は当たらず足元へ落ちるが、眠り解除・金縛り解除の効果だけ持つ。",
+    "tags": [
+      "秘技",
+      "暇投げ",
+      "水中"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/22.html"
+  },
+  {
+    "id": 89,
+    "category": "秘技・鬼月",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "パコレプキンの腕輪を装備した状態で秘技『鬼月』を使った場合、壁越し・壁内への移動はできる？",
+    "choices": [
+      "両方できる",
+      "壁内だけできる",
+      "壁越えだけできる",
+      "どちらもできない"
+    ],
+    "answer": 3,
+    "explanation": "パコレプキンの腕輪装備中でも、鬼月で壁内への侵入や壁越えはできない。",
+    "tags": [
+      "秘技",
+      "鬼月",
+      "パコレプキンの腕輪"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/22.html"
+  },
+  {
+    "id": 90,
+    "category": "秘技・死門",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "秘技『死門』が効かない組み合わせはどれ？",
+    "choices": [
+      "マムルと店主",
+      "おうごんマムルと大店長",
+      "アークドラゴンと店長",
+      "うしわか丸とシューベル"
+    ],
+    "answer": 1,
+    "explanation": "死門は根絶やし相当だが、おうごんマムルと大店長には効かない。",
+    "tags": [
+      "秘技",
+      "死門",
+      "おうごんマムル",
+      "大店長"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/22.html"
+  },
+  {
+    "id": 91,
+    "category": "武器・背水の剣",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "背水の剣が発動条件（HP最大値の10%以下）を満たしたときについて、正しいものをすべて選べ。",
+    "choices": [
+      "必中効果が出る",
+      "会心効果が出る",
+      "壁の中の敵にも攻撃できるようになる",
+      "水中の敵にも攻撃できるようになる"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "背水の剣はHP10%以下で必中＋会心。ただしこの必中は特殊で、壁内・水中の敵へ攻撃可能になる効果までは持たない。",
+    "tags": [
+      "背水の剣",
+      "必中",
+      "会心",
+      "壁内"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/15.html"
+  },
+  {
+    "id": 92,
+    "category": "武器・マリンスラッシャー",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "敵が入った『水中のやりすごしの壺』にマリンスラッシャーで攻撃した場合、どうなる？",
+    "choices": [
+      "壺には干渉できない",
+      "壺を割れる",
+      "敵だけにダメージが入り壺は残る",
+      "水中なので攻撃自体が届かない"
+    ],
+    "answer": 1,
+    "explanation": "マリンスラッシャーでは、敵が入った水中のやりすごしの壺も割ることができる。",
+    "tags": [
+      "マリンスラッシャー",
+      "やりすごしの壺",
+      "水中"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/15.html"
+  },
+  {
+    "id": 93,
+    "category": "盾・投擲",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "盾をモンスターへ投げる際のダメージについて、正しいものをすべて選べ。",
+    "choices": [
+      "ステータスの『防御力』欄の数値が基準になる",
+      "鉄扇による防御力上昇分は無視される",
+      "盾本体の基本防御力だけを見る",
+      "すべての盾でこの投擲ダメージ仕様が使える"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explanation": "すべての盾は投げると防御力相当のダメージ。参照はステータスの防御力欄だが、鉄扇で上がった分は無視される。",
+    "tags": [
+      "盾",
+      "投擲",
+      "防御力",
+      "鉄扇"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/16.html"
+  },
+  {
+    "id": 94,
+    "category": "盾・不動",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "不動の盾を装備したアスカが敵へ場所がえの杖を振った場合、どうなる？",
+    "choices": [
+      "通常通り位置交換する",
+      "場所がえ自体が無効",
+      "敵がアスカ側へ引き寄せられる",
+      "アスカが階段へワープする"
+    ],
+    "answer": 2,
+    "explanation": "不動の盾装備中はアスカが動けないため、場所がえの杖を振ると敵側が引き寄せられる。",
+    "tags": [
+      "不動の盾",
+      "場所がえの杖",
+      "引き寄せ"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/16.html"
+  },
+  {
+    "id": 95,
+    "category": "盾・不動",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "不動の盾装備中に場所がえの杖で引き寄せられた敵の落下優先順は、どこから始まる？",
+    "choices": [
+      "アスカの左腕側から反時計回り",
+      "アスカの右腕側から時計回り",
+      "敵の正面から時計回り",
+      "完全ランダム"
+    ],
+    "answer": 1,
+    "explanation": "この場合の敵の落下優先順は、アスカの右腕側から時計回り。",
+    "tags": [
+      "不動の盾",
+      "場所がえの杖",
+      "落下順"
+    ],
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/16.html"
+  },
+  {
+    "id": 96,
+    "category": "裏白蛇・出現階層",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "裏白蛇島で怪盗ペリカン4世が自然出現する階層の組み合わせとして正しいものは？",
+    "choices": [
+      "47～49F、61～65F、76～86F",
+      "47～49F、61～70F、76～86F",
+      "47～55F、61～65F、76～86F",
+      "47～49F、66～70F、81～86F"
+    ],
+    "answer": 0,
+    "explanation": "裏白蛇島の怪盗ペリカン4世は47～49F、61～65F、76～86Fに自然出現する。",
+    "tags": [
+      "裏白蛇",
+      "怪盗ペリカン4世",
+      "出現階層"
+    ],
+    "verification": "user_confirmed",
+    "source": "裏白研究室・ユーザー確認済み"
+  },
+  {
+    "id": 97,
+    "category": "裏白蛇・出現階層",
+    "difficulty_author": 5,
+    "type": "multiple",
+    "instruction": "正しいものをすべて選べ",
+    "question": "裏白蛇島の怪盗ペリカン1世～3世の自然出現階層について、正しいものをすべて選べ。",
+    "choices": [
+      "1世：7～9F",
+      "2世：12～16F",
+      "3世：20～24F",
+      "3世：21～25F"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explanation": "1世は7～9F、2世は12～16F、3世は20～24F。",
+    "tags": [
+      "裏白蛇",
+      "怪盗ペリカン",
+      "出現階層"
+    ],
+    "verification": "user_confirmed",
+    "source": "裏白研究室・ユーザー確認済み"
+  },
+  {
+    "id": 98,
+    "category": "裏白蛇・出現階層",
+    "difficulty_author": 5,
+    "type": "single",
+    "question": "裏白蛇島でおうごんマムルが自然出現する階層の組み合わせとして正しいものは？",
+    "choices": [
+      "50～55F、70～74F、90～99F",
+      "55～60F、75～79F、90～99F",
+      "55～60F、70～79F、95～99F",
+      "60～65F、75～79F、90～95F"
+    ],
+    "answer": 1,
+    "explanation": "裏白蛇島のおうごんマムルは55～60F、75～79F、90～99Fに自然出現する。",
+    "tags": [
+      "裏白蛇",
+      "おうごんマムル",
+      "出現階層"
+    ],
+    "verification": "user_confirmed",
+    "source": "裏白研究室・ユーザー確認済み"
+  },
+  {
+    "id": 99,
+    "category": "盾・数値",
+    "difficulty_author": 3,
+    "type": "single",
+    "question": "獣王の盾の基本防御力と印数の組み合わせとして正しいものは？",
+    "choices": [
+      "防御力10・印5",
+      "防御力11・印4",
+      "防御力12・印4",
+      "防御力12・印5"
+    ],
+    "answer": 2,
+    "explanation": "獣王の盾は基本防御力12、印数4。",
+    "tags": [
+      "獣王の盾",
+      "防御力",
+      "印数"
+    ],
+    "verification": "user_confirmed",
+    "source": "裏白研究室・ユーザー確認済み"
+  },
+  {
+    "id": 100,
+    "category": "草・価格",
+    "difficulty_author": 3,
+    "type": "single",
+    "question": "命の草の店での買値・売値として正しい組み合わせは？",
+    "choices": [
+      "買値300・売値150",
+      "買値400・売値200",
+      "買値500・売値250",
+      "買値1000・売値500"
+    ],
+    "answer": 1,
+    "explanation": "命の草は買値400ギタン、売値200ギタン。",
+    "tags": [
+      "命の草",
+      "価格",
+      "店"
+    ],
+    "verification": "user_confirmed",
+    "source": "裏白研究室・ユーザー確認済み"
+  }
 ]
