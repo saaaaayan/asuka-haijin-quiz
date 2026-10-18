@@ -493,13 +493,19 @@ async function saveFirstAnswer(
 
     const { error: insertError } =
       await supabaseClient
-        .from("first_answers")
-        .insert({
-          user_id: user.id,
-          question_id: questionId,
-          is_correct: isCorrect,
-          selected_answer: selectedIndex
-        });
+.from("first_answers")
+.upsert(
+  {
+    user_id: user.id,
+    question_id: questionId,
+    is_correct: isCorrect,
+    selected_answer: selectedIndex
+  },
+  {
+    onConflict: "user_id,question_id",
+    ignoreDuplicates: true
+  }
+);
 
     if (
       insertError &&
