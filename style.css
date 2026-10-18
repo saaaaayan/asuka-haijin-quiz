@@ -807,3 +807,18 @@ h1 {
   opacity: 0.35;
   cursor: default;
 }
+
+.question-meta-right {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  gap: 4px;
+}
+
+.question-id {
+  font-size: 0.72rem;
+  opacity: 0.45;
+  letter-spacing: 0.04em;
+}
