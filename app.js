@@ -390,23 +390,53 @@ reportSubmitButton.addEventListener(
         (score / quizQuestions.length) * 100
       );
 
-    let rank = "";
+let rank = "";
 
-    if (percentage === 100) {
-      rank = "風来神";
-    } else if (percentage >= 90) {
-      rank = "廃人を超えし者";
-    } else if (percentage >= 75) {
-      rank = "アスカ廃人";
-    } else if (percentage >= 60) {
-      rank = "上級風来人";
-    } else if (percentage >= 40) {
-      rank = "裏白経験者";
-    } else if (percentage >= 20) {
-      rank = "アスカ経験者";
-    } else {
-      rank = "まだ人間";
-    }
+if (percentage === 100) {
+  rank = "風来神";
+
+} else if (percentage === 99) {
+  rank = "戸籍上ほぼ風来人";
+
+} else if (percentage >= 95) {
+  rank = "職業欄に「風来人」と書き始める";
+
+} else if (percentage >= 90) {
+  rank = "天輪国 永住権取得";
+
+} else if (percentage >= 85) {
+  rank = "アスカ法律事務所 最高顧問";
+
+} else if (percentage >= 80) {
+  rank = "アスカ見参で確定申告できる";
+
+} else if (percentage >= 75) {
+  rank = "アスカ見参有識者会議 常連";
+
+} else if (percentage >= 70) {
+  rank = "アスカ見参博士（自称）";
+
+} else if (percentage >= 65) {
+  rank = "アスカ見参大学院 修士課程修了";
+
+} else if (percentage >= 60) {
+  rank = "アスカ見参学部 フェイ問学科卒";
+
+} else if (percentage >= 55) {
+  rank = "アスカ見参学部 合格";
+
+} else if (percentage >= 50) {
+  rank = "三度の飯よりアスカ好き";
+
+} else if (percentage >= 35) {
+  rank = "ちょっとアスカに詳しい人";
+
+} else if (percentage >= 20) {
+  rank = "アスカ見参を知っている人";
+
+} else {
+  rank = "まだ人間";
+}
 
     quizCard.innerHTML = `
       <div class="result-screen">
