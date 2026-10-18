@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  function checkAnswer(selectedIndex) {
+async function checkAnswer(selectedIndex) {
     const question =
       quizQuestions[currentQuestionIndex];
 
@@ -109,6 +109,12 @@ document.addEventListener("DOMContentLoaded", function () {
     if (isCorrect) {
       score++;
     }
+
+  const stats = await saveFirstAnswer(
+  question.id,
+  selectedIndex,
+  isCorrect
+);
 
     choiceButtons.forEach((button, index) => {
       button.disabled = true;
@@ -151,6 +157,27 @@ document.addEventListener("DOMContentLoaded", function () {
         <p class="explanation">
           ${question.explanation}
         </p>
+
+${
+  stats
+    ? `
+      <div class="community-stats">
+        <div class="community-stats-title">
+          みんなの正答率
+        </div>
+
+        <div class="community-stats-number">
+          ${stats.accuracy}%
+        </div>
+
+        <div class="community-stats-detail">
+          ${stats.attempts}人中
+          ${stats.correct}人正解
+        </div>
+      </div>
+    `
+    : ""
+}
 
         <div class="current-score">
           現在の成績：
@@ -271,30 +298,103 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function ensureAnonymousUser() {
   const {
-    data: { session },
-    error: sessionError
-  } = await supabaseClient.auth.getSession();
+    data: { user },
+    error: userError
+  } = await supabaseClient.auth.getUser();
 
-  if (sessionError) {
-    console.error("セッション確認エラー:", sessionError);
-    return;
+  if (!userError && user) {
+    return user;
   }
 
-  if (session) {
-    console.log("すでに匿名ログイン済み:", session.user.id);
-    return;
-  }
-
-  const { data, error } =
-    await supabaseClient.auth.signInAnonymously();
+  const {
+    data,
+    error
+  } = await supabaseClient.auth
+    .signInAnonymously();
 
   if (error) {
-    console.error("匿名ログインエラー:", error);
-    return;
+    console.error(
+      "匿名ログインエラー:",
+      error
+    );
+
+    return null;
   }
 
-  console.log(
-    "匿名ログイン成功:",
-    data.user.id
-  );
+  return data.user;
+}
+
+async function saveFirstAnswer(
+  questionId,
+  selectedIndex,
+  isCorrect
+) {
+  try {
+    const user = await ensureAnonymousUser();
+
+    if (!user) {
+      console.error(
+        "回答を保存できませんでした：ユーザー情報がありません"
+      );
+      return null;
+    }
+
+    const { error: insertError } =
+      await supabaseClient
+        .from("first_answers")
+        .insert({
+          user_id: user.id,
+          question_id: questionId,
+          is_correct: isCorrect,
+          selected_answer: selectedIndex
+        });
+
+    if (
+      insertError &&
+      insertError.code !== "23505"
+    ) {
+      console.error(
+        "回答保存エラー:",
+        insertError
+      );
+
+      return null;
+    }
+
+    const {
+      data: statsData,
+      error: statsError
+    } = await supabaseClient.rpc(
+      "get_question_stats",
+      {
+        p_question_id: questionId
+      }
+    );
+
+    if (statsError) {
+      console.error(
+        "正答率取得エラー:",
+        statsError
+      );
+
+      return null;
+    }
+
+    if (
+      !statsData ||
+      statsData.length === 0
+    ) {
+      return null;
+    }
+
+    return statsData[0];
+
+  } catch (error) {
+    console.error(
+      "回答処理エラー:",
+      error
+    );
+
+    return null;
+  }
 }
