@@ -151,10 +151,21 @@ async function checkAnswer(selectedIndex) {
           ${resultTitle}
         </div>
 
-        <div class="correct-answer">
-          正解：
-          ${question.choices[question.answer]}
-        </div>
+<div class="correct-answer">
+
+  <span class="correct-answer-title">
+    正解
+  </span>
+
+  <span class="correct-answer-label">
+    ${String.fromCharCode(65 + question.answer)}
+  </span>
+
+  <span class="correct-answer-text">
+    ${question.choices[question.answer]}
+  </span>
+
+</div>
 
         <div class="explanation-title">
           解説
