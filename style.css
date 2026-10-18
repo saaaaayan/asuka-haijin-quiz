@@ -695,3 +695,39 @@ h1 {
   gap: 20px;
   text-align: left;
 }
+
+.correct-answer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.correct-answer-title {
+  color: #f0d26d;
+  font-weight: 800;
+}
+
+.correct-answer-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+
+  border-radius: 8px;
+
+  background: rgba(212, 175, 55, 0.14);
+
+  color: #f0d26d;
+
+  font-size: 15px;
+  font-weight: 900;
+
+  flex-shrink: 0;
+}
+
+.correct-answer-text {
+  color: #f5f5f5;
+  font-weight: 700;
+}
