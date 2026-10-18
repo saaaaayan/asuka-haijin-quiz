@@ -197,8 +197,13 @@ ${
 }
 
 <div class="current-score">
-  現在の成績：
-  ${score} / ${currentQuestionIndex + 1}
+  <span class="current-score-label">
+    現在の成績
+  </span>
+
+  <span class="current-score-number">
+    ${score} / ${currentQuestionIndex + 1}
+  </span>
 </div>
 
 <div class="report-section">
