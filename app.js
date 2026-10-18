@@ -55,15 +55,21 @@ function showQuestion() {
   const question = quizQuestions[currentQuestionIndex];
 
   quizCard.innerHTML = `
-    <div class="question-meta">
-      <span>
-        第${currentQuestionIndex + 1}問 / 全${quizQuestions.length}問
-      </span>
+<div class="question-meta">
+  <span>
+    第${currentQuestionIndex + 1}問 / 全${quizQuestions.length}問
+  </span>
 
-      <span class="category">
-        ${question.category}
-      </span>
-    </div>
+  <div class="question-meta-right">
+    <span class="question-id">
+      問題ID #${question.id}
+    </span>
+
+    <span class="category">
+      ${question.category}
+    </span>
+  </div>
+</div>
 
     <h2>${question.question}</h2>
 
