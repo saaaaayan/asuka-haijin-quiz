@@ -46,58 +46,151 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  function showQuestion() {
-    const question = quizQuestions[currentQuestionIndex];
+function showQuestion() {
+  const question = quizQuestions[currentQuestionIndex];
 
-    quizCard.innerHTML = `
-      <div class="question-meta">
-        <span>
-          第${currentQuestionIndex + 1}問 / 全${quizQuestions.length}問
-        </span>
+  quizCard.innerHTML = `
+    <div class="question-meta">
+      <span>
+        第${currentQuestionIndex + 1}問 / 全${quizQuestions.length}問
+      </span>
 
-        <span class="category">
-          ${question.category}
-        </span>
-      </div>
+      <span class="category">
+        ${question.category}
+      </span>
+    </div>
 
-      <h2>${question.question}</h2>
+    <h2>${question.question}</h2>
 
-      <div class="choices">
-${question.choices
-  .map(
-    (choice, index) => `
-      <button
-        class="choice-button"
-        data-index="${index}"
-      >
-        <span class="choice-label">
-          ${String.fromCharCode(65 + index)}
-        </span>
+    ${
+      question.type === "multiple"
+        ? `
+          <div class="question-instruction">
+            ${question.instruction}
+          </div>
+        `
+        : ""
+    }
 
-        <span class="choice-text">
-          ${choice}
-        </span>
-      </button>
-    `
-  )
-  .join("")}
-      </div>
+    <div class="choices">
+      ${question.choices
+        .map(
+          (choice, index) => `
+            <button
+              class="choice-button"
+              data-index="${index}"
+            >
+              <span class="choice-label">
+                ${String.fromCharCode(65 + index)}
+              </span>
 
-      <div id="answer-area"></div>
-    `;
+              <span class="choice-text">
+                ${choice}
+              </span>
+            </button>
+          `
+        )
+        .join("")}
+    </div>
 
-    const choiceButtons =
-      document.querySelectorAll(".choice-button");
+    ${
+      question.type === "multiple"
+        ? `
+          <button
+            class="submit-answer-button"
+            disabled
+          >
+            回答する
+          </button>
+        `
+        : ""
+    }
+
+    <div id="answer-area"></div>
+  `;
+
+  const choiceButtons =
+    document.querySelectorAll(".choice-button");
+
+  if (question.type === "multiple") {
+
+    const selectedAnswers = new Set();
+
+    const submitButton =
+      document.querySelector(
+        ".submit-answer-button"
+      );
 
     choiceButtons.forEach((button) => {
-      button.addEventListener("click", function () {
-        const selectedIndex =
-          Number(button.dataset.index);
 
-        checkAnswer(selectedIndex);
-      });
+      button.addEventListener(
+        "click",
+        function () {
+
+          const selectedIndex =
+            Number(button.dataset.index);
+
+          if (
+            selectedAnswers.has(
+              selectedIndex
+            )
+          ) {
+            selectedAnswers.delete(
+              selectedIndex
+            );
+
+            button.classList.remove(
+              "selected"
+            );
+
+          } else {
+            selectedAnswers.add(
+              selectedIndex
+            );
+
+            button.classList.add(
+              "selected"
+            );
+          }
+
+          submitButton.disabled =
+            selectedAnswers.size === 0;
+        }
+      );
+    });
+
+    submitButton.addEventListener(
+      "click",
+      function () {
+
+        const answers =
+          Array.from(
+            selectedAnswers
+          ).sort(
+            (a, b) => a - b
+          );
+
+        checkAnswer(answers);
+      }
+    );
+
+  } else {
+
+    choiceButtons.forEach((button) => {
+
+      button.addEventListener(
+        "click",
+        function () {
+
+          const selectedIndex =
+            Number(button.dataset.index);
+
+          checkAnswer(selectedIndex);
+        }
+      );
     });
   }
+}
 
 async function checkAnswer(selectedIndex) {
     const question =
