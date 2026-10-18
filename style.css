@@ -664,3 +664,34 @@ h1 {
   font-size: 18px;
   font-weight: 800;
 }
+
+.choice-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+  margin-right: 16px;
+
+  border-radius: 8px;
+
+  background: rgba(212, 175, 55, 0.12);
+
+  color: #f0d26d;
+
+  font-size: 15px;
+  font-weight: 900;
+
+  flex-shrink: 0;
+}
+
+.choice-text {
+  flex: 1;
+}
+
+.choice-button {
+  display: flex;
+  align-items: center;
+  text-align: left;
+}
