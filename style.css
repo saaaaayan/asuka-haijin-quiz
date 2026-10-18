@@ -453,3 +453,44 @@ h1 {
     width: 100%;
   }
 }
+
+.community-stats {
+  margin-top: 24px;
+  padding: 20px;
+
+  text-align: center;
+
+  border: 1px solid
+    rgba(212, 175, 55, 0.2);
+
+  border-radius: 12px;
+
+  background:
+    rgba(212, 175, 55, 0.05);
+}
+
+.community-stats-title {
+  font-size: 13px;
+  font-weight: bold;
+
+  color: #aaa;
+
+  letter-spacing: 0.08em;
+}
+
+.community-stats-number {
+  margin-top: 6px;
+
+  font-size: 34px;
+  font-weight: 900;
+
+  color: #f0d26d;
+}
+
+.community-stats-detail {
+  margin-top: 4px;
+
+  font-size: 14px;
+
+  color: #aaa;
+}
