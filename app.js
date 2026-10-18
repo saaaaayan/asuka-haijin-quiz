@@ -179,13 +179,79 @@ ${
     : ""
 }
 
-        <div class="current-score">
-          現在の成績：
-          ${score} / ${currentQuestionIndex + 1}
-        </div>
-      </div>
+<div class="current-score">
+  現在の成績：
+  ${score} / ${currentQuestionIndex + 1}
+</div>
 
-      <button class="next-button">
+<div class="report-section">
+
+  <button class="report-toggle-button">
+    この問題に物申す
+  </button>
+
+  <div class="report-form hidden">
+
+    <div class="report-heading">
+      この問題のどこが気になりますか？
+    </div>
+
+    <select class="report-type">
+
+      <option value="">
+        指摘内容を選んでください
+      </option>
+
+      <option value="wrong_answer">
+        正解が違う
+      </option>
+
+      <option value="insufficient_condition">
+        条件が不足している
+      </option>
+
+      <option value="alternate_answer">
+        別解がある
+      </option>
+
+      <option value="version_difference">
+        バージョンによって挙動が違う
+      </option>
+
+      <option value="explanation_error">
+        解説が不正確
+      </option>
+
+      <option value="other">
+        その他
+      </option>
+
+    </select>
+
+    <textarea
+      class="report-message"
+      maxlength="2000"
+      placeholder="具体的な内容を入力してください"
+    ></textarea>
+
+    <p class="report-note">
+      投稿内容は管理者に送信されます。
+      一般には公開されません。
+    </p>
+
+    <button class="report-submit-button">
+      物申す！
+    </button>
+
+    <div class="report-status"></div>
+
+  </div>
+
+</div>
+
+</div>
+
+<button class="next-button">
         ${
           currentQuestionIndex + 1 <
           quizQuestions.length
@@ -396,5 +462,52 @@ async function saveFirstAnswer(
     );
 
     return null;
+  }
+}
+
+async function submitQuestionReport(
+  questionId,
+  reportType,
+  message
+) {
+  try {
+    const user = await ensureAnonymousUser();
+
+    if (!user) {
+      console.error(
+        "物申す投稿エラー：ユーザー情報がありません"
+      );
+
+      return false;
+    }
+
+    const { error } =
+      await supabaseClient
+        .from("question_reports")
+        .insert({
+          user_id: user.id,
+          question_id: questionId,
+          report_type: reportType,
+          message: message
+        });
+
+    if (error) {
+      console.error(
+        "物申す投稿エラー:",
+        error
+      );
+
+      return false;
+    }
+
+    return true;
+
+  } catch (error) {
+    console.error(
+      "物申す投稿処理エラー:",
+      error
+    );
+
+    return false;
   }
 }
