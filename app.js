@@ -78,24 +78,33 @@ function showQuestion() {
     }
 
     <div class="choices">
-      ${question.choices
-        .map(
-          (choice, index) => `
-            <button
-              class="choice-button"
-              data-index="${index}"
-            >
-              <span class="choice-label">
-                ${String.fromCharCode(65 + index)}
-              </span>
+${question.choices
+  .map((choice, index) => ({
+    choice,
+    index
+  }))
+  .filter(
+    ({ choice }) =>
+      typeof choice === "string" &&
+      choice.trim() !== ""
+  )
+  .map(
+    ({ choice, index }) => `
+      <button
+        class="choice-button"
+        data-index="${index}"
+      >
+        <span class="choice-label">
+          ${String.fromCharCode(65 + index)}
+        </span>
 
-              <span class="choice-text">
-                ${choice}
-              </span>
-            </button>
-          `
-        )
-        .join("")}
+        <span class="choice-text">
+          ${choice}
+        </span>
+      </button>
+    `
+  )
+  .join("")}
     </div>
 
     ${
@@ -236,16 +245,19 @@ const stats = await saveFirstAnswer(
   isCorrect
 );
 
-choiceButtons.forEach((button, index) => {
+choiceButtons.forEach((button) => {
   button.disabled = true;
 
-  if (correctAnswers.includes(index)) {
+  const choiceIndex =
+    Number(button.dataset.index);
+
+  if (correctAnswers.includes(choiceIndex)) {
     button.classList.add("correct");
   }
 
   if (
-    selectedAnswers.includes(index) &&
-    !correctAnswers.includes(index)
+    selectedAnswers.includes(choiceIndex) &&
+    !correctAnswers.includes(choiceIndex)
   ) {
     button.classList.add("incorrect");
   }
