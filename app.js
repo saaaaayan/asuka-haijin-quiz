@@ -192,7 +192,7 @@ function showQuestion() {
   }
 }
 
-async function checkAnswer(selectedIndex) {
+async function checkAnswer(selectedAnswer) {
     const question =
       quizQuestions[currentQuestionIndex];
 
@@ -202,33 +202,47 @@ async function checkAnswer(selectedIndex) {
     const answerArea =
       document.querySelector("#answer-area");
 
-    const isCorrect =
-      selectedIndex === question.answer;
+const correctAnswers =
+  Array.isArray(question.answer)
+    ? [...question.answer].sort((a, b) => a - b)
+    : [question.answer];
 
-    if (isCorrect) {
-      score++;
-    }
+const selectedAnswers =
+  Array.isArray(selectedAnswer)
+    ? [...selectedAnswer].sort((a, b) => a - b)
+    : [selectedAnswer];
 
-  const stats = await saveFirstAnswer(
+const isCorrect =
+  selectedAnswers.length === correctAnswers.length &&
+  selectedAnswers.every(
+    (answer, index) =>
+      answer === correctAnswers[index]
+  );
+
+if (isCorrect) {
+  score++;
+}
+
+const stats = await saveFirstAnswer(
   question.id,
-  selectedIndex,
+  selectedAnswer,
   isCorrect
 );
 
-    choiceButtons.forEach((button, index) => {
-      button.disabled = true;
+choiceButtons.forEach((button, index) => {
+  button.disabled = true;
 
-      if (index === question.answer) {
-        button.classList.add("correct");
-      }
+  if (correctAnswers.includes(index)) {
+    button.classList.add("correct");
+  }
 
-      if (
-        index === selectedIndex &&
-        selectedIndex !== question.answer
-      ) {
-        button.classList.add("incorrect");
-      }
-    });
+  if (
+    selectedAnswers.includes(index) &&
+    !correctAnswers.includes(index)
+  ) {
+    button.classList.add("incorrect");
+  }
+});
 
     const resultTitle = isCorrect
       ? "正解！"
@@ -250,13 +264,19 @@ async function checkAnswer(selectedIndex) {
     正解
   </span>
 
-  <span class="correct-answer-label">
-    ${String.fromCharCode(65 + question.answer)}
-  </span>
+  ${correctAnswers
+    .map(
+      (answerIndex) => `
+        <span class="correct-answer-label">
+          ${String.fromCharCode(65 + answerIndex)}
+        </span>
 
-  <span class="correct-answer-text">
-    ${question.choices[question.answer]}
-  </span>
+        <span class="correct-answer-text">
+          ${question.choices[answerIndex]}
+        </span>
+      `
+    )
+    .join("")}
 
 </div>
 
