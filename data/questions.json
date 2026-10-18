@@ -63,11 +63,9 @@
       "警報スイッチ"
     ],
     "verification": "confirmed"
-  }
-],
-
-{
-  "id": 4,
+  },
+  {
+    "id": 4,
   "category": "状態異常・速度",
   "difficulty_author": 5,
   "type": "multiple",
@@ -120,3 +118,4 @@
   ],
   "verification": "confirmed"
 }
+]
