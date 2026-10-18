@@ -659,3 +659,8 @@ h1 {
 .report-status.error {
   color: #ef7772;
 }
+
+.question-meta > span:first-child {
+  font-size: 18px;
+  font-weight: 800;
+}
