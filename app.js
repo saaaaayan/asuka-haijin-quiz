@@ -261,10 +261,96 @@ ${
       </button>
     `;
 
-    document
-      .querySelector(".next-button")
-      .addEventListener("click", nextQuestion);
+document
+  .querySelector(".next-button")
+  .addEventListener("click", nextQuestion);
+
+const reportToggleButton =
+  document.querySelector(".report-toggle-button");
+
+const reportForm =
+  document.querySelector(".report-form");
+
+reportToggleButton.addEventListener(
+  "click",
+  function () {
+    reportForm.classList.toggle("hidden");
   }
+);
+
+const reportSubmitButton =
+  document.querySelector(".report-submit-button");
+
+reportSubmitButton.addEventListener(
+  "click",
+  async function () {
+    const reportType =
+      document.querySelector(".report-type").value;
+
+    const message =
+      document
+        .querySelector(".report-message")
+        .value
+        .trim();
+
+    const reportStatus =
+      document.querySelector(".report-status");
+
+    if (!reportType) {
+      reportStatus.textContent =
+        "指摘内容を選んでください。";
+
+      reportStatus.className =
+        "report-status error";
+
+      return;
+    }
+
+    if (!message) {
+      reportStatus.textContent =
+        "具体的な内容を入力してください。";
+
+      reportStatus.className =
+        "report-status error";
+
+      return;
+    }
+
+    reportSubmitButton.disabled = true;
+    reportSubmitButton.textContent =
+      "送信中...";
+
+    const success =
+      await submitQuestionReport(
+        question.id,
+        reportType,
+        message
+      );
+
+    if (success) {
+      reportStatus.textContent =
+        "送信しました。ありがとうございます。";
+
+      reportStatus.className =
+        "report-status success";
+
+      reportSubmitButton.textContent =
+        "送信済み";
+
+    } else {
+      reportStatus.textContent =
+        "送信できませんでした。もう一度お試しください。";
+
+      reportStatus.className =
+        "report-status error";
+
+      reportSubmitButton.disabled = false;
+      reportSubmitButton.textContent =
+        "物申す！";
+    }
+  }
+);
+}
 
   function nextQuestion() {
     currentQuestionIndex++;
