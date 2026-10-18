@@ -164,20 +164,22 @@ function showQuestion() {
       );
     });
 
-    submitButton.addEventListener(
-      "click",
-      function () {
+submitButton.addEventListener(
+  "click",
+  function () {
 
-        const answers =
-          Array.from(
-            selectedAnswers
-          ).sort(
-            (a, b) => a - b
-          );
+    const answers =
+      Array.from(
+        selectedAnswers
+      ).sort(
+        (a, b) => a - b
+      );
 
-        checkAnswer(answers);
-      }
-    );
+    submitButton.remove();
+
+    checkAnswer(answers);
+  }
+);
 
   } else {
 
