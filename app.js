@@ -236,9 +236,6 @@ ${
         別解がある
       </option>
 
-      <option value="version_difference">
-        バージョンによって挙動が違う
-      </option>
 
       <option value="explanation_error">
         解説が不正確
