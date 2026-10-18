@@ -672,7 +672,6 @@ h1 {
 
   width: 32px;
   height: 32px;
-  margin-right: 16px;
 
   border-radius: 8px;
 
@@ -693,5 +692,6 @@ h1 {
 .choice-button {
   display: flex;
   align-items: center;
+  gap: 20px;
   text-align: left;
 }
