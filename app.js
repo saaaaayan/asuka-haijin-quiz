@@ -19,7 +19,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function startQuiz() {
     try {
-      const response = await fetch("data/questions.json");
+const response = await fetch(
+  "data/questions.json",
+  {
+    cache: "no-store"
+  }
+);
 
       if (!response.ok) {
         throw new Error("問題データを読み込めませんでした。");
