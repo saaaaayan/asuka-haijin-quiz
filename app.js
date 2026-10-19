@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
 async function startQuiz() {
 
   // 結果画面テスト
-  score = 95;
+  score = 99;
   quizQuestions = new Array(100);
   showResult();
   return;
