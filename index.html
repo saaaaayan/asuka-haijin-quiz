@@ -15,60 +15,77 @@
 
     <section class="quiz-card hero-card">
 
-      <p class="hero-label">ASUKA KENZAN / HAIJIN TEST</p>
+      <p class="hero-label">
+        ASUKA KENZAN / HAIJIN TEST
+      </p>
 
-      <h1>アスカ見参　廃人検定</h1>
+      <h1>
+        アスカ見参　廃人検定
+      </h1>
 
       <p class="hero-catch">
         にわか知識では、まず通用しない。<br>
         あなたは本当にアスカを理解しているか？
       </p>
 
-<p class="subtitle">
-  問題は毎回ランダムで出題。<br>
-  普通に遊んでいるだけでは気づきにくい細かな仕様や、<br>
-  知っていても忘れやすい挙動まで出題します。<br>
-  「知っているつもり」を容赦なく暴く、アスカ見参ガチ勢向け検定です。
-</p>
+      <p class="subtitle">
+        問題は毎回ランダムで出題。<br>
+        普通に遊んでいるだけでは気づきにくい細かな仕様や、<br>
+        知っていても忘れやすい挙動まで出題します。<br>
+        「知っているつもり」を容赦なく暴く、アスカ見参ガチ勢向け検定です。
+      </p>
 
       <p class="hero-warning">
         クリア回数だけでは語れない。<br>
         知識と理解で、本物かどうかがバレる。
       </p>
 
-<div class="hero-buttons">
+      <div class="hero-buttons">
 
-  <button
-    class="trial-button"
-    id="trial-button"
-    type="button"
-  >
-    まずは5問やってみる
-    <span>お試し版・約1〜2分</span>
-  </button>
+        <!-- 本番100問 -->
+        <button
+          class="start-button"
+          id="main-button"
+          type="button"
+        >
+          <span class="button-main">
+            廃人検定に挑戦する
+          </span>
 
-  <button
-    class="start-button"
-    id="main-button"
-    type="button"
-  >
-    廃人検定に挑戦する
-    <span>全100問・正式ランク判定</span>
-  </button>
+          <span class="button-sub">
+            全100問・正式ランク判定
+          </span>
+        </button>
 
-</div>
+        <!-- お試し5問 -->
+        <button
+          class="trial-button"
+          id="trial-button"
+          type="button"
+        >
+          <span class="trial-label">
+            お試し版
+          </span>
 
-<p class="trial-note">
-  ※お試し版は正式ランク判定の対象外です
-</p>
+          <span class="trial-main">
+            まずは5問やってみる
+          </span>
+        </button>
+
+      </div>
+
+      <p class="trial-note">
+        ※お試し版は正式ランク判定の対象外です<br>
+        ※所要時間の目安：お試し版 約1〜2分 / 本番 約30分
+      </p>
 
     </section>
 
   </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="rank.js"></script>
-<script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="rank.js"></script>
+  <script src="app.js"></script>
 
 </body>
 </html>
