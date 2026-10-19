@@ -1090,12 +1090,11 @@ document.addEventListener(
           <br>
 
 
-          <button
-            class="restart-button
-                   trial-again-button"
-          >
-            もう一度5問やってみる
-          </button>
+<button
+  class="trial-result-button trial-again-button"
+>
+  もう一度5問やってみる
+</button>
 
         </div>
       `;
