@@ -312,16 +312,16 @@ h1 {
 .trial-label {
   display: block;
 
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 
-  color: #bdbdbd;
+  color: #d7d7d7;
 
-  font-size: 13px;
+  font-size: 18px;
   line-height: 1.3;
 
-  font-weight: 700;
+  font-weight: 800;
 
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
 }
 
 .trial-main {
