@@ -523,6 +523,8 @@ reportSubmitButton.addEventListener(
   }
 
   function showResult() {
+    //テスト用にスコアを設定
+    score = 95;
     const percentage =
       Math.round(
         (score / quizQuestions.length) * 100
