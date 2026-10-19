@@ -18,14 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
   startButton.addEventListener("click", startQuiz);
 
 async function startQuiz() {
-
-  // 結果画面テスト
-  score = 100;
-  quizQuestions = new Array(100);
-  showResult();
-  return;
-  // 結果画面テストおわり
-
   try {
 const response = await fetch(
   "data/questions.json",
