@@ -17,8 +17,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
   startButton.addEventListener("click", startQuiz);
 
-  async function startQuiz() {
-    try {
+async function startQuiz() {
+
+  // 結果画面テスト
+  score = 95;
+  quizQuestions = new Array(100);
+  showResult();
+  return;
+  // 結果画面テストおわり
+
+  try {
 const response = await fetch(
   "data/questions.json",
   {
@@ -523,8 +531,6 @@ reportSubmitButton.addEventListener(
   }
 
   function showResult() {
-    //テスト用にスコアを設定
-    score = 95;
     const percentage =
       Math.round(
         (score / quizQuestions.length) * 100
