@@ -822,3 +822,11 @@ h1 {
   opacity: 0.45;
   letter-spacing: 0.04em;
 }
+
+.rank-grade {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  font-size: 2.4rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
