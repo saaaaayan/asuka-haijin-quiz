@@ -830,3 +830,64 @@ h1 {
   font-weight: 900;
   letter-spacing: 0.08em;
 }
+
+.hero-buttons {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 36px;
+}
+
+.hero-buttons button {
+  min-width: 270px;
+}
+
+.hero-buttons button span {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.78;
+}
+
+.trial-button {
+  padding: 18px 26px;
+  border-radius: 14px;
+  border: 1px solid #7a6328;
+  background: #242424;
+  color: #f0c94f;
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.trial-button:hover {
+  transform: translateY(-2px);
+  border-color: #f0c94f;
+  background: #2b2b2b;
+}
+
+.start-button span {
+  display: block;
+}
+
+.trial-note {
+  margin-top: 14px;
+  color: #8f8f8f;
+  font-size: 13px;
+}
+
+@media (max-width: 700px) {
+  .hero-buttons {
+    flex-direction: column;
+  }
+
+  .hero-buttons button {
+    width: 100%;
+    min-width: 0;
+  }
+}
