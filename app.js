@@ -1,15 +1,11 @@
 const SUPABASE_URL =
   "https://eiseszhremqmeodxbcuc.supabase.co";
-
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_1mtFdVK6HheU4pVZ7D2wxg_7tb_9PDO";
-
 const QUIZ_SAVE_KEY =
   "asuka-haijin-quiz-progress-v1";
-
 const QUIZ_LAST_RESULT_KEY =
   "asuka-haijin-quiz-last-result-v1";
-
 const VALID_QUESTION_CATEGORIES = [
   "モンスター",
   "アイテム",
@@ -17,12 +13,10 @@ const VALID_QUESTION_CATEGORIES = [
   "仕様",
   "その他"
 ];
-
 const VALID_QUESTION_TYPES = [
   "single",
   "multiple"
 ];
-
 const supabaseClient =
   window.supabase.createClient(
     SUPABASE_URL,
@@ -702,6 +696,7 @@ document.addEventListener(
               total:
                 5
             }
+
           },
 
           categoryStatsComplete:
@@ -1260,7 +1255,7 @@ document.addEventListener(
        正誤判定
     ========================= */
 
-    async function checkAnswer(
+    function checkAnswer(
       selectedAnswer
     ) {
 
@@ -1273,6 +1268,9 @@ document.addEventListener(
 
       answerLocked =
         true;
+
+      const answeredQuestionIndex =
+        currentQuestionIndex;
 
       const question =
         quizQuestions[
@@ -1442,12 +1440,19 @@ document.addEventListener(
         }
       );
 
-      const stats =
-        await saveFirstAnswer(
+
+      /*
+        Supabaseへの保存・正答率取得は
+        画面表示を待たせず開始する
+      */
+
+      const statsPromise =
+        saveFirstAnswer(
           question.id,
           selectedAnswer,
           isCorrect
         );
+
 
       const resultTitle =
         isCorrect
@@ -1458,6 +1463,11 @@ document.addEventListener(
         isCorrect
           ? "result-correct"
           : "result-incorrect";
+
+
+      /*
+        正誤・解説は即座に表示
+      */
 
       answerArea.innerHTML = `
 
@@ -1534,40 +1544,26 @@ document.addEventListener(
             )}
           </p>
 
-          ${
-            stats
+          <div
+            class="
+              community-stats
+              community-stats-slot
+            "
+          >
 
-              ? `
+            <div
+              class="community-stats-title"
+            >
+              みんなの正答率
+            </div>
 
-                <div
-                  class="community-stats"
-                >
+            <div
+              class="community-stats-detail"
+            >
+              読み込み中...
+            </div>
 
-                  <div
-                    class="community-stats-title"
-                  >
-                    みんなの正答率
-                  </div>
-
-                  <div
-                    class="community-stats-number"
-                  >
-                    ${stats.accuracy}%
-                  </div>
-
-                  <div
-                    class="community-stats-detail"
-                  >
-                    ${stats.attempts}人中
-                    ${stats.correct}人正解
-                  </div>
-
-                </div>
-
-              `
-
-              : ""
-          }
+          </div>
 
           <div
             class="current-score"
@@ -1860,6 +1856,89 @@ document.addEventListener(
             reportSubmitButton.textContent =
               "物申す！";
           }
+        }
+      );
+
+
+      /* =========================
+         正答率だけ後から反映
+      ========================= */
+
+      statsPromise.then(
+        function (
+          stats
+        ) {
+
+          /*
+            正答率取得中に次の問題へ進んでいたら
+            古い問題の結果で新しい画面を書き換えない
+          */
+
+          if (
+            currentQuestionIndex !==
+              answeredQuestionIndex
+          ) {
+
+            return;
+          }
+
+          const statsSlot =
+            document.querySelector(
+              ".community-stats-slot"
+            );
+
+          if (
+            !statsSlot
+          ) {
+
+            return;
+          }
+
+          if (
+            !stats
+          ) {
+
+            statsSlot.innerHTML = `
+
+              <div
+                class="community-stats-title"
+              >
+                みんなの正答率
+              </div>
+
+              <div
+                class="community-stats-detail"
+              >
+                正答率を取得できませんでした
+              </div>
+
+            `;
+
+            return;
+          }
+
+          statsSlot.innerHTML = `
+
+            <div
+              class="community-stats-title"
+            >
+              みんなの正答率
+            </div>
+
+            <div
+              class="community-stats-number"
+            >
+              ${stats.accuracy}%
+            </div>
+
+            <div
+              class="community-stats-detail"
+            >
+              ${stats.attempts}人中
+              ${stats.correct}人正解
+            </div>
+
+          `;
         }
       );
     }
@@ -2582,6 +2661,7 @@ ${escapeHtml(
           explanation:
             "テスト"
         }
+
       ];
 
       try {
@@ -2672,6 +2752,7 @@ ${escapeHtml(
           total:
             5
         }
+
       };
 
       const rankResult =
