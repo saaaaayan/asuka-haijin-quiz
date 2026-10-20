@@ -86,7 +86,7 @@ document.addEventListener(
 
           const confirmed =
             confirm(
-              "途中までのデータを削除して、100問検定を最初から始めますか？"
+              "途中までのデータを削除しますか？"
             );
 
           if (!confirmed) {
@@ -94,7 +94,8 @@ document.addEventListener(
           }
 
           clearProgress();
-          startQuiz(100, "main");
+
+          window.location.reload();
         }
       );
     }
@@ -184,8 +185,11 @@ document.addEventListener(
     function showQuestion() {
 
       if (quizMode === "main") {
-        saveProgress(currentQuestionIndex);
+        saveProgress(
+          currentQuestionIndex
+        );
       }
+
 
       const question =
         quizQuestions[
