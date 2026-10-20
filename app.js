@@ -3181,9 +3181,26 @@ ${escapeHtml(
           </p>
 
 
-          <h1>
-            検定結果
-          </h1>
+          <div class="result-brand">
+
+            <div class="result-brand-title">
+
+              <span class="title-asuka">
+                アスカ見参
+              </span>
+
+              <span class="title-haijin">
+                廃人検定
+              </span>
+
+            </div>
+
+
+            <h1 class="result-heading">
+              検定結果
+            </h1>
+
+          </div>
 
 
           ${
