@@ -2,7 +2,6 @@
   box-sizing: border-box;
 }
 
-
 body {
   margin: 0;
   min-height: 100vh;
@@ -37,7 +36,6 @@ body {
   padding: 80px 0;
 }
 
-
 .quiz-card {
   border-radius: 22px;
   padding: 55px;
@@ -68,7 +66,6 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
-
 .hero-card::before {
   content: "";
 
@@ -88,7 +85,6 @@ body {
     );
 }
 
-
 .hero-label {
   position: relative;
 
@@ -102,6 +98,10 @@ body {
   letter-spacing: 0.18em;
 }
 
+
+/* =========================
+   共通 h1
+========================= */
 
 h1 {
   position: relative;
@@ -123,6 +123,30 @@ h1 {
 }
 
 
+/* =========================
+   トップタイトル
+   Yuji Syuku
+========================= */
+
+.hero-card > h1 {
+  font-family:
+    "Yuji Syuku",
+    "Yu Mincho",
+    "Hiragino Mincho ProN",
+    serif;
+
+  font-weight: 400;
+
+  letter-spacing: 0.055em;
+
+  color: #f6f1e4;
+
+  text-shadow:
+    0 2px 2px rgba(0, 0, 0, 0.95),
+    0 0 14px rgba(212, 175, 55, 0.10);
+}
+
+
 .hero-catch {
   position: relative;
 
@@ -136,7 +160,6 @@ h1 {
   color: #f5f0df;
 }
 
-
 .subtitle {
   position: relative;
 
@@ -149,7 +172,6 @@ h1 {
 
   color: #ccc;
 }
-
 
 .hero-warning {
   position: relative;
@@ -189,7 +211,7 @@ h1 {
 }
 
 
-/* 本番100問：左 */
+/* 本番100問 */
 
 .start-button {
   order: 1;
@@ -225,7 +247,6 @@ h1 {
     box-shadow 0.15s ease;
 }
 
-
 .start-button:hover {
   transform:
     translateY(-2px);
@@ -235,7 +256,6 @@ h1 {
     rgba(212, 175, 55, 0.32);
 }
 
-
 .button-main {
   display: block;
 
@@ -244,7 +264,6 @@ h1 {
 
   font-weight: 900;
 }
-
 
 .button-sub {
   display: block;
@@ -260,7 +279,7 @@ h1 {
 }
 
 
-/* お試し5問：右 */
+/* お試し5問 */
 
 .trial-button {
   order: 2;
@@ -301,7 +320,6 @@ h1 {
     box-shadow 0.15s ease;
 }
 
-
 .trial-button:hover {
   transform:
     translateY(-2px);
@@ -317,12 +335,9 @@ h1 {
     );
 
   box-shadow:
-    0 8px 24px
-    rgba(0, 0, 0, 0.25),
-    inset 0 1px 0
-    rgba(255, 255, 255, 0.06);
+    0 8px 24px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
-
 
 .trial-label {
   display: block;
@@ -338,7 +353,6 @@ h1 {
 
   letter-spacing: 0.04em;
 }
-
 
 .trial-main {
   display: block;
@@ -379,7 +393,6 @@ h1 {
   color: #fff;
 }
 
-
 .quiz-card > p:first-child {
   color: #d9b94e;
 
@@ -396,8 +409,7 @@ h1 {
 .question-meta {
   display: flex;
 
-  justify-content:
-    space-between;
+  justify-content: space-between;
 
   gap: 20px;
 
@@ -410,12 +422,10 @@ h1 {
   font-weight: bold;
 }
 
-
 .question-meta > span:first-child {
   font-size: 18px;
   font-weight: 800;
 }
-
 
 .question-meta-right {
   margin-left: auto;
@@ -431,7 +441,6 @@ h1 {
   gap: 4px;
 }
 
-
 .question-id {
   font-size: 0.72rem;
 
@@ -439,7 +448,6 @@ h1 {
 
   letter-spacing: 0.04em;
 }
-
 
 .category {
   color: #aaa;
@@ -481,7 +489,6 @@ h1 {
   margin-top: 28px;
 }
 
-
 .choice-button {
   width: 100%;
 
@@ -518,7 +525,6 @@ h1 {
     transform 0.15s ease;
 }
 
-
 .choice-button:hover {
   border-color: #d4af37;
 
@@ -529,13 +535,11 @@ h1 {
     translateY(-1px);
 }
 
-
 .choice-button:disabled {
   cursor: default;
 
   opacity: 1;
 }
-
 
 .choice-button.selected {
   border-color: #d4af37;
@@ -543,7 +547,6 @@ h1 {
   background:
     rgba(212, 175, 55, 0.12);
 }
-
 
 .choice-button.correct {
   border-color: #4caf70;
@@ -554,7 +557,6 @@ h1 {
   color: #d9ffe4;
 }
 
-
 .choice-button.incorrect {
   border-color: #d9534f;
 
@@ -563,7 +565,6 @@ h1 {
 
   color: #ffd7d5;
 }
-
 
 .choice-label {
   display: inline-flex;
@@ -589,7 +590,6 @@ h1 {
   flex-shrink: 0;
 }
 
-
 .choice-text {
   flex: 1;
 }
@@ -614,18 +614,15 @@ h1 {
     rgba(255, 255, 255, 0.08);
 }
 
-
 .result-correct {
   border-left:
     4px solid #4caf70;
 }
 
-
 .result-incorrect {
   border-left:
     4px solid #d9534f;
 }
-
 
 .result-title {
   margin-bottom: 15px;
@@ -635,18 +632,13 @@ h1 {
   font-weight: 800;
 }
 
-
-.result-correct
-.result-title {
+.result-correct .result-title {
   color: #77d997;
 }
 
-
-.result-incorrect
-.result-title {
+.result-incorrect .result-title {
   color: #ef7772;
 }
-
 
 .correct-answer {
   display: flex;
@@ -664,13 +656,11 @@ h1 {
   color: #f2d36f;
 }
 
-
 .correct-answer-title {
   color: #f0d26d;
 
   font-weight: 800;
 }
-
 
 .correct-answer-label {
   display: inline-flex;
@@ -696,13 +686,11 @@ h1 {
   flex-shrink: 0;
 }
 
-
 .correct-answer-text {
   color: #f5f5f5;
 
   font-weight: 700;
 }
-
 
 .explanation-title {
   margin-bottom: 8px;
@@ -715,7 +703,6 @@ h1 {
 
   letter-spacing: 0.08em;
 }
-
 
 .explanation {
   margin: 0;
@@ -737,8 +724,7 @@ h1 {
 
   align-items: center;
 
-  justify-content:
-    space-between;
+  justify-content: space-between;
 
   margin-top: 22px;
 
@@ -754,7 +740,6 @@ h1 {
     rgba(212, 175, 55, 0.04);
 }
 
-
 .current-score-label {
   color: #aaa;
 
@@ -762,7 +747,6 @@ h1 {
 
   font-weight: 700;
 }
-
 
 .current-score-number {
   color: #f0d26d;
@@ -807,7 +791,6 @@ h1 {
     box-shadow 0.15s ease;
 }
 
-
 .next-button:hover,
 .restart-button:hover {
   transform:
@@ -850,7 +833,6 @@ h1 {
   cursor: pointer;
 }
 
-
 .submit-answer-button:disabled {
   opacity: 0.35;
 
@@ -866,7 +848,6 @@ h1 {
   text-align: center;
 }
 
-
 .final-score {
   margin-top: 25px;
 
@@ -877,13 +858,11 @@ h1 {
   color: #f0d26d;
 }
 
-
 .final-score span {
   font-size: 28px;
 
   color: #aaa;
 }
-
 
 .percentage {
   margin-top: 8px;
@@ -892,7 +871,6 @@ h1 {
 
   color: #ccc;
 }
-
 
 .rank-label {
   margin-top: 35px;
@@ -903,7 +881,6 @@ h1 {
 
   letter-spacing: 0.1em;
 }
-
 
 .rank-grade {
   margin-top: 8px;
@@ -916,7 +893,6 @@ h1 {
 
   letter-spacing: 0.08em;
 }
-
 
 .rank {
   margin-top: 8px;
@@ -950,7 +926,6 @@ h1 {
     rgba(212, 175, 55, 0.05);
 }
 
-
 .community-stats-title {
   font-size: 13px;
 
@@ -961,7 +936,6 @@ h1 {
   letter-spacing: 0.08em;
 }
 
-
 .community-stats-number {
   margin-top: 6px;
 
@@ -971,7 +945,6 @@ h1 {
 
   color: #f0d26d;
 }
-
 
 .community-stats-detail {
   margin-top: 4px;
@@ -995,7 +968,6 @@ h1 {
     1px solid
     rgba(255, 255, 255, 0.08);
 }
-
 
 .report-toggle-button {
   padding: 10px 18px;
@@ -1021,7 +993,6 @@ h1 {
     background 0.15s ease;
 }
 
-
 .report-toggle-button:hover {
   border-color: #d4af37;
 
@@ -1030,7 +1001,6 @@ h1 {
   background:
     rgba(212, 175, 55, 0.06);
 }
-
 
 .report-form {
   margin-top: 20px;
@@ -1047,11 +1017,9 @@ h1 {
     rgba(255, 255, 255, 0.08);
 }
 
-
 .hidden {
   display: none;
 }
-
 
 .report-heading {
   margin-bottom: 14px;
@@ -1062,7 +1030,6 @@ h1 {
 
   color: #eee;
 }
-
 
 .report-type {
   width: 100%;
@@ -1083,7 +1050,6 @@ h1 {
 
   font-size: 15px;
 }
-
 
 .report-message {
   width: 100%;
@@ -1111,14 +1077,12 @@ h1 {
   line-height: 1.7;
 }
 
-
 .report-message:focus,
 .report-type:focus {
   outline: none;
 
   border-color: #d4af37;
 }
-
 
 .report-note {
   margin: 10px 0 0;
@@ -1127,7 +1091,6 @@ h1 {
 
   font-size: 12px;
 }
-
 
 .report-submit-button {
   margin-top: 16px;
@@ -1154,13 +1117,11 @@ h1 {
   cursor: pointer;
 }
 
-
 .report-submit-button:disabled {
   opacity: 0.6;
 
   cursor: default;
 }
-
 
 .report-status {
   margin-top: 14px;
@@ -1168,14 +1129,513 @@ h1 {
   font-size: 14px;
 }
 
-
 .report-status.success {
   color: #77d997;
 }
 
-
 .report-status.error {
   color: #ef7772;
+}
+
+
+/* =========================
+   お試し結果ボタン
+========================= */
+
+.trial-result-button {
+  margin-top: 18px;
+
+  padding: 15px 30px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.18);
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #3e3e3e,
+      #303030
+    );
+
+  color: #f2f2f2;
+
+  font-size: 17px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.trial-result-button:hover {
+  transform: translateY(-2px);
+
+  background:
+    linear-gradient(
+      145deg,
+      #484848,
+      #393939
+    );
+
+  border-color:
+    rgba(255, 255, 255, 0.32);
+}
+
+
+/* =========================
+   進捗バー
+========================= */
+
+.progress-wrap {
+  width: 100%;
+  height: 7px;
+
+  margin:
+    10px 0
+    24px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+}
+
+.progress-bar {
+  height: 100%;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #b88a1d,
+      #e0bd55
+    );
+
+  transition:
+    width 0.3s ease;
+}
+
+
+/* =========================
+   中断・再開
+========================= */
+
+.resume-area {
+  position: relative;
+
+  margin: 28px 0 6px;
+
+  padding: 18px;
+
+  border:
+    1px solid
+    rgba(212, 175, 55, 0.22);
+
+  border-radius: 14px;
+
+  background:
+    rgba(212, 175, 55, 0.045);
+}
+
+.resume-area.hidden {
+  display: none;
+}
+
+.resume-heading {
+  margin-bottom: 12px;
+
+  color: #d9b94e;
+
+  font-size: 14px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.04em;
+}
+
+.resume-button {
+  width: 100%;
+
+  padding: 15px 22px;
+
+  border:
+    1px solid
+    rgba(212, 175, 55, 0.48);
+
+  border-radius: 12px;
+
+  background:
+    rgba(212, 175, 55, 0.08);
+
+  color: #f0d26d;
+
+  font-family: inherit;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.resume-button:hover {
+  transform: translateY(-1px);
+
+  background:
+    rgba(212, 175, 55, 0.13);
+
+  border-color: #d4af37;
+}
+
+.resume-main {
+  display: block;
+
+  font-size: 19px;
+
+  font-weight: 900;
+}
+
+.resume-detail {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #bbb;
+
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+.resume-reset-button {
+  width: 100%;
+
+  margin-top: 10px;
+
+  padding: 11px 18px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.14);
+
+  border-radius: 10px;
+
+  background:
+    rgba(255, 255, 255, 0.035);
+
+  color: #aaa;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    color 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.resume-reset-button:hover {
+  color: #eee;
+
+  background:
+    rgba(255, 255, 255, 0.065);
+
+  border-color:
+    rgba(255, 255, 255, 0.28);
+}
+
+
+/* =========================
+   中断ボタン
+========================= */
+
+.pause-row {
+  display: flex;
+
+  justify-content: flex-end;
+
+  margin: -6px 0 18px;
+}
+
+.pause-button {
+  min-width: 180px;
+  min-height: 46px;
+
+  padding: 12px 18px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.18);
+
+  border-radius: 10px;
+
+  background:
+    rgba(255, 255, 255, 0.045);
+
+  color: #aaa;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    color 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.pause-button:hover {
+  color: #eee;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+
+  border-color:
+    rgba(255, 255, 255, 0.32);
+
+  transform:
+    translateY(-1px);
+}
+
+
+/* =========================
+   解答後の次へボタン固定
+========================= */
+
+.answer-next-button {
+  position: fixed;
+
+  left: 50%;
+  bottom: 20px;
+
+  width: 340px;
+
+  max-width:
+    calc(
+      100% - 36px
+    );
+
+  margin: 0;
+
+  padding: 16px 24px;
+
+  transform:
+    translateX(-50%);
+
+  z-index: 1000;
+
+  box-shadow:
+    0 8px 30px
+    rgba(0, 0, 0, 0.55),
+
+    0 5px 20px
+    rgba(212, 175, 55, 0.25);
+}
+
+.answer-next-button:hover {
+  transform:
+    translateX(-50%)
+    translateY(-2px);
+}
+
+
+/*
+  固定ボタンで解説の最後が
+  隠れないよう余白を確保
+*/
+
+#answer-area .result-box {
+  margin-bottom: 95px;
+}
+
+
+/* =========================
+   結果：カテゴリ別正答率
+========================= */
+
+.category-results {
+  margin-top: 34px;
+
+  padding: 24px;
+
+  text-align: left;
+
+  border:
+    1px solid
+    rgba(212, 175, 55, 0.18);
+
+  border-radius: 14px;
+
+  background:
+    rgba(212, 175, 55, 0.035);
+}
+
+.category-results-title {
+  margin-bottom: 18px;
+
+  color: #f0d26d;
+
+  font-size: 18px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.04em;
+}
+
+.category-results-list {
+  display: grid;
+
+  gap: 18px;
+}
+
+.category-result-row {
+  min-width: 0;
+}
+
+.category-result-top {
+  display: flex;
+
+  align-items: baseline;
+
+  justify-content: space-between;
+
+  gap: 16px;
+
+  margin-bottom: 8px;
+}
+
+.category-result-name {
+  min-width: 0;
+
+  color: #eee;
+
+  font-size: 15px;
+
+  font-weight: 800;
+}
+
+.category-result-score {
+  flex-shrink: 0;
+
+  color: #aaa;
+
+  font-size: 14px;
+
+  font-weight: 700;
+}
+
+.category-result-score strong {
+  margin-left: 10px;
+
+  font-size: 16px;
+
+  font-weight: 900;
+}
+
+.category-result-bar-wrap {
+  width: 100%;
+  height: 7px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+}
+
+.category-result-bar {
+  height: 100%;
+
+  border-radius: 999px;
+
+  transition:
+    width 0.45s ease;
+}
+
+
+/* 80%以上：金 */
+
+.category-result-bar.high {
+  background:
+    linear-gradient(
+      90deg,
+      #b88a1d,
+      #f0d26d
+    );
+}
+
+.category-result-accuracy.high {
+  color: #f0d26d;
+}
+
+
+/* 50～79%：オレンジ */
+
+.category-result-bar.middle {
+  background:
+    linear-gradient(
+      90deg,
+      #b96818,
+      #e69a35
+    );
+}
+
+.category-result-accuracy.middle {
+  color: #e69a35;
+}
+
+
+/* 0～49%：赤 */
+
+.category-result-bar.low {
+  background:
+    linear-gradient(
+      90deg,
+      #9f3733,
+      #df625b
+    );
+}
+
+.category-result-accuracy.low {
+  color: #ef7772;
+}
+
+.category-results-note {
+  margin: 0;
+
+  color: #aaa;
+
+  font-size: 14px;
+
+  line-height: 1.8;
 }
 
 
@@ -1196,25 +1656,39 @@ h1 {
 
 
   /*
-    トップタイトルだけスマホで1行表示
-    「アスカ見参　廃人検定」
+    Yuji Syuku のタイトルを
+    スマホでも1行に収める
   */
 
   .hero-card > h1 {
+    font-family:
+      "Yuji Syuku",
+      "Yu Mincho",
+      "Hiragino Mincho ProN",
+      serif;
+
     font-size:
       clamp(
-        28px,
-        8.2vw,
+        27px,
+        7.8vw,
         34px
       );
 
-    line-height: 1.15;
+    font-weight: 400;
 
-    letter-spacing: 0.01em;
+    line-height: 1.2;
+
+    letter-spacing: 0.025em;
 
     white-space: nowrap;
 
     word-break: keep-all;
+
+    color: #f6f1e4;
+
+    text-shadow:
+      0 2px 2px rgba(0, 0, 0, 0.95),
+      0 0 12px rgba(212, 175, 55, 0.10);
   }
 
 
@@ -1286,325 +1760,11 @@ h1 {
 
 
   .next-button,
-  .restart-button {
-    width: 100%;
-  }
-}
-
-
-/* =========================
-   お試し結果ボタン
-========================= */
-
-.trial-result-button {
-  margin-top: 18px;
-
-  padding: 15px 30px;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.18);
-
-  border-radius: 10px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #3e3e3e,
-      #303030
-    );
-
-  color: #f2f2f2;
-
-  font-size: 17px;
-
-  font-weight: 800;
-
-  cursor: pointer;
-
-  transition:
-    transform 0.15s ease,
-    background 0.15s ease,
-    border-color 0.15s ease;
-}
-
-
-.trial-result-button:hover {
-  transform: translateY(-2px);
-
-  background:
-    linear-gradient(
-      145deg,
-      #484848,
-      #393939
-    );
-
-  border-color:
-    rgba(255, 255, 255, 0.32);
-}
-
-
-@media (max-width: 700px) {
-
+  .restart-button,
   .trial-result-button {
     width: 100%;
   }
-}
 
-
-/* =========================
-   進捗バー
-========================= */
-
-.progress-wrap {
-  width: 100%;
-  height: 7px;
-
-  margin:
-    10px 0
-    24px;
-
-  overflow: hidden;
-
-  border-radius: 999px;
-
-  background:
-    rgba(255, 255, 255, 0.08);
-}
-
-
-.progress-bar {
-  height: 100%;
-
-  border-radius: 999px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #b88a1d,
-      #e0bd55
-    );
-
-  transition:
-    width 0.3s ease;
-}
-
-
-/* =========================
-   中断・再開
-========================= */
-
-.resume-area {
-  position: relative;
-
-  margin: 28px 0 6px;
-
-  padding: 18px;
-
-  border:
-    1px solid
-    rgba(212, 175, 55, 0.22);
-
-  border-radius: 14px;
-
-  background:
-    rgba(212, 175, 55, 0.045);
-}
-
-
-.resume-area.hidden {
-  display: none;
-}
-
-
-.resume-heading {
-  margin-bottom: 12px;
-
-  color: #d9b94e;
-
-  font-size: 14px;
-
-  font-weight: 800;
-
-  letter-spacing: 0.04em;
-}
-
-
-.resume-button {
-  width: 100%;
-
-  padding: 15px 22px;
-
-  border:
-    1px solid
-    rgba(212, 175, 55, 0.48);
-
-  border-radius: 12px;
-
-  background:
-    rgba(212, 175, 55, 0.08);
-
-  color: #f0d26d;
-
-  font-family: inherit;
-
-  cursor: pointer;
-
-  transition:
-    transform 0.15s ease,
-    background 0.15s ease,
-    border-color 0.15s ease;
-}
-
-
-.resume-button:hover {
-  transform: translateY(-1px);
-
-  background:
-    rgba(212, 175, 55, 0.13);
-
-  border-color: #d4af37;
-}
-
-
-.resume-main {
-  display: block;
-
-  font-size: 19px;
-
-  font-weight: 900;
-}
-
-
-.resume-detail {
-  display: block;
-
-  margin-top: 5px;
-
-  color: #bbb;
-
-  font-size: 13px;
-
-  font-weight: 700;
-}
-
-
-.resume-reset-button {
-  width: 100%;
-
-  margin-top: 10px;
-
-  padding: 11px 18px;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.14);
-
-  border-radius: 10px;
-
-  background:
-    rgba(255, 255, 255, 0.035);
-
-  color: #aaa;
-
-  font-family: inherit;
-
-  font-size: 13px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition:
-    color 0.15s ease,
-    background 0.15s ease,
-    border-color 0.15s ease;
-}
-
-
-.resume-reset-button:hover {
-  color: #eee;
-
-  background:
-    rgba(255, 255, 255, 0.065);
-
-  border-color:
-    rgba(255, 255, 255, 0.28);
-}
-
-
-/* =========================
-   中断ボタン
-========================= */
-
-.pause-row {
-  display: flex;
-
-  justify-content: flex-end;
-
-  margin: -6px 0 18px;
-}
-
-
-.pause-button {
-  min-width: 180px;
-
-  min-height: 46px;
-
-  padding: 12px 18px;
-
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.18);
-
-  border-radius: 10px;
-
-  background:
-    rgba(255, 255, 255, 0.045);
-
-  color: #aaa;
-
-  font-family: inherit;
-
-  font-size: 13px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition:
-    color 0.15s ease,
-    background 0.15s ease,
-    border-color 0.15s ease,
-    transform 0.15s ease;
-}
-
-
-.pause-button:hover {
-  color: #eee;
-
-  background:
-    rgba(255, 255, 255, 0.08);
-
-  border-color:
-    rgba(255, 255, 255, 0.32);
-
-  transform:
-    translateY(-1px);
-}
-
-
-/* =========================
-   中断・再開：スマホ
-========================= */
-
-@media (max-width: 700px) {
 
   .resume-area {
     padding: 15px;
@@ -1621,66 +1781,7 @@ h1 {
 
     min-height: 48px;
   }
-}
 
-
-/* =========================
-   解答後の次へボタン固定
-   PC・スマホ共通
-========================= */
-
-.answer-next-button {
-  position: fixed;
-
-  left: 50%;
-
-  bottom: 20px;
-
-  width: 340px;
-
-  max-width:
-    calc(
-      100% - 36px
-    );
-
-  margin: 0;
-
-  padding: 16px 24px;
-
-  transform:
-    translateX(-50%);
-
-  z-index: 1000;
-
-  box-shadow:
-    0 8px 30px
-    rgba(0, 0, 0, 0.55),
-
-    0 5px 20px
-    rgba(212, 175, 55, 0.25);
-}
-
-
-.answer-next-button:hover {
-  transform:
-    translateX(-50%)
-    translateY(-2px);
-}
-
-
-/*
-  固定ボタンに解説の一番下が
-  隠れないよう余白を確保
-*/
-
-#answer-area .result-box {
-  margin-bottom: 95px;
-}
-
-
-/* スマホでは横幅を広くする */
-
-@media (max-width: 700px) {
 
   .answer-next-button {
     bottom: 18px;
@@ -1693,182 +1794,7 @@ h1 {
         520px
       );
   }
-}
 
-
-/* =========================
-   結果：カテゴリ別正答率
-========================= */
-
-.category-results {
-  margin-top: 34px;
-
-  padding: 24px;
-
-  text-align: left;
-
-  border:
-    1px solid
-    rgba(212, 175, 55, 0.18);
-
-  border-radius: 14px;
-
-  background:
-    rgba(212, 175, 55, 0.035);
-}
-
-
-.category-results-title {
-  margin-bottom: 18px;
-
-  color: #f0d26d;
-
-  font-size: 18px;
-
-  font-weight: 900;
-
-  letter-spacing: 0.04em;
-}
-
-
-.category-results-list {
-  display: grid;
-
-  gap: 18px;
-}
-
-
-.category-result-row {
-  min-width: 0;
-}
-
-
-.category-result-top {
-  display: flex;
-
-  align-items: baseline;
-
-  justify-content:
-    space-between;
-
-  gap: 16px;
-
-  margin-bottom: 8px;
-}
-
-
-.category-result-name {
-  min-width: 0;
-
-  color: #eee;
-
-  font-size: 15px;
-
-  font-weight: 800;
-}
-
-
-.category-result-score {
-  flex-shrink: 0;
-
-  color: #aaa;
-
-  font-size: 14px;
-
-  font-weight: 700;
-}
-
-
-.category-result-score strong {
-  margin-left: 10px;
-
-  font-size: 16px;
-
-  font-weight: 900;
-}
-
-
-.category-result-accuracy.high {
-  color: #f0d26d;
-}
-
-
-.category-result-accuracy.middle {
-  color: #f0a44b;
-}
-
-
-.category-result-accuracy.low {
-  color: #ef7772;
-}
-
-
-.category-result-bar-wrap {
-  width: 100%;
-
-  height: 7px;
-
-  overflow: hidden;
-
-  border-radius: 999px;
-
-  background:
-    rgba(255, 255, 255, 0.08);
-}
-
-
-.category-result-bar {
-  height: 100%;
-
-  border-radius: 999px;
-
-  transition:
-    width 0.35s ease;
-}
-
-
-.category-result-bar.high {
-  background:
-    linear-gradient(
-      90deg,
-      #b88a1d,
-      #e0bd55
-    );
-}
-
-
-.category-result-bar.middle {
-  background:
-    linear-gradient(
-      90deg,
-      #c6752b,
-      #f0a44b
-    );
-}
-
-
-.category-result-bar.low {
-  background:
-    linear-gradient(
-      90deg,
-      #b94a48,
-      #ef7772
-    );
-}
-
-
-.category-results-note {
-  margin: 0;
-
-  color: #aaa;
-
-  font-size: 14px;
-
-  line-height: 1.8;
-}
-
-
-@media (max-width: 700px) {
 
   .category-results {
     padding: 18px;
@@ -1895,71 +1821,4 @@ h1 {
 
     font-size: 15px;
   }
-}
-
-
-/* =========================
-   カテゴリ別正答率：成績カラー
-========================= */
-
-/* 80%以上：金 */
-
-.category-result-bar.high {
-  background:
-    linear-gradient(
-      90deg,
-      #b88a1d,
-      #f0d26d
-    );
-}
-
-
-.category-result-accuracy.high {
-  color: #f0d26d;
-}
-
-
-/* 50～79%：オレンジ */
-
-.category-result-bar.middle {
-  background:
-    linear-gradient(
-      90deg,
-      #b96818,
-      #e69a35
-    );
-}
-
-
-.category-result-accuracy.middle {
-  color: #e69a35;
-}
-
-
-/* 0～49%：赤 */
-
-.category-result-bar.low {
-  background:
-    linear-gradient(
-      90deg,
-      #9f3733,
-      #df625b
-    );
-}
-
-
-.category-result-accuracy.low {
-  color: #ef7772;
-}
-
-
-/* バーの伸びを少し滑らかに */
-
-.category-result-bar {
-  height: 100%;
-
-  border-radius: 999px;
-
-  transition:
-    width 0.45s ease;
 }
