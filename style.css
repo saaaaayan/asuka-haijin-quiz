@@ -1273,3 +1273,184 @@ h1 {
   transition:
     width 0.3s ease;
 }
+
+/* =========================
+   中断・再開
+========================= */
+
+.resume-area {
+  position: relative;
+
+  margin: 28px 0 6px;
+  padding: 18px;
+
+  border:
+    1px solid
+    rgba(212, 175, 55, 0.22);
+
+  border-radius: 14px;
+
+  background:
+    rgba(212, 175, 55, 0.045);
+}
+
+.resume-area.hidden {
+  display: none;
+}
+
+.resume-heading {
+  margin-bottom: 12px;
+
+  color: #d9b94e;
+
+  font-size: 14px;
+  font-weight: 800;
+
+  letter-spacing: 0.04em;
+}
+
+.resume-button {
+  width: 100%;
+
+  padding: 15px 22px;
+
+  border:
+    1px solid
+    rgba(212, 175, 55, 0.48);
+
+  border-radius: 12px;
+
+  background:
+    rgba(212, 175, 55, 0.08);
+
+  color: #f0d26d;
+
+  font-family: inherit;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.resume-button:hover {
+  transform: translateY(-1px);
+
+  background:
+    rgba(212, 175, 55, 0.13);
+
+  border-color: #d4af37;
+}
+
+.resume-main {
+  display: block;
+
+  font-size: 19px;
+  font-weight: 900;
+}
+
+.resume-detail {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #bbb;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.resume-reset-button {
+  width: 100%;
+
+  margin-top: 10px;
+  padding: 11px 18px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.14);
+
+  border-radius: 10px;
+
+  background:
+    rgba(255, 255, 255, 0.035);
+
+  color: #aaa;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    color 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.resume-reset-button:hover {
+  color: #eee;
+
+  background:
+    rgba(255, 255, 255, 0.065);
+
+  border-color:
+    rgba(255, 255, 255, 0.28);
+}
+
+.pause-row {
+  display: flex;
+  justify-content: flex-end;
+
+  margin: -10px 0 12px;
+}
+
+.pause-button {
+  padding: 8px 13px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.14);
+
+  border-radius: 9px;
+
+  background:
+    rgba(255, 255, 255, 0.03);
+
+  color: #999;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    color 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.pause-button:hover {
+  color: #ddd;
+
+  background:
+    rgba(255, 255, 255, 0.055);
+
+  border-color:
+    rgba(255, 255, 255, 0.26);
+}
+
+@media (max-width: 700px) {
+  .resume-area {
+    padding: 15px;
+  }
+
+  .pause-row {
+    justify-content: flex-start;
+  }
+}
+
