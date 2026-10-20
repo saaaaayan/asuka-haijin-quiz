@@ -1628,10 +1628,20 @@ h1 {
 .category-result-score strong {
   margin-left: 10px;
 
-  color: #f0d26d;
-
   font-size: 16px;
   font-weight: 900;
+}
+
+.category-result-accuracy.high {
+  color: #f0d26d;
+}
+
+.category-result-accuracy.middle {
+  color: #f0a44b;
+}
+
+.category-result-accuracy.low {
+  color: #ef7772;
 }
 
 .category-result-bar-wrap {
@@ -1651,11 +1661,34 @@ h1 {
 
   border-radius: 999px;
 
+  transition:
+    width 0.35s ease;
+}
+
+.category-result-bar.high {
   background:
     linear-gradient(
       90deg,
       #b88a1d,
       #e0bd55
+    );
+}
+
+.category-result-bar.middle {
+  background:
+    linear-gradient(
+      90deg,
+      #c6752b,
+      #f0a44b
+    );
+}
+
+.category-result-bar.low {
+  background:
+    linear-gradient(
+      90deg,
+      #b94a48,
+      #ef7772
     );
 }
 
