@@ -3947,3 +3947,52 @@ body {
       1.85;
   }
 }
+
+/* =========================
+   カテゴリ別正答率
+   フォント統一
+========================= */
+
+.category-results-title {
+  font-family:
+    "Noto Sans JP",
+    "Yu Gothic",
+    sans-serif;
+
+  font-size: 19px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.035em;
+}
+
+
+.category-result-name {
+  font-family:
+    "Noto Sans JP",
+    "Yu Gothic",
+    sans-serif;
+
+  font-weight: 700;
+
+  letter-spacing: 0.01em;
+}
+
+
+.category-result-score,
+.category-result-score strong {
+  font-family:
+    "Noto Sans JP",
+    "Yu Gothic",
+    sans-serif;
+
+  font-weight: 700;
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+
+.category-result-score strong {
+  font-weight: 900;
+}
