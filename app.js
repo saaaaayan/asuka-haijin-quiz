@@ -7,6 +7,19 @@ const SUPABASE_PUBLISHABLE_KEY =
 const QUIZ_SAVE_KEY =
   "asuka-haijin-quiz-progress-v1";
 
+const VALID_QUESTION_CATEGORIES = [
+  "モンスター",
+  "アイテム",
+  "ダンジョン",
+  "仕様",
+  "その他"
+];
+
+const VALID_QUESTION_TYPES = [
+  "single",
+  "multiple"
+];
+
 const supabaseClient =
   window.supabase.createClient(
     SUPABASE_URL,
@@ -70,13 +83,14 @@ document.addEventListener(
         window.location.search
       );
 
-
     const isTestMode =
       urlParams.get("test") === "1";
 
-
     const isResultTestMode =
       urlParams.get("resulttest") === "1";
+
+    const isDataTestMode =
+      urlParams.get("datatest") === "1";
 
 
     /* =========================
@@ -87,10 +101,7 @@ document.addEventListener(
 
       mainButton.addEventListener(
         "click",
-        function () {
-
-          startMainQuizFromBeginning();
-        }
+        startMainQuizFromBeginning
       );
     }
 
@@ -130,12 +141,10 @@ document.addEventListener(
               "途中までのデータを削除しますか？"
             );
 
-
           if (!confirmed) {
 
             return;
           }
-
 
           clearProgress();
 
@@ -146,6 +155,14 @@ document.addEventListener(
 
 
     updateResumeArea();
+
+
+    if (isDataTestMode) {
+
+      runDataValidationTest();
+
+      return;
+    }
 
 
     if (isResultTestMode) {
@@ -165,30 +182,14 @@ document.addEventListener(
       mode = "main"
     ) {
 
-      quizMode = mode;
+      quizMode =
+        mode;
 
 
       try {
 
-        const response =
-          await fetch(
-            "data/questions.json",
-            {
-              cache: "no-store"
-            }
-          );
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            "問題データを読み込めませんでした。"
-          );
-        }
-
-
         const allQuestions =
-          await response.json();
+          await loadQuestionsData();
 
 
         quizQuestions =
@@ -203,20 +204,26 @@ document.addEventListener(
           );
 
 
-        currentQuestionIndex = 0;
+        currentQuestionIndex =
+          0;
 
-        score = 0;
+        score =
+          0;
 
-        categoryStats = {};
+        categoryStats =
+          {};
 
-        categoryStatsComplete = true;
+        categoryStatsComplete =
+          true;
 
 
         if (
           quizMode === "main"
         ) {
 
-          saveProgress(0);
+          saveProgress(
+            0
+          );
         }
 
 
@@ -225,18 +232,7 @@ document.addEventListener(
 
       } catch (error) {
 
-        quizCard.innerHTML = `
-          <h2>
-            エラー
-          </h2>
-
-          <p>
-            問題データを読み込めませんでした。
-          </p>
-        `;
-
-
-        console.error(
+        showQuestionDataError(
           error
         );
       }
@@ -265,6 +261,29 @@ document.addEventListener(
         ];
 
 
+      if (!question) {
+
+        showQuestionDataError(
+          new Error(
+            "表示する問題データが見つかりません。"
+          )
+        );
+
+        return;
+      }
+
+
+      const progress =
+        (
+          (
+            currentQuestionIndex +
+            1
+          ) /
+          quizQuestions.length
+        ) *
+        100;
+
+
       quizCard.innerHTML = `
 
         <div class="question-meta">
@@ -275,14 +294,18 @@ document.addEventListener(
           </span>
 
 
-          <div class="question-meta-right">
+          <div
+            class="question-meta-right"
+          >
 
             <span class="question-id">
               問題ID #${question.id}
             </span>
 
             <span class="category">
-              ${question.category}
+              ${escapeHtml(
+                question.category
+              )}
             </span>
 
           </div>
@@ -295,15 +318,7 @@ document.addEventListener(
           <div
             class="progress-bar"
             style="
-              width: ${
-                (
-                  (
-                    currentQuestionIndex +
-                    1
-                  ) /
-                  quizQuestions.length
-                ) * 100
-              }%;
+              width: ${progress}%;
             "
           ></div>
 
@@ -333,7 +348,9 @@ document.addEventListener(
 
 
         <h2>
-          ${question.question}
+          ${escapeHtml(
+            question.question
+          )}
         </h2>
 
 
@@ -341,12 +358,18 @@ document.addEventListener(
           question.type ===
             "multiple"
 
+          &&
+
+          question.instruction
+
             ? `
 
               <div
                 class="question-instruction"
               >
-                ${question.instruction}
+                ${escapeHtml(
+                  question.instruction
+                )}
               </div>
 
             `
@@ -363,30 +386,7 @@ document.addEventListener(
               (
                 choice,
                 index
-              ) => ({
-                choice,
-                index
-              })
-            )
-
-            .filter(
-              ({
-                choice
-              }) =>
-
-                typeof choice ===
-                  "string"
-
-                &&
-
-                choice.trim() !== ""
-            )
-
-            .map(
-              ({
-                choice,
-                index
-              }) => `
+              ) => `
 
                 <button
                   class="choice-button"
@@ -397,14 +397,18 @@ document.addEventListener(
                     class="choice-label"
                   >
                     ${String.fromCharCode(
-                      65 + index
+                      65 +
+                      index
                     )}
                   </span>
+
 
                   <span
                     class="choice-text"
                   >
-                    ${choice}
+                    ${escapeHtml(
+                      choice
+                    )}
                   </span>
 
                 </button>
@@ -439,6 +443,7 @@ document.addEventListener(
         <div
           id="answer-area"
         ></div>
+
       `;
 
 
@@ -466,6 +471,10 @@ document.addEventListener(
       }
 
 
+      /* =========================
+         複数選択
+      ========================= */
+
       if (
         question.type ===
           "multiple"
@@ -482,9 +491,9 @@ document.addEventListener(
 
 
         choiceButtons.forEach(
-          (
+          function (
             button
-          ) => {
+          ) {
 
             button.addEventListener(
               "click",
@@ -506,10 +515,11 @@ document.addEventListener(
                     selectedIndex
                   );
 
-
-                  button.classList.remove(
-                    "selected"
-                  );
+                  button
+                    .classList
+                    .remove(
+                      "selected"
+                    );
 
 
                 } else {
@@ -518,10 +528,11 @@ document.addEventListener(
                     selectedIndex
                   );
 
-
-                  button.classList.add(
-                    "selected"
-                  );
+                  button
+                    .classList
+                    .add(
+                      "selected"
+                    );
                 }
 
 
@@ -542,11 +553,16 @@ document.addEventListener(
               Array.from(
                 selectedAnswers
               ).sort(
-                (
+                function (
                   a,
                   b
-                ) =>
-                  a - b
+                ) {
+
+                  return (
+                    a -
+                    b
+                  );
+                }
               );
 
 
@@ -560,25 +576,25 @@ document.addEventListener(
         );
 
 
+      /* =========================
+         単一選択
+      ========================= */
+
       } else {
 
         choiceButtons.forEach(
-          (
+          function (
             button
-          ) => {
+          ) {
 
             button.addEventListener(
               "click",
               function () {
 
-                const selectedIndex =
+                checkAnswer(
                   Number(
                     button.dataset.index
-                  );
-
-
-                checkAnswer(
-                  selectedIndex
+                  )
                 );
               }
             );
@@ -622,11 +638,16 @@ document.addEventListener(
           ? [
               ...question.answer
             ].sort(
-              (
+              function (
                 a,
                 b
-              ) =>
-                a - b
+              ) {
+
+                return (
+                  a -
+                  b
+                );
+              }
             )
 
           : [
@@ -642,11 +663,16 @@ document.addEventListener(
           ? [
               ...selectedAnswer
             ].sort(
-              (
+              function (
                 a,
                 b
-              ) =>
-                a - b
+              ) {
+
+                return (
+                  a -
+                  b
+                );
+              }
             )
 
           : [
@@ -662,13 +688,18 @@ document.addEventListener(
         &&
 
         selectedAnswers.every(
-          (
+          function (
             answer,
             index
-          ) =>
+          ) {
 
-            answer ===
-              correctAnswers[index]
+            return (
+              answer ===
+              correctAnswers[
+                index
+              ]
+            );
+          }
         );
 
 
@@ -686,16 +717,11 @@ document.addEventListener(
           question.category,
           isCorrect
         );
-      }
 
-
-      if (
-        quizMode === "main"
-      ) {
 
         saveProgress(
           currentQuestionIndex +
-            1
+          1
         );
       }
 
@@ -709,9 +735,9 @@ document.addEventListener(
 
 
       choiceButtons.forEach(
-        (
+        function (
           button
-        ) => {
+        ) {
 
           button.disabled =
             true;
@@ -729,9 +755,11 @@ document.addEventListener(
             )
           ) {
 
-            button.classList.add(
-              "correct"
-            );
+            button
+              .classList
+              .add(
+                "correct"
+              );
           }
 
 
@@ -747,9 +775,11 @@ document.addEventListener(
             )
           ) {
 
-            button.classList.add(
-              "incorrect"
-            );
+            button
+              .classList
+              .add(
+                "incorrect"
+              );
           }
         }
       );
@@ -781,14 +811,10 @@ document.addEventListener(
           </div>
 
 
-          <div
-            class="correct-answer"
-          >
+          <div class="correct-answer">
 
             <span
-              class="
-                correct-answer-title
-              "
+              class="correct-answer-title"
             >
               正解
             </span>
@@ -797,35 +823,34 @@ document.addEventListener(
             ${correctAnswers
 
               .map(
-                (
+                function (
                   answerIndex
-                ) => `
+                ) {
 
-                  <span
-                    class="
-                      correct-answer-label
-                    "
-                  >
-                    ${String.fromCharCode(
-                      65 +
-                      answerIndex
-                    )}
-                  </span>
+                  return `
 
-
-                  <span
-                    class="
-                      correct-answer-text
-                    "
-                  >
-                    ${
-                      question.choices[
+                    <span
+                      class="correct-answer-label"
+                    >
+                      ${String.fromCharCode(
+                        65 +
                         answerIndex
-                      ]
-                    }
-                  </span>
+                      )}
+                    </span>
 
-                `
+
+                    <span
+                      class="correct-answer-text"
+                    >
+                      ${escapeHtml(
+                        question.choices[
+                          answerIndex
+                        ]
+                      )}
+                    </span>
+
+                  `;
+                }
               )
 
               .join("")}
@@ -834,18 +859,16 @@ document.addEventListener(
 
 
           <div
-            class="
-              explanation-title
-            "
+            class="explanation-title"
           >
             解説
           </div>
 
 
-          <p
-            class="explanation"
-          >
-            ${question.explanation}
+          <p class="explanation">
+            ${escapeHtml(
+              question.explanation
+            )}
           </p>
 
 
@@ -854,34 +877,22 @@ document.addEventListener(
 
               ? `
 
-                <div
-                  class="
-                    community-stats
-                  "
-                >
+                <div class="community-stats">
 
                   <div
-                    class="
-                      community-stats-title
-                    "
+                    class="community-stats-title"
                   >
                     みんなの正答率
                   </div>
 
-
                   <div
-                    class="
-                      community-stats-number
-                    "
+                    class="community-stats-number"
                   >
                     ${stats.accuracy}%
                   </div>
 
-
                   <div
-                    class="
-                      community-stats-detail
-                    "
+                    class="community-stats-detail"
                   >
                     ${stats.attempts}人中
                     ${stats.correct}人正解
@@ -895,23 +906,16 @@ document.addEventListener(
           }
 
 
-          <div
-            class="current-score"
-          >
+          <div class="current-score">
 
             <span
-              class="
-                current-score-label
-              "
+              class="current-score-label"
             >
               現在の成績
             </span>
 
-
             <span
-              class="
-                current-score-number
-              "
+              class="current-score-number"
             >
               ${score} /
               ${currentQuestionIndex + 1}
@@ -920,14 +924,10 @@ document.addEventListener(
           </div>
 
 
-          <div
-            class="report-section"
-          >
+          <div class="report-section">
 
             <button
-              class="
-                report-toggle-button
-              "
+              class="report-toggle-button"
             >
               この問題に物申す
             </button>
@@ -941,9 +941,7 @@ document.addEventListener(
             >
 
               <div
-                class="
-                  report-heading
-                "
+                class="report-heading"
               >
                 この問題のどこが気になりますか？
               </div>
@@ -997,27 +995,21 @@ document.addEventListener(
               ></textarea>
 
 
-              <p
-                class="report-note"
-              >
+              <p class="report-note">
                 投稿内容は管理者に送信されます。
                 一般には公開されません。
               </p>
 
 
               <button
-                class="
-                  report-submit-button
-                "
+                class="report-submit-button"
               >
                 物申す！
               </button>
 
 
               <div
-                class="
-                  report-status
-                "
+                class="report-status"
               ></div>
 
             </div>
@@ -1033,7 +1025,6 @@ document.addEventListener(
             answer-next-button
           "
         >
-
           ${
             currentQuestionIndex + 1 <
               quizQuestions.length
@@ -1042,14 +1033,14 @@ document.addEventListener(
 
               : "結果を見る"
           }
-
         </button>
+
       `;
 
 
       document
         .querySelector(
-          ".next-button"
+          ".answer-next-button"
         )
         .addEventListener(
           "click",
@@ -1069,21 +1060,23 @@ document.addEventListener(
         );
 
 
-      reportToggleButton.addEventListener(
-        "click",
-        function () {
-
-          reportForm.classList.toggle(
-            "hidden"
-          );
-        }
-      );
-
-
       const reportSubmitButton =
         document.querySelector(
           ".report-submit-button"
         );
+
+
+      reportToggleButton.addEventListener(
+        "click",
+        function () {
+
+          reportForm
+            .classList
+            .toggle(
+              "hidden"
+            );
+        }
+      );
 
 
       reportSubmitButton.addEventListener(
@@ -1116,10 +1109,8 @@ document.addEventListener(
             reportStatus.textContent =
               "指摘内容を選んでください。";
 
-
             reportStatus.className =
               "report-status error";
-
 
             return;
           }
@@ -1130,10 +1121,8 @@ document.addEventListener(
             reportStatus.textContent =
               "具体的な内容を入力してください。";
 
-
             reportStatus.className =
               "report-status error";
-
 
             return;
           }
@@ -1141,7 +1130,6 @@ document.addEventListener(
 
           reportSubmitButton.disabled =
             true;
-
 
           reportSubmitButton.textContent =
             "送信中...";
@@ -1160,10 +1148,8 @@ document.addEventListener(
             reportStatus.textContent =
               "送信しました。ありがとうございます。";
 
-
             reportStatus.className =
               "report-status success";
-
 
             reportSubmitButton.textContent =
               "送信済み";
@@ -1174,14 +1160,11 @@ document.addEventListener(
             reportStatus.textContent =
               "送信できませんでした。もう一度お試しください。";
 
-
             reportStatus.className =
               "report-status error";
 
-
             reportSubmitButton.disabled =
               false;
-
 
             reportSubmitButton.textContent =
               "物申す！";
@@ -1216,7 +1199,766 @@ document.addEventListener(
 
 
     /* =========================
+       問題データ読込
+    ========================= */
+
+    async function loadQuestionsData() {
+
+      let response;
+
+
+      try {
+
+        response =
+          await fetch(
+            "data/questions.json",
+            {
+              cache:
+                "no-store"
+            }
+          );
+
+
+      } catch (error) {
+
+        throw new Error(
+          "questions.json への通信に失敗しました。"
+        );
+      }
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          `questions.json の取得に失敗しました。HTTP ${response.status}`
+        );
+      }
+
+
+      let rawText;
+
+
+      try {
+
+        rawText =
+          await response.text();
+
+
+      } catch (error) {
+
+        throw new Error(
+          "questions.json の内容を読み取れませんでした。"
+        );
+      }
+
+
+      let data;
+
+
+      try {
+
+        data =
+          JSON.parse(
+            rawText
+          );
+
+
+      } catch (error) {
+
+        throw new Error(
+          `questions.json のJSON形式が壊れています。${error.message}`
+        );
+      }
+
+
+      validateQuestionsData(
+        data
+      );
+
+
+      return data;
+    }
+
+
+    /* =========================
+       問題データ検証
+    ========================= */
+
+    function validateQuestionsData(
+      data
+    ) {
+
+      const errors =
+        [];
+
+
+      if (
+        !Array.isArray(
+          data
+        )
+      ) {
+
+        throw new Error(
+          "questions.json の最上位は配列である必要があります。"
+        );
+      }
+
+
+      if (
+        data.length ===
+          0
+      ) {
+
+        throw new Error(
+          "questions.json に問題が1問もありません。"
+        );
+      }
+
+
+      const seenIds =
+        new Set();
+
+
+      data.forEach(
+        function (
+          question,
+          index
+        ) {
+
+          const rowLabel =
+            `データ${index + 1}件目`;
+
+
+          if (
+            !question
+
+            ||
+
+            typeof question !==
+              "object"
+
+            ||
+
+            Array.isArray(
+              question
+            )
+          ) {
+
+            errors.push(
+              `${rowLabel}: 問題データがオブジェクトではありません。`
+            );
+
+            return;
+          }
+
+
+          const questionId =
+            question.id;
+
+
+          const hasId =
+
+            questionId !==
+              undefined
+
+            &&
+
+            questionId !==
+              null
+
+            &&
+
+            String(
+              questionId
+            ).trim() !==
+              "";
+
+
+          const idLabel =
+            hasId
+              ? `問題ID #${questionId}`
+              : rowLabel;
+
+
+          if (!hasId) {
+
+            errors.push(
+              `${rowLabel}: id がありません。`
+            );
+
+
+          } else {
+
+            const normalizedId =
+              String(
+                questionId
+              );
+
+
+            if (
+              seenIds.has(
+                normalizedId
+              )
+            ) {
+
+              errors.push(
+                `${idLabel}: id が重複しています。`
+              );
+
+
+            } else {
+
+              seenIds.add(
+                normalizedId
+              );
+            }
+          }
+
+
+          if (
+            !VALID_QUESTION_CATEGORIES
+              .includes(
+                question.category
+              )
+          ) {
+
+            errors.push(
+              `${idLabel}: category「${question.category}」は無効です。`
+            );
+          }
+
+
+          if (
+            !VALID_QUESTION_TYPES
+              .includes(
+                question.type
+              )
+          ) {
+
+            errors.push(
+              `${idLabel}: type「${question.type}」は無効です。`
+            );
+          }
+
+
+          if (
+            typeof question.question !==
+              "string"
+
+            ||
+
+            question.question
+              .trim() ===
+              ""
+          ) {
+
+            errors.push(
+              `${idLabel}: question が空です。`
+            );
+          }
+
+
+          if (
+            !Array.isArray(
+              question.choices
+            )
+          ) {
+
+            errors.push(
+              `${idLabel}: choices が配列ではありません。`
+            );
+
+            return;
+          }
+
+
+          if (
+            question.choices.length <
+              2
+
+            ||
+
+            question.choices.length >
+              4
+          ) {
+
+            errors.push(
+              `${idLabel}: choices は2～4個である必要があります。`
+            );
+          }
+
+
+          question.choices.forEach(
+            function (
+              choice,
+              choiceIndex
+            ) {
+
+              if (
+                typeof choice !==
+                  "string"
+
+                ||
+
+                choice
+                  .trim() ===
+                  ""
+              ) {
+
+                errors.push(
+                  `${idLabel}: 選択肢${String.fromCharCode(
+                    65 +
+                    choiceIndex
+                  )}が空です。`
+                );
+              }
+            }
+          );
+
+
+          const isValidAnswerIndex =
+            function (
+              answer
+            ) {
+
+              return (
+
+                Number.isInteger(
+                  answer
+                )
+
+                &&
+
+                answer >=
+                  0
+
+                &&
+
+                answer <
+                  question
+                    .choices
+                    .length
+              );
+            };
+
+
+          if (
+            question.type ===
+              "single"
+          ) {
+
+            if (
+              !isValidAnswerIndex(
+                question.answer
+              )
+            ) {
+
+              errors.push(
+                `${idLabel}: answer が選択肢の範囲外です。`
+              );
+            }
+          }
+
+
+          if (
+            question.type ===
+              "multiple"
+          ) {
+
+            if (
+              !Array.isArray(
+                question.answer
+              )
+
+              ||
+
+              question.answer.length ===
+                0
+            ) {
+
+              errors.push(
+                `${idLabel}: multiple の answer は1個以上の配列である必要があります。`
+              );
+
+
+            } else {
+
+              const uniqueAnswers =
+                new Set(
+                  question.answer
+                );
+
+
+              if (
+                uniqueAnswers.size !==
+                  question.answer.length
+              ) {
+
+                errors.push(
+                  `${idLabel}: answer に重複があります。`
+                );
+              }
+
+
+              question.answer.forEach(
+                function (
+                  answer
+                ) {
+
+                  if (
+                    !isValidAnswerIndex(
+                      answer
+                    )
+                  ) {
+
+                    errors.push(
+                      `${idLabel}: answer「${answer}」が選択肢の範囲外です。`
+                    );
+                  }
+                }
+              );
+            }
+          }
+
+
+          if (
+            typeof question.explanation !==
+              "string"
+          ) {
+
+            errors.push(
+              `${idLabel}: explanation が文字列ではありません。`
+            );
+          }
+        }
+      );
+
+
+      if (
+        errors.length >
+          0
+      ) {
+
+        const preview =
+          errors
+            .slice(
+              0,
+              20
+            )
+            .join(
+              "\n"
+            );
+
+
+        const restCount =
+          errors.length -
+          20;
+
+
+        throw new Error(
+
+          restCount >
+            0
+
+            ? `${preview}\nほか${restCount}件のエラーがあります。`
+
+            : preview
+        );
+      }
+    }
+
+
+    /* =========================
+       データエラー画面
+    ========================= */
+
+    function showQuestionDataError(
+      error,
+      showDetail = false
+    ) {
+
+      console.error(
+        "問題データエラー:",
+        error
+      );
+
+
+      const safeMessage =
+
+        error &&
+        error.message
+
+          ? String(
+              error.message
+            )
+
+          : "不明なエラー";
+
+
+      quizCard.innerHTML = `
+
+        <div
+          class="result-screen"
+        >
+
+          <p class="hero-label">
+            DATA ERROR
+          </p>
+
+
+          <h1>
+            問題データを読み込めません
+          </h1>
+
+
+          <p
+            style="
+              margin:
+                0 auto;
+
+              max-width:
+                720px;
+
+              color:
+                #ccc;
+
+              line-height:
+                1.9;
+            "
+          >
+            問題データの読み込み中にエラーが発生しました。
+            <br>
+            時間をおいて再度お試しください。
+          </p>
+
+
+          ${
+            showDetail
+
+              ? `
+
+                <pre
+                  style="
+                    margin:
+                      28px auto 0;
+
+                    max-width:
+                      820px;
+
+                    padding:
+                      18px;
+
+                    overflow-x:
+                      auto;
+
+                    border:
+                      1px solid
+                      rgba(
+                        239,
+                        119,
+                        114,
+                        0.28
+                      );
+
+                    border-radius:
+                      12px;
+
+                    background:
+                      rgba(
+                        239,
+                        119,
+                        114,
+                        0.06
+                      );
+
+                    color:
+                      #ef9b97;
+
+                    font-size:
+                      13px;
+
+                    line-height:
+                      1.7;
+
+                    text-align:
+                      left;
+
+                    white-space:
+                      pre-wrap;
+                  "
+                >
+${escapeHtml(
+  safeMessage
+)}
+                </pre>
+
+              `
+
+              : ""
+          }
+
+
+          <button
+            class="
+              restart-button
+              data-reload-button
+            "
+            type="button"
+          >
+            再読み込みする
+          </button>
+
+        </div>
+
+      `;
+
+
+      const reloadButton =
+        document.querySelector(
+          ".data-reload-button"
+        );
+
+
+      if (reloadButton) {
+
+        reloadButton.addEventListener(
+          "click",
+          function () {
+
+            window.location.reload();
+          }
+        );
+      }
+    }
+
+
+    /* =========================
+       データ検証テスト
+       ?datatest=1
+    ========================= */
+
+    function runDataValidationTest() {
+
+      const intentionallyBrokenData = [
+
+        {
+          id:
+            "TEST-1",
+
+          category:
+            "モンスター",
+
+          type:
+            "single",
+
+          question:
+            "answer範囲外テスト",
+
+          choices: [
+            "A",
+            "B"
+          ],
+
+          answer:
+            5,
+
+          explanation:
+            "テスト"
+        },
+
+
+        {
+          id:
+            "TEST-2",
+
+          category:
+            "旧カテゴリ",
+
+          type:
+            "single",
+
+          question:
+            "カテゴリ異常テスト",
+
+          choices: [
+            "A",
+            "B"
+          ],
+
+          answer:
+            0,
+
+          explanation:
+            "テスト"
+        },
+
+
+        {
+          id:
+            "TEST-3",
+
+          category:
+            "仕様",
+
+          type:
+            "unknown",
+
+          question:
+            "type異常テスト",
+
+          choices: [
+            "A",
+            "B"
+          ],
+
+          answer:
+            0,
+
+          explanation:
+            "テスト"
+        }
+
+      ];
+
+
+      try {
+
+        validateQuestionsData(
+          intentionallyBrokenData
+        );
+
+
+        quizCard.innerHTML = `
+
+          <h2>
+            データ検証テスト失敗
+          </h2>
+
+          <p>
+            不正データを検出できませんでした。
+          </p>
+
+        `;
+
+
+      } catch (error) {
+
+        console.info(
+          "データ検証テスト：想定どおりエラーを検出しました。"
+        );
+
+
+        showQuestionDataError(
+          error,
+          true
+        );
+      }
+    }
+
+
+    /* =========================
        結果画面テスト
+       ?resulttest=1
     ========================= */
 
     function showResultTest() {
@@ -1233,28 +1975,6 @@ document.addEventListener(
         );
 
 
-      /*
-        100問ぶんになるよう調整
-
-        モンスター
-        19 / 20 = 95%
-
-        アイテム
-        16 / 20 = 80%
-
-        ダンジョン
-        15 / 19 = 79%
-
-        仕様
-        18 / 36 = 50%
-
-        その他
-        1 / 5 = 20%
-
-        合計
-        69 / 100
-      */
-
       score =
         69;
 
@@ -1262,28 +1982,47 @@ document.addEventListener(
       categoryStats = {
 
         モンスター: {
-          correct: 19,
-          total: 20
+          correct:
+            19,
+
+          total:
+            20
         },
+
 
         アイテム: {
-          correct: 16,
-          total: 20
+          correct:
+            16,
+
+          total:
+            20
         },
+
 
         ダンジョン: {
-          correct: 15,
-          total: 19
+          correct:
+            15,
+
+          total:
+            19
         },
+
 
         仕様: {
-          correct: 18,
-          total: 36
+          correct:
+            18,
+
+          total:
+            36
         },
 
+
         その他: {
-          correct: 1,
-          total: 5
+          correct:
+            1,
+
+          total:
+            5
         }
 
       };
@@ -1308,12 +2047,14 @@ document.addEventListener(
           (
             score /
             quizQuestions.length
-          ) * 100
+          ) *
+          100
         );
 
 
       if (
-        quizMode === "trial"
+        quizMode ===
+          "trial"
       ) {
 
         showTrialResult(
@@ -1405,22 +2146,18 @@ document.addEventListener(
           <div
             class="final-score"
           >
-
             ${score}
 
             <span>
-              /
-              ${quizQuestions.length}
+              / ${quizQuestions.length}
             </span>
-
           </div>
 
 
           <div
             class="percentage"
           >
-            正答率
-            ${percentage}%
+            正答率 ${percentage}%
           </div>
 
 
@@ -1434,14 +2171,18 @@ document.addEventListener(
           <div
             class="rank-grade"
           >
-            ${rank}
+            ${escapeHtml(
+              rank
+            )}
           </div>
 
 
           <div
             class="rank"
           >
-            ${title}
+            ${escapeHtml(
+              title
+            )}
           </div>
 
 
@@ -1474,9 +2215,7 @@ document.addEventListener(
               : `
 
                 <button
-                  class="
-                    restart-button
-                  "
+                  class="restart-button"
                 >
                   もう一度挑戦する
                 </button>
@@ -1485,6 +2224,7 @@ document.addEventListener(
           }
 
         </div>
+
       `;
 
 
@@ -1532,7 +2272,7 @@ document.addEventListener(
 
 
     /* =========================
-       お試し結果画面
+       お試し結果
     ========================= */
 
     function showTrialResult(
@@ -1545,9 +2285,7 @@ document.addEventListener(
           class="result-screen"
         >
 
-          <p
-            class="hero-label"
-          >
+          <p class="hero-label">
             TRIAL RESULT
           </p>
 
@@ -1560,21 +2298,18 @@ document.addEventListener(
           <div
             class="final-score"
           >
-
             ${score}
 
             <span>
               / 5
             </span>
-
           </div>
 
 
           <div
             class="percentage"
           >
-            正答率
-            ${percentage}%
+            正答率 ${percentage}%
           </div>
 
 
@@ -1616,6 +2351,7 @@ document.addEventListener(
           </button>
 
         </div>
+
       `;
 
 
@@ -1625,10 +2361,7 @@ document.addEventListener(
         )
         .addEventListener(
           "click",
-          function () {
-
-            startMainQuizFromBeginning();
-          }
+          startMainQuizFromBeginning
         );
 
 
@@ -1692,15 +2425,16 @@ document.addEventListener(
     ) {
 
       if (
-        quizMode !== "main"
-      ) {
+        quizMode !==
+          "main"
 
-        return;
-      }
+        ||
 
-
-      if (
         isResultTestMode
+
+        ||
+
+        isDataTestMode
       ) {
 
         return;
@@ -1711,15 +2445,20 @@ document.addEventListener(
 
         const data = {
 
-          version: 1,
+          version:
+            1,
 
 
           questionIds:
             quizQuestions.map(
-              (
+              function (
                 question
-              ) =>
-                question.id
+              ) {
+
+                return (
+                  question.id
+                );
+              }
             ),
 
 
@@ -1793,7 +2532,8 @@ document.addEventListener(
 
           ||
 
-          data.version !== 1
+          data.version !==
+            1
 
           ||
 
@@ -1880,24 +2620,30 @@ document.addEventListener(
 
       if (!saved) {
 
-        resumeArea.classList.add(
-          "hidden"
-        );
+        resumeArea
+          .classList
+          .add(
+            "hidden"
+          );
 
 
         if (heroButtons) {
 
-          heroButtons.classList.remove(
-            "hidden"
-          );
+          heroButtons
+            .classList
+            .remove(
+              "hidden"
+            );
         }
 
 
         if (trialNote) {
 
-          trialNote.classList.remove(
-            "hidden"
-          );
+          trialNote
+            .classList
+            .remove(
+              "hidden"
+            );
         }
 
 
@@ -1905,29 +2651,37 @@ document.addEventListener(
       }
 
 
-      resumeArea.classList.remove(
-        "hidden"
-      );
+      resumeArea
+        .classList
+        .remove(
+          "hidden"
+        );
 
 
       if (heroButtons) {
 
-        heroButtons.classList.add(
-          "hidden"
-        );
+        heroButtons
+          .classList
+          .add(
+            "hidden"
+          );
       }
 
 
       if (trialNote) {
 
-        trialNote.classList.add(
-          "hidden"
-        );
+        trialNote
+          .classList
+          .add(
+            "hidden"
+          );
       }
 
 
       const total =
-        saved.questionIds.length;
+        saved
+          .questionIds
+          .length;
 
 
       if (
@@ -1963,65 +2717,55 @@ document.addEventListener(
 
       try {
 
-        const response =
-          await fetch(
-            "data/questions.json",
-            {
-              cache:
-                "no-store"
-            }
-          );
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            "問題データを読み込めませんでした。"
-          );
-        }
-
-
         const allQuestions =
-          await response.json();
+          await loadQuestionsData();
 
 
         const questionMap =
           new Map(
             allQuestions.map(
-              (
+              function (
                 question
-              ) => [
+              ) {
 
-                String(
-                  question.id
-                ),
-
-                question
-              ]
+                return [
+                  String(
+                    question.id
+                  ),
+                  question
+                ];
+              }
             )
           );
 
 
         const restoredQuestions =
           saved.questionIds.map(
-            (
+            function (
               id
-            ) =>
+            ) {
 
-              questionMap.get(
-                String(
-                  id
+              return (
+                questionMap.get(
+                  String(
+                    id
+                  )
                 )
-              )
+              );
+            }
           );
 
 
         if (
           restoredQuestions.some(
-            (
+            function (
               question
-            ) =>
-              !question
+            ) {
+
+              return (
+                !question
+              );
+            }
           )
         ) {
 
@@ -2108,8 +2852,8 @@ document.addEventListener(
         );
 
 
-        alert(
-          "途中データを再開できませんでした。"
+        showQuestionDataError(
+          error
         );
       }
     }
@@ -2126,34 +2870,22 @@ document.addEventListener(
       const raw =
         String(
           category ||
-            "その他"
+          "その他"
         ).trim();
 
 
-      const group =
-        raw.includes(
-          "・"
-        )
-
-          ? raw.split(
-              "・"
-            )[0]
-
-          : raw;
-
-
       if (
-        group === "罠"
+        VALID_QUESTION_CATEGORIES
+          .includes(
+            raw
+          )
       ) {
 
-        return "ワナ";
+        return raw;
       }
 
 
-      return (
-        group ||
-        "その他"
-      );
+      return "その他";
     }
 
 
@@ -2178,9 +2910,11 @@ document.addEventListener(
           group
         ] = {
 
-          correct: 0,
+          correct:
+            0,
 
-          total: 0
+          total:
+            0
         };
       }
 
@@ -2208,76 +2942,64 @@ document.addEventListener(
         return `
 
           <section
-            class="
-              category-results
-            "
+            class="category-results"
           >
 
             <div
-              class="
-                category-results-title
-              "
+              class="category-results-title"
             >
               カテゴリ別正答率
             </div>
 
 
             <p
-              class="
-                category-results-note
-              "
+              class="category-results-note"
             >
               この挑戦はカテゴリ集計機能の追加前に開始されたため、
               カテゴリ別正答率は表示できません。
             </p>
 
           </section>
+
         `;
       }
 
 
-      const categoryOrder = [
-
-        "モンスター",
-
-        "アイテム",
-
-        "ダンジョン",
-
-        "仕様",
-
-        "その他"
-      ];
-
-
       const entries =
-        categoryOrder
+        VALID_QUESTION_CATEGORIES
 
           .map(
-            (
+            function (
               category
-            ) => [
+            ) {
 
-              category,
-
-              categoryStats[
-                category
-              ]
-            ]
+              return [
+                category,
+                categoryStats[
+                  category
+                ]
+              ];
+            }
           )
 
           .filter(
-            ([
-              ,
-              stats
-            ]) =>
+            function (
+              entry
+            ) {
 
-              stats
+              const stats =
+                entry[1];
 
-              &&
 
-              stats.total >
-                0
+              return (
+                stats
+
+                &&
+
+                stats.total >
+                  0
+              );
+            }
           );
 
 
@@ -2293,33 +3015,33 @@ document.addEventListener(
       return `
 
         <section
-          class="
-            category-results
-          "
+          class="category-results"
         >
 
           <div
-            class="
-              category-results-title
-            "
+            class="category-results-title"
           >
             カテゴリ別正答率
           </div>
 
 
           <div
-            class="
-              category-results-list
-            "
+            class="category-results-list"
           >
 
             ${entries
 
               .map(
-                ([
-                  category,
-                  stats
-                ]) => {
+                function (
+                  entry
+                ) {
+
+                  const category =
+                    entry[0];
+
+
+                  const stats =
+                    entry[1];
 
 
                   const accuracy =
@@ -2345,7 +3067,6 @@ document.addEventListener(
                     barBackground =
                       "linear-gradient(90deg, #b88a1d, #f0d26d)";
 
-
                     accuracyColor =
                       "#f0d26d";
 
@@ -2358,7 +3079,6 @@ document.addEventListener(
                     barBackground =
                       "linear-gradient(90deg, #b96818, #e69a35)";
 
-
                     accuracyColor =
                       "#e69a35";
 
@@ -2368,7 +3088,6 @@ document.addEventListener(
                     barBackground =
                       "linear-gradient(90deg, #9f3733, #df625b)";
 
-
                     accuracyColor =
                       "#ef7772";
                   }
@@ -2377,42 +3096,30 @@ document.addEventListener(
                   return `
 
                     <div
-                      class="
-                        category-result-row
-                      "
+                      class="category-result-row"
                     >
 
                       <div
-                        class="
-                          category-result-top
-                        "
+                        class="category-result-top"
                       >
 
-
                         <span
-                          class="
-                            category-result-name
-                          "
+                          class="category-result-name"
                         >
                           ${category}
                         </span>
 
 
                         <span
-                          class="
-                            category-result-score
-                          "
+                          class="category-result-score"
                         >
-
                           ${stats.correct}
                           /
                           ${stats.total}
 
 
                           <strong
-                            class="
-                              category-result-accuracy
-                            "
+                            class="category-result-accuracy"
                             style="
                               color:
                                 ${accuracyColor};
@@ -2427,15 +3134,11 @@ document.addEventListener(
 
 
                       <div
-                        class="
-                          category-result-bar-wrap
-                        "
+                        class="category-result-bar-wrap"
                       >
 
                         <div
-                          class="
-                            category-result-bar
-                          "
+                          class="category-result-bar"
                           style="
                             width:
                               ${accuracy}%;
@@ -2448,6 +3151,7 @@ document.addEventListener(
                       </div>
 
                     </div>
+
                   `;
                 }
               )
@@ -2457,6 +3161,7 @@ document.addEventListener(
           </div>
 
         </section>
+
       `;
     }
 
@@ -2474,7 +3179,8 @@ document.addEventListener(
           array.length -
           1;
 
-        i > 0;
+        i >
+          0;
 
         i--
       ) {
@@ -2483,7 +3189,8 @@ document.addEventListener(
           Math.floor(
             Math.random() *
             (
-              i + 1
+              i +
+              1
             )
           );
 
@@ -2492,7 +3199,6 @@ document.addEventListener(
           array[i],
           array[j]
         ] = [
-
           array[j],
           array[i]
         ];
@@ -2500,6 +3206,45 @@ document.addEventListener(
 
 
       return array;
+    }
+
+
+    /* =========================
+       HTMLエスケープ
+    ========================= */
+
+    function escapeHtml(
+      value
+    ) {
+
+      return String(
+        value
+      )
+
+        .replaceAll(
+          "&",
+          "&amp;"
+        )
+
+        .replaceAll(
+          "<",
+          "&lt;"
+        )
+
+        .replaceAll(
+          ">",
+          "&gt;"
+        )
+
+        .replaceAll(
+          '"',
+          "&quot;"
+        )
+
+        .replaceAll(
+          "'",
+          "&#039;"
+        );
     }
   }
 );
@@ -2646,6 +3391,7 @@ async function saveFirstAnswer(
     const {
       data:
         statsData,
+
       error:
         statsError
     } =
@@ -2688,7 +3434,9 @@ async function saveFirstAnswer(
     }
 
 
-    return statsData[0];
+    return (
+      statsData[0]
+    );
 
 
   } catch (error) {
