@@ -4,6 +4,9 @@ const SUPABASE_URL =
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_1mtFdVK6HheU4pVZ7D2wxg_7tb_9PDO";
 
+const QUIZ_SAVE_KEY =
+  "asuka-haijin-quiz-progress-v1";
+
 const supabaseClient =
   window.supabase.createClient(
     SUPABASE_URL,
@@ -26,6 +29,18 @@ document.addEventListener(
     const quizCard =
       document.querySelector(".quiz-card");
 
+    const resumeArea =
+      document.querySelector("#resume-area");
+
+    const resumeButton =
+      document.querySelector("#resume-button");
+
+    const resumeDetail =
+      document.querySelector("#resume-detail");
+
+    const resumeResetButton =
+      document.querySelector("#resume-reset-button");
+
 
     let quizQuestions = [];
 
@@ -43,7 +58,7 @@ document.addEventListener(
     mainButton.addEventListener(
       "click",
       function () {
-        startQuiz(100, "main");
+        startMainQuizFromBeginning();
       }
     );
 
@@ -54,6 +69,38 @@ document.addEventListener(
         startQuiz(5, "trial");
       }
     );
+
+
+    if (resumeButton) {
+      resumeButton.addEventListener(
+        "click",
+        resumeQuiz
+      );
+    }
+
+
+    if (resumeResetButton) {
+      resumeResetButton.addEventListener(
+        "click",
+        function () {
+
+          const confirmed =
+            confirm(
+              "途中までのデータを削除して、100問検定を最初から始めますか？"
+            );
+
+          if (!confirmed) {
+            return;
+          }
+
+          clearProgress();
+          startQuiz(100, "main");
+        }
+      );
+    }
+
+
+    updateResumeArea();
 
 
     /* =========================
@@ -106,6 +153,11 @@ document.addEventListener(
         score = 0;
 
 
+        if (quizMode === "main") {
+          saveProgress(0);
+        }
+
+
         showQuestion();
 
 
@@ -130,6 +182,10 @@ document.addEventListener(
     ========================= */
 
     function showQuestion() {
+
+      if (quizMode === "main") {
+        saveProgress(currentQuestionIndex);
+      }
 
       const question =
         quizQuestions[
@@ -160,17 +216,43 @@ document.addEventListener(
           </div>
 
         </div>
+
+
         <div class="progress-wrap">
-  <div
-    class="progress-bar"
-    style="
-      width: ${
-        ((currentQuestionIndex + 1) /
-          quizQuestions.length) * 100
-      }%;
-    "
-  ></div>
-</div>
+
+          <div
+            class="progress-bar"
+            style="
+              width: ${
+                (
+                  (currentQuestionIndex + 1) /
+                  quizQuestions.length
+                ) * 100
+              }%;
+            "
+          ></div>
+
+        </div>
+
+
+        ${
+          quizMode === "main"
+
+            ? `
+              <div class="pause-row">
+
+                <button
+                  class="pause-button"
+                  type="button"
+                >
+                  中断してトップへ戻る
+                </button>
+
+              </div>
+            `
+
+            : ""
+        }
 
 
         <h2>
@@ -260,6 +342,24 @@ document.addEventListener(
         document.querySelectorAll(
           ".choice-button"
         );
+
+
+      const pauseButton =
+        document.querySelector(
+          ".pause-button"
+        );
+
+
+      if (pauseButton) {
+
+        pauseButton.addEventListener(
+          "click",
+          function () {
+
+            window.location.reload();
+          }
+        );
+      }
 
 
       /* =========================
@@ -448,6 +548,14 @@ document.addEventListener(
 
       if (isCorrect) {
         score++;
+      }
+
+
+      if (quizMode === "main") {
+
+        saveProgress(
+          currentQuestionIndex + 1
+        );
       }
 
 
@@ -946,6 +1054,9 @@ document.addEventListener(
          本番100問
       ========================= */
 
+      clearProgress();
+
+
       const rankResult =
         getRankResult(
           score
@@ -1101,11 +1212,11 @@ document.addEventListener(
           <br>
 
 
-<button
-  class="trial-result-button trial-again-button"
->
-  もう一度5問やってみる
-</button>
+          <button
+            class="trial-result-button trial-again-button"
+          >
+            もう一度5問やってみる
+          </button>
 
         </div>
       `;
@@ -1119,10 +1230,7 @@ document.addEventListener(
           "click",
           function () {
 
-            startQuiz(
-              100,
-              "main"
-            );
+            startMainQuizFromBeginning();
           }
         );
 
@@ -1141,6 +1249,344 @@ document.addEventListener(
             );
           }
         );
+    }
+
+
+    /* =========================
+       中断・再開
+    ========================= */
+
+    function startMainQuizFromBeginning() {
+
+      const saved =
+        loadProgress();
+
+
+      if (saved) {
+
+        const confirmed =
+          confirm(
+            "中断中の100問検定があります。途中データを削除して最初から始めますか？"
+          );
+
+
+        if (!confirmed) {
+          return;
+        }
+
+
+        clearProgress();
+      }
+
+
+      startQuiz(
+        100,
+        "main"
+      );
+    }
+
+
+    function saveProgress(
+      nextQuestionIndex
+    ) {
+
+      if (
+        quizMode !== "main"
+      ) {
+        return;
+      }
+
+
+      try {
+
+        const data = {
+
+          version: 1,
+
+          questionIds:
+            quizQuestions.map(
+              (question) =>
+                question.id
+            ),
+
+          currentQuestionIndex:
+            nextQuestionIndex,
+
+          score:
+            score,
+
+          savedAt:
+            new Date().toISOString()
+        };
+
+
+        localStorage.setItem(
+          QUIZ_SAVE_KEY,
+          JSON.stringify(data)
+        );
+
+
+        updateResumeArea();
+
+
+      } catch (error) {
+
+        console.error(
+          "途中データ保存エラー:",
+          error
+        );
+      }
+    }
+
+
+    function loadProgress() {
+
+      try {
+
+        const raw =
+          localStorage.getItem(
+            QUIZ_SAVE_KEY
+          );
+
+
+        if (!raw) {
+          return null;
+        }
+
+
+        const data =
+          JSON.parse(raw);
+
+
+        if (
+          !data ||
+          data.version !== 1 ||
+          !Array.isArray(
+            data.questionIds
+          ) ||
+          data.questionIds.length === 0 ||
+          typeof data.currentQuestionIndex !==
+            "number" ||
+          typeof data.score !==
+            "number"
+        ) {
+
+          return null;
+        }
+
+
+        return data;
+
+
+      } catch (error) {
+
+        console.error(
+          "途中データ読込エラー:",
+          error
+        );
+
+
+        return null;
+      }
+    }
+
+
+    function clearProgress() {
+
+      try {
+
+        localStorage.removeItem(
+          QUIZ_SAVE_KEY
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "途中データ削除エラー:",
+          error
+        );
+      }
+
+
+      updateResumeArea();
+    }
+
+
+    function updateResumeArea() {
+
+      if (
+        !resumeArea ||
+        !resumeDetail
+      ) {
+        return;
+      }
+
+
+      const saved =
+        loadProgress();
+
+
+      if (!saved) {
+
+        resumeArea.classList.add(
+          "hidden"
+        );
+
+
+        return;
+      }
+
+
+      resumeArea.classList.remove(
+        "hidden"
+      );
+
+
+      const total =
+        saved.questionIds.length;
+
+
+      if (
+        saved.currentQuestionIndex >=
+        total
+      ) {
+
+        resumeDetail.textContent =
+          `全${total}問回答済み・結果を見る`;
+
+
+      } else {
+
+        resumeDetail.textContent =
+          `第${saved.currentQuestionIndex + 1}問から再開・現在 ${saved.score}点`;
+      }
+    }
+
+
+    async function resumeQuiz() {
+
+      const saved =
+        loadProgress();
+
+
+      if (!saved) {
+
+        updateResumeArea();
+
+        return;
+      }
+
+
+      try {
+
+        const response =
+          await fetch(
+            "data/questions.json",
+            {
+              cache: "no-store"
+            }
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "問題データを読み込めませんでした。"
+          );
+        }
+
+
+        const allQuestions =
+          await response.json();
+
+
+        const questionMap =
+          new Map(
+            allQuestions.map(
+              (question) => [
+                String(question.id),
+                question
+              ]
+            )
+          );
+
+
+        const restoredQuestions =
+          saved.questionIds.map(
+            (id) =>
+              questionMap.get(
+                String(id)
+              )
+          );
+
+
+        if (
+          restoredQuestions.some(
+            (question) => !question
+          )
+        ) {
+
+          alert(
+            "問題データが更新されたため、この途中データは再開できません。最初から挑戦してください。"
+          );
+
+
+          clearProgress();
+
+
+          return;
+        }
+
+
+        quizQuestions =
+          restoredQuestions;
+
+
+        currentQuestionIndex =
+          Math.max(
+            0,
+            saved.currentQuestionIndex
+          );
+
+
+        score =
+          Math.max(
+            0,
+            saved.score
+          );
+
+
+        quizMode =
+          "main";
+
+
+        if (
+          currentQuestionIndex >=
+          quizQuestions.length
+        ) {
+
+          showResult();
+
+
+        } else {
+
+          showQuestion();
+        }
+
+
+      } catch (error) {
+
+        console.error(
+          "再開エラー:",
+          error
+        );
+
+
+        alert(
+          "途中データを再開できませんでした。"
+        );
+      }
     }
 
 
@@ -1255,6 +1701,7 @@ async function saveFirstAnswer(
         "回答を保存できませんでした：ユーザー情報がありません"
       );
 
+
       return null;
     }
 
@@ -1268,6 +1715,7 @@ async function saveFirstAnswer(
         )
         .upsert(
           {
+
             user_id:
               user.id,
 
@@ -1279,13 +1727,16 @@ async function saveFirstAnswer(
 
             selected_answer:
               selectedIndex
+
           },
           {
+
             onConflict:
               "user_id,question_id",
 
             ignoreDuplicates:
               true
+
           }
         );
 
@@ -1313,8 +1764,10 @@ async function saveFirstAnswer(
         .rpc(
           "get_question_stats",
           {
+
             p_question_id:
               questionId
+
           }
         );
 
@@ -1392,6 +1845,7 @@ async function submitQuestionReport(
         )
         .insert(
           {
+
             user_id:
               user.id,
 
@@ -1403,6 +1857,7 @@ async function submitQuestionReport(
 
             message:
               message
+
           }
         );
 
