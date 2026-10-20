@@ -136,21 +136,11 @@ document.addEventListener(
       );
 
 
-    /*
-      ?test=1
-      → 本番形式を5問で確認
-    */
-
     const isTestMode =
       urlParams.get(
         "test"
       ) === "1";
 
-
-    /*
-      ?resulttest=1
-      → 結果画面を直接確認
-    */
 
     const isResultTestMode =
       urlParams.get(
@@ -158,21 +148,11 @@ document.addEventListener(
       ) === "1";
 
 
-    /*
-      ?datatest=1
-      → 問題データ異常を確認
-    */
-
     const isDataTestMode =
       urlParams.get(
         "datatest"
       ) === "1";
 
-
-    /*
-      ?lastresulttest=1
-      → ダミーの前回結果を保存
-    */
 
     const isLastResultTestMode =
       urlParams.get(
@@ -260,10 +240,6 @@ document.addEventListener(
     setupPreviousResultArea();
 
 
-    /*
-      前回結果保存テスト
-    */
-
     if (
       isLastResultTestMode
     ) {
@@ -274,10 +250,6 @@ document.addEventListener(
     }
 
 
-    /*
-      データ異常テスト
-    */
-
     if (
       isDataTestMode
     ) {
@@ -287,10 +259,6 @@ document.addEventListener(
       return;
     }
 
-
-    /*
-      結果画面テスト
-    */
 
     if (
       isResultTestMode
@@ -378,7 +346,8 @@ document.addEventListener(
           type="button"
 
           style="
-            width: 100%;
+            width:
+              100%;
 
             padding:
               14px 18px;
@@ -652,6 +621,8 @@ document.addEventListener(
 
     /* =========================
        前回結果を表示
+
+       通常結果と全く同じ見た目
     ========================= */
 
     function showPreviousResult() {
@@ -670,172 +641,62 @@ document.addEventListener(
       }
 
 
-      const percentage =
-        Math.round(
-          (
-            saved.score /
-            saved.total
-          ) *
-          100
-        );
+      const rankResult = {
+
+        rank:
+          saved.rank,
 
 
-      const completedText =
-        formatCompletedAt(
-          saved.completedAt
-        );
+        title:
+          saved.title,
 
 
-      quizCard.innerHTML = `
-
-        <div
-          class="result-screen"
-        >
-
-          <p
-            class="hero-label"
-          >
-            PREVIOUS RESULT
-          </p>
+        comment:
+          saved.comment ||
+          ""
+      };
 
 
-          <h1>
-            前回の検定結果
-          </h1>
+      renderMainResultScreen(
+        {
+
+          scoreValue:
+            saved.score,
 
 
-          <div
-            class="final-score"
-          >
-
-            ${saved.score}
-
-            <span>
-              /
-              ${saved.total}
-            </span>
-
-          </div>
+          totalValue:
+            saved.total,
 
 
-          <div
-            class="percentage"
-          >
-            正答率
-            ${percentage}%
-          </div>
+          rankResult:
+            rankResult,
 
 
-          ${
-            completedText
-
-              ? `
-
-                <div
-                  style="
-                    margin-top:
-                      12px;
-
-                    color:
-                      #888;
-
-                    font-size:
-                      13px;
-                  "
-                >
-                  ${completedText}
-                  完走
-                </div>
-
-              `
-
-              : ""
-          }
+          statsSource:
+            saved.categoryStats ||
+            {},
 
 
-          <div
-            class="rank-label"
-          >
-            あなたのランク・称号
-          </div>
+          statsComplete:
+            typeof saved
+              .categoryStatsComplete ===
+              "boolean"
+
+              ? saved
+                  .categoryStatsComplete
+
+              : true,
 
 
-          <div
-            class="rank-grade"
-          >
-            ${escapeHtml(
-              saved.rank
-            )}
-          </div>
-
-
-          <div
-            class="rank"
-          >
-            ${escapeHtml(
-              saved.title
-            )}
-          </div>
-
-
-          ${
-            saved.comment
-
-              ? `
-
-                <div
-                  class="rank-comment"
-                >
-                  ${saved.comment}
-                </div>
-
-              `
-
-              : ""
-          }
-
-
-          ${renderCategoryStatsFromData(
-            saved.categoryStats,
-            saved.categoryStatsComplete
-          )}
-
-
-          <button
-            class="
-              restart-button
-              previous-result-back-button
-            "
-            type="button"
-          >
-            トップ画面へ戻る
-          </button>
-
-        </div>
-
-      `;
-
-
-      const backButton =
-        document.querySelector(
-          ".previous-result-back-button"
-        );
-
-
-      if (
-        backButton
-      ) {
-
-        backButton.addEventListener(
-          "click",
-          goToTop
-        );
-      }
+          resultTest:
+            false
+        }
+      );
     }
 
 
     /* =========================
-       前回結果ダミーテスト
+       ダミー前回結果
        ?lastresulttest=1
     ========================= */
 
@@ -882,6 +743,7 @@ document.addEventListener(
           categoryStats: {
 
             モンスター: {
+
               correct:
                 19,
 
@@ -891,6 +753,7 @@ document.addEventListener(
 
 
             アイテム: {
+
               correct:
                 16,
 
@@ -900,6 +763,7 @@ document.addEventListener(
 
 
             ダンジョン: {
+
               correct:
                 15,
 
@@ -909,6 +773,7 @@ document.addEventListener(
 
 
             仕様: {
+
               correct:
                 18,
 
@@ -918,6 +783,7 @@ document.addEventListener(
 
 
             その他: {
+
               correct:
                 1,
 
@@ -951,11 +817,6 @@ document.addEventListener(
         );
 
 
-        /*
-          ?lastresulttest=1 を消して
-          通常トップへ移動
-        */
-
         window.location.replace(
           window.location.pathname
         );
@@ -977,7 +838,7 @@ document.addEventListener(
 
 
     /* =========================
-       完走日時表示
+       完走日時
     ========================= */
 
     function formatCompletedAt(
@@ -1290,37 +1151,40 @@ document.addEventListener(
           ${question.choices
 
             .map(
-              (
+              function (
                 choice,
                 index
-              ) => `
+              ) {
 
-                <button
-                  class="choice-button"
-                  data-index="${index}"
-                >
+                return `
 
-                  <span
-                    class="choice-label"
+                  <button
+                    class="choice-button"
+                    data-index="${index}"
                   >
-                    ${String.fromCharCode(
-                      65 +
-                      index
-                    )}
-                  </span>
+
+                    <span
+                      class="choice-label"
+                    >
+                      ${String.fromCharCode(
+                        65 +
+                        index
+                      )}
+                    </span>
 
 
-                  <span
-                    class="choice-text"
-                  >
-                    ${escapeHtml(
-                      choice
-                    )}
-                  </span>
+                    <span
+                      class="choice-text"
+                    >
+                      ${escapeHtml(
+                        choice
+                      )}
+                    </span>
 
-                </button>
+                  </button>
 
-              `
+                `;
+              }
             )
 
             .join("")}
@@ -2998,23 +2862,11 @@ ${escapeHtml(
 
     function showResultTest() {
 
-      quizMode =
-        "main";
-
-
-      quizQuestions =
-        new Array(
-          100
-        ).fill(
-          null
-        );
-
-
-      score =
+      const testScore =
         69;
 
 
-      categoryStats = {
+      const testStats = {
 
         モンスター: {
 
@@ -3068,34 +2920,62 @@ ${escapeHtml(
       };
 
 
-      categoryStatsComplete =
-        true;
+      const rankResult =
+        getRankResult(
+          testScore
+        );
 
 
-      showResult();
+      renderMainResultScreen(
+        {
+
+          scoreValue:
+            testScore,
+
+
+          totalValue:
+            100,
+
+
+          rankResult:
+            rankResult,
+
+
+          statsSource:
+            testStats,
+
+
+          statsComplete:
+            true,
+
+
+          resultTest:
+            true
+        }
+      );
     }
 
 
     /* =========================
-       結果画面
+       通常結果画面
     ========================= */
 
     function showResult() {
-
-      const percentage =
-        Math.round(
-          (
-            score /
-            quizQuestions.length
-          ) *
-          100
-        );
-
 
       if (
         quizMode ===
           "trial"
       ) {
+
+        const percentage =
+          Math.round(
+            (
+              score /
+              quizQuestions.length
+            ) *
+            100
+          );
+
 
         showTrialResult(
           percentage
@@ -3111,11 +2991,6 @@ ${escapeHtml(
           score
         );
 
-
-      /*
-        正式100問完走のみ
-        前回結果として保存
-      */
 
       const isOfficialFullCompletion =
 
@@ -3162,6 +3037,71 @@ ${escapeHtml(
       }
 
 
+      renderMainResultScreen(
+        {
+
+          scoreValue:
+            score,
+
+
+          totalValue:
+            quizQuestions.length,
+
+
+          rankResult:
+            rankResult,
+
+
+          statsSource:
+            categoryStats,
+
+
+          statsComplete:
+            categoryStatsComplete,
+
+
+          resultTest:
+            false
+        }
+      );
+    }
+
+
+    /* =========================
+       結果画面共通描画
+
+       通常結果
+       前回結果
+       共通
+    ========================= */
+
+    function renderMainResultScreen(
+      {
+
+        scoreValue,
+
+        totalValue,
+
+        rankResult,
+
+        statsSource,
+
+        statsComplete,
+
+        resultTest = false
+      }
+    ) {
+
+      const percentage =
+        Math.round(
+          (
+            scoreValue /
+            totalValue
+          ) *
+          100
+        );
+
+
       const rank =
         rankResult.rank;
 
@@ -3185,7 +3125,7 @@ ${escapeHtml(
           >
 
             ${
-              isResultTestMode
+              resultTest
 
                 ? "RESULT TEST"
 
@@ -3201,7 +3141,7 @@ ${escapeHtml(
 
 
           ${
-            isResultTestMode
+            resultTest
 
               ? `
 
@@ -3234,11 +3174,11 @@ ${escapeHtml(
             class="final-score"
           >
 
-            ${score}
+            ${scoreValue}
 
             <span>
               /
-              ${quizQuestions.length}
+              ${totalValue}
             </span>
 
           </div>
@@ -3284,11 +3224,14 @@ ${escapeHtml(
           </div>
 
 
-          ${renderCategoryStats()}
+          ${renderCategoryStatsFromData(
+            statsSource,
+            statsComplete
+          )}
 
 
           ${
-            isResultTestMode
+            resultTest
 
               ? `
 
@@ -3306,7 +3249,10 @@ ${escapeHtml(
               : `
 
                 <button
-                  class="restart-button"
+                  class="
+                    restart-button
+                    result-retry-button
+                  "
                 >
                   もう一度挑戦する
                 </button>
@@ -3334,7 +3280,7 @@ ${escapeHtml(
 
 
       if (
-        isResultTestMode
+        resultTest
       ) {
 
         const backButton =
@@ -3343,48 +3289,61 @@ ${escapeHtml(
           );
 
 
-        backButton.addEventListener(
-          "click",
-          goToTop
-        );
-
-
-      } else {
-
-        document
-          .querySelector(
-            ".restart-button"
-          )
-          .addEventListener(
-            "click",
-            function () {
-
-              startQuiz(
-                isTestMode
-                  ? 5
-                  : 100,
-
-                "main"
-              );
-            }
-          );
-
-
-        const topButton =
-          document.querySelector(
-            ".result-top-button"
-          );
-
-
         if (
-          topButton
+          backButton
         ) {
 
-          topButton.addEventListener(
+          backButton.addEventListener(
             "click",
             goToTop
           );
         }
+
+
+        return;
+      }
+
+
+      const retryButton =
+        document.querySelector(
+          ".result-retry-button"
+        );
+
+
+      if (
+        retryButton
+      ) {
+
+        retryButton.addEventListener(
+          "click",
+          function () {
+
+            startQuiz(
+              isTestMode
+                ? 5
+                : 100,
+
+              "main"
+            );
+          }
+        );
+      }
+
+
+      const topButton =
+        document.querySelector(
+          ".result-top-button"
+        );
+
+
+      if (
+        topButton
+      ) {
+
+        topButton.addEventListener(
+          "click",
+          goToTop
+        );
       }
     }
 
@@ -4441,12 +4400,14 @@ ${escapeHtml(
 async function ensureAnonymousUser() {
 
   const {
+
     data: {
       user
     },
 
     error:
       userError
+
   } =
 
     await supabaseClient
@@ -4549,6 +4510,7 @@ async function saveFirstAnswer(
 
             selected_answer:
               selectedIndex
+
           },
           {
 
@@ -4558,6 +4520,7 @@ async function saveFirstAnswer(
 
             ignoreDuplicates:
               true
+
           }
         );
 
@@ -4582,11 +4545,13 @@ async function saveFirstAnswer(
 
 
     const {
+
       data:
         statsData,
 
       error:
         statsError
+
     } =
 
       await supabaseClient
@@ -4596,6 +4561,7 @@ async function saveFirstAnswer(
 
             p_question_id:
               questionId
+
           }
         );
 
@@ -4697,6 +4663,7 @@ async function submitQuestionReport(
 
             message:
               message
+
           }
         );
 
