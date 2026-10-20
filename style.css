@@ -2811,3 +2811,677 @@ body {
     line-height: 1.95;
   }
 }
+
+/* =========================================================
+   問題画面 仕上げ調整
+========================================================= */
+
+
+/* =========================
+   問題番号・カテゴリ周辺
+========================= */
+
+.question-meta {
+  align-items: center;
+
+  margin-bottom: 14px;
+
+  padding: 0 2px;
+
+  color: #d9b94e;
+}
+
+
+.question-meta > span:first-child {
+  font-family:
+    "Shippori Mincho B1",
+    "Yu Mincho",
+    serif;
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.04em;
+
+  color: #e5c761;
+}
+
+
+.question-meta-right {
+  gap: 7px;
+}
+
+
+.question-id {
+  font-family:
+    "Noto Sans JP",
+    sans-serif;
+
+  font-size: 11px;
+
+  font-weight: 500;
+
+  letter-spacing: 0.06em;
+
+  color: #8a8f96;
+
+  opacity: 0.7;
+}
+
+
+/* カテゴリをタグっぽく */
+
+.category {
+  display: inline-flex;
+
+  align-items: center;
+
+  min-height: 26px;
+
+  padding:
+    3px 10px;
+
+  border:
+    1px solid
+    rgba(212, 175, 55, 0.22);
+
+  border-radius: 999px;
+
+  background:
+    rgba(212, 175, 55, 0.055);
+
+  color:
+    #cdbd82;
+
+  font-family:
+    "Noto Sans JP",
+    sans-serif;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.035em;
+}
+
+
+/* =========================
+   進捗バー
+========================= */
+
+.progress-wrap {
+  height: 6px;
+
+  margin-bottom: 26px;
+
+  border-radius: 999px;
+
+  background:
+    rgba(255, 255, 255, 0.055);
+
+  box-shadow:
+    inset 0 1px 2px
+    rgba(0, 0, 0, 0.45);
+}
+
+
+.progress-bar {
+  background:
+    linear-gradient(
+      90deg,
+      #9b711c 0%,
+      #cfa536 55%,
+      #f1d76e 100%
+    );
+
+  box-shadow:
+    0 0 10px
+    rgba(212, 175, 55, 0.22);
+}
+
+
+/* =========================
+   中断ボタン
+========================= */
+
+.pause-row {
+  margin:
+    -4px 0
+    18px;
+
+  justify-content:
+    flex-end;
+}
+
+
+.pause-button {
+  min-width: 0;
+
+  min-height: 38px;
+
+  padding:
+    8px 14px;
+
+  border-color:
+    rgba(255, 255, 255, 0.11);
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  color:
+    #858b92;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+
+.pause-button:hover {
+  color:
+    #d7dbe0;
+
+  background:
+    rgba(255, 255, 255, 0.055);
+}
+
+
+/* =========================
+   問題文
+========================= */
+
+/*
+   question-meta が存在する画面の
+   問題文だけを狙う
+*/
+
+.question-meta ~ h2 {
+  margin:
+    0 0
+    28px;
+
+  padding:
+    25px 28px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.065);
+
+  border-left:
+    3px solid
+    rgba(212, 175, 55, 0.68);
+
+  border-radius:
+    14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.035),
+      rgba(255, 255, 255, 0.015)
+    );
+
+  box-shadow:
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.025);
+
+  color:
+    #f7f7f7;
+
+  font-family:
+    "Noto Sans JP",
+    sans-serif;
+
+  font-size:
+    clamp(
+      25px,
+      3.2vw,
+      30px
+    );
+
+  font-weight:
+    700;
+
+  line-height:
+    1.72;
+
+  letter-spacing:
+    0.018em;
+}
+
+
+/* =========================
+   複数回答の注意
+========================= */
+
+.question-instruction {
+  margin:
+    -8px 0
+    24px;
+
+  padding:
+    12px 15px;
+
+  border-left:
+    3px solid
+    #d4af37;
+
+  border-radius:
+    0 8px 8px 0;
+
+  background:
+    rgba(212, 175, 55, 0.055);
+
+  color:
+    #dacd95;
+
+  font-size:
+    14px;
+
+  font-weight:
+    600;
+
+  line-height:
+    1.75;
+}
+
+
+/* =========================
+   選択肢全体
+========================= */
+
+.choices {
+  gap:
+    13px;
+
+  margin-top:
+    24px;
+}
+
+
+/* =========================
+   選択肢ボタン
+========================= */
+
+.choice-button {
+  min-height:
+    64px;
+
+  padding:
+    15px 18px;
+
+  gap:
+    18px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.10);
+
+  border-radius:
+    12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.047),
+      rgba(255, 255, 255, 0.022)
+    );
+
+  color:
+    #f0f2f4;
+
+  font-family:
+    "Noto Sans JP",
+    sans-serif;
+
+  font-size:
+    16px;
+
+  font-weight:
+    500;
+
+  line-height:
+    1.6;
+
+  letter-spacing:
+    0.012em;
+
+  box-shadow:
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.025);
+
+  transition:
+    border-color 0.14s ease,
+    background 0.14s ease,
+    transform 0.14s ease,
+    box-shadow 0.14s ease;
+}
+
+
+.choice-button:hover {
+  transform:
+    translateY(-1px);
+
+  border-color:
+    rgba(212, 175, 55, 0.62);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(212, 175, 55, 0.10),
+      rgba(212, 175, 55, 0.045)
+    );
+
+  box-shadow:
+    0 4px 16px
+    rgba(0, 0, 0, 0.15);
+}
+
+
+/* 選択中 */
+
+.choice-button.selected {
+  border-color:
+    rgba(240, 210, 109, 0.8);
+
+  background:
+    rgba(212, 175, 55, 0.13);
+
+  box-shadow:
+    0 0 0 1px
+    rgba(212, 175, 55, 0.08);
+}
+
+
+/* =========================
+   A B C D
+========================= */
+
+.choice-label {
+  width:
+    34px;
+
+  height:
+    34px;
+
+  border:
+    1px solid
+    rgba(212, 175, 55, 0.24);
+
+  border-radius:
+    8px;
+
+  background:
+    rgba(212, 175, 55, 0.075);
+
+  color:
+    #e7c85e;
+
+  font-family:
+    "Noto Sans JP",
+    sans-serif;
+
+  font-size:
+    14px;
+
+  font-weight:
+    900;
+
+  box-shadow:
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.025);
+}
+
+
+.choice-text {
+  color:
+    #f1f2f4;
+
+  font-weight:
+    500;
+}
+
+
+/* =========================
+   回答後
+
+   正解＝緑
+   不正解＝赤
+   はそのまま維持
+========================= */
+
+.choice-button.correct {
+  border-color:
+    #4caf70;
+
+  background:
+    rgba(76, 175, 112, 0.15);
+
+  color:
+    #d9ffe4;
+}
+
+
+.choice-button.incorrect {
+  border-color:
+    #d9534f;
+
+  background:
+    rgba(217, 83, 79, 0.15);
+
+  color:
+    #ffd7d5;
+}
+
+
+/*
+   disabledでもマウスが乗ると
+   金色hoverに戻ってしまうのを防ぐ
+*/
+
+.choice-button.correct:hover {
+  transform:
+    none;
+
+  border-color:
+    #4caf70;
+
+  background:
+    rgba(76, 175, 112, 0.15);
+}
+
+
+.choice-button.incorrect:hover {
+  transform:
+    none;
+
+  border-color:
+    #d9534f;
+
+  background:
+    rgba(217, 83, 79, 0.15);
+}
+
+
+.choice-button:disabled:hover {
+  transform:
+    none;
+}
+
+
+/* =========================
+   複数回答「回答する」
+========================= */
+
+.submit-answer-button {
+  min-height:
+    54px;
+
+  margin-top:
+    20px;
+
+  border-radius:
+    12px;
+
+  font-size:
+    16px;
+
+  font-weight:
+    800;
+
+  letter-spacing:
+    0.025em;
+
+  box-shadow:
+    0 8px 24px
+    rgba(212, 175, 55, 0.13);
+}
+
+
+/* =========================
+   スマホ
+========================= */
+
+@media (max-width: 700px) {
+
+  .question-meta {
+    display:
+      block;
+
+    margin-bottom:
+      12px;
+  }
+
+
+  .question-meta > span:first-child {
+    font-size:
+      18px;
+  }
+
+
+  .question-meta-right {
+    margin-top:
+      9px;
+
+    flex-direction:
+      row;
+
+    align-items:
+      center;
+
+    justify-content:
+      flex-start;
+
+    flex-wrap:
+      wrap;
+
+    gap:
+      7px;
+
+    text-align:
+      left;
+  }
+
+
+  .question-id {
+    font-size:
+      10px;
+  }
+
+
+  .category {
+    min-height:
+      24px;
+
+    padding:
+      2px 9px;
+
+    font-size:
+      11px;
+  }
+
+
+  .progress-wrap {
+    margin-bottom:
+      22px;
+  }
+
+
+  .pause-row {
+    justify-content:
+      flex-start;
+
+    margin-bottom:
+      16px;
+  }
+
+
+  .pause-button {
+    min-width:
+      0;
+
+    min-height:
+      38px;
+
+    padding:
+      8px 13px;
+  }
+
+
+  .question-meta ~ h2 {
+    margin-bottom:
+      24px;
+
+    padding:
+      20px 18px;
+
+    font-size:
+      22px;
+
+    line-height:
+      1.7;
+
+    border-left-width:
+      3px;
+  }
+
+
+  .choices {
+    gap:
+      11px;
+
+    margin-top:
+      20px;
+  }
+
+
+  .choice-button {
+    min-height:
+      60px;
+
+    padding:
+      14px 14px;
+
+    gap:
+      13px;
+
+    font-size:
+      15px;
+
+    line-height:
+      1.6;
+  }
+
+
+  .choice-label {
+    width:
+      32px;
+
+    height:
+      32px;
+
+    font-size:
+      13px;
+  }
+}
