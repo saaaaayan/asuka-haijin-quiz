@@ -20,6 +20,11 @@ document.addEventListener(
 
     ensureAnonymousUser();
 
+
+    /* =========================
+       DOM取得
+    ========================= */
+
     const mainButton =
       document.querySelector("#main-button");
 
@@ -41,6 +46,16 @@ document.addEventListener(
     const resumeResetButton =
       document.querySelector("#resume-reset-button");
 
+    const heroButtons =
+      document.querySelector(".hero-buttons");
+
+    const trialNote =
+      document.querySelector(".trial-note");
+
+
+    /* =========================
+       クイズ状態
+    ========================= */
 
     let quizQuestions = [];
 
@@ -58,6 +73,7 @@ document.addEventListener(
     mainButton.addEventListener(
       "click",
       function () {
+
         startMainQuizFromBeginning();
       }
     );
@@ -66,12 +82,17 @@ document.addEventListener(
     trialButton.addEventListener(
       "click",
       function () {
-        startQuiz(5, "trial");
+
+        startQuiz(
+          5,
+          "trial"
+        );
       }
     );
 
 
     if (resumeButton) {
+
       resumeButton.addEventListener(
         "click",
         resumeQuiz
@@ -80,6 +101,7 @@ document.addEventListener(
 
 
     if (resumeResetButton) {
+
       resumeResetButton.addEventListener(
         "click",
         function () {
@@ -89,11 +111,14 @@ document.addEventListener(
               "途中までのデータを削除しますか？"
             );
 
+
           if (!confirmed) {
             return;
           }
 
+
           clearProgress();
+
 
           window.location.reload();
         }
@@ -115,6 +140,7 @@ document.addEventListener(
 
       quizMode = mode;
 
+
       try {
 
         const response =
@@ -127,6 +153,7 @@ document.addEventListener(
 
 
         if (!response.ok) {
+
           throw new Error(
             "問題データを読み込めませんでした。"
           );
@@ -154,7 +181,10 @@ document.addEventListener(
         score = 0;
 
 
-        if (quizMode === "main") {
+        if (
+          quizMode === "main"
+        ) {
+
           saveProgress(0);
         }
 
@@ -165,7 +195,9 @@ document.addEventListener(
       } catch (error) {
 
         quizCard.innerHTML = `
-          <h2>エラー</h2>
+          <h2>
+            エラー
+          </h2>
 
           <p>
             問題データを読み込めませんでした。
@@ -184,7 +216,10 @@ document.addEventListener(
 
     function showQuestion() {
 
-      if (quizMode === "main") {
+      if (
+        quizMode === "main"
+      ) {
+
         saveProgress(
           currentQuestionIndex
         );
@@ -342,11 +377,9 @@ document.addEventListener(
       `;
 
 
-      const choiceButtons =
-        document.querySelectorAll(
-          ".choice-button"
-        );
-
+      /* =========================
+         中断ボタン
+      ========================= */
 
       const pauseButton =
         document.querySelector(
@@ -364,6 +397,16 @@ document.addEventListener(
           }
         );
       }
+
+
+      /* =========================
+         選択肢
+      ========================= */
+
+      const choiceButtons =
+        document.querySelectorAll(
+          ".choice-button"
+        );
 
 
       /* =========================
@@ -551,17 +594,28 @@ document.addEventListener(
 
 
       if (isCorrect) {
+
         score++;
       }
 
 
-      if (quizMode === "main") {
+      /* =========================
+         回答後に途中保存
+      ========================= */
+
+      if (
+        quizMode === "main"
+      ) {
 
         saveProgress(
           currentQuestionIndex + 1
         );
       }
 
+
+      /* =========================
+         初回回答統計
+      ========================= */
 
       const stats =
         await saveFirstAnswer(
@@ -570,6 +624,10 @@ document.addEventListener(
           isCorrect
         );
 
+
+      /* =========================
+         選択肢表示
+      ========================= */
 
       choiceButtons.forEach(
         (button) => {
@@ -855,6 +913,10 @@ document.addEventListener(
       `;
 
 
+      /* =========================
+         次へ
+      ========================= */
+
       document
         .querySelector(
           ".next-button"
@@ -864,6 +926,10 @@ document.addEventListener(
           nextQuestion
         );
 
+
+      /* =========================
+         問題報告
+      ========================= */
 
       const reportToggleButton =
         document.querySelector(
@@ -1050,6 +1116,7 @@ document.addEventListener(
           percentage
         );
 
+
         return;
       }
 
@@ -1157,7 +1224,7 @@ document.addEventListener(
 
 
     /* =========================
-       お試し結果画面
+       お試し結果
     ========================= */
 
     function showTrialResult(
@@ -1206,8 +1273,7 @@ document.addEventListener(
 
 
           <button
-            class="next-button
-                   main-challenge-button"
+            class="next-button main-challenge-button"
           >
             廃人検定100問に挑戦する
           </button>
@@ -1257,7 +1323,7 @@ document.addEventListener(
 
 
     /* =========================
-       中断・再開
+       本番を最初から開始
     ========================= */
 
     function startMainQuizFromBeginning() {
@@ -1290,6 +1356,10 @@ document.addEventListener(
     }
 
 
+    /* =========================
+       途中保存
+    ========================= */
+
     function saveProgress(
       nextQuestionIndex
     ) {
@@ -1297,6 +1367,7 @@ document.addEventListener(
       if (
         quizMode !== "main"
       ) {
+
         return;
       }
 
@@ -1343,6 +1414,10 @@ document.addEventListener(
     }
 
 
+    /* =========================
+       途中データ読込
+    ========================= */
+
     function loadProgress() {
 
       try {
@@ -1354,6 +1429,7 @@ document.addEventListener(
 
 
         if (!raw) {
+
           return null;
         }
 
@@ -1395,6 +1471,10 @@ document.addEventListener(
     }
 
 
+    /* =========================
+       途中データ削除
+    ========================= */
+
     function clearProgress() {
 
       try {
@@ -1417,12 +1497,17 @@ document.addEventListener(
     }
 
 
+    /* =========================
+       トップの再開表示
+    ========================= */
+
     function updateResumeArea() {
 
       if (
         !resumeArea ||
         !resumeDetail
       ) {
+
         return;
       }
 
@@ -1431,6 +1516,10 @@ document.addEventListener(
         loadProgress();
 
 
+      /* =========================
+         中断データなし
+      ========================= */
+
       if (!saved) {
 
         resumeArea.classList.add(
@@ -1438,13 +1527,49 @@ document.addEventListener(
         );
 
 
+        if (heroButtons) {
+
+          heroButtons.classList.remove(
+            "hidden"
+          );
+        }
+
+
+        if (trialNote) {
+
+          trialNote.classList.remove(
+            "hidden"
+          );
+        }
+
+
         return;
       }
 
 
+      /* =========================
+         中断データあり
+      ========================= */
+
       resumeArea.classList.remove(
         "hidden"
       );
+
+
+      if (heroButtons) {
+
+        heroButtons.classList.add(
+          "hidden"
+        );
+      }
+
+
+      if (trialNote) {
+
+        trialNote.classList.add(
+          "hidden"
+        );
+      }
 
 
       const total =
@@ -1468,6 +1593,10 @@ document.addEventListener(
     }
 
 
+    /* =========================
+       続きから再開
+    ========================= */
+
     async function resumeQuiz() {
 
       const saved =
@@ -1477,6 +1606,7 @@ document.addEventListener(
       if (!saved) {
 
         updateResumeArea();
+
 
         return;
       }
@@ -1509,7 +1639,9 @@ document.addEventListener(
           new Map(
             allQuestions.map(
               (question) => [
-                String(question.id),
+                String(
+                  question.id
+                ),
                 question
               ]
             )
@@ -1527,7 +1659,8 @@ document.addEventListener(
 
         if (
           restoredQuestions.some(
-            (question) => !question
+            (question) =>
+              !question
           )
         ) {
 
