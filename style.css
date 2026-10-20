@@ -16,10 +16,10 @@ body {
 
   background:
     radial-gradient(
-      circle at top,
-      #383838 0%,
-      #1f1f1f 40%,
-      #101010 100%
+      circle at 50% 0%,
+      #27303a 0%,
+      #1a1d21 38%,
+      #0c0d0f 100%
     );
 
   color: #f5f5f5;
@@ -53,17 +53,17 @@ body {
   background:
     linear-gradient(
       145deg,
-      rgba(38, 38, 38, 0.98),
-      rgba(21, 21, 21, 0.98)
+      rgba(29, 33, 38, 0.985),
+      rgba(13, 15, 18, 0.985)
     );
 
   border:
     1px solid
-    rgba(218, 181, 74, 0.25);
+    rgba(185, 160, 88, 0.26);
 
   box-shadow:
-    0 25px 80px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    0 25px 80px rgba(0, 0, 0, 0.58),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
 }
 
 .hero-card::before {
@@ -71,18 +71,41 @@ body {
 
   position: absolute;
 
-  width: 350px;
-  height: 350px;
+  width: 420px;
+  height: 420px;
 
-  right: -140px;
-  top: -180px;
+  right: -190px;
+  top: -210px;
 
   background:
     radial-gradient(
       circle,
-      rgba(212, 175, 55, 0.16),
+      rgba(212, 175, 55, 0.09),
+      transparent 68%
+    );
+
+  pointer-events: none;
+}
+
+.hero-card::after {
+  content: "";
+
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  left: -240px;
+  top: -220px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(65, 105, 170, 0.08),
       transparent 70%
     );
+
+  pointer-events: none;
 }
 
 .hero-label {
@@ -125,10 +148,16 @@ h1 {
 
 /* =========================
    トップタイトル
-   Yuji Syuku
 ========================= */
 
 .hero-card > h1 {
+  display: flex;
+  align-items: baseline;
+
+  gap: 0.9em;
+
+  flex-wrap: nowrap;
+
   font-family:
     "Yuji Syuku",
     "Yu Mincho",
@@ -137,13 +166,43 @@ h1 {
 
   font-weight: 400;
 
-  letter-spacing: 0.055em;
+  letter-spacing: 0.045em;
+}
 
-  color: #f6f1e4;
+
+/* アスカ見参 */
+
+.title-asuka {
+  color: #f6fbff;
 
   text-shadow:
-    0 2px 2px rgba(0, 0, 0, 0.95),
-    0 0 14px rgba(212, 175, 55, 0.10);
+    0 2px 0 rgba(0, 0, 0, 0.9),
+    0 0 2px rgba(255, 255, 255, 0.9),
+    0 0 7px rgba(100, 155, 230, 0.75),
+    2px 3px 0 rgba(31, 57, 104, 0.95);
+}
+
+
+/* 廃人検定 */
+
+.title-haijin {
+  background:
+    linear-gradient(
+      180deg,
+      #ffe6a3 0%,
+      #f0b34c 38%,
+      #d65b2d 70%,
+      #9c2f22 100%
+    );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  color: transparent;
+
+  text-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.85),
+    2px 3px 0 rgba(88, 24, 18, 0.75);
 }
 
 
@@ -170,7 +229,7 @@ h1 {
   font-size: 17px;
   line-height: 2;
 
-  color: #ccc;
+  color: #c7ccd2;
 }
 
 .hero-warning {
@@ -181,10 +240,14 @@ h1 {
   padding: 17px 20px;
 
   border-left:
-    4px solid #d4af37;
+    4px solid #d3aa39;
 
   background:
-    rgba(212, 175, 55, 0.06);
+    linear-gradient(
+      90deg,
+      rgba(212, 175, 55, 0.08),
+      rgba(212, 175, 55, 0.025)
+    );
 
   font-size: 17px;
   line-height: 1.8;
@@ -222,17 +285,21 @@ h1 {
 
   padding: 17px 32px;
 
-  border: 0;
+  border:
+    1px solid
+    rgba(255, 222, 115, 0.55);
+
   border-radius: 18px;
 
   background:
     linear-gradient(
       135deg,
-      #c89e32,
-      #f0d26d
+      #b9851f 0%,
+      #d8aa38 42%,
+      #f1d46f 100%
     );
 
-  color: #181818;
+  color: #171717;
 
   font-family: inherit;
 
@@ -240,7 +307,9 @@ h1 {
 
   box-shadow:
     0 10px 32px
-    rgba(212, 175, 55, 0.22);
+    rgba(212, 175, 55, 0.20),
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.25);
 
   transition:
     transform 0.15s ease,
@@ -253,7 +322,9 @@ h1 {
 
   box-shadow:
     0 14px 38px
-    rgba(212, 175, 55, 0.32);
+    rgba(212, 175, 55, 0.30),
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.28);
 }
 
 .button-main {
@@ -292,18 +363,18 @@ h1 {
 
   border:
     1px solid
-    rgba(255, 255, 255, 0.18);
+    rgba(134, 160, 194, 0.30);
 
   border-radius: 18px;
 
   background:
     linear-gradient(
       145deg,
-      #3e3e3e,
-      #303030
+      #313944,
+      #222830
     );
 
-  color: #f3f3f3;
+  color: #f3f5f8;
 
   font-family: inherit;
 
@@ -311,7 +382,7 @@ h1 {
 
   box-shadow:
     inset 0 1px 0
-    rgba(255, 255, 255, 0.05);
+    rgba(255, 255, 255, 0.055);
 
   transition:
     transform 0.15s ease,
@@ -325,18 +396,18 @@ h1 {
     translateY(-2px);
 
   border-color:
-    rgba(255, 255, 255, 0.32);
+    rgba(158, 188, 227, 0.48);
 
   background:
     linear-gradient(
       145deg,
-      #484848,
-      #393939
+      #394452,
+      #29323c
     );
 
   box-shadow:
     0 8px 24px rgba(0, 0, 0, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
 }
 
 .trial-label {
@@ -344,7 +415,7 @@ h1 {
 
   margin-bottom: 6px;
 
-  color: #d7d7d7;
+  color: #dce7f5;
 
   font-size: 22px;
   line-height: 1.3;
@@ -357,7 +428,7 @@ h1 {
 .trial-main {
   display: block;
 
-  color: #f5f5f5;
+  color: #f4f7fb;
 
   font-size: 18px;
   line-height: 1.35;
@@ -373,7 +444,7 @@ h1 {
 
   margin: 16px 0 0;
 
-  color: #999;
+  color: #8f959d;
 
   font-size: 13px;
   line-height: 1.8;
@@ -381,44 +452,30 @@ h1 {
 
 
 /* =========================
-   問題画面
+   以下は既存CSSをそのまま
 ========================= */
 
 .quiz-card h2 {
   margin: 12px 0 24px;
-
   font-size: 26px;
   line-height: 1.7;
-
   color: #fff;
 }
 
 .quiz-card > p:first-child {
   color: #d9b94e;
-
   font-size: 14px;
-
   font-weight: bold;
-
   letter-spacing: 0.08em;
 }
 
-
-/* 問題上部情報 */
-
 .question-meta {
   display: flex;
-
   justify-content: space-between;
-
   gap: 20px;
-
   margin-bottom: 18px;
-
   color: #d9b94e;
-
   font-size: 14px;
-
   font-weight: bold;
 }
 
@@ -429,96 +486,54 @@ h1 {
 
 .question-meta-right {
   margin-left: auto;
-
   display: flex;
-
   flex-direction: column;
-
   align-items: flex-end;
-
   text-align: right;
-
   gap: 4px;
 }
 
 .question-id {
   font-size: 0.72rem;
-
   opacity: 0.45;
-
   letter-spacing: 0.04em;
 }
 
 .category {
   color: #aaa;
-
   font-weight: normal;
 }
 
-
-/* 複数選択等の注意 */
-
 .question-instruction {
   margin: -4px 0 20px;
-
   padding: 12px 16px;
-
-  border-left:
-    3px solid #d4af37;
-
-  background:
-    rgba(212, 175, 55, 0.06);
-
+  border-left: 3px solid #d4af37;
+  background: rgba(212, 175, 55, 0.06);
   color: #e6d99c;
-
   font-size: 15px;
-
   font-weight: 700;
 }
 
-
-/* =========================
-   選択肢
-========================= */
-
 .choices {
   display: grid;
-
   gap: 14px;
-
   margin-top: 28px;
 }
 
 .choice-button {
   width: 100%;
-
   padding: 16px 18px;
-
   display: flex;
-
   align-items: center;
-
   gap: 20px;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.12);
-
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
-
-  background:
-    rgba(255, 255, 255, 0.04);
-
+  background: rgba(255, 255, 255, 0.04);
   color: #f5f5f5;
-
   font-size: 16px;
-
   line-height: 1.5;
-
   text-align: left;
-
   cursor: pointer;
-
   transition:
     border-color 0.15s ease,
     background 0.15s ease,
@@ -527,66 +542,43 @@ h1 {
 
 .choice-button:hover {
   border-color: #d4af37;
-
-  background:
-    rgba(212, 175, 55, 0.08);
-
-  transform:
-    translateY(-1px);
+  background: rgba(212, 175, 55, 0.08);
+  transform: translateY(-1px);
 }
 
 .choice-button:disabled {
   cursor: default;
-
   opacity: 1;
 }
 
 .choice-button.selected {
   border-color: #d4af37;
-
-  background:
-    rgba(212, 175, 55, 0.12);
+  background: rgba(212, 175, 55, 0.12);
 }
 
 .choice-button.correct {
   border-color: #4caf70;
-
-  background:
-    rgba(76, 175, 112, 0.15);
-
+  background: rgba(76, 175, 112, 0.15);
   color: #d9ffe4;
 }
 
 .choice-button.incorrect {
   border-color: #d9534f;
-
-  background:
-    rgba(217, 83, 79, 0.15);
-
+  background: rgba(217, 83, 79, 0.15);
   color: #ffd7d5;
 }
 
 .choice-label {
   display: inline-flex;
-
   align-items: center;
-
   justify-content: center;
-
   width: 32px;
   height: 32px;
-
   border-radius: 8px;
-
-  background:
-    rgba(212, 175, 55, 0.12);
-
+  background: rgba(212, 175, 55, 0.12);
   color: #f0d26d;
-
   font-size: 15px;
-
   font-weight: 900;
-
   flex-shrink: 0;
 }
 
@@ -594,41 +586,25 @@ h1 {
   flex: 1;
 }
 
-
-/* =========================
-   解答結果
-========================= */
-
 .result-box {
   margin-top: 30px;
-
   padding: 24px;
-
   border-radius: 14px;
-
-  background:
-    rgba(255, 255, 255, 0.04);
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .result-correct {
-  border-left:
-    4px solid #4caf70;
+  border-left: 4px solid #4caf70;
 }
 
 .result-incorrect {
-  border-left:
-    4px solid #d9534f;
+  border-left: 4px solid #d9534f;
 }
 
 .result-title {
   margin-bottom: 15px;
-
   font-size: 26px;
-
   font-weight: 800;
 }
 
@@ -642,207 +618,116 @@ h1 {
 
 .correct-answer {
   display: flex;
-
   align-items: center;
-
   gap: 14px;
-
   margin-bottom: 24px;
-
   font-size: 17px;
-
   font-weight: bold;
-
   color: #f2d36f;
 }
 
 .correct-answer-title {
   color: #f0d26d;
-
   font-weight: 800;
 }
 
 .correct-answer-label {
   display: inline-flex;
-
   align-items: center;
-
   justify-content: center;
-
   width: 32px;
   height: 32px;
-
   border-radius: 8px;
-
-  background:
-    rgba(212, 175, 55, 0.14);
-
+  background: rgba(212, 175, 55, 0.14);
   color: #f0d26d;
-
   font-size: 15px;
-
   font-weight: 900;
-
   flex-shrink: 0;
 }
 
 .correct-answer-text {
   color: #f5f5f5;
-
   font-weight: 700;
 }
 
 .explanation-title {
   margin-bottom: 8px;
-
   font-size: 14px;
-
   font-weight: bold;
-
   color: #d9b94e;
-
   letter-spacing: 0.08em;
 }
 
 .explanation {
   margin: 0;
-
   font-size: 16px;
-
   line-height: 1.9;
-
   color: #ddd;
 }
 
-
-/* =========================
-   現在スコア
-========================= */
-
 .current-score {
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   margin-top: 22px;
-
   padding: 16px 20px;
-
-  border:
-    1px solid
-    rgba(212, 175, 55, 0.16);
-
+  border: 1px solid rgba(212, 175, 55, 0.16);
   border-radius: 10px;
-
-  background:
-    rgba(212, 175, 55, 0.04);
+  background: rgba(212, 175, 55, 0.04);
 }
 
 .current-score-label {
   color: #aaa;
-
   font-size: 14px;
-
   font-weight: 700;
 }
 
 .current-score-number {
   color: #f0d26d;
-
   font-size: 24px;
-
   font-weight: 900;
 }
-
-
-/* =========================
-   次へ・戻る
-========================= */
 
 .next-button,
 .restart-button {
   margin-top: 25px;
-
   padding: 15px 30px;
-
   border: none;
-
   border-radius: 10px;
-
   background:
     linear-gradient(
       135deg,
       #c89e32,
       #f0d26d
     );
-
   color: #181818;
-
   font-size: 17px;
-
   font-weight: 800;
-
   cursor: pointer;
-
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
 }
-
-.next-button:hover,
-.restart-button:hover {
-  transform:
-    translateY(-2px);
-
-  box-shadow:
-    0 10px 30px
-    rgba(212, 175, 55, 0.25);
-}
-
-
-/* =========================
-   複数選択の決定ボタン
-========================= */
 
 .submit-answer-button {
   width: 100%;
-
   margin-top: 18px;
-
   padding: 15px;
-
   border: 0;
-
   border-radius: 10px;
-
   background:
     linear-gradient(
       135deg,
       #c89e32,
       #f0d26d
     );
-
   color: #181818;
-
   font-size: 17px;
-
   font-weight: 800;
-
   cursor: pointer;
 }
 
 .submit-answer-button:disabled {
   opacity: 0.35;
-
   cursor: default;
 }
-
-
-/* =========================
-   最終結果画面
-========================= */
 
 .result-screen {
   text-align: center;
@@ -850,792 +735,75 @@ h1 {
 
 .final-score {
   margin-top: 25px;
-
   font-size: 80px;
-
   font-weight: 900;
-
   color: #f0d26d;
 }
 
 .final-score span {
   font-size: 28px;
-
   color: #aaa;
 }
 
 .percentage {
   margin-top: 8px;
-
   font-size: 20px;
-
   color: #ccc;
 }
 
 .rank-label {
   margin-top: 35px;
-
   font-size: 14px;
-
   color: #aaa;
-
   letter-spacing: 0.1em;
 }
 
 .rank-grade {
   margin-top: 8px;
-
   margin-bottom: 8px;
-
   font-size: 2.4rem;
-
   font-weight: 900;
-
   letter-spacing: 0.08em;
 }
 
 .rank {
   margin-top: 8px;
-
   font-size: 36px;
-
   font-weight: 900;
-
   color: #f0d26d;
 }
 
-
-/* =========================
-   コミュニティ統計
-========================= */
-
 .community-stats {
   margin-top: 24px;
-
   padding: 20px;
-
   text-align: center;
-
-  border:
-    1px solid
-    rgba(212, 175, 55, 0.2);
-
+  border: 1px solid rgba(212, 175, 55, 0.2);
   border-radius: 12px;
-
-  background:
-    rgba(212, 175, 55, 0.05);
+  background: rgba(212, 175, 55, 0.05);
 }
 
 .community-stats-title {
   font-size: 13px;
-
   font-weight: bold;
-
   color: #aaa;
-
   letter-spacing: 0.08em;
 }
 
 .community-stats-number {
   margin-top: 6px;
-
   font-size: 34px;
-
   font-weight: 900;
-
   color: #f0d26d;
 }
 
 .community-stats-detail {
   margin-top: 4px;
-
   font-size: 14px;
-
   color: #aaa;
-}
-
-
-/* =========================
-   問題報告
-========================= */
-
-.report-section {
-  margin-top: 28px;
-
-  padding-top: 22px;
-
-  border-top:
-    1px solid
-    rgba(255, 255, 255, 0.08);
-}
-
-.report-toggle-button {
-  padding: 10px 18px;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.18);
-
-  border-radius: 9px;
-
-  background:
-    rgba(255, 255, 255, 0.04);
-
-  color: #bbb;
-
-  font-size: 14px;
-
-  cursor: pointer;
-
-  transition:
-    border-color 0.15s ease,
-    color 0.15s ease,
-    background 0.15s ease;
-}
-
-.report-toggle-button:hover {
-  border-color: #d4af37;
-
-  color: #f0d26d;
-
-  background:
-    rgba(212, 175, 55, 0.06);
-}
-
-.report-form {
-  margin-top: 20px;
-
-  padding: 22px;
-
-  border-radius: 12px;
-
-  background:
-    rgba(0, 0, 0, 0.18);
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.08);
 }
 
 .hidden {
   display: none;
-}
-
-.report-heading {
-  margin-bottom: 14px;
-
-  font-size: 16px;
-
-  font-weight: bold;
-
-  color: #eee;
-}
-
-.report-type {
-  width: 100%;
-
-  padding: 12px;
-
-  margin-bottom: 14px;
-
-  border-radius: 8px;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.15);
-
-  background: #222;
-
-  color: #eee;
-
-  font-size: 15px;
-}
-
-.report-message {
-  width: 100%;
-
-  min-height: 130px;
-
-  padding: 14px;
-
-  resize: vertical;
-
-  border-radius: 8px;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.15);
-
-  background: #1d1d1d;
-
-  color: #eee;
-
-  font-family: inherit;
-
-  font-size: 15px;
-
-  line-height: 1.7;
-}
-
-.report-message:focus,
-.report-type:focus {
-  outline: none;
-
-  border-color: #d4af37;
-}
-
-.report-note {
-  margin: 10px 0 0;
-
-  color: #888;
-
-  font-size: 12px;
-}
-
-.report-submit-button {
-  margin-top: 16px;
-
-  padding: 11px 22px;
-
-  border: 0;
-
-  border-radius: 8px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #c89e32,
-      #f0d26d
-    );
-
-  color: #171717;
-
-  font-size: 15px;
-
-  font-weight: 800;
-
-  cursor: pointer;
-}
-
-.report-submit-button:disabled {
-  opacity: 0.6;
-
-  cursor: default;
-}
-
-.report-status {
-  margin-top: 14px;
-
-  font-size: 14px;
-}
-
-.report-status.success {
-  color: #77d997;
-}
-
-.report-status.error {
-  color: #ef7772;
-}
-
-
-/* =========================
-   お試し結果ボタン
-========================= */
-
-.trial-result-button {
-  margin-top: 18px;
-
-  padding: 15px 30px;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.18);
-
-  border-radius: 10px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #3e3e3e,
-      #303030
-    );
-
-  color: #f2f2f2;
-
-  font-size: 17px;
-
-  font-weight: 800;
-
-  cursor: pointer;
-
-  transition:
-    transform 0.15s ease,
-    background 0.15s ease,
-    border-color 0.15s ease;
-}
-
-.trial-result-button:hover {
-  transform: translateY(-2px);
-
-  background:
-    linear-gradient(
-      145deg,
-      #484848,
-      #393939
-    );
-
-  border-color:
-    rgba(255, 255, 255, 0.32);
-}
-
-
-/* =========================
-   進捗バー
-========================= */
-
-.progress-wrap {
-  width: 100%;
-  height: 7px;
-
-  margin:
-    10px 0
-    24px;
-
-  overflow: hidden;
-
-  border-radius: 999px;
-
-  background:
-    rgba(255, 255, 255, 0.08);
-}
-
-.progress-bar {
-  height: 100%;
-
-  border-radius: 999px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #b88a1d,
-      #e0bd55
-    );
-
-  transition:
-    width 0.3s ease;
-}
-
-
-/* =========================
-   中断・再開
-========================= */
-
-.resume-area {
-  position: relative;
-
-  margin: 28px 0 6px;
-
-  padding: 18px;
-
-  border:
-    1px solid
-    rgba(212, 175, 55, 0.22);
-
-  border-radius: 14px;
-
-  background:
-    rgba(212, 175, 55, 0.045);
-}
-
-.resume-area.hidden {
-  display: none;
-}
-
-.resume-heading {
-  margin-bottom: 12px;
-
-  color: #d9b94e;
-
-  font-size: 14px;
-
-  font-weight: 800;
-
-  letter-spacing: 0.04em;
-}
-
-.resume-button {
-  width: 100%;
-
-  padding: 15px 22px;
-
-  border:
-    1px solid
-    rgba(212, 175, 55, 0.48);
-
-  border-radius: 12px;
-
-  background:
-    rgba(212, 175, 55, 0.08);
-
-  color: #f0d26d;
-
-  font-family: inherit;
-
-  cursor: pointer;
-
-  transition:
-    transform 0.15s ease,
-    background 0.15s ease,
-    border-color 0.15s ease;
-}
-
-.resume-button:hover {
-  transform: translateY(-1px);
-
-  background:
-    rgba(212, 175, 55, 0.13);
-
-  border-color: #d4af37;
-}
-
-.resume-main {
-  display: block;
-
-  font-size: 19px;
-
-  font-weight: 900;
-}
-
-.resume-detail {
-  display: block;
-
-  margin-top: 5px;
-
-  color: #bbb;
-
-  font-size: 13px;
-
-  font-weight: 700;
-}
-
-.resume-reset-button {
-  width: 100%;
-
-  margin-top: 10px;
-
-  padding: 11px 18px;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.14);
-
-  border-radius: 10px;
-
-  background:
-    rgba(255, 255, 255, 0.035);
-
-  color: #aaa;
-
-  font-family: inherit;
-
-  font-size: 13px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition:
-    color 0.15s ease,
-    background 0.15s ease,
-    border-color 0.15s ease;
-}
-
-.resume-reset-button:hover {
-  color: #eee;
-
-  background:
-    rgba(255, 255, 255, 0.065);
-
-  border-color:
-    rgba(255, 255, 255, 0.28);
-}
-
-
-/* =========================
-   中断ボタン
-========================= */
-
-.pause-row {
-  display: flex;
-
-  justify-content: flex-end;
-
-  margin: -6px 0 18px;
-}
-
-.pause-button {
-  min-width: 180px;
-  min-height: 46px;
-
-  padding: 12px 18px;
-
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.18);
-
-  border-radius: 10px;
-
-  background:
-    rgba(255, 255, 255, 0.045);
-
-  color: #aaa;
-
-  font-family: inherit;
-
-  font-size: 13px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition:
-    color 0.15s ease,
-    background 0.15s ease,
-    border-color 0.15s ease,
-    transform 0.15s ease;
-}
-
-.pause-button:hover {
-  color: #eee;
-
-  background:
-    rgba(255, 255, 255, 0.08);
-
-  border-color:
-    rgba(255, 255, 255, 0.32);
-
-  transform:
-    translateY(-1px);
-}
-
-
-/* =========================
-   解答後の次へボタン固定
-========================= */
-
-.answer-next-button {
-  position: fixed;
-
-  left: 50%;
-  bottom: 20px;
-
-  width: 340px;
-
-  max-width:
-    calc(
-      100% - 36px
-    );
-
-  margin: 0;
-
-  padding: 16px 24px;
-
-  transform:
-    translateX(-50%);
-
-  z-index: 1000;
-
-  box-shadow:
-    0 8px 30px
-    rgba(0, 0, 0, 0.55),
-
-    0 5px 20px
-    rgba(212, 175, 55, 0.25);
-}
-
-.answer-next-button:hover {
-  transform:
-    translateX(-50%)
-    translateY(-2px);
-}
-
-
-/*
-  固定ボタンで解説の最後が
-  隠れないよう余白を確保
-*/
-
-#answer-area .result-box {
-  margin-bottom: 95px;
-}
-
-
-/* =========================
-   結果：カテゴリ別正答率
-========================= */
-
-.category-results {
-  margin-top: 34px;
-
-  padding: 24px;
-
-  text-align: left;
-
-  border:
-    1px solid
-    rgba(212, 175, 55, 0.18);
-
-  border-radius: 14px;
-
-  background:
-    rgba(212, 175, 55, 0.035);
-}
-
-.category-results-title {
-  margin-bottom: 18px;
-
-  color: #f0d26d;
-
-  font-size: 18px;
-
-  font-weight: 900;
-
-  letter-spacing: 0.04em;
-}
-
-.category-results-list {
-  display: grid;
-
-  gap: 18px;
-}
-
-.category-result-row {
-  min-width: 0;
-}
-
-.category-result-top {
-  display: flex;
-
-  align-items: baseline;
-
-  justify-content: space-between;
-
-  gap: 16px;
-
-  margin-bottom: 8px;
-}
-
-.category-result-name {
-  min-width: 0;
-
-  color: #eee;
-
-  font-size: 15px;
-
-  font-weight: 800;
-}
-
-.category-result-score {
-  flex-shrink: 0;
-
-  color: #aaa;
-
-  font-size: 14px;
-
-  font-weight: 700;
-}
-
-.category-result-score strong {
-  margin-left: 10px;
-
-  font-size: 16px;
-
-  font-weight: 900;
-}
-
-.category-result-bar-wrap {
-  width: 100%;
-  height: 7px;
-
-  overflow: hidden;
-
-  border-radius: 999px;
-
-  background:
-    rgba(255, 255, 255, 0.08);
-}
-
-.category-result-bar {
-  height: 100%;
-
-  border-radius: 999px;
-
-  transition:
-    width 0.45s ease;
-}
-
-
-/* 80%以上：金 */
-
-.category-result-bar.high {
-  background:
-    linear-gradient(
-      90deg,
-      #b88a1d,
-      #f0d26d
-    );
-}
-
-.category-result-accuracy.high {
-  color: #f0d26d;
-}
-
-
-/* 50～79%：オレンジ */
-
-.category-result-bar.middle {
-  background:
-    linear-gradient(
-      90deg,
-      #b96818,
-      #e69a35
-    );
-}
-
-.category-result-accuracy.middle {
-  color: #e69a35;
-}
-
-
-/* 0～49%：赤 */
-
-.category-result-bar.low {
-  background:
-    linear-gradient(
-      90deg,
-      #9f3733,
-      #df625b
-    );
-}
-
-.category-result-accuracy.low {
-  color: #ef7772;
-}
-
-.category-results-note {
-  margin: 0;
-
-  color: #aaa;
-
-  font-size: 14px;
-
-  line-height: 1.8;
 }
 
 
@@ -1649,176 +817,73 @@ h1 {
     padding: 35px 0;
   }
 
-
   .quiz-card {
     padding: 32px 24px;
   }
 
-
-  /*
-    Yuji Syuku のタイトルを
-    スマホでも1行に収める
-  */
-
   .hero-card > h1 {
-    font-family:
-      "Yuji Syuku",
-      "Yu Mincho",
-      "Hiragino Mincho ProN",
-      serif;
+    display: flex;
+
+    gap: 0.5em;
 
     font-size:
       clamp(
-        27px,
-        7.8vw,
-        34px
+        24px,
+        7vw,
+        31px
       );
 
-    font-weight: 400;
-
-    line-height: 1.2;
-
-    letter-spacing: 0.025em;
+    letter-spacing: 0.015em;
 
     white-space: nowrap;
-
-    word-break: keep-all;
-
-    color: #f6f1e4;
-
-    text-shadow:
-      0 2px 2px rgba(0, 0, 0, 0.95),
-      0 0 12px rgba(212, 175, 55, 0.10);
   }
-
 
   .hero-catch {
     font-size: 20px;
   }
-
 
   .subtitle,
   .hero-warning {
     font-size: 15px;
   }
 
-
   .hero-buttons {
     flex-direction: column;
   }
 
-
   .start-button,
   .trial-button {
     width: 100%;
-
     min-width: 0;
   }
-
-
-  .start-button {
-    order: 1;
-  }
-
-
-  .trial-button {
-    order: 2;
-  }
-
 
   .question-meta {
     display: block;
   }
 
-
   .question-meta-right {
     margin-left: 0;
-
     margin-top: 8px;
-
     align-items: flex-start;
-
     text-align: left;
   }
 
-
   .category {
     display: block;
-
     margin-top: 6px;
   }
-
 
   .final-score {
     font-size: 60px;
   }
 
-
   .rank {
     font-size: 28px;
   }
-
 
   .next-button,
   .restart-button,
   .trial-result-button {
     width: 100%;
-  }
-
-
-  .resume-area {
-    padding: 15px;
-  }
-
-
-  .pause-row {
-    justify-content: flex-start;
-  }
-
-
-  .pause-button {
-    min-width: 190px;
-
-    min-height: 48px;
-  }
-
-
-  .answer-next-button {
-    bottom: 18px;
-
-    width:
-      min(
-        calc(
-          100% - 36px
-        ),
-        520px
-      );
-  }
-
-
-  .category-results {
-    padding: 18px;
-  }
-
-
-  .category-result-top {
-    gap: 10px;
-  }
-
-
-  .category-result-name {
-    font-size: 14px;
-  }
-
-
-  .category-result-score {
-    font-size: 13px;
-  }
-
-
-  .category-result-score strong {
-    margin-left: 6px;
-
-    font-size: 15px;
   }
 }
