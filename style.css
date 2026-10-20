@@ -3996,3 +3996,55 @@ body {
 .category-result-score strong {
   font-weight: 900;
 }
+
+/* =========================
+   結果画面：称号
+========================= */
+
+.rank {
+  margin-top: 12px;
+
+  font-family:
+    "Reggae One",
+    "Noto Sans JP",
+    sans-serif;
+
+  font-size:
+    clamp(
+      32px,
+      4.5vw,
+      48px
+    );
+
+  font-weight: 400;
+
+  line-height: 1.45;
+
+  letter-spacing: 0.035em;
+
+  color: #fff0b5;
+
+  -webkit-text-stroke:
+    1px rgba(120, 69, 10, 0.75);
+
+  text-shadow:
+    0 2px 0 #6b3608,
+    0 4px 0 rgba(55, 22, 0, 0.72),
+    0 6px 18px rgba(212, 151, 40, 0.32);
+}
+
+
+@media (max-width: 700px) {
+
+  .rank {
+    font-size:
+      clamp(
+        27px,
+        8vw,
+        36px
+      );
+
+    -webkit-text-stroke:
+      0.8px rgba(120, 69, 10, 0.75);
+  }
+}
