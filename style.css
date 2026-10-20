@@ -1495,3 +1495,52 @@ h1 {
     min-height: 48px;
   }
 }
+
+/* =========================
+   スマホ：解答後の次へボタン固定
+========================= */
+
+@media (max-width: 700px) {
+
+  .answer-next-button {
+    position: fixed;
+
+    left: 50%;
+    bottom: 18px;
+
+    width:
+      min(
+        calc(100% - 36px),
+        520px
+      );
+
+    margin: 0;
+
+    padding: 16px 24px;
+
+    transform:
+      translateX(-50%);
+
+    z-index: 1000;
+
+    box-shadow:
+      0 8px 30px
+      rgba(0, 0, 0, 0.55),
+      0 5px 20px
+      rgba(212, 175, 55, 0.25);
+  }
+
+  .answer-next-button:hover {
+    transform:
+      translateX(-50%)
+      translateY(-2px);
+  }
+
+  /*
+    固定ボタンに解説の一番下が
+    隠れないよう余白を確保
+  */
+  #answer-area .result-box {
+    margin-bottom: 90px;
+  }
+}
