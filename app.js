@@ -7,6 +7,9 @@ const SUPABASE_PUBLISHABLE_KEY =
 const QUIZ_SAVE_KEY =
   "asuka-haijin-quiz-progress-v1";
 
+const QUIZ_LAST_RESULT_KEY =
+  "asuka-haijin-quiz-last-result-v1";
+
 const VALID_QUESTION_CATEGORIES = [
   "モンスター",
   "アイテム",
@@ -60,18 +63,14 @@ document.addEventListener(
     const trialNote =
       document.querySelector(".trial-note");
 
-
+    let previousResultArea = null;
     let quizQuestions = [];
-
     let currentQuestionIndex = 0;
-
     let score = 0;
-
     let quizMode = "main";
-
     let categoryStats = {};
-
     let categoryStatsComplete = true;
+    let answerLocked = false;
 
 
     /* =========================
@@ -94,82 +93,426 @@ document.addEventListener(
 
 
     /* =========================
-       トップページ
+       初期化
     ========================= */
 
     if (mainButton) {
-
       mainButton.addEventListener(
         "click",
         startMainQuizFromBeginning
       );
     }
 
-
     if (trialButton) {
-
       trialButton.addEventListener(
         "click",
         function () {
-
-          startQuiz(
-            5,
-            "trial"
-          );
+          startQuiz(5, "trial");
         }
       );
     }
 
-
     if (resumeButton) {
-
       resumeButton.addEventListener(
         "click",
         resumeQuiz
       );
     }
 
-
     if (resumeResetButton) {
-
       resumeResetButton.addEventListener(
         "click",
         function () {
-
           const confirmed =
             confirm(
               "途中までのデータを削除しますか？"
             );
 
           if (!confirmed) {
-
             return;
           }
 
           clearProgress();
-
           window.location.reload();
         }
       );
     }
 
-
     updateResumeArea();
-
+    setupPreviousResultArea();
 
     if (isDataTestMode) {
-
       runDataValidationTest();
+      return;
+    }
 
+    if (isResultTestMode) {
+      showResultTest();
       return;
     }
 
 
-    if (isResultTestMode) {
+    /* =========================
+       前回結果
+    ========================= */
 
-      showResultTest();
+    function setupPreviousResultArea() {
+      if (!heroButtons) {
+        return;
+      }
 
-      return;
+      previousResultArea =
+        document.createElement("div");
+
+      previousResultArea.id =
+        "previous-result-area";
+
+      previousResultArea.style.marginTop =
+        "18px";
+
+      heroButtons.insertAdjacentElement(
+        "afterend",
+        previousResultArea
+      );
+
+      updatePreviousResultArea();
+    }
+
+
+    function updatePreviousResultArea() {
+      if (!previousResultArea) {
+        return;
+      }
+
+      const saved =
+        loadLastResult();
+
+      if (!saved) {
+        previousResultArea.innerHTML = "";
+        return;
+      }
+
+      const completedText =
+        formatCompletedAt(
+          saved.completedAt
+        );
+
+      previousResultArea.innerHTML = `
+        <button
+          id="previous-result-button"
+          type="button"
+          style="
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid rgba(212, 175, 55, 0.24);
+            border-radius: 12px;
+            background: rgba(212, 175, 55, 0.045);
+            color: #ddd;
+            font: inherit;
+            cursor: pointer;
+            text-align: left;
+          "
+        >
+          <span
+            style="
+              display: block;
+              color: #f0d26d;
+              font-size: 15px;
+              font-weight: 900;
+            "
+          >
+            前回の結果を見る
+          </span>
+
+          <span
+            style="
+              display: block;
+              margin-top: 5px;
+              color: #aaa;
+              font-size: 13px;
+              font-weight: 700;
+            "
+          >
+            ${saved.score} / ${saved.total}点 ・
+            ${escapeHtml(saved.rank)}
+            ${escapeHtml(saved.title)}
+            ${
+              completedText
+                ? ` ・ ${completedText}`
+                : ""
+            }
+          </span>
+        </button>
+      `;
+
+      const button =
+        document.querySelector(
+          "#previous-result-button"
+        );
+
+      if (button) {
+        button.addEventListener(
+          "click",
+          showPreviousResult
+        );
+      }
+    }
+
+
+    function saveLastResult(
+      rankResult
+    ) {
+      try {
+        const data = {
+          version: 1,
+
+          score:
+            score,
+
+          total:
+            quizQuestions.length,
+
+          rank:
+            rankResult.rank,
+
+          title:
+            rankResult.title,
+
+          comment:
+            rankResult.comment,
+
+          categoryStats:
+            categoryStats,
+
+          categoryStatsComplete:
+            categoryStatsComplete,
+
+          completedAt:
+            new Date()
+              .toISOString()
+        };
+
+        localStorage.setItem(
+          QUIZ_LAST_RESULT_KEY,
+          JSON.stringify(data)
+        );
+
+        updatePreviousResultArea();
+
+      } catch (error) {
+        console.error(
+          "前回結果保存エラー:",
+          error
+        );
+      }
+    }
+
+
+    function loadLastResult() {
+      try {
+        const raw =
+          localStorage.getItem(
+            QUIZ_LAST_RESULT_KEY
+          );
+
+        if (!raw) {
+          return null;
+        }
+
+        const data =
+          JSON.parse(raw);
+
+        if (
+          !data ||
+          data.version !== 1 ||
+          typeof data.score !==
+            "number" ||
+          typeof data.total !==
+            "number" ||
+          typeof data.rank !==
+            "string" ||
+          typeof data.title !==
+            "string"
+        ) {
+          return null;
+        }
+
+        return data;
+
+      } catch (error) {
+        console.error(
+          "前回結果読込エラー:",
+          error
+        );
+
+        return null;
+      }
+    }
+
+
+    function showPreviousResult() {
+      const saved =
+        loadLastResult();
+
+      if (!saved) {
+        updatePreviousResultArea();
+        return;
+      }
+
+      const percentage =
+        Math.round(
+          (
+            saved.score /
+            saved.total
+          ) *
+          100
+        );
+
+      const completedText =
+        formatCompletedAt(
+          saved.completedAt
+        );
+
+      quizCard.innerHTML = `
+        <div class="result-screen">
+
+          <p class="hero-label">
+            PREVIOUS RESULT
+          </p>
+
+          <h1>
+            前回の検定結果
+          </h1>
+
+          <div class="final-score">
+            ${saved.score}
+
+            <span>
+              / ${saved.total}
+            </span>
+          </div>
+
+          <div class="percentage">
+            正答率 ${percentage}%
+          </div>
+
+          ${
+            completedText
+              ? `
+                <div
+                  style="
+                    margin-top: 12px;
+                    color: #888;
+                    font-size: 13px;
+                  "
+                >
+                  ${completedText} 完走
+                </div>
+              `
+              : ""
+          }
+
+          <div class="rank-label">
+            あなたのランク・称号
+          </div>
+
+          <div class="rank-grade">
+            ${escapeHtml(
+              saved.rank
+            )}
+          </div>
+
+          <div class="rank">
+            ${escapeHtml(
+              saved.title
+            )}
+          </div>
+
+          ${
+            saved.comment
+              ? `
+                <div class="rank-comment">
+                  ${saved.comment}
+                </div>
+              `
+              : ""
+          }
+
+          ${renderCategoryStatsFromData(
+            saved.categoryStats,
+            saved.categoryStatsComplete
+          )}
+
+          <button
+            class="
+              restart-button
+              previous-result-back-button
+            "
+            type="button"
+          >
+            トップ画面へ戻る
+          </button>
+
+        </div>
+      `;
+
+      const backButton =
+        document.querySelector(
+          ".previous-result-back-button"
+        );
+
+      if (backButton) {
+        backButton.addEventListener(
+          "click",
+          goToTop
+        );
+      }
+    }
+
+
+    function formatCompletedAt(
+      value
+    ) {
+      if (!value) {
+        return "";
+      }
+
+      const date =
+        new Date(value);
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+        return "";
+      }
+
+      return new Intl.DateTimeFormat(
+        "ja-JP",
+        {
+          year:
+            "numeric",
+
+          month:
+            "numeric",
+
+          day:
+            "numeric",
+
+          hour:
+            "2-digit",
+
+          minute:
+            "2-digit"
+        }
+      ).format(date);
+    }
+
+
+    function goToTop() {
+      window.location.href =
+        window.location.pathname;
     }
 
 
@@ -181,16 +524,12 @@ document.addEventListener(
       questionCount = 100,
       mode = "main"
     ) {
-
       quizMode =
         mode;
 
-
       try {
-
         const allQuestions =
           await loadQuestionsData();
-
 
         quizQuestions =
           shuffleArray(
@@ -202,7 +541,6 @@ document.addEventListener(
               allQuestions.length
             )
           );
-
 
         currentQuestionIndex =
           0;
@@ -216,22 +554,18 @@ document.addEventListener(
         categoryStatsComplete =
           true;
 
+        answerLocked =
+          false;
 
         if (
           quizMode === "main"
         ) {
-
-          saveProgress(
-            0
-          );
+          saveProgress(0);
         }
-
 
         showQuestion();
 
-
       } catch (error) {
-
         showQuestionDataError(
           error
         );
@@ -244,25 +578,23 @@ document.addEventListener(
     ========================= */
 
     function showQuestion() {
+      answerLocked =
+        false;
 
       if (
         quizMode === "main"
       ) {
-
         saveProgress(
           currentQuestionIndex
         );
       }
-
 
       const question =
         quizQuestions[
           currentQuestionIndex
         ];
 
-
       if (!question) {
-
         showQuestionDataError(
           new Error(
             "表示する問題データが見つかりません。"
@@ -271,7 +603,6 @@ document.addEventListener(
 
         return;
       }
-
 
       const progress =
         (
@@ -282,7 +613,6 @@ document.addEventListener(
           quizQuestions.length
         ) *
         100;
-
 
       quizCard.innerHTML = `
 
@@ -327,7 +657,6 @@ document.addEventListener(
 
         ${
           quizMode === "main"
-
             ? `
 
               <div class="pause-row">
@@ -342,7 +671,6 @@ document.addEventListener(
               </div>
 
             `
-
             : ""
         }
 
@@ -397,8 +725,7 @@ document.addEventListener(
                     class="choice-label"
                   >
                     ${String.fromCharCode(
-                      65 +
-                      index
+                      65 + index
                     )}
                   </span>
 
@@ -460,13 +787,9 @@ document.addEventListener(
 
 
       if (pauseButton) {
-
         pauseButton.addEventListener(
           "click",
-          function () {
-
-            window.location.reload();
-          }
+          goToTop
         );
       }
 
@@ -479,38 +802,39 @@ document.addEventListener(
         question.type ===
           "multiple"
       ) {
-
         const selectedAnswers =
           new Set();
-
 
         const submitButton =
           document.querySelector(
             ".submit-answer-button"
           );
 
-
         choiceButtons.forEach(
-          function (
+          (
             button
-          ) {
+          ) => {
 
             button.addEventListener(
               "click",
               function () {
+
+                if (
+                  answerLocked
+                ) {
+                  return;
+                }
 
                 const selectedIndex =
                   Number(
                     button.dataset.index
                   );
 
-
                 if (
                   selectedAnswers.has(
                     selectedIndex
                   )
                 ) {
-
                   selectedAnswers.delete(
                     selectedIndex
                   );
@@ -521,9 +845,7 @@ document.addEventListener(
                       "selected"
                     );
 
-
                 } else {
-
                   selectedAnswers.add(
                     selectedIndex
                   );
@@ -535,7 +857,6 @@ document.addEventListener(
                     );
                 }
 
-
                 submitButton.disabled =
                   selectedAnswers.size ===
                     0;
@@ -544,30 +865,26 @@ document.addEventListener(
           }
         );
 
-
         submitButton.addEventListener(
           "click",
           function () {
+
+            if (
+              answerLocked
+            ) {
+              return;
+            }
 
             const answers =
               Array.from(
                 selectedAnswers
               ).sort(
-                function (
+                (
                   a,
                   b
-                ) {
-
-                  return (
-                    a -
-                    b
-                  );
-                }
+                ) =>
+                  a - b
               );
-
-
-            submitButton.remove();
-
 
             checkAnswer(
               answers
@@ -581,15 +898,20 @@ document.addEventListener(
       ========================= */
 
       } else {
-
         choiceButtons.forEach(
-          function (
+          (
             button
-          ) {
+          ) => {
 
             button.addEventListener(
               "click",
               function () {
+
+                if (
+                  answerLocked
+                ) {
+                  return;
+                }
 
                 checkAnswer(
                   Number(
@@ -611,24 +933,41 @@ document.addEventListener(
     async function checkAnswer(
       selectedAnswer
     ) {
+      if (
+        answerLocked
+      ) {
+        return;
+      }
+
+      answerLocked =
+        true;
 
       const question =
         quizQuestions[
           currentQuestionIndex
         ];
 
-
       const choiceButtons =
         document.querySelectorAll(
           ".choice-button"
         );
-
 
       const answerArea =
         document.querySelector(
           "#answer-area"
         );
 
+      const submitButton =
+        document.querySelector(
+          ".submit-answer-button"
+        );
+
+      if (
+        submitButton
+      ) {
+        submitButton.disabled =
+          true;
+      }
 
       const correctAnswers =
         Array.isArray(
@@ -638,16 +977,11 @@ document.addEventListener(
           ? [
               ...question.answer
             ].sort(
-              function (
+              (
                 a,
                 b
-              ) {
-
-                return (
-                  a -
-                  b
-                );
-              }
+              ) =>
+                a - b
             )
 
           : [
@@ -663,16 +997,11 @@ document.addEventListener(
           ? [
               ...selectedAnswer
             ].sort(
-              function (
+              (
                 a,
                 b
-              ) {
-
-                return (
-                  a -
-                  b
-                );
-              }
+              ) =>
+                a - b
             )
 
           : [
@@ -681,30 +1010,26 @@ document.addEventListener(
 
 
       const isCorrect =
-
         selectedAnswers.length ===
           correctAnswers.length
 
         &&
 
         selectedAnswers.every(
-          function (
+          (
             answer,
             index
-          ) {
-
-            return (
-              answer ===
-              correctAnswers[
-                index
-              ]
-            );
-          }
+          ) =>
+            answer ===
+            correctAnswers[
+              index
+            ]
         );
 
 
-      if (isCorrect) {
-
+      if (
+        isCorrect
+      ) {
         score++;
       }
 
@@ -712,12 +1037,10 @@ document.addEventListener(
       if (
         quizMode === "main"
       ) {
-
         updateCategoryStats(
           question.category,
           isCorrect
         );
-
 
         saveProgress(
           currentQuestionIndex +
@@ -726,42 +1049,30 @@ document.addEventListener(
       }
 
 
-      const stats =
-        await saveFirstAnswer(
-          question.id,
-          selectedAnswer,
-          isCorrect
-        );
-
-
       choiceButtons.forEach(
-        function (
+        (
           button
-        ) {
+        ) => {
 
           button.disabled =
             true;
-
 
           const choiceIndex =
             Number(
               button.dataset.index
             );
 
-
           if (
             correctAnswers.includes(
               choiceIndex
             )
           ) {
-
             button
               .classList
               .add(
                 "correct"
               );
           }
-
 
           if (
             selectedAnswers.includes(
@@ -774,7 +1085,6 @@ document.addEventListener(
               choiceIndex
             )
           ) {
-
             button
               .classList
               .add(
@@ -783,6 +1093,14 @@ document.addEventListener(
           }
         }
       );
+
+
+      const stats =
+        await saveFirstAnswer(
+          question.id,
+          selectedAnswer,
+          isCorrect
+        );
 
 
       const resultTitle =
@@ -823,34 +1141,31 @@ document.addEventListener(
             ${correctAnswers
 
               .map(
-                function (
+                (
                   answerIndex
-                ) {
+                ) => `
 
-                  return `
+                  <span
+                    class="correct-answer-label"
+                  >
+                    ${String.fromCharCode(
+                      65 +
+                      answerIndex
+                    )}
+                  </span>
 
-                    <span
-                      class="correct-answer-label"
-                    >
-                      ${String.fromCharCode(
-                        65 +
+
+                  <span
+                    class="correct-answer-text"
+                  >
+                    ${escapeHtml(
+                      question.choices[
                         answerIndex
-                      )}
-                    </span>
+                      ]
+                    )}
+                  </span>
 
-
-                    <span
-                      class="correct-answer-text"
-                    >
-                      ${escapeHtml(
-                        question.choices[
-                          answerIndex
-                        ]
-                      )}
-                    </span>
-
-                  `;
-                }
+                `
               )
 
               .join("")}
@@ -874,7 +1189,6 @@ document.addEventListener(
 
           ${
             stats
-
               ? `
 
                 <div class="community-stats">
@@ -885,11 +1199,13 @@ document.addEventListener(
                     みんなの正答率
                   </div>
 
+
                   <div
                     class="community-stats-number"
                   >
                     ${stats.accuracy}%
                   </div>
+
 
                   <div
                     class="community-stats-detail"
@@ -901,7 +1217,6 @@ document.addEventListener(
                 </div>
 
               `
-
               : ""
           }
 
@@ -913,6 +1228,7 @@ document.addEventListener(
             >
               現在の成績
             </span>
+
 
             <span
               class="current-score-number"
@@ -1104,8 +1420,9 @@ document.addEventListener(
             );
 
 
-          if (!reportType) {
-
+          if (
+            !reportType
+          ) {
             reportStatus.textContent =
               "指摘内容を選んでください。";
 
@@ -1116,8 +1433,9 @@ document.addEventListener(
           }
 
 
-          if (!message) {
-
+          if (
+            !message
+          ) {
             reportStatus.textContent =
               "具体的な内容を入力してください。";
 
@@ -1143,8 +1461,9 @@ document.addEventListener(
             );
 
 
-          if (success) {
-
+          if (
+            success
+          ) {
             reportStatus.textContent =
               "送信しました。ありがとうございます。";
 
@@ -1154,9 +1473,7 @@ document.addEventListener(
             reportSubmitButton.textContent =
               "送信済み";
 
-
           } else {
-
             reportStatus.textContent =
               "送信できませんでした。もう一度お試しください。";
 
@@ -1179,20 +1496,15 @@ document.addEventListener(
     ========================= */
 
     function nextQuestion() {
-
       currentQuestionIndex++;
-
 
       if (
         currentQuestionIndex <
-          quizQuestions.length
+        quizQuestions.length
       ) {
-
         showQuestion();
 
-
       } else {
-
         showResult();
       }
     }
@@ -1203,12 +1515,9 @@ document.addEventListener(
     ========================= */
 
     async function loadQuestionsData() {
-
       let response;
 
-
       try {
-
         response =
           await fetch(
             "data/questions.json",
@@ -1218,17 +1527,16 @@ document.addEventListener(
             }
           );
 
-
       } catch (error) {
-
         throw new Error(
           "questions.json への通信に失敗しました。"
         );
       }
 
 
-      if (!response.ok) {
-
+      if (
+        !response.ok
+      ) {
         throw new Error(
           `questions.json の取得に失敗しました。HTTP ${response.status}`
         );
@@ -1237,15 +1545,11 @@ document.addEventListener(
 
       let rawText;
 
-
       try {
-
         rawText =
           await response.text();
 
-
       } catch (error) {
-
         throw new Error(
           "questions.json の内容を読み取れませんでした。"
         );
@@ -1254,17 +1558,13 @@ document.addEventListener(
 
       let data;
 
-
       try {
-
         data =
           JSON.parse(
             rawText
           );
 
-
       } catch (error) {
-
         throw new Error(
           `questions.json のJSON形式が壊れています。${error.message}`
         );
@@ -1274,7 +1574,6 @@ document.addEventListener(
       validateQuestionsData(
         data
       );
-
 
       return data;
     }
@@ -1287,7 +1586,6 @@ document.addEventListener(
     function validateQuestionsData(
       data
     ) {
-
       const errors =
         [];
 
@@ -1297,7 +1595,6 @@ document.addEventListener(
           data
         )
       ) {
-
         throw new Error(
           "questions.json の最上位は配列である必要があります。"
         );
@@ -1305,10 +1602,8 @@ document.addEventListener(
 
 
       if (
-        data.length ===
-          0
+        data.length === 0
       ) {
-
         throw new Error(
           "questions.json に問題が1問もありません。"
         );
@@ -1320,10 +1615,10 @@ document.addEventListener(
 
 
       data.forEach(
-        function (
+        (
           question,
           index
-        ) {
+        ) => {
 
           const rowLabel =
             `データ${index + 1}件目`;
@@ -1343,7 +1638,6 @@ document.addEventListener(
               question
             )
           ) {
-
             errors.push(
               `${rowLabel}: 問題データがオブジェクトではありません。`
             );
@@ -1357,7 +1651,6 @@ document.addEventListener(
 
 
           const hasId =
-
             questionId !==
               undefined
 
@@ -1380,15 +1673,14 @@ document.addEventListener(
               : rowLabel;
 
 
-          if (!hasId) {
-
+          if (
+            !hasId
+          ) {
             errors.push(
               `${rowLabel}: id がありません。`
             );
 
-
           } else {
-
             const normalizedId =
               String(
                 questionId
@@ -1400,14 +1692,11 @@ document.addEventListener(
                 normalizedId
               )
             ) {
-
               errors.push(
                 `${idLabel}: id が重複しています。`
               );
 
-
             } else {
-
               seenIds.add(
                 normalizedId
               );
@@ -1421,7 +1710,6 @@ document.addEventListener(
                 question.category
               )
           ) {
-
             errors.push(
               `${idLabel}: category「${question.category}」は無効です。`
             );
@@ -1434,7 +1722,6 @@ document.addEventListener(
                 question.type
               )
           ) {
-
             errors.push(
               `${idLabel}: type「${question.type}」は無効です。`
             );
@@ -1451,7 +1738,6 @@ document.addEventListener(
               .trim() ===
               ""
           ) {
-
             errors.push(
               `${idLabel}: question が空です。`
             );
@@ -1463,7 +1749,6 @@ document.addEventListener(
               question.choices
             )
           ) {
-
             errors.push(
               `${idLabel}: choices が配列ではありません。`
             );
@@ -1481,7 +1766,6 @@ document.addEventListener(
             question.choices.length >
               4
           ) {
-
             errors.push(
               `${idLabel}: choices は2～4個である必要があります。`
             );
@@ -1489,10 +1773,10 @@ document.addEventListener(
 
 
           question.choices.forEach(
-            function (
+            (
               choice,
               choiceIndex
-            ) {
+            ) => {
 
               if (
                 typeof choice !==
@@ -1504,7 +1788,6 @@ document.addEventListener(
                   .trim() ===
                   ""
               ) {
-
                 errors.push(
                   `${idLabel}: 選択肢${String.fromCharCode(
                     65 +
@@ -1517,46 +1800,39 @@ document.addEventListener(
 
 
           const isValidAnswerIndex =
-            function (
+            (
               answer
-            ) {
+            ) =>
+              Number.isInteger(
+                answer
+              )
 
-              return (
+              &&
 
-                Number.isInteger(
-                  answer
-                )
+              answer >=
+                0
 
-                &&
+              &&
 
-                answer >=
-                  0
-
-                &&
-
-                answer <
-                  question
-                    .choices
-                    .length
-              );
-            };
+              answer <
+                question
+                  .choices
+                  .length;
 
 
           if (
             question.type ===
               "single"
+
+            &&
+
+            !isValidAnswerIndex(
+              question.answer
+            )
           ) {
-
-            if (
-              !isValidAnswerIndex(
-                question.answer
-              )
-            ) {
-
-              errors.push(
-                `${idLabel}: answer が選択肢の範囲外です。`
-              );
-            }
+            errors.push(
+              `${idLabel}: answer が選択肢の範囲外です。`
+            );
           }
 
 
@@ -1564,7 +1840,6 @@ document.addEventListener(
             question.type ===
               "multiple"
           ) {
-
             if (
               !Array.isArray(
                 question.answer
@@ -1575,14 +1850,11 @@ document.addEventListener(
               question.answer.length ===
                 0
             ) {
-
               errors.push(
                 `${idLabel}: multiple の answer は1個以上の配列である必要があります。`
               );
 
-
             } else {
-
               const uniqueAnswers =
                 new Set(
                   question.answer
@@ -1593,7 +1865,6 @@ document.addEventListener(
                 uniqueAnswers.size !==
                   question.answer.length
               ) {
-
                 errors.push(
                   `${idLabel}: answer に重複があります。`
                 );
@@ -1601,16 +1872,15 @@ document.addEventListener(
 
 
               question.answer.forEach(
-                function (
+                (
                   answer
-                ) {
+                ) => {
 
                   if (
                     !isValidAnswerIndex(
                       answer
                     )
                   ) {
-
                     errors.push(
                       `${idLabel}: answer「${answer}」が選択肢の範囲外です。`
                     );
@@ -1625,7 +1895,6 @@ document.addEventListener(
             typeof question.explanation !==
               "string"
           ) {
-
             errors.push(
               `${idLabel}: explanation が文字列ではありません。`
             );
@@ -1638,7 +1907,6 @@ document.addEventListener(
         errors.length >
           0
       ) {
-
         const preview =
           errors
             .slice(
@@ -1656,7 +1924,6 @@ document.addEventListener(
 
 
         throw new Error(
-
           restCount >
             0
 
@@ -1676,7 +1943,6 @@ document.addEventListener(
       error,
       showDetail = false
     ) {
-
       console.error(
         "問題データエラー:",
         error
@@ -1684,7 +1950,6 @@ document.addEventListener(
 
 
       const safeMessage =
-
         error &&
         error.message
 
@@ -1713,17 +1978,10 @@ document.addEventListener(
 
           <p
             style="
-              margin:
-                0 auto;
-
-              max-width:
-                720px;
-
-              color:
-                #ccc;
-
-              line-height:
-                1.9;
+              margin: 0 auto;
+              max-width: 720px;
+              color: #ccc;
+              line-height: 1.9;
             "
           >
             問題データの読み込み中にエラーが発生しました。
@@ -1734,66 +1992,28 @@ document.addEventListener(
 
           ${
             showDetail
-
               ? `
 
                 <pre
                   style="
-                    margin:
-                      28px auto 0;
-
-                    max-width:
-                      820px;
-
-                    padding:
-                      18px;
-
-                    overflow-x:
-                      auto;
-
-                    border:
-                      1px solid
-                      rgba(
-                        239,
-                        119,
-                        114,
-                        0.28
-                      );
-
-                    border-radius:
-                      12px;
-
-                    background:
-                      rgba(
-                        239,
-                        119,
-                        114,
-                        0.06
-                      );
-
-                    color:
-                      #ef9b97;
-
-                    font-size:
-                      13px;
-
-                    line-height:
-                      1.7;
-
-                    text-align:
-                      left;
-
-                    white-space:
-                      pre-wrap;
+                    margin: 28px auto 0;
+                    max-width: 820px;
+                    padding: 18px;
+                    overflow-x: auto;
+                    border: 1px solid rgba(239, 119, 114, 0.28);
+                    border-radius: 12px;
+                    background: rgba(239, 119, 114, 0.06);
+                    color: #ef9b97;
+                    font-size: 13px;
+                    line-height: 1.7;
+                    text-align: left;
+                    white-space: pre-wrap;
                   "
-                >
-${escapeHtml(
-  safeMessage
-)}
-                </pre>
+                >${escapeHtml(
+                  safeMessage
+                )}</pre>
 
               `
-
               : ""
           }
 
@@ -1819,12 +2039,12 @@ ${escapeHtml(
         );
 
 
-      if (reloadButton) {
-
+      if (
+        reloadButton
+      ) {
         reloadButton.addEventListener(
           "click",
           function () {
-
             window.location.reload();
           }
         );
@@ -1838,7 +2058,6 @@ ${escapeHtml(
     ========================= */
 
     function runDataValidationTest() {
-
       const intentionallyBrokenData = [
 
         {
@@ -1922,7 +2141,6 @@ ${escapeHtml(
 
 
       try {
-
         validateQuestionsData(
           intentionallyBrokenData
         );
@@ -1942,7 +2160,6 @@ ${escapeHtml(
 
 
       } catch (error) {
-
         console.info(
           "データ検証テスト：想定どおりエラーを検出しました。"
         );
@@ -1962,7 +2179,6 @@ ${escapeHtml(
     ========================= */
 
     function showResultTest() {
-
       quizMode =
         "main";
 
@@ -2041,7 +2257,6 @@ ${escapeHtml(
     ========================= */
 
     function showResult() {
-
       const percentage =
         Math.round(
           (
@@ -2056,7 +2271,6 @@ ${escapeHtml(
         quizMode ===
           "trial"
       ) {
-
         showTrialResult(
           percentage
         );
@@ -2065,18 +2279,48 @@ ${escapeHtml(
       }
 
 
-      if (
-        !isResultTestMode
-      ) {
-
-        clearProgress();
-      }
-
-
       const rankResult =
         getRankResult(
           score
         );
+
+
+      const isOfficialFullCompletion =
+        quizMode ===
+          "main"
+
+        &&
+
+        !isTestMode
+
+        &&
+
+        !isResultTestMode
+
+        &&
+
+        !isDataTestMode
+
+        &&
+
+        quizQuestions.length ===
+          100;
+
+
+      if (
+        isOfficialFullCompletion
+      ) {
+        saveLastResult(
+          rankResult
+        );
+      }
+
+
+      if (
+        !isResultTestMode
+      ) {
+        clearProgress();
+      }
 
 
       const rank =
@@ -2093,13 +2337,9 @@ ${escapeHtml(
 
       quizCard.innerHTML = `
 
-        <div
-          class="result-screen"
-        >
+        <div class="result-screen">
 
-          <p
-            class="hero-label"
-          >
+          <p class="hero-label">
             ${
               isResultTestMode
                 ? "RESULT TEST"
@@ -2115,80 +2355,60 @@ ${escapeHtml(
 
           ${
             isResultTestMode
-
               ? `
 
                 <div
                   style="
-                    margin:
-                      -12px 0
-                      16px;
-
-                    color:
-                      #888;
-
-                    font-size:
-                      12px;
-
-                    letter-spacing:
-                      0.05em;
+                    margin: -12px 0 16px;
+                    color: #888;
+                    font-size: 12px;
+                    letter-spacing: 0.05em;
                   "
                 >
                   開発用結果画面テスト
                 </div>
 
               `
-
               : ""
           }
 
 
-          <div
-            class="final-score"
-          >
+          <div class="final-score">
+
             ${score}
 
             <span>
               / ${quizQuestions.length}
             </span>
+
           </div>
 
 
-          <div
-            class="percentage"
-          >
+          <div class="percentage">
             正答率 ${percentage}%
           </div>
 
 
-          <div
-            class="rank-label"
-          >
+          <div class="rank-label">
             あなたのランク・称号
           </div>
 
 
-          <div
-            class="rank-grade"
-          >
+          <div class="rank-grade">
             ${escapeHtml(
               rank
             )}
           </div>
 
 
-          <div
-            class="rank"
-          >
+          <div class="rank">
             ${escapeHtml(
               title
             )}
           </div>
 
 
-          <div
-            class="rank-comment"
-          >
+          <div class="rank-comment">
             ${comment}
           </div>
 
@@ -2198,7 +2418,6 @@ ${escapeHtml(
 
           ${
             isResultTestMode
-
               ? `
 
                 <button
@@ -2211,13 +2430,26 @@ ${escapeHtml(
                 </button>
 
               `
-
               : `
 
                 <button
                   class="restart-button"
                 >
                   もう一度挑戦する
+                </button>
+
+
+                <br>
+
+
+                <button
+                  class="
+                    trial-result-button
+                    result-top-button
+                  "
+                  type="button"
+                >
+                  トップ画面へ戻る
                 </button>
 
               `
@@ -2231,25 +2463,18 @@ ${escapeHtml(
       if (
         isResultTestMode
       ) {
-
         const backButton =
           document.querySelector(
             ".result-test-back-button"
           );
 
-
         backButton.addEventListener(
           "click",
-          function () {
-
-            window.location.href =
-              window.location.pathname;
-          }
+          goToTop
         );
 
 
       } else {
-
         document
           .querySelector(
             ".restart-button"
@@ -2267,6 +2492,22 @@ ${escapeHtml(
               );
             }
           );
+
+
+        const topButton =
+          document.querySelector(
+            ".result-top-button"
+          );
+
+
+        if (
+          topButton
+        ) {
+          topButton.addEventListener(
+            "click",
+            goToTop
+          );
+        }
       }
     }
 
@@ -2278,12 +2519,9 @@ ${escapeHtml(
     function showTrialResult(
       percentage
     ) {
-
       quizCard.innerHTML = `
 
-        <div
-          class="result-screen"
-        >
+        <div class="result-screen">
 
           <p class="hero-label">
             TRIAL RESULT
@@ -2295,35 +2533,29 @@ ${escapeHtml(
           </h1>
 
 
-          <div
-            class="final-score"
-          >
+          <div class="final-score">
+
             ${score}
 
             <span>
               / 5
             </span>
+
           </div>
 
 
-          <div
-            class="percentage"
-          >
+          <div class="percentage">
             正答率 ${percentage}%
           </div>
 
 
-          <div
-            class="rank-label"
-          >
+          <div class="rank-label">
             お試し版のため、
             正式ランク判定はありません
           </div>
 
 
-          <div
-            class="rank"
-          >
+          <div class="rank">
             本当の廃人度は100問で判定
           </div>
 
@@ -2387,21 +2619,22 @@ ${escapeHtml(
     ========================= */
 
     function startMainQuizFromBeginning() {
-
       const saved =
         loadProgress();
 
 
-      if (saved) {
-
+      if (
+        saved
+      ) {
         const confirmed =
           confirm(
             "中断中の100問検定があります。途中データを削除して最初から始めますか？"
           );
 
 
-        if (!confirmed) {
-
+        if (
+          !confirmed
+        ) {
           return;
         }
 
@@ -2423,7 +2656,6 @@ ${escapeHtml(
     function saveProgress(
       nextQuestionIndex
     ) {
-
       if (
         quizMode !==
           "main"
@@ -2436,13 +2668,11 @@ ${escapeHtml(
 
         isDataTestMode
       ) {
-
         return;
       }
 
 
       try {
-
         const data = {
 
           version:
@@ -2451,14 +2681,10 @@ ${escapeHtml(
 
           questionIds:
             quizQuestions.map(
-              function (
+              (
                 question
-              ) {
-
-                return (
-                  question.id
-                );
-              }
+              ) =>
+                question.id
             ),
 
 
@@ -2496,7 +2722,6 @@ ${escapeHtml(
 
 
       } catch (error) {
-
         console.error(
           "途中データ保存エラー:",
           error
@@ -2506,17 +2731,16 @@ ${escapeHtml(
 
 
     function loadProgress() {
-
       try {
-
         const raw =
           localStorage.getItem(
             QUIZ_SAVE_KEY
           );
 
 
-        if (!raw) {
-
+        if (
+          !raw
+        ) {
           return null;
         }
 
@@ -2557,7 +2781,6 @@ ${escapeHtml(
           typeof data.score !==
             "number"
         ) {
-
           return null;
         }
 
@@ -2566,12 +2789,10 @@ ${escapeHtml(
 
 
       } catch (error) {
-
         console.error(
           "途中データ読込エラー:",
           error
         );
-
 
         return null;
       }
@@ -2579,16 +2800,12 @@ ${escapeHtml(
 
 
     function clearProgress() {
-
       try {
-
         localStorage.removeItem(
           QUIZ_SAVE_KEY
         );
 
-
       } catch (error) {
-
         console.error(
           "途中データ削除エラー:",
           error
@@ -2601,7 +2818,6 @@ ${escapeHtml(
 
 
     function updateResumeArea() {
-
       if (
         !resumeArea
 
@@ -2609,7 +2825,6 @@ ${escapeHtml(
 
         !resumeDetail
       ) {
-
         return;
       }
 
@@ -2618,8 +2833,9 @@ ${escapeHtml(
         loadProgress();
 
 
-      if (!saved) {
-
+      if (
+        !saved
+      ) {
         resumeArea
           .classList
           .add(
@@ -2627,8 +2843,9 @@ ${escapeHtml(
           );
 
 
-        if (heroButtons) {
-
+        if (
+          heroButtons
+        ) {
           heroButtons
             .classList
             .remove(
@@ -2637,8 +2854,9 @@ ${escapeHtml(
         }
 
 
-        if (trialNote) {
-
+        if (
+          trialNote
+        ) {
           trialNote
             .classList
             .remove(
@@ -2658,8 +2876,9 @@ ${escapeHtml(
         );
 
 
-      if (heroButtons) {
-
+      if (
+        heroButtons
+      ) {
         heroButtons
           .classList
           .add(
@@ -2668,8 +2887,9 @@ ${escapeHtml(
       }
 
 
-      if (trialNote) {
-
+      if (
+        trialNote
+      ) {
         trialNote
           .classList
           .add(
@@ -2688,13 +2908,10 @@ ${escapeHtml(
         saved.currentQuestionIndex >=
           total
       ) {
-
         resumeDetail.textContent =
           `全${total}問回答済み・結果を見る`;
 
-
       } else {
-
         resumeDetail.textContent =
           `第${saved.currentQuestionIndex + 1}問から再開・現在 ${saved.score}点`;
       }
@@ -2702,13 +2919,13 @@ ${escapeHtml(
 
 
     async function resumeQuiz() {
-
       const saved =
         loadProgress();
 
 
-      if (!saved) {
-
+      if (
+        !saved
+      ) {
         updateResumeArea();
 
         return;
@@ -2716,7 +2933,6 @@ ${escapeHtml(
 
 
       try {
-
         const allQuestions =
           await loadQuestionsData();
 
@@ -2724,55 +2940,44 @@ ${escapeHtml(
         const questionMap =
           new Map(
             allQuestions.map(
-              function (
+              (
                 question
-              ) {
-
-                return [
-                  String(
-                    question.id
-                  ),
-                  question
-                ];
-              }
+              ) => [
+                String(
+                  question.id
+                ),
+                question
+              ]
             )
           );
 
 
         const restoredQuestions =
-          saved.questionIds.map(
-            function (
-              id
-            ) {
-
-              return (
+          saved
+            .questionIds
+            .map(
+              (
+                id
+              ) =>
                 questionMap.get(
                   String(
                     id
                   )
                 )
-              );
-            }
-          );
+            );
 
 
         if (
           restoredQuestions.some(
-            function (
+            (
               question
-            ) {
-
-              return (
-                !question
-              );
-            }
+            ) =>
+              !question
           )
         ) {
-
           alert(
             "問題データが更新されたため、この途中データは再開できません。最初から挑戦してください。"
           );
-
 
           clearProgress();
 
@@ -2799,7 +3004,6 @@ ${escapeHtml(
 
 
         categoryStats =
-
           saved.categoryStats
 
           &&
@@ -2813,7 +3017,6 @@ ${escapeHtml(
 
 
         categoryStatsComplete =
-
           typeof saved
             .categoryStatsComplete ===
             "boolean"
@@ -2834,23 +3037,18 @@ ${escapeHtml(
           currentQuestionIndex >=
             quizQuestions.length
         ) {
-
           showResult();
 
-
         } else {
-
           showQuestion();
         }
 
 
       } catch (error) {
-
         console.error(
           "再開エラー:",
           error
         );
-
 
         showQuestionDataError(
           error
@@ -2866,11 +3064,10 @@ ${escapeHtml(
     function getCategoryGroup(
       category
     ) {
-
       const raw =
         String(
           category ||
-          "その他"
+            "その他"
         ).trim();
 
 
@@ -2880,7 +3077,6 @@ ${escapeHtml(
             raw
           )
       ) {
-
         return raw;
       }
 
@@ -2893,7 +3089,6 @@ ${escapeHtml(
       category,
       isCorrect
     ) {
-
       const group =
         getCategoryGroup(
           category
@@ -2905,7 +3100,6 @@ ${escapeHtml(
           group
         ]
       ) {
-
         categoryStats[
           group
         ] = {
@@ -2924,8 +3118,9 @@ ${escapeHtml(
       ].total++;
 
 
-      if (isCorrect) {
-
+      if (
+        isCorrect
+      ) {
         categoryStats[
           group
         ].correct++;
@@ -2934,11 +3129,20 @@ ${escapeHtml(
 
 
     function renderCategoryStats() {
+      return renderCategoryStatsFromData(
+        categoryStats,
+        categoryStatsComplete
+      );
+    }
 
+
+    function renderCategoryStatsFromData(
+      statsSource,
+      statsComplete = true
+    ) {
       if (
-        !categoryStatsComplete
+        !statsComplete
       ) {
-
         return `
 
           <section
@@ -2965,41 +3169,43 @@ ${escapeHtml(
       }
 
 
+      if (
+        !statsSource
+
+        ||
+
+        typeof statsSource !==
+          "object"
+      ) {
+        return "";
+      }
+
+
       const entries =
         VALID_QUESTION_CATEGORIES
 
           .map(
-            function (
+            (
               category
-            ) {
-
-              return [
-                category,
-                categoryStats[
-                  category
-                ]
-              ];
-            }
+            ) => [
+              category,
+              statsSource[
+                category
+              ]
+            ]
           )
 
           .filter(
-            function (
-              entry
-            ) {
+            ([
+              ,
+              stats
+            ]) =>
+              stats
 
-              const stats =
-                entry[1];
+              &&
 
-
-              return (
-                stats
-
-                &&
-
-                stats.total >
-                  0
-              );
-            }
+              stats.total >
+                0
           );
 
 
@@ -3007,7 +3213,6 @@ ${escapeHtml(
         entries.length ===
           0
       ) {
-
         return "";
       }
 
@@ -3032,17 +3237,10 @@ ${escapeHtml(
             ${entries
 
               .map(
-                function (
-                  entry
-                ) {
-
-                  const category =
-                    entry[0];
-
-
-                  const stats =
-                    entry[1];
-
+                ([
+                  category,
+                  stats
+                ]) => {
 
                   const accuracy =
                     Math.round(
@@ -3055,7 +3253,6 @@ ${escapeHtml(
 
 
                   let barBackground;
-
                   let accuracyColor;
 
 
@@ -3063,7 +3260,6 @@ ${escapeHtml(
                     accuracy >=
                       80
                   ) {
-
                     barBackground =
                       "linear-gradient(90deg, #b88a1d, #f0d26d)";
 
@@ -3075,7 +3271,6 @@ ${escapeHtml(
                     accuracy >=
                       50
                   ) {
-
                     barBackground =
                       "linear-gradient(90deg, #b96818, #e69a35)";
 
@@ -3084,7 +3279,6 @@ ${escapeHtml(
 
 
                   } else {
-
                     barBackground =
                       "linear-gradient(90deg, #9f3733, #df625b)";
 
@@ -3121,8 +3315,7 @@ ${escapeHtml(
                           <strong
                             class="category-result-accuracy"
                             style="
-                              color:
-                                ${accuracyColor};
+                              color: ${accuracyColor};
                             "
                           >
                             ${accuracy}%
@@ -3140,11 +3333,8 @@ ${escapeHtml(
                         <div
                           class="category-result-bar"
                           style="
-                            width:
-                              ${accuracy}%;
-
-                            background:
-                              ${barBackground};
+                            width: ${accuracy}%;
+                            background: ${barBackground};
                           "
                         ></div>
 
@@ -3173,7 +3363,6 @@ ${escapeHtml(
     function shuffleArray(
       array
     ) {
-
       for (
         let i =
           array.length -
@@ -3184,7 +3373,6 @@ ${escapeHtml(
 
         i--
       ) {
-
         const j =
           Math.floor(
             Math.random() *
@@ -3216,31 +3404,25 @@ ${escapeHtml(
     function escapeHtml(
       value
     ) {
-
       return String(
         value
       )
-
         .replaceAll(
           "&",
           "&amp;"
         )
-
         .replaceAll(
           "<",
           "&lt;"
         )
-
         .replaceAll(
           ">",
           "&gt;"
         )
-
         .replaceAll(
           '"',
           "&quot;"
         )
-
         .replaceAll(
           "'",
           "&#039;"
@@ -3255,7 +3437,6 @@ ${escapeHtml(
 ========================= */
 
 async function ensureAnonymousUser() {
-
   const {
     data: {
       user
@@ -3263,7 +3444,6 @@ async function ensureAnonymousUser() {
     error:
       userError
   } =
-
     await supabaseClient
       .auth
       .getUser();
@@ -3276,7 +3456,6 @@ async function ensureAnonymousUser() {
 
     user
   ) {
-
     return user;
   }
 
@@ -3285,19 +3464,18 @@ async function ensureAnonymousUser() {
     data,
     error
   } =
-
     await supabaseClient
       .auth
       .signInAnonymously();
 
 
-  if (error) {
-
+  if (
+    error
+  ) {
     console.error(
       "匿名ログインエラー:",
       error
     );
-
 
     return null;
   }
@@ -3316,19 +3494,17 @@ async function saveFirstAnswer(
   selectedIndex,
   isCorrect
 ) {
-
   try {
-
     const user =
       await ensureAnonymousUser();
 
 
-    if (!user) {
-
+    if (
+      !user
+    ) {
       console.error(
         "回答を保存できませんでした：ユーザー情報がありません"
       );
-
 
       return null;
     }
@@ -3338,14 +3514,12 @@ async function saveFirstAnswer(
       error:
         insertError
     } =
-
       await supabaseClient
         .from(
           "first_answers"
         )
         .upsert(
           {
-
             user_id:
               user.id,
 
@@ -3359,7 +3533,6 @@ async function saveFirstAnswer(
               selectedIndex
           },
           {
-
             onConflict:
               "user_id,question_id",
 
@@ -3377,12 +3550,10 @@ async function saveFirstAnswer(
       insertError.code !==
         "23505"
     ) {
-
       console.error(
         "回答保存エラー:",
         insertError
       );
-
 
       return null;
     }
@@ -3395,12 +3566,10 @@ async function saveFirstAnswer(
       error:
         statsError
     } =
-
       await supabaseClient
         .rpc(
           "get_question_stats",
           {
-
             p_question_id:
               questionId
           }
@@ -3410,12 +3579,10 @@ async function saveFirstAnswer(
     if (
       statsError
     ) {
-
       console.error(
         "正答率取得エラー:",
         statsError
       );
-
 
       return null;
     }
@@ -3429,23 +3596,18 @@ async function saveFirstAnswer(
       statsData.length ===
         0
     ) {
-
       return null;
     }
 
 
-    return (
-      statsData[0]
-    );
+    return statsData[0];
 
 
   } catch (error) {
-
     console.error(
       "回答処理エラー:",
       error
     );
-
 
     return null;
   }
@@ -3461,19 +3623,17 @@ async function submitQuestionReport(
   reportType,
   message
 ) {
-
   try {
-
     const user =
       await ensureAnonymousUser();
 
 
-    if (!user) {
-
+    if (
+      !user
+    ) {
       console.error(
         "物申す投稿エラー：ユーザー情報がありません"
       );
-
 
       return false;
     }
@@ -3482,14 +3642,12 @@ async function submitQuestionReport(
     const {
       error
     } =
-
       await supabaseClient
         .from(
           "question_reports"
         )
         .insert(
           {
-
             user_id:
               user.id,
 
@@ -3505,13 +3663,13 @@ async function submitQuestionReport(
         );
 
 
-    if (error) {
-
+    if (
+      error
+    ) {
       console.error(
         "物申す投稿エラー:",
         error
       );
-
 
       return false;
     }
@@ -3521,12 +3679,10 @@ async function submitQuestionReport(
 
 
   } catch (error) {
-
     console.error(
       "物申す投稿処理エラー:",
       error
     );
-
 
     return false;
   }
