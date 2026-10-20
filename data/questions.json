@@ -1,23 +1,26 @@
 [
   {
     "id": 1,
-    "category": "白蛇島・特殊MH",
+    "category": "ダンジョン",
     "type": "single",
     "instruction": "",
-    "question": "白蛇島でオオイカリアーク（神アーク）が発生しうる条件として正しいものは？",
+    "question": "白蛇島で神アーク（オオイカリアーク）が発生することはありえるか？",
     "choices": [
-      "通常出現階層の重なりだけで必ず発生する",
-      "デビルカンガルー階でドラゴンハウスからアークドラゴンが出れば発生しうる",
-      "86F以降ならドラゴンハウスなしでも必ず発生する",
-      "店主を怒らせた場合にだけ発生する"
+      "ありえる",
+      "ありえない",
+      "6",
+      "6"
     ],
-    "answer": 1,
-    "explanation": "通常出現ではデビルカンガルーとアークドラゴンの階層は重ならない。しかし、デビルカンガルー出現階にドラゴンハウスが生成され、その中にアークドラゴンが出ればオオイカリ化は起こりうる。",
+    "answer": 0,
+    "explanation": "デビルカンガルー出現階層でドラゴンハウスが生成され、その中にアークドラゴンが出れば発生しうる。他にも、41F以降に店売りで出るオオイカリの杖をアークドラゴンに振れば神アーク（オオイカリアーク）が誕生する。",
     "tags": [
       "白蛇島",
+      "神アーク",
+      "オオイカリアーク",
       "アークドラゴン",
       "デビルカンガルー",
-      "ドラゴンハウス"
+      "ドラゴンハウス",
+      "オオイカリの杖"
     ],
     "difficulty": 5,
     "verification": "user_confirmed",
@@ -28,49 +31,51 @@
   },
   {
     "id": 2,
-    "category": "アイテム・識別",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "識別の壺の中に未識別アイテムが存在する状況は作れるか？",
     "choices": [
-      "絶対に作れない",
       "作れる",
-      "壺が呪われている場合だけ作れる",
-      "店の商品だけ作れる"
+      "作れない",
+      "6",
+      "6"
     ],
-    "answer": 1,
-    "explanation": "作れる。代表例は、未識別のぬれた巻物を識別の壺へ入れ、壺の中で乾かすケース。『識別の壺に入った＝常に識別済み』ではない例外を突く問題。",
+    "answer": 0,
+    "explanation": "代表例は、識別の壺にアイテムが入った状態で物忘れの草を飲む。他にも、未識別のぬれた巻物を識別の壺へ入れ、壺の中で乾かすと作れる。",
     "tags": [
       "識別の壺",
-      "ぬれた巻物",
-      "未識別"
+      "未識別",
+      "物忘れの草",
+      "ぬれた巻物"
     ],
     "difficulty": 5,
-    "verification": "source_checked",
-    "source": "https://w.atwiki.jp/feimon_db/pages/14.html",
+    "verification": "user_confirmed",
+    "source": "裏白研究室・ユーザー確認済み",
     "review_status": "確認済",
-    "audit_status": "単一資料整合",
+    "audit_status": "ユーザー確認済",
     "quality": "残す候補"
   },
   {
     "id": 3,
-    "category": "裏白蛇・特殊MH",
+    "category": "ダンジョン",
     "type": "single",
     "instruction": "",
-    "question": "裏白蛇2Fをしおいやんが歩いている状況が成立しうる理由は？",
+    "question": "裏白蛇2Fをしおいやんが歩いていた。ありえる？",
     "choices": [
-      "2Fでも低確率で通常出現する",
-      "ドレインハウス内の個体が警報スイッチなどで起きて外へ出た",
-      "しおかんべんが自然にレベルダウンした",
-      "店の商品として配置される"
+      "そんなことはありえない",
+      "2Fでも低確率で出現する",
+      "ドレインハウス内のしおいやんが警報スイッチで起きて外へ出た",
+      "けものみちの杖を振ると出現する"
     ],
-    "answer": 1,
-    "explanation": "通常出現階は3F以降でも、2Fにドレインハウスが生成され、しおいやんが警報スイッチなどで起こされれば部屋外へ出て歩くことがある。出現テーブルだけでは説明できない例。",
+    "answer": 2,
+    "explanation": "通常出現階は3F以降だが、2Fにドレインハウスが生成され、その中のしおいやんが警報スイッチで起こされれば、部屋の外へ出て歩くことがある。",
     "tags": [
       "裏白蛇",
       "しおいやん",
       "ドレインハウス",
-      "警報スイッチ"
+      "警報スイッチ",
+      "けものみちの杖"
     ],
     "difficulty": 5,
     "verification": "user_confirmed",
@@ -81,10 +86,10 @@
   },
   {
     "id": 4,
-    "category": "杖・反射",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
-    "question": "壁に向かって杖を振ったとき、光弾が壁で反射する条件は？",
+    "question": "壁に向かって杖を振ったとき、魔法弾が壁で反射する条件はどれ？",
     "choices": [
       "縦横方向に振ったときだけ",
       "斜め方向に振ったときだけ",
@@ -107,10 +112,10 @@
   },
   {
     "id": 5,
-    "category": "杖・反射",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
-    "question": "壁の角へ斜めに杖を振ったとき、光弾はアスカから見てどちらへ反射する？",
+    "question": "壁の角へ斜めに杖を振ったとき、魔法弾はアスカから見てどちらへ反射する？",
     "choices": [
       "右",
       "左",
@@ -118,7 +123,7 @@
       "ランダム"
     ],
     "answer": 1,
-    "explanation": "壁の角への斜め振りでは、光弾はアスカから見て左方向へ反射する。フェイ問で反射軌道を組む際の基礎仕様。",
+    "explanation": "壁の角への斜め振りでは、魔法弾はアスカから見て左方向へ反射する。フェイ問で反射軌道を考える際の基礎仕様。",
     "tags": [
       "杖",
       "反射",
@@ -133,10 +138,10 @@
   },
   {
     "id": 6,
-    "category": "杖・反射",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
-    "question": "モンスターAが反射した杖の光弾がモンスターBに当たった。処理上の『使用者』は誰？",
+    "question": "モンスターAが反射した杖の魔法弾がモンスターBに当たった。処理上の「使用者」は誰になる？",
     "choices": [
       "アスカ",
       "反射したモンスターA",
@@ -144,7 +149,7 @@
       "使用者なし"
     ],
     "answer": 1,
-    "explanation": "反射後の光弾は、反射したモンスターAが杖を使用したものとして処理される。誰の行為として扱われるかで効果や帰属が変わる局面がある。",
+    "explanation": "反射後の魔法弾は、反射したモンスターAが杖を使用したものとして処理される。誰の行為として扱われるかで効果や帰属が変わる局面がある。",
     "tags": [
       "杖",
       "反射",
@@ -159,18 +164,18 @@
   },
   {
     "id": 7,
-    "category": "杖・反射",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
-    "question": "一度モンスターに反射された杖の光弾が、別の杖反射能力持ちへ飛んだ場合は？",
+    "question": "一度クロウ丸に反射された杖の魔法弾が、別のクロウ丸へ飛んだ場合はどうなる？",
     "choices": [
       "もう一度反射する",
       "再反射せず命中する",
-      "光弾が消える",
+      "魔法弾が消える",
       "50%で再反射する"
     ],
     "answer": 1,
-    "explanation": "モンスターに一度反射された光弾は、通常なら杖を反射する別モンスターに届いても再反射されない。反射は連鎖しない。",
+    "explanation": "モンスターに一度反射された魔法弾は、通常なら杖を反射する別モンスターに届いても再反射されない。反射は連鎖しない。",
     "tags": [
       "杖",
       "反射",
@@ -185,36 +190,41 @@
   },
   {
     "id": 8,
-    "category": "杖・ふきとばし",
-    "type": "single",
-    "instruction": "",
-    "question": "ふきとばしの杖で階段を動かすときの正しい仕様は？",
+    "category": "仕様",
+    "type": "multiple",
+    "instruction": "全て選びなさい",
+    "question": "ふきとばしの杖で階段を動かすときの正しい仕様を全て選びなさい",
     "choices": [
-      "水路を越えて10マス必ず飛ぶ",
-      "遮るものまで動くが水路は越えられない",
-      "階段は一切動かせない",
-      "階段だけキャラ落下則で着地する"
+      "最大10マス飛ぶ",
+      "遮るものまで何マスでも飛ぶ",
+      "水路は越えられない",
+      "見えないワナを超えて飛ぶ"
     ],
-    "answer": 1,
-    "explanation": "モンスター・アイテム・罠は最大10マスだが、階段は遮るものがある位置まで移動する。一方、階段は水路を越えて吹き飛ばせない。",
+    "answer": [
+      1,
+      2
+    ],
+    "explanation": "ふきとばしの杖でふきとばした場合、モンスター・アイテム・罠は最大10マスだが、階段は遮るものがある位置まで何マスでも移動する。一方、階段は水路を超えることは出来ず、見える見えないにかかわらずワナを越えて吹き飛ばすことも出来ない。",
     "tags": [
       "ふきとばしの杖",
       "階段",
-      "水路"
+      "水路",
+      "ワナ",
+      "複数選択"
     ],
     "difficulty": 5,
-    "verification": "source_checked",
-    "source": "https://w.atwiki.jp/feimon_db/pages/12.html",
+    "verification": "user_confirmed",
+    "source": "裏白研究室・ユーザー確認済み",
     "review_status": "確認済",
-    "audit_status": "単一資料整合",
+    "audit_status": "ユーザー確認済",
     "quality": "残す候補"
   },
   {
     "id": 9,
-    "category": "杖・ばくだん",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
-    "question": "ばくだんの杖で爆弾状態になった敵が爆発し、その爆発で別の敵を倒した。アスカの経験値は？",
+    "question": "ばくだんの杖で爆弾状態になった敵が爆発し、その爆発で別の敵を倒した。アスカに経験値は入る？",
     "choices": [
       "入る",
       "入らない",
@@ -222,7 +232,7 @@
       "敵のレベル次第"
     ],
     "answer": 1,
-    "explanation": "モンスター自身の爆発による撃破では、アスカに経験値は入らない。アスカ自身の爆発で敵を倒した場合は経験値を得るため、帰属が異なる。",
+    "explanation": "モンスター自身の爆発による撃破では、アスカに経験値は入らない。アスカ自身の爆発で敵を倒した場合はアスカに経験値が入る。",
     "tags": [
       "ばくだんの杖",
       "経験値",
@@ -237,10 +247,10 @@
   },
   {
     "id": 10,
-    "category": "杖・場所がえ",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
-    "question": "水路上の敵と場所がえし、元の敵位置へアスカがそのまま着地できない場合の代替着地点は？",
+    "question": "水路上の敵と場所がえし、元の敵位置へアスカがそのまま着地できない場合の代替着地点は何によって決まる？",
     "choices": [
       "アイテム落下則",
       "キャラ落下則",
@@ -248,7 +258,7 @@
       "完全ランダム"
     ],
     "answer": 1,
-    "explanation": "場所がえ先へそのまま着地できない場合、代替着地点はキャラ落下則で決まる。今後この検定では『キャラ落下則』で用語を統一する。",
+    "explanation": "場所がえ先へそのまま着地できない場合、代替着地点はキャラ落下則で決まる。",
     "tags": [
       "場所がえの杖",
       "水路",
@@ -263,18 +273,18 @@
   },
   {
     "id": 11,
-    "category": "杖・引き寄せ",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
     "question": "未発見のワナを挟んだ先に階段がある。引き寄せの杖を振ると？",
     "choices": [
-      "光弾がワナで止まる",
-      "光弾も階段もワナを完全に無視する",
-      "光弾は通るが階段はワナ位置で止まる",
+      "魔法弾がワナで止まる",
+      "魔法弾も階段もワナを完全に無視する",
+      "魔法弾は通るが階段はワナ位置で止まる",
       "未発見ワナ自体が引き寄せられる"
     ],
     "answer": 2,
-    "explanation": "未発見のワナは光弾を通す。しかし引き寄せられて移動する階段はワナの位置で引っかかって止まる。『光弾の通過』と『対象物の移動』を分けて考える必要がある。",
+    "explanation": "未発見のワナは魔法弾を通す。しかし引き寄せられて移動する階段はワナの位置で引っかかって止まる。『魔法弾の通過』と『対象物の移動』を分けて考える必要がある。",
     "tags": [
       "引き寄せの杖",
       "未発見ワナ",
@@ -289,7 +299,7 @@
   },
   {
     "id": 12,
-    "category": "杖・一時しのぎ",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
     "question": "反射などでアスカ自身に一時しのぎの杖の効果を当てると？",
@@ -315,7 +325,7 @@
   },
   {
     "id": 13,
-    "category": "草・共通仕様",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
     "question": "草を飲んだとき、固有効果とは別に共通して起こることは？",
@@ -340,7 +350,7 @@
   },
   {
     "id": 14,
-    "category": "草・すばやさ",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
     "question": "すばやさの種を1個飲んで倍速中に、もう1個飲むとどうなる？",
@@ -366,7 +376,7 @@
   },
   {
     "id": 15,
-    "category": "草・レベル低下",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "くねくね草などでレベルが下がったとき、現在HPが15以下ならどう処理される？",
@@ -392,7 +402,7 @@
   },
   {
     "id": 16,
-    "category": "草・命の草",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
     "question": "命の草を飲んだ際のHP処理として正しいものは？",
@@ -418,7 +428,7 @@
   },
   {
     "id": 17,
-    "category": "草・毒消し",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "毒消し草をしおいやん系へ遠投で当てた場合の特殊仕様は？",
@@ -444,7 +454,7 @@
   },
   {
     "id": 18,
-    "category": "草・ドラゴン草",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
     "question": "ドラゴン草・火炎草を通常状態で『飲んで攻撃』したときのダメージは？",
@@ -470,7 +480,7 @@
   },
   {
     "id": 19,
-    "category": "草・毒草",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "ゲイズに操られて毒草を飲まされた直後、次の行動権はどちらへ移る？",
@@ -496,7 +506,7 @@
   },
   {
     "id": 20,
-    "category": "フェイ問・乱数",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "フェイの問題で同じ行動順を完全に再現した場合、眠印など残存する乱数の結果は？",
@@ -522,7 +532,7 @@
   },
   {
     "id": 21,
-    "category": "回復・ターン処理",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "最大HP100のアスカが自然回復だけでHPを1回復するのに必要なターン数は？",
@@ -548,7 +558,7 @@
   },
   {
     "id": 22,
-    "category": "回復・壁内",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "自然回復の内部カウントで、壁の中にいたターンはどう扱われる？",
@@ -574,7 +584,7 @@
   },
   {
     "id": 23,
-    "category": "落下則・アイテム",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "アイテムの本来の落下地点が埋まっているとき、代替地点を探す順序は何と呼ぶ？",
@@ -599,7 +609,7 @@
   },
   {
     "id": 24,
-    "category": "高とび・着地点",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "高とび草で有効な着地点が一つもない場合は？",
@@ -625,7 +635,7 @@
   },
   {
     "id": 25,
-    "category": "状態異常・レベルアップ",
+    "category": "モンスター",
     "type": "single",
     "instruction": "",
     "question": "モンスターがレベルアップしたとき、倍速状態はどうなる？",
@@ -651,7 +661,7 @@
   },
   {
     "id": 26,
-    "category": "武器・背水の剣",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
     "question": "背水の剣がHP最大値の10%以下で発動したとき、得られる効果は？",
@@ -677,7 +687,7 @@
   },
   {
     "id": 27,
-    "category": "武器・マリンスラッシャー",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "敵が入った『水中のやりすごしの壺』へマリンスラッシャーで攻撃すると？",
@@ -703,7 +713,7 @@
   },
   {
     "id": 28,
-    "category": "盾・不動",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "不動の盾を装備したアスカが敵へ場所がえの杖を振ると？",
@@ -729,7 +739,7 @@
   },
   {
     "id": 29,
-    "category": "腕輪・百発百中",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "百発百中の腕輪を装備して身かわし回路付きエレキへアイテムを投げると？",
@@ -755,7 +765,7 @@
   },
   {
     "id": 30,
-    "category": "食料・にぎり系",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "にぎりみならい系へ呪われていないおにぎりを通常投擲した場合は？",
@@ -781,7 +791,7 @@
   },
   {
     "id": 31,
-    "category": "モンスター・おうごんマムル",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "おうごんマムルへ一時しのぎの杖を当てると？",
@@ -807,7 +817,7 @@
   },
   {
     "id": 32,
-    "category": "モンスター・店主",
+    "category": "モンスター",
     "type": "single",
     "instruction": "",
     "question": "非敵対の店主とアスカの位置関係について正しいものは？",
@@ -833,7 +843,7 @@
   },
   {
     "id": 33,
-    "category": "モンスター・大店長",
+    "category": "モンスター",
     "type": "single",
     "instruction": "",
     "question": "大店長に例外的に有効な状態変化は？",
@@ -859,7 +869,7 @@
   },
   {
     "id": 34,
-    "category": "モンスター・シューベル",
+    "category": "モンスター",
     "type": "single",
     "instruction": "",
     "question": "イカリ状態のシューベル系が召喚不能な状況ではどう行動する？",
@@ -885,7 +895,7 @@
   },
   {
     "id": 35,
-    "category": "モンスター・とおせんりゅう",
+    "category": "モンスター",
     "type": "single",
     "instruction": "",
     "question": "とおせんりゅう系が特技を100%使う条件の一つとして必要なのは？",
@@ -911,7 +921,7 @@
   },
   {
     "id": 36,
-    "category": "モンスター・ひまガッパ",
+    "category": "モンスター",
     "type": "single",
     "instruction": "",
     "question": "アスカと隣接していないひまガッパ系が、同室にアイテムを見つけたときの傾向は？",
@@ -937,7 +947,7 @@
   },
   {
     "id": 37,
-    "category": "秘技・水蜘蛛",
+    "category": "その他",
     "type": "single",
     "instruction": "",
     "question": "水蜘蛛で水上に立ったまま31ターン目を迎えると？",
@@ -963,7 +973,7 @@
   },
   {
     "id": 38,
-    "category": "秘技・結界",
+    "category": "その他",
     "type": "single",
     "instruction": "",
     "question": "秘技『結界』の性質として正しいものは？",
@@ -989,7 +999,7 @@
   },
   {
     "id": 39,
-    "category": "秘技・無敵",
+    "category": "その他",
     "type": "single",
     "instruction": "",
     "question": "秘技『無敵』の効果として正しいものは？",
@@ -1015,7 +1025,7 @@
   },
   {
     "id": 40,
-    "category": "秘技・跳返",
+    "category": "その他",
     "type": "single",
     "instruction": "",
     "question": "秘技『跳返』で跳ね返せないものは？",
@@ -1041,7 +1051,7 @@
   },
   {
     "id": 41,
-    "category": "秘技・鬼月",
+    "category": "その他",
     "type": "single",
     "instruction": "",
     "question": "パコレプキンの腕輪装備中に秘技『鬼月』を使うと、壁越し・壁内へ移動できる？",
@@ -1067,7 +1077,7 @@
   },
   {
     "id": 42,
-    "category": "秘技・死門",
+    "category": "その他",
     "type": "single",
     "instruction": "",
     "question": "秘技『死門』が効かない組み合わせは？",
@@ -1093,7 +1103,7 @@
   },
   {
     "id": 43,
-    "category": "裏白蛇・出現階層",
+    "category": "ダンジョン",
     "type": "single",
     "instruction": "",
     "question": "裏白蛇島の怪盗ペリカン4世の自然出現階として正しい組み合わせは？",
@@ -1119,7 +1129,7 @@
   },
   {
     "id": 44,
-    "category": "裏白蛇・出現階層",
+    "category": "ダンジョン",
     "type": "single",
     "instruction": "",
     "question": "裏白蛇島のおうごんマムルの自然出現階として正しい組み合わせは？",
@@ -1145,7 +1155,7 @@
   },
   {
     "id": 45,
-    "category": "巻物・呪い",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "呪われた『おはらいの巻物』を作ることはできる？",
@@ -1172,7 +1182,7 @@
   },
   {
     "id": 46,
-    "category": "アイテム・識別",
+    "category": "仕様",
     "type": "multiple",
     "instruction": "正しいものをすべて選べ",
     "question": "識別の壺の中に『未識別のアイテム』を存在させる方法として正しいものをすべて選べ。",
@@ -1202,7 +1212,7 @@
   },
   {
     "id": 47,
-    "category": "モンスター・状態異常",
+    "category": "モンスター",
     "type": "single",
     "instruction": "",
     "question": "状態異常にかかっている『おうごんマムル』を存在させることはできる？",
@@ -1229,7 +1239,7 @@
   },
   {
     "id": 48,
-    "category": "裏白蛇・特殊MH",
+    "category": "ダンジョン",
     "type": "single",
     "instruction": "",
     "question": "裏白蛇島で『くねくねハニー』が出現することはある？",
@@ -1256,7 +1266,7 @@
   },
   {
     "id": 49,
-    "category": "ターン処理・最大攻撃回数",
+    "category": "モンスター",
     "type": "single",
     "instruction": "",
     "question": "1体のモンスターから、アスカの1ターン中に受けうる通常攻撃の最大回数は？",
@@ -1283,7 +1293,7 @@
   },
   {
     "id": 50,
-    "category": "杖・合成",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
     "question": "呪われた杖と祝福された同種の杖を合成した場合、呪いはどうなる？",
@@ -1309,7 +1319,7 @@
   },
   {
     "id": 51,
-    "category": "杖・合成",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
     "question": "呪われた杖を、それより回数の多い呪われていない同種の杖と合成すると？",
@@ -1336,7 +1346,7 @@
   },
   {
     "id": 52,
-    "category": "杖・イカリ",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
     "question": "イカリの杖の効果は何ターンで切れる？",
@@ -1361,7 +1371,7 @@
   },
   {
     "id": 53,
-    "category": "杖・痛み分け",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
     "question": "痛み分けの杖で相手へ伝わるダメージに含まれるものは？",
@@ -1388,7 +1398,7 @@
   },
   {
     "id": 54,
-    "category": "杖・入れ替え",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "HP入れ替えの際、衰弱状態はどうなる？",
@@ -1414,7 +1424,7 @@
   },
   {
     "id": 55,
-    "category": "杖・入れ替え",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "金縛り中の衰弱モンスターについて正しいものは？",
@@ -1440,7 +1450,7 @@
   },
   {
     "id": 56,
-    "category": "杖・けものみち",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
     "question": "けものみちの杖で出るモンスターは何を基準に選ばれる？",
@@ -1465,7 +1475,7 @@
   },
   {
     "id": 57,
-    "category": "杖・けものみち",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "フロア開始時にいたある種類のモンスターを全滅させた後、けものみちの杖を振ると？",
@@ -1491,7 +1501,7 @@
   },
   {
     "id": 58,
-    "category": "杖・ふきとばし",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "カッパのエレキ装着中、うしわか丸系に投げた杖を跳ね返され、自分にふきとばし効果が当たると？",
@@ -1518,7 +1528,7 @@
   },
   {
     "id": 59,
-    "category": "杖・引き寄せ",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
     "question": "引き寄せの杖を投げた場合、アイテムや罠に当たる？",
@@ -1545,7 +1555,7 @@
   },
   {
     "id": 60,
-    "category": "杖・引き寄せ",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
     "question": "引き寄せでモンスターを動かすとき、部屋の角を越えることはある？",
@@ -1571,18 +1581,18 @@
   },
   {
     "id": 61,
-    "category": "杖・引き寄せ",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
-    "question": "壁反射で引き寄せの光弾を当てた場合、対象が引き寄せられる方向は？",
+    "question": "壁反射で引き寄せの魔法弾を当てた場合、対象が引き寄せられる方向は？",
     "choices": [
-      "対象に光弾が当たった方向",
+      "対象に魔法弾が当たった方向",
       "ランダム",
       "アスカの現在向き",
       "階段方向"
     ],
     "answer": 0,
-    "explanation": "壁反射を利用した場合は、対象に光弾が当たった方向を基準に引き寄せられる。",
+    "explanation": "壁反射を利用した場合は、対象に魔法弾が当たった方向を基準に引き寄せられる。",
     "tags": [
       "引き寄せの杖",
       "壁反射",
@@ -1597,7 +1607,7 @@
   },
   {
     "id": 62,
-    "category": "杖・封印",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "倍速モンスターを封印したときの速度は？",
@@ -1623,7 +1633,7 @@
   },
   {
     "id": 63,
-    "category": "杖・とうめい",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
     "question": "フェイ問でモンスターにとうめいの杖を振ったときの見え方は？",
@@ -1649,7 +1659,7 @@
   },
   {
     "id": 64,
-    "category": "杖・トンネル",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
     "question": "水路に隣接した壁を、水路越しにトンネルの杖で壊せる？",
@@ -1675,7 +1685,7 @@
   },
   {
     "id": 65,
-    "category": "フェイ問・部屋判定",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "フェイ問で、どこまでが同じ部屋かを見た目だけで完全に判別できる？",
@@ -1700,7 +1710,7 @@
   },
   {
     "id": 66,
-    "category": "フェイ問・罠",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "フェイ問でアスカが罠を踏んだ場合、発動判定はどうなる？",
@@ -1726,7 +1736,7 @@
   },
   {
     "id": 67,
-    "category": "落下則・アイテム",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "アイテム落下則の候補マスを使い切ると、そのアイテムはどうなる？",
@@ -1751,7 +1761,7 @@
   },
   {
     "id": 68,
-    "category": "落下則・キャラ",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "キャラ落下則は何を基準に回転する？",
@@ -1776,7 +1786,7 @@
   },
   {
     "id": 69,
-    "category": "落下則・キャラ",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "キャラ落下則で18体目以降の処理は？",
@@ -1801,7 +1811,7 @@
   },
   {
     "id": 70,
-    "category": "高とび・アイテム",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "バネのワナなどでアイテムが高とびしたとき、落下先の優先に関係するものは？",
@@ -1827,7 +1837,7 @@
   },
   {
     "id": 71,
-    "category": "状態異常・引継ぎ",
+    "category": "モンスター",
     "type": "single",
     "instruction": "",
     "question": "モンスターのレベルアップで引き継がれない状態異常はどれ？",
@@ -1853,93 +1863,91 @@
   },
   {
     "id": 72,
-    "category": "状態異常・身代わり",
+    "category": "モンスター",
     "type": "single",
     "instruction": "",
-    "question": "身代わり状態のモンスターが存在するとき、キグニ状態のモンスターはアスカを攻撃することがある？",
+    "question": "身代わり状態のモンスターが存在するとき、キグニ状態のモンスターはアスカを攻撃する？",
     "choices": [
       "攻撃する",
       "攻撃しない。身代わりを優先する",
-      "身代わりとの位置関係によって変わる",
-      "未検証"
+      "6",
+      "6"
     ],
-    "answer": null,
-    "explanation": "未検証。身代わり状態によるターゲット変更と、キグニ状態の攻撃対象決定が競合したとき、どちらの処理が優先されるかを確認する必要がある。",
+    "answer": 0,
+    "explanation": "身代わり状態のモンスターが存在していても、キグニ状態のモンスターはアスカを攻撃する。",
     "tags": [
       "身代わり",
       "キグニ状態",
       "ターゲット",
-      "状態異常",
-      "未検証"
+      "状態異常"
     ],
     "difficulty": 5,
-    "verification": "needs_check",
-    "source": "未検証・裏白研究室確認待ち",
-    "review_status": "保留",
-    "audit_status": "保留",
-    "quality": "良問候補・未検証"
+    "verification": "user_confirmed",
+    "source": "裏白研究室・ユーザー確認済み",
+    "review_status": "確認済",
+    "audit_status": "ユーザー確認済",
+    "quality": "残す候補"
   },
   {
     "id": 73,
-    "category": "店・特殊マス",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
-    "question": "店の入口にある『アイテムを置けず、罠も設置できない3マス』を濡らすことはできる？",
+    "question": "店の入口にある『アイテムを置けず、ワナも設置できない3マス』を濡らすことはできる？",
     "choices": [
       "濡らせる",
       "濡らせない",
-      "中央の1マスだけ濡らせる",
-      "未検証"
+      "6",
+      "6"
     ],
-    "answer": null,
-    "explanation": "未検証。店入口3マスにはアイテム設置・罠設置の特殊制限があるが、水濡れ処理まで同じ制限を受けるかは別途確認が必要。",
+    "answer": 0,
+    "explanation": "店入口の『アイテムを置けず、ワナも設置できない3マス』でも、水がめなどで濡らすことはできる。アイテム・ワナの設置制限と、水濡れ処理は別扱い。",
     "tags": [
       "店",
       "入口",
       "特殊マス",
       "水濡れ",
-      "水がめ",
-      "未検証"
+      "水がめ"
     ],
     "difficulty": 5,
-    "verification": "needs_check",
-    "source": "未検証・裏白研究室確認待ち",
-    "review_status": "保留",
-    "audit_status": "保留",
-    "quality": "良問候補・未検証"
+    "verification": "user_confirmed",
+    "source": "裏白研究室・ユーザー実機確認",
+    "review_status": "確認済",
+    "audit_status": "ユーザー実機確認済",
+    "quality": "残す候補"
   },
   {
     "id": 74,
-    "category": "店・入口判定",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
-    "question": "店の周囲の壁を掘って店を拡張し、店主が新しい入口を塞ぐ位置へ移動した場合、『アイテムや罠を置けない3マス』も新しい入口側へ移動する？",
+    "question": "店の周囲の壁を掘って店を拡張し、店主が新しい入口を塞ぐ位置へ移動した場合、『アイテムやワナを置けない3マス』も新しい入口側へ移動する？",
     "choices": [
-      "新しい入口側の3マスへ移動する",
+      "移動する",
       "元の入口3マスのまま変わらない",
-      "新旧両方の入口3マスが設置不可になる",
-      "未検証"
+      "6",
+      "6"
     ],
-    "answer": null,
-    "explanation": "未検証。壁を掘って店の形状を変えると店主が新たな入口を塞ぐように移動することがあるが、設置不可3マスの判定まで動的に再設定されるかは確認が必要。",
+    "answer": 0,
+    "explanation": "設置不可3マスは、新しい入口側へ移動する。ただし、移動前にそのマスへ置いてあったアイテムはそのまま残る。そのアイテムを拾うと、以後そのマスには通常の方法ではアイテムを置けないが、手持ちアイテムとの交換なら置くことができる。",
     "tags": [
       "店",
       "店主",
       "入口",
       "壁掘り",
       "設置不可マス",
-      "未検証"
+      "アイテム交換"
     ],
     "difficulty": 5,
-    "verification": "needs_check",
-    "source": "未検証・裏白研究室確認待ち",
-    "review_status": "保留",
-    "audit_status": "保留",
-    "quality": "良問候補・未検証"
+    "verification": "user_confirmed",
+    "source": "裏白研究室・ユーザー実機確認",
+    "review_status": "確認済",
+    "audit_status": "ユーザー実機確認済",
+    "quality": "残す候補"
   },
   {
     "id": 75,
-    "category": "裏白蛇・出現階層",
+    "category": "ダンジョン",
     "type": "single",
     "instruction": "",
     "question": "裏白蛇島でプチフェニックスが自然出現する階層の組み合わせとして正しいものは？",
@@ -1965,7 +1973,7 @@
   },
   {
     "id": 76,
-    "category": "裏白蛇・出現階層",
+    "category": "ダンジョン",
     "type": "single",
     "instruction": "",
     "question": "裏白蛇島でアストラルデビルが自然出現する階層の組み合わせとして正しいものは？",
@@ -1991,7 +1999,7 @@
   },
   {
     "id": 77,
-    "category": "落下則・ふきとばし",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "次のうち、落下則の挙動が他の3つと異なるものはどれ？",
@@ -2021,7 +2029,7 @@
   },
   {
     "id": 78,
-    "category": "階段・水濡れ",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "ゲーム『アスカ見参』で、濡れたマスにある階段へふきとばしの杖の効果を与えるとどうなる？",
@@ -2049,7 +2057,7 @@
   },
   {
     "id": 79,
-    "category": "草・状態異常",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
     "question": "物忘れの草をモンスターに投げ当てたり、アスカに当たったりするとどうなる？",
@@ -2076,7 +2084,7 @@
   },
   {
     "id": 80,
-    "category": "草・状態異常",
+    "category": "アイテム",
     "type": "single",
     "instruction": "",
     "question": "弟切草のHP回復以外の効果はどれ？",
@@ -2103,7 +2111,7 @@
   },
   {
     "id": 81,
-    "category": "裏白蛇・おうごんマムル",
+    "category": "ダンジョン",
     "type": "single",
     "instruction": "",
     "question": "裏白蛇のおうごんマムルを最短で倒す手段として正しいものはどれ？",
@@ -2131,7 +2139,7 @@
   },
   {
     "id": 82,
-    "category": "店主・罠",
+    "category": "仕様",
     "type": "single",
     "instruction": "",
     "question": "フェイ問で大店長は落とし穴にかかる？",
@@ -2154,6 +2162,520 @@
     "difficulty": 5,
     "verification": "user_confirmed",
     "source": "裏白研究室・ユーザー実機確認（フェイ問）",
+    "review_status": "確認済",
+    "audit_status": "ユーザー確認済",
+    "quality": "残す候補"
+  },
+  {
+    "id": 83,
+    "category": "仕様",
+    "type": "single",
+    "instruction": "",
+    "question": "店があるフロアで大部屋の巻物を読んだ場合、店入口にある『アイテムやワナを置けない3マス』はどうなる？",
+    "choices": [
+      "なくなる",
+      "元の位置に残る",
+      "6",
+      "6"
+    ],
+    "answer": 0,
+    "explanation": "大部屋の巻物を読むと、店入口に設定されていた『アイテムやワナを置けない3マス』はなくなる。",
+    "tags": [
+      "店",
+      "大部屋の巻物",
+      "入口",
+      "設置不可マス"
+    ],
+    "difficulty": 5,
+    "verification": "user_confirmed",
+    "source": "裏白研究室・ユーザー実機確認",
+    "review_status": "確認済",
+    "audit_status": "ユーザー実機確認済",
+    "quality": "残す候補"
+  },
+  {
+    "id": 84,
+    "category": "仕様",
+    "type": "single",
+    "instruction": "",
+    "question": "アイテムの上にモンスターが乗った状態でモンスターのワナを踏むと、そのアイテムはモンスター化する？",
+    "choices": [
+      "モンスター化する",
+      "モンスター化しない",
+      "6",
+      "6"
+    ],
+    "answer": 1,
+    "explanation": "アイテムの上にモンスターが乗っている場合、そのアイテムはモンスターのワナを踏んでもモンスター化しない。",
+    "tags": [
+      "モンスターのワナ",
+      "アイテム",
+      "モンスター",
+      "重なり"
+    ],
+    "difficulty": 5,
+    "verification": "user_confirmed",
+    "source": "裏白研究室・ユーザー実機確認",
+    "review_status": "確認済",
+    "audit_status": "ユーザー実機確認済",
+    "quality": "残す候補"
+  },
+  {
+    "id": 85,
+    "category": "仕様",
+    "type": "single",
+    "instruction": "",
+    "question": "モンスターのワナを踏んだとき、水路に沈んでいるアイテムがモンスター化することはある？",
+    "choices": [
+      "ある",
+      "ない",
+      "6",
+      "6"
+    ],
+    "answer": 0,
+    "explanation": "特定の条件では、水路に沈んでいるアイテムがモンスターのワナによってモンスター化することがある。具体的な成立条件は追記予定。",
+    "tags": [
+      "モンスターのワナ",
+      "水路",
+      "水没アイテム",
+      "モンスター化"
+    ],
+    "difficulty": 5,
+    "verification": "user_confirmed",
+    "source": "裏白研究室・ユーザー実機確認",
+    "review_status": "確認済",
+    "audit_status": "ユーザー実機確認済",
+    "quality": "残す候補"
+  },
+  {
+    "id": 86,
+    "category": "仕様",
+    "type": "single",
+    "instruction": "",
+    "question": "アスカがおにぎり状態で転び石を踏むと、アイテムはどうばらまかれる？",
+    "choices": [
+      "通常どおり進行方向へばらまく",
+      "逆方向へばらまく",
+      "その場に全て落とす",
+      "アイテムは落とさない"
+    ],
+    "answer": 1,
+    "explanation": "アスカがおにぎり状態で転び石を踏むと、通常とは逆方向へ所持アイテムをばらまく。",
+    "tags": [
+      "おにぎり状態",
+      "転び石",
+      "アイテム",
+      "ばらまき",
+      "方向"
+    ],
+    "difficulty": 5,
+    "verification": "user_confirmed",
+    "source": "裏白研究室・ユーザー実機確認",
+    "review_status": "確認済",
+    "audit_status": "ユーザー実機確認済",
+    "quality": "残す候補"
+  },
+  {
+    "id": 87,
+    "category": "仕様",
+    "type": "single",
+    "instruction": "",
+    "question": "武器をモンスターに投げたときのダメージに影響しないものはどれ？",
+    "choices": [
+      "アスカのレベル",
+      "アスカのちから",
+      "武器の強さ",
+      "アスカがイカリ状態かどうか"
+    ],
+    "answer": 3,
+    "explanation": "武器投擲のダメージにはレベル・ちから・武器の強さ・「ち」印・祝福/呪い・相手の防御力などが関係するが、アスカがイカリ状態かどうかは関係しない。",
+    "tags": [
+      "武器",
+      "投擲",
+      "ダメージ",
+      "イカリ"
+    ],
+    "difficulty": 5,
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/15.html",
+    "review_status": "確認済",
+    "audit_status": "単一資料整合",
+    "quality": "残す候補"
+  },
+  {
+    "id": 88,
+    "category": "仕様",
+    "type": "single",
+    "instruction": "",
+    "question": "フェイ問で変化の壺にアイテムを入れた場合、変化後に出るアイテムは何になる？",
+    "choices": [
+      "雑草",
+      "薬草",
+      "おにぎり",
+      "ランダムな通常アイテム"
+    ],
+    "answer": 0,
+    "explanation": "フェイ問では、変化の壺に物を入れた際に生成されるアイテムは雑草になる。",
+    "tags": [
+      "フェイ問",
+      "変化の壺",
+      "雑草",
+      "アイテム生成"
+    ],
+    "difficulty": 5,
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/13.html",
+    "review_status": "確認済",
+    "audit_status": "単一資料整合",
+    "quality": "残す候補"
+  },
+  {
+    "id": 89,
+    "category": "仕様",
+    "type": "single",
+    "instruction": "",
+    "question": "フェイ問でモンスターハウスの巻物などにより新しく生成されるアイテムは、原則どうなる？",
+    "choices": [
+      "全て雑草になる",
+      "全て薬草になる",
+      "通常どおりランダム生成される",
+      "全ておにぎりになる"
+    ],
+    "answer": 0,
+    "explanation": "フェイ問では、モンスターハウスの巻物やケンゴウ系の弾き飛ばし、ぬすっトド系の盗みなどで新しく生成されるアイテムは雑草になる。",
+    "tags": [
+      "フェイ問",
+      "雑草",
+      "アイテム生成",
+      "モンスターハウスの巻物"
+    ],
+    "difficulty": 5,
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/13.html",
+    "review_status": "確認済",
+    "audit_status": "単一資料整合",
+    "quality": "残す候補"
+  },
+  {
+    "id": 90,
+    "category": "仕様",
+    "type": "single",
+    "instruction": "",
+    "question": "転ばぬ先の杖を所持した状態でイノシシ系の特技を受けたとき、「弟」印入りの盾による回復は発生する？",
+    "choices": [
+      "発生する",
+      "発生しない",
+      "6",
+      "6"
+    ],
+    "answer": 0,
+    "explanation": "転ばぬ先の杖を所持している場合、イノシシ系の特技を受けた際でも「弟」印入りの盾による回復が可能。",
+    "tags": [
+      "転ばぬ先の杖",
+      "イノシシ系",
+      "弟印",
+      "盾"
+    ],
+    "difficulty": 5,
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/12.html",
+    "review_status": "確認済",
+    "audit_status": "単一資料整合",
+    "quality": "残す候補"
+  },
+  {
+    "id": 91,
+    "category": "アイテム",
+    "type": "single",
+    "instruction": "",
+    "question": "いかずちの杖は、ぬれた床や水路を利用して電撃を伝導させられる？",
+    "choices": [
+      "できる",
+      "できない",
+      "6",
+      "6"
+    ],
+    "answer": 0,
+    "explanation": "いかずちの杖は、ぬれた床や水路を伝って電撃を伝導させ、離れた対象へダメージを与えることができる。",
+    "tags": [
+      "いかずちの杖",
+      "水路",
+      "ぬれた床",
+      "伝導"
+    ],
+    "difficulty": 5,
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/12.html",
+    "review_status": "確認済",
+    "audit_status": "単一資料整合",
+    "quality": "残す候補"
+  },
+  {
+    "id": 92,
+    "category": "仕様",
+    "type": "single",
+    "instruction": "",
+    "question": "いかずちの杖の電撃で帯電したモンスターに、別のモンスターが隣接していた場合、電撃はそのモンスターにも伝わる？",
+    "choices": [
+      "伝わる",
+      "伝わらない",
+      "水路上にいる場合だけ伝わる",
+      "ぬれた床上にいる場合だけ伝わる"
+    ],
+    "answer": 0,
+    "explanation": "電撃の伝導経路には『帯電したモンスターに隣接しているモンスター』も含まれるため、地形が水路やぬれた床でなくても隣接によって伝導する。",
+    "tags": [
+      "いかずちの杖",
+      "電撃",
+      "伝導",
+      "モンスター"
+    ],
+    "difficulty": 5,
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/12.html",
+    "review_status": "確認済",
+    "audit_status": "単一資料整合",
+    "quality": "残す候補"
+  },
+  {
+    "id": 93,
+    "category": "その他",
+    "type": "single",
+    "instruction": "",
+    "question": "秘技「一気食い」で選択できないものはどれ？",
+    "choices": [
+      "所持している草",
+      "所持している食料",
+      "足元の草や食料",
+      "壺から出した草"
+    ],
+    "answer": 2,
+    "explanation": "一気食いは草や食料を一度に複数食べられるが、足元にあるアイテムは選択できない。",
+    "tags": [
+      "秘技",
+      "一気食い",
+      "草",
+      "食料"
+    ],
+    "difficulty": 5,
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/22.html",
+    "review_status": "確認済",
+    "audit_status": "単一資料整合",
+    "quality": "残す候補"
+  },
+  {
+    "id": 94,
+    "category": "その他",
+    "type": "single",
+    "instruction": "",
+    "question": "秘技「強肩」で投げる対象として選べないものの組み合わせは？",
+    "choices": [
+      "足元のアイテムと壺の中のアイテム",
+      "装備中の武器と盾",
+      "祝福アイテムと呪いアイテム",
+      "店の商品と床落ちアイテム"
+    ],
+    "answer": 0,
+    "explanation": "強肩では、壺の中にあるアイテムと足元にあるアイテムは選択できない。",
+    "tags": [
+      "秘技",
+      "強肩",
+      "投擲",
+      "足元",
+      "壺"
+    ],
+    "difficulty": 5,
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/22.html",
+    "review_status": "確認済",
+    "audit_status": "単一資料整合",
+    "quality": "残す候補"
+  },
+  {
+    "id": 95,
+    "category": "その他",
+    "type": "single",
+    "instruction": "",
+    "question": "水中の敵に向かって秘技「暇投げ」を使うと、投げたアイテムはどうなる？",
+    "choices": [
+      "敵に命中する",
+      "敵を貫通する",
+      "敵には当たらずアスカの足元に落ちる",
+      "消滅する"
+    ],
+    "answer": 2,
+    "explanation": "水中の敵へ暇投げを使ってもアイテムは命中せず、アスカの足元に落ちる。",
+    "tags": [
+      "秘技",
+      "暇投げ",
+      "水中",
+      "投擲"
+    ],
+    "difficulty": 5,
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/22.html",
+    "review_status": "確認済",
+    "audit_status": "単一資料整合",
+    "quality": "残す候補"
+  },
+  {
+    "id": 96,
+    "category": "その他",
+    "type": "single",
+    "instruction": "",
+    "question": "通過の腕輪を装備した状態で、水中の敵へ向かって秘技「体当」を使うとどうなる？",
+    "choices": [
+      "敵にぶつかって止まる",
+      "敵をつかんで進む",
+      "敵の頭上を通り過ぎる",
+      "秘技が不発になる"
+    ],
+    "answer": 2,
+    "explanation": "通過の腕輪装備中に体当を使い、敵が水中にいる場合は、その敵の頭上を通り過ぎて進む。",
+    "tags": [
+      "秘技",
+      "体当",
+      "通過の腕輪",
+      "水中"
+    ],
+    "difficulty": 5,
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/22.html",
+    "review_status": "確認済",
+    "audit_status": "単一資料整合",
+    "quality": "残す候補"
+  },
+  {
+    "id": 97,
+    "category": "その他",
+    "type": "single",
+    "instruction": "",
+    "question": "秘技「必中剣」の『必中』で可能になることはどれ？",
+    "choices": [
+      "壁の中や水中の敵にも攻撃を当てられる",
+      "必ず会心の一撃になる",
+      "2回連続で攻撃する",
+      "状態異常も必ず付与する"
+    ],
+    "answer": 0,
+    "explanation": "必中剣は攻撃が必ず命中し、壁の中や水中にいる敵にも攻撃を当てることができる。背水の剣の必中効果とは性質が異なる。",
+    "tags": [
+      "秘技",
+      "必中剣",
+      "壁内",
+      "水中"
+    ],
+    "difficulty": 5,
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/22.html",
+    "review_status": "確認済",
+    "audit_status": "単一資料整合",
+    "quality": "残す候補"
+  },
+  {
+    "id": 98,
+    "category": "その他",
+    "type": "single",
+    "instruction": "",
+    "question": "秘技「身かわし」でも避けられないものはどれ？",
+    "choices": [
+      "正面から飛んでくる矢",
+      "通常の投擲アイテム",
+      "上から落ちてくる物",
+      "横から飛んでくる石"
+    ],
+    "answer": 2,
+    "explanation": "身かわし状態でも、上から落ちてくる物は避けられない。",
+    "tags": [
+      "秘技",
+      "身かわし",
+      "落下物"
+    ],
+    "difficulty": 5,
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/22.html",
+    "review_status": "確認済",
+    "audit_status": "単一資料整合",
+    "quality": "残す候補"
+  },
+  {
+    "id": 99,
+    "category": "その他",
+    "type": "single",
+    "instruction": "",
+    "question": "秘技「四股」を使ったとき、ワナの上にモンスターがいた場合はどうなる？",
+    "choices": [
+      "何も起こらない",
+      "ワナだけ消える",
+      "そのモンスターがワナにかかる",
+      "モンスターが高とびする"
+    ],
+    "answer": 2,
+    "explanation": "四股は同室の敵を転ばせてアイテムを落とさせ、ワナを全て出現させる。ワナ上にモンスターがいた場合、そのモンスターはワナにかかる。",
+    "tags": [
+      "秘技",
+      "四股",
+      "ワナ",
+      "モンスター"
+    ],
+    "difficulty": 5,
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/22.html",
+    "review_status": "確認済",
+    "audit_status": "単一資料整合",
+    "quality": "残す候補"
+  },
+  {
+    "id": 100,
+    "category": "モンスター",
+    "type": "single",
+    "instruction": "",
+    "question": "大店長に固定ダメージを与えた場合、ダメージはいくつになる？",
+    "choices": [
+      "0",
+      "1",
+      "固定ダメージの値そのまま",
+      "最大HPの1%"
+    ],
+    "answer": 1,
+    "explanation": "大店長はおうごんマムルと同様の特性を持ち、固定ダメージを含めて全てのダメージを1にする。",
+    "tags": [
+      "大店長",
+      "固定ダメージ",
+      "店主",
+      "ダメージ"
+    ],
+    "difficulty": 5,
+    "verification": "source_checked",
+    "source": "https://w.atwiki.jp/feimon_db/pages/32.html",
+    "review_status": "確認済",
+    "audit_status": "単一資料整合",
+    "quality": "残す候補"
+  },
+  {
+    "id": 101,
+    "category": "ダンジョン",
+    "type": "single",
+    "instruction": "",
+    "question": "裏白蛇島100Fをスムーズに操作した場合、最短でどれくらい時間がかかる？",
+    "choices": [
+      "20～30秒",
+      "30～40秒",
+      "40～50秒",
+      "50～60秒"
+    ],
+    "answer": 1,
+    "explanation": "裏白蛇島100Fは、スムーズに操作した場合でも最短でおよそ30～40秒ほどかかる。",
+    "tags": [
+      "裏白蛇",
+      "100F",
+      "タイム",
+      "最短時間"
+    ],
+    "difficulty": 5,
+    "verification": "user_confirmed",
+    "source": "裏白研究室・ユーザー確認済み",
     "review_status": "確認済",
     "audit_status": "ユーザー確認済",
     "quality": "残す候補"
