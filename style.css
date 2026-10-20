@@ -1725,3 +1725,62 @@ h1 {
     font-size: 15px;
   }
 }
+
+/* =========================
+   カテゴリ別正答率：成績カラー
+========================= */
+
+/* 80%以上：金 */
+.category-result-bar.high {
+  background:
+    linear-gradient(
+      90deg,
+      #b88a1d,
+      #f0d26d
+    );
+}
+
+.category-result-accuracy.high {
+  color: #f0d26d;
+}
+
+
+/* 50～79%：オレンジ */
+.category-result-bar.middle {
+  background:
+    linear-gradient(
+      90deg,
+      #b96818,
+      #e69a35
+    );
+}
+
+.category-result-accuracy.middle {
+  color: #e69a35;
+}
+
+
+/* 0～49%：赤 */
+.category-result-bar.low {
+  background:
+    linear-gradient(
+      90deg,
+      #9f3733,
+      #df625b
+    );
+}
+
+.category-result-accuracy.low {
+  color: #ef7772;
+}
+
+
+/* バーの伸びを少し滑らかに */
+.category-result-bar {
+  height: 100%;
+
+  border-radius: 999px;
+
+  transition:
+    width 0.45s ease;
+}
