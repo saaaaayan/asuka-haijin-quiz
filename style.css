@@ -3517,3 +3517,42 @@ body {
     font-size: 18px;
   }
 }
+
+/* =========================
+   解答結果フォント調整
+========================= */
+
+.result-title {
+  font-family:
+    "Noto Sans JP",
+    "Yu Gothic",
+    sans-serif;
+
+  font-weight: 900;
+
+  letter-spacing: 0.02em;
+}
+
+
+.correct-answer-title {
+  font-family:
+    "Noto Sans JP",
+    "Yu Gothic",
+    sans-serif;
+
+  font-weight: 800;
+
+  letter-spacing: 0.02em;
+}
+
+
+.explanation-title {
+  font-family:
+    "Noto Sans JP",
+    "Yu Gothic",
+    sans-serif;
+
+  font-weight: 800;
+
+  letter-spacing: 0.04em;
+}
