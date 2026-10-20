@@ -20,11 +20,6 @@ document.addEventListener(
 
     ensureAnonymousUser();
 
-
-    /* =========================
-       DOM取得
-    ========================= */
-
     const mainButton =
       document.querySelector("#main-button");
 
@@ -53,10 +48,6 @@ document.addEventListener(
       document.querySelector(".trial-note");
 
 
-    /* =========================
-       クイズ状態
-    ========================= */
-
     let quizQuestions = [];
 
     let currentQuestionIndex = 0;
@@ -64,6 +55,10 @@ document.addEventListener(
     let score = 0;
 
     let quizMode = "main";
+
+    let categoryStats = {};
+
+    let categoryStatsComplete = true;
 
 
     /* =========================
@@ -73,7 +68,6 @@ document.addEventListener(
     mainButton.addEventListener(
       "click",
       function () {
-
         startMainQuizFromBeginning();
       }
     );
@@ -82,17 +76,12 @@ document.addEventListener(
     trialButton.addEventListener(
       "click",
       function () {
-
-        startQuiz(
-          5,
-          "trial"
-        );
+        startQuiz(5, "trial");
       }
     );
 
 
     if (resumeButton) {
-
       resumeButton.addEventListener(
         "click",
         resumeQuiz
@@ -101,7 +90,6 @@ document.addEventListener(
 
 
     if (resumeResetButton) {
-
       resumeResetButton.addEventListener(
         "click",
         function () {
@@ -111,15 +99,11 @@ document.addEventListener(
               "途中までのデータを削除しますか？"
             );
 
-
           if (!confirmed) {
             return;
           }
 
-
           clearProgress();
-
-
           window.location.reload();
         }
       );
@@ -140,7 +124,6 @@ document.addEventListener(
 
       quizMode = mode;
 
-
       try {
 
         const response =
@@ -153,7 +136,6 @@ document.addEventListener(
 
 
         if (!response.ok) {
-
           throw new Error(
             "問題データを読み込めませんでした。"
           );
@@ -180,11 +162,12 @@ document.addEventListener(
 
         score = 0;
 
+        categoryStats = {};
 
-        if (
-          quizMode === "main"
-        ) {
+        categoryStatsComplete = true;
 
+
+        if (quizMode === "main") {
           saveProgress(0);
         }
 
@@ -195,9 +178,7 @@ document.addEventListener(
       } catch (error) {
 
         quizCard.innerHTML = `
-          <h2>
-            エラー
-          </h2>
+          <h2>エラー</h2>
 
           <p>
             問題データを読み込めませんでした。
@@ -216,10 +197,7 @@ document.addEventListener(
 
     function showQuestion() {
 
-      if (
-        quizMode === "main"
-      ) {
-
+      if (quizMode === "main") {
         saveProgress(
           currentQuestionIndex
         );
@@ -248,6 +226,7 @@ document.addEventListener(
               問題ID #${question.id}
             </span>
 
+
             <span class="category">
               ${question.category}
             </span>
@@ -264,7 +243,9 @@ document.addEventListener(
             style="
               width: ${
                 (
-                  (currentQuestionIndex + 1) /
+                  (
+                    currentQuestionIndex + 1
+                  ) /
                   quizQuestions.length
                 ) * 100
               }%;
@@ -303,7 +284,9 @@ document.addEventListener(
           question.type === "multiple"
 
             ? `
-              <div class="question-instruction">
+              <div
+                class="question-instruction"
+              >
                 ${question.instruction}
               </div>
             `
@@ -337,13 +320,18 @@ document.addEventListener(
                   data-index="${index}"
                 >
 
-                  <span class="choice-label">
+                  <span
+                    class="choice-label"
+                  >
                     ${String.fromCharCode(
                       65 + index
                     )}
                   </span>
 
-                  <span class="choice-text">
+
+                  <span
+                    class="choice-text"
+                  >
                     ${choice}
                   </span>
 
@@ -377,9 +365,11 @@ document.addEventListener(
       `;
 
 
-      /* =========================
-         中断ボタン
-      ========================= */
+      const choiceButtons =
+        document.querySelectorAll(
+          ".choice-button"
+        );
+
 
       const pauseButton =
         document.querySelector(
@@ -397,16 +387,6 @@ document.addEventListener(
           }
         );
       }
-
-
-      /* =========================
-         選択肢
-      ========================= */
-
-      const choiceButtons =
-        document.querySelectorAll(
-          ".choice-button"
-        );
 
 
       /* =========================
@@ -594,28 +574,26 @@ document.addEventListener(
 
 
       if (isCorrect) {
-
         score++;
       }
 
 
-      /* =========================
-         回答後に途中保存
-      ========================= */
+      if (quizMode === "main") {
 
-      if (
-        quizMode === "main"
-      ) {
+        updateCategoryStats(
+          question.category,
+          isCorrect
+        );
+      }
+
+
+      if (quizMode === "main") {
 
         saveProgress(
           currentQuestionIndex + 1
         );
       }
 
-
-      /* =========================
-         初回回答統計
-      ========================= */
 
       const stats =
         await saveFirstAnswer(
@@ -624,10 +602,6 @@ document.addEventListener(
           isCorrect
         );
 
-
-      /* =========================
-         選択肢表示
-      ========================= */
 
       choiceButtons.forEach(
         (button) => {
@@ -832,11 +806,13 @@ document.addEventListener(
                   指摘内容を選んでください
                 </option>
 
+
                 <option
                   value="wrong_answer"
                 >
                   正解が違う
                 </option>
+
 
                 <option
                   value="insufficient_condition"
@@ -844,17 +820,20 @@ document.addEventListener(
                   条件が不足している
                 </option>
 
+
                 <option
                   value="alternate_answer"
                 >
                   別解がある
                 </option>
 
+
                 <option
                   value="explanation_error"
                 >
                   解説が不正確
                 </option>
+
 
                 <option
                   value="other"
@@ -896,9 +875,9 @@ document.addEventListener(
         </div>
 
 
-<button
-  class="next-button answer-next-button"
->
+        <button
+          class="next-button answer-next-button"
+        >
 
           ${
             currentQuestionIndex + 1 <
@@ -913,10 +892,6 @@ document.addEventListener(
       `;
 
 
-      /* =========================
-         次へ
-      ========================= */
-
       document
         .querySelector(
           ".next-button"
@@ -926,10 +901,6 @@ document.addEventListener(
           nextQuestion
         );
 
-
-      /* =========================
-         問題報告
-      ========================= */
 
       const reportToggleButton =
         document.querySelector(
@@ -1116,7 +1087,6 @@ document.addEventListener(
           percentage
         );
 
-
         return;
       }
 
@@ -1196,6 +1166,9 @@ document.addEventListener(
           </div>
 
 
+          ${renderCategoryStats()}
+
+
           <button
             class="restart-button"
           >
@@ -1224,7 +1197,7 @@ document.addEventListener(
 
 
     /* =========================
-       お試し結果
+       お試し結果画面
     ========================= */
 
     function showTrialResult(
@@ -1273,7 +1246,10 @@ document.addEventListener(
 
 
           <button
-            class="next-button main-challenge-button"
+            class="
+              next-button
+              main-challenge-button
+            "
           >
             廃人検定100問に挑戦する
           </button>
@@ -1283,7 +1259,10 @@ document.addEventListener(
 
 
           <button
-            class="trial-result-button trial-again-button"
+            class="
+              trial-result-button
+              trial-again-button
+            "
           >
             もう一度5問やってみる
           </button>
@@ -1323,7 +1302,7 @@ document.addEventListener(
 
 
     /* =========================
-       本番を最初から開始
+       中断・再開
     ========================= */
 
     function startMainQuizFromBeginning() {
@@ -1356,18 +1335,11 @@ document.addEventListener(
     }
 
 
-    /* =========================
-       途中保存
-    ========================= */
-
     function saveProgress(
       nextQuestionIndex
     ) {
 
-      if (
-        quizMode !== "main"
-      ) {
-
+      if (quizMode !== "main") {
         return;
       }
 
@@ -1378,17 +1350,29 @@ document.addEventListener(
 
           version: 1,
 
+
           questionIds:
             quizQuestions.map(
               (question) =>
                 question.id
             ),
 
+
           currentQuestionIndex:
             nextQuestionIndex,
 
+
           score:
             score,
+
+
+          categoryStats:
+            categoryStats,
+
+
+          categoryStatsComplete:
+            categoryStatsComplete,
+
 
           savedAt:
             new Date().toISOString()
@@ -1414,10 +1398,6 @@ document.addEventListener(
     }
 
 
-    /* =========================
-       途中データ読込
-    ========================= */
-
     function loadProgress() {
 
       try {
@@ -1429,7 +1409,6 @@ document.addEventListener(
 
 
         if (!raw) {
-
           return null;
         }
 
@@ -1471,10 +1450,6 @@ document.addEventListener(
     }
 
 
-    /* =========================
-       途中データ削除
-    ========================= */
-
     function clearProgress() {
 
       try {
@@ -1497,10 +1472,6 @@ document.addEventListener(
     }
 
 
-    /* =========================
-       トップの再開表示
-    ========================= */
-
     function updateResumeArea() {
 
       if (
@@ -1515,10 +1486,6 @@ document.addEventListener(
       const saved =
         loadProgress();
 
-
-      /* =========================
-         中断データなし
-      ========================= */
 
       if (!saved) {
 
@@ -1546,10 +1513,6 @@ document.addEventListener(
         return;
       }
 
-
-      /* =========================
-         中断データあり
-      ========================= */
 
       resumeArea.classList.remove(
         "hidden"
@@ -1593,10 +1556,6 @@ document.addEventListener(
     }
 
 
-    /* =========================
-       続きから再開
-    ========================= */
-
     async function resumeQuiz() {
 
       const saved =
@@ -1606,7 +1565,6 @@ document.addEventListener(
       if (!saved) {
 
         updateResumeArea();
-
 
         return;
       }
@@ -1659,8 +1617,7 @@ document.addEventListener(
 
         if (
           restoredQuestions.some(
-            (question) =>
-              !question
+            (question) => !question
           )
         ) {
 
@@ -1670,7 +1627,6 @@ document.addEventListener(
 
 
           clearProgress();
-
 
           return;
         }
@@ -1692,6 +1648,25 @@ document.addEventListener(
             0,
             saved.score
           );
+
+
+        categoryStats =
+          saved.categoryStats &&
+          typeof saved.categoryStats ===
+            "object"
+
+            ? saved.categoryStats
+
+            : {};
+
+
+        categoryStatsComplete =
+          typeof saved.categoryStatsComplete ===
+            "boolean"
+
+            ? saved.categoryStatsComplete
+
+            : saved.currentQuestionIndex === 0;
 
 
         quizMode =
@@ -1724,6 +1699,212 @@ document.addEventListener(
           "途中データを再開できませんでした。"
         );
       }
+    }
+
+
+    /* =========================
+       カテゴリ別成績
+    ========================= */
+
+    function getCategoryGroup(
+      category
+    ) {
+
+      const raw =
+        String(
+          category ||
+          "その他"
+        ).trim();
+
+
+      const group =
+        raw.includes("・")
+
+          ? raw.split("・")[0]
+
+          : raw;
+
+
+      if (group === "罠") {
+
+        return "ワナ";
+      }
+
+
+      return group || "その他";
+    }
+
+
+    function updateCategoryStats(
+      category,
+      isCorrect
+    ) {
+
+      const group =
+        getCategoryGroup(
+          category
+        );
+
+
+      if (!categoryStats[group]) {
+
+        categoryStats[group] = {
+          correct: 0,
+          total: 0
+        };
+      }
+
+
+      categoryStats[group].total++;
+
+
+      if (isCorrect) {
+
+        categoryStats[group].correct++;
+      }
+    }
+
+
+    function renderCategoryStats() {
+
+      if (!categoryStatsComplete) {
+
+        return `
+          <section
+            class="category-results"
+          >
+
+            <div
+              class="category-results-title"
+            >
+              カテゴリ別正答率
+            </div>
+
+
+            <p
+              class="category-results-note"
+            >
+              この挑戦はカテゴリ集計機能の追加前に開始されたため、
+              カテゴリ別正答率は表示できません。
+            </p>
+
+          </section>
+        `;
+      }
+
+
+      const entries =
+        Object.entries(
+          categoryStats
+        )
+
+          .filter(
+            ([, stats]) =>
+              stats &&
+              stats.total > 0
+          )
+
+          .sort(
+            ([a], [b]) =>
+              a.localeCompare(
+                b,
+                "ja"
+              )
+          );
+
+
+      if (entries.length === 0) {
+
+        return "";
+      }
+
+
+      return `
+        <section
+          class="category-results"
+        >
+
+          <div
+            class="category-results-title"
+          >
+            カテゴリ別正答率
+          </div>
+
+
+          <div
+            class="category-results-list"
+          >
+
+            ${entries
+
+              .map(
+                ([category, stats]) => {
+
+                  const accuracy =
+                    Math.round(
+                      (
+                        stats.correct /
+                        stats.total
+                      ) * 100
+                    );
+
+
+                  return `
+
+                    <div
+                      class="category-result-row"
+                    >
+
+                      <div
+                        class="category-result-top"
+                      >
+
+                        <span
+                          class="category-result-name"
+                        >
+                          ${category}
+                        </span>
+
+
+                        <span
+                          class="category-result-score"
+                        >
+                          ${stats.correct} /
+                          ${stats.total}
+
+                          <strong>
+                            ${accuracy}%
+                          </strong>
+                        </span>
+
+                      </div>
+
+
+                      <div
+                        class="category-result-bar-wrap"
+                      >
+
+                        <div
+                          class="category-result-bar"
+                          style="
+                            width: ${accuracy}%;
+                          "
+                        ></div>
+
+                      </div>
+
+                    </div>
+
+                  `;
+                }
+              )
+
+              .join("")}
+
+          </div>
+
+        </section>
+      `;
     }
 
 
@@ -1852,28 +2033,28 @@ async function saveFirstAnswer(
         )
         .upsert(
           {
-
             user_id:
               user.id,
+
 
             question_id:
               questionId,
 
+
             is_correct:
               isCorrect,
 
+
             selected_answer:
               selectedIndex
-
           },
           {
-
             onConflict:
               "user_id,question_id",
 
+
             ignoreDuplicates:
               true
-
           }
         );
 
@@ -1901,10 +2082,8 @@ async function saveFirstAnswer(
         .rpc(
           "get_question_stats",
           {
-
             p_question_id:
               questionId
-
           }
         );
 
@@ -1982,19 +2161,20 @@ async function submitQuestionReport(
         )
         .insert(
           {
-
             user_id:
               user.id,
+
 
             question_id:
               questionId,
 
+
             report_type:
               reportType,
 
+
             message:
               message
-
           }
         );
 
