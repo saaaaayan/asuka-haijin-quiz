@@ -337,6 +337,7 @@ h1 {
   font-weight: 900;
 }
 
+
 /* トップ注意書き */
 
 .trial-note {
@@ -1188,8 +1189,14 @@ h1 {
   }
 }
 
+
+/* =========================
+   お試し結果ボタン
+========================= */
+
 .trial-result-button {
   margin-top: 18px;
+
   padding: 15px 30px;
 
   border:
@@ -1233,10 +1240,12 @@ h1 {
 }
 
 @media (max-width: 700px) {
+
   .trial-result-button {
     width: 100%;
   }
 }
+
 
 /* =========================
    進捗バー
@@ -1273,6 +1282,7 @@ h1 {
   transition:
     width 0.3s ease;
 }
+
 
 /* =========================
    中断・再開
@@ -1401,29 +1411,46 @@ h1 {
     rgba(255, 255, 255, 0.28);
 }
 
+
+/* =========================
+   中断ボタン
+========================= */
+
 .pause-row {
   display: flex;
+
   justify-content: flex-end;
 
-  margin: -10px 0 12px;
+  margin: -6px 0 18px;
 }
 
 .pause-button {
-  padding: 8px 13px;
+  min-width: 180px;
+  min-height: 46px;
+
+  padding: 12px 18px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
 
   border:
     1px solid
-    rgba(255, 255, 255, 0.14);
+    rgba(255, 255, 255, 0.18);
 
-  border-radius: 9px;
+  border-radius: 10px;
 
   background:
-    rgba(255, 255, 255, 0.03);
+    rgba(255, 255, 255, 0.045);
 
-  color: #999;
+  color: #aaa;
 
   font-family: inherit;
-  font-size: 12px;
+
+  font-size: 13px;
+
   font-weight: 700;
 
   cursor: pointer;
@@ -1431,20 +1458,30 @@ h1 {
   transition:
     color 0.15s ease,
     background 0.15s ease,
-    border-color 0.15s ease;
+    border-color 0.15s ease,
+    transform 0.15s ease;
 }
 
 .pause-button:hover {
-  color: #ddd;
+  color: #eee;
 
   background:
-    rgba(255, 255, 255, 0.055);
+    rgba(255, 255, 255, 0.08);
 
   border-color:
-    rgba(255, 255, 255, 0.26);
+    rgba(255, 255, 255, 0.32);
+
+  transform:
+    translateY(-1px);
 }
 
+
+/* =========================
+   中断・再開：スマホ
+========================= */
+
 @media (max-width: 700px) {
+
   .resume-area {
     padding: 15px;
   }
@@ -1452,5 +1489,9 @@ h1 {
   .pause-row {
     justify-content: flex-start;
   }
-}
 
+  .pause-button {
+    min-width: 190px;
+    min-height: 48px;
+  }
+}
