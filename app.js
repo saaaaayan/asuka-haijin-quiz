@@ -1456,7 +1456,7 @@ document.addEventListener(
 
       const resultTitle =
         isCorrect
-          ? "正解！"
+          ? "正解"
           : "不正解";
 
       const resultClass =
