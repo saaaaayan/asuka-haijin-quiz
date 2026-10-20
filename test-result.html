@@ -1,132 +1,1180 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>アスカ見参 廃人検定｜結果画面テスト</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    アスカ見参 廃人検定｜結果画面テスト
+  </title>
+
+
+  <!-- 本番と同じフォント -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800;900&family=Reggae+One&family=Shippori+Mincho+B1:wght@500;600;700;800&family=Yuji+Syuku&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <!-- 本番と同じCSS -->
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+
+  <!--
+    テストメニューだけのCSS。
+    結果画面には極力独自CSSを当てない。
+  -->
+
   <style>
-    body{font-family:sans-serif;background:#151515;color:#fff;margin:0;padding:24px}
-    .wrap{max-width:1100px;margin:auto}
-    .menu,.result{background:#1d1d1d;border:1px solid #5d4c1d;border-radius:22px;padding:28px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:20px}
-    .grid button,.back{padding:14px;border-radius:10px;border:1px solid #7a6328;background:#282828;color:#fff;font-weight:800;cursor:pointer}
-    .grid button:hover{border-color:#f0c94f}
-    .grid strong,.title,.score{color:#f0c94f}
-    .manual{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .manual input{width:90px;padding:10px;font-size:16px}
-    .manual button,.back{background:#f0c94f;color:#111}
-    .result{display:none;text-align:center}
-    .result-label{color:#f0c94f;font-weight:900;letter-spacing:.15em}
-    .score{font-size:70px;font-weight:900;margin-top:20px}
-    .score small{font-size:.4em;color:#bbb}
-    .rank-label{margin-top:36px;color:#bbb}
-    .grade{font-size:48px;font-weight:900;margin-top:10px}
-    .title{font-size:40px;font-weight:900;margin:8px 0 24px}
-    .comment{max-width:850px;margin:auto;line-height:1.9;font-size:18px}
-    .comment p{margin:0 0 12px}
-    .back{margin-top:30px}
-    @media(max-width:600px){body{padding:12px}.menu,.result{padding:20px}.score{font-size:52px}.grade{font-size:40px}.title{font-size:32px}.comment{font-size:16px;text-align:left}}
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <section class="menu" id="menu">
-      <h1>結果画面テスト</h1>
-      <p>ランクを押すだけで、そのランクの最低点の結果を即表示します。</p>
 
-      <div class="grid">
-        <button data-score="0"><strong>D</strong><br>0点</button>
-        <button data-score="20"><strong>D+</strong><br>20点</button>
-        <button data-score="35"><strong>C−</strong><br>35点</button>
-        <button data-score="40"><strong>C</strong><br>40点</button>
-        <button data-score="50"><strong>C+</strong><br>50点</button>
-        <button data-score="60"><strong>B−</strong><br>60点</button>
-        <button data-score="65"><strong>B</strong><br>65点</button>
-        <button data-score="70"><strong>B+</strong><br>70点</button>
-        <button data-score="75"><strong>A−</strong><br>75点</button>
-        <button data-score="80"><strong>A</strong><br>80点</button>
-        <button data-score="85"><strong>A+</strong><br>85点</button>
-        <button data-score="90"><strong>S</strong><br>90点</button>
-        <button data-score="95"><strong>S+</strong><br>95点</button>
-        <button data-score="99"><strong>SS</strong><br>99点</button>
-        <button data-score="100"><strong>SSS</strong><br>100点</button>
-      </div>
+    .test-menu {
+      width:
+        min(
+          1100px,
+          92%
+        );
 
-      <div class="manual">
-        <label for="manual">任意スコア：</label>
-        <input id="manual" type="number" min="0" max="100" value="95">
-        <button id="manualBtn">表示</button>
-      </div>
-    </section>
+      margin:
+        40px auto;
 
-    <section class="result" id="result">
-      <p class="result-label">RESULT</p>
-      <h1>検定結果</h1>
-      <div class="score"><span id="score">95</span> <small>/ 100</small></div>
-      <p>正答率 <span id="pct">95</span>%</p>
-      <p class="rank-label">あなたのランク・称号</p>
-      <div class="grade" id="grade">S+</div>
-      <div class="title" id="title">アスカ星人</div>
-      <div class="comment" id="comment"></div>
-      <button class="back" id="back">テストメニューへ戻る</button>
-    </section>
-  </div>
+      padding:
+        32px;
 
-  <!-- 本番と共通のランク判定 -->
-  <script src="rank.js"></script>
+      border:
+        1px solid
+        rgba(
+          212,
+          175,
+          55,
+          0.28
+        );
 
-  <!-- テストページ専用処理 -->
-  <script>
-    const menu = document.getElementById("menu");
-    const result = document.getElementById("result");
+      border-radius:
+        20px;
 
-    function showTestResult(score) {
-      score = Number(score);
+      background:
+        #181a1d;
 
-      if (Number.isNaN(score) || score < 0 || score > 100) {
-        alert("0〜100の点数を入力してください。");
-        return;
-      }
-
-      const rankResult = getRankResult(score);
-
-      if (!rankResult) {
-        alert("ランク情報を取得できませんでした。rank.js を確認してください。");
-        return;
-      }
-
-      document.getElementById("score").textContent = score;
-      document.getElementById("pct").textContent = score;
-      document.getElementById("grade").textContent = rankResult.rank;
-      document.getElementById("title").textContent = rankResult.title;
-      document.getElementById("comment").innerHTML = rankResult.comment;
-
-      menu.style.display = "none";
-      result.style.display = "block";
-      window.scrollTo(0, 0);
+      color:
+        #f5f5f5;
     }
 
-    document.querySelectorAll("[data-score]").forEach((button) => {
-      button.addEventListener("click", () => {
-        showTestResult(button.dataset.score);
-      });
-    });
 
-    document.getElementById("manualBtn").addEventListener("click", () => {
-      showTestResult(document.getElementById("manual").value);
-    });
+    .test-menu h1 {
+      margin:
+        0 0
+        10px;
 
-    document.getElementById("manual").addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        showTestResult(event.currentTarget.value);
+      font-family:
+        "Noto Sans JP",
+        sans-serif;
+
+      font-size:
+        30px;
+
+      font-weight:
+        900;
+    }
+
+
+    .test-menu-description {
+      margin:
+        0;
+
+      color:
+        #aaa;
+
+      font-family:
+        "Noto Sans JP",
+        sans-serif;
+
+      line-height:
+        1.8;
+    }
+
+
+    .test-rank-grid {
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(
+            120px,
+            1fr
+          )
+        );
+
+      gap:
+        10px;
+
+      margin-top:
+        24px;
+    }
+
+
+    .test-rank-button {
+      padding:
+        14px 10px;
+
+      border:
+        1px solid
+        rgba(
+          212,
+          175,
+          55,
+          0.28
+        );
+
+      border-radius:
+        10px;
+
+      background:
+        rgba(
+          255,
+          255,
+          255,
+          0.035
+        );
+
+      color:
+        #eee;
+
+      font-family:
+        "Noto Sans JP",
+        sans-serif;
+
+      font-size:
+        14px;
+
+      font-weight:
+        700;
+
+      cursor:
+        pointer;
+    }
+
+
+    .test-rank-button:hover {
+      border-color:
+        #f0d26d;
+
+      background:
+        rgba(
+          212,
+          175,
+          55,
+          0.08
+        );
+    }
+
+
+    .test-rank-button strong {
+      display:
+        block;
+
+      margin-bottom:
+        4px;
+
+      color:
+        #f0d26d;
+
+      font-size:
+        20px;
+
+      font-weight:
+        900;
+    }
+
+
+    .test-manual {
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      flex-wrap:
+        wrap;
+
+      gap:
+        10px;
+
+      margin-top:
+        22px;
+
+      font-family:
+        "Noto Sans JP",
+        sans-serif;
+    }
+
+
+    .test-manual input {
+      width:
+        90px;
+
+      padding:
+        10px;
+
+      border:
+        1px solid
+        rgba(
+          255,
+          255,
+          255,
+          0.18
+        );
+
+      border-radius:
+        8px;
+
+      background:
+        #111;
+
+      color:
+        #fff;
+
+      font-family:
+        inherit;
+
+      font-size:
+        16px;
+    }
+
+
+    .test-manual button {
+      padding:
+        10px 18px;
+
+      border:
+        0;
+
+      border-radius:
+        8px;
+
+      background:
+        #f0d26d;
+
+      color:
+        #111;
+
+      font-family:
+        "Noto Sans JP",
+        sans-serif;
+
+      font-size:
+        14px;
+
+      font-weight:
+        900;
+
+      cursor:
+        pointer;
+    }
+
+
+    .test-result-container {
+      display:
+        none;
+    }
+
+
+    .test-back-button {
+      margin-top:
+        28px;
+    }
+
+
+    @media (
+      max-width:
+      700px
+    ) {
+
+      .test-menu {
+        margin:
+          20px auto;
+
+        padding:
+          22px 18px;
       }
-    });
 
-    document.getElementById("back").addEventListener("click", () => {
-      result.style.display = "none";
-      menu.style.display = "block";
-      window.scrollTo(0, 0);
-    });
+
+      .test-menu h1 {
+        font-size:
+          24px;
+      }
+
+
+      .test-rank-grid {
+        grid-template-columns:
+          repeat(
+            3,
+            1fr
+          );
+      }
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+
+  <!-- =========================
+       ランク選択メニュー
+  ========================= -->
+
+  <section
+    class="test-menu"
+    id="test-menu"
+  >
+
+    <h1>
+      結果画面テスト
+    </h1>
+
+
+    <p
+      class="test-menu-description"
+    >
+      ランクを押すと、そのランクの最低点で
+      本番とほぼ同じ結果画面を表示します。
+    </p>
+
+
+    <div
+      class="test-rank-grid"
+    >
+
+      <button
+        class="test-rank-button"
+        data-score="0"
+      >
+        <strong>D</strong>
+        0点
+      </button>
+
+
+      <button
+        class="test-rank-button"
+        data-score="20"
+      >
+        <strong>D+</strong>
+        20点
+      </button>
+
+
+      <button
+        class="test-rank-button"
+        data-score="35"
+      >
+        <strong>C−</strong>
+        35点
+      </button>
+
+
+      <button
+        class="test-rank-button"
+        data-score="40"
+      >
+        <strong>C</strong>
+        40点
+      </button>
+
+
+      <button
+        class="test-rank-button"
+        data-score="50"
+      >
+        <strong>C+</strong>
+        50点
+      </button>
+
+
+      <button
+        class="test-rank-button"
+        data-score="60"
+      >
+        <strong>B−</strong>
+        60点
+      </button>
+
+
+      <button
+        class="test-rank-button"
+        data-score="65"
+      >
+        <strong>B</strong>
+        65点
+      </button>
+
+
+      <button
+        class="test-rank-button"
+        data-score="70"
+      >
+        <strong>B+</strong>
+        70点
+      </button>
+
+
+      <button
+        class="test-rank-button"
+        data-score="75"
+      >
+        <strong>A−</strong>
+        75点
+      </button>
+
+
+      <button
+        class="test-rank-button"
+        data-score="80"
+      >
+        <strong>A</strong>
+        80点
+      </button>
+
+
+      <button
+        class="test-rank-button"
+        data-score="85"
+      >
+        <strong>A+</strong>
+        85点
+      </button>
+
+
+      <button
+        class="test-rank-button"
+        data-score="90"
+      >
+        <strong>S</strong>
+        90点
+      </button>
+
+
+      <button
+        class="test-rank-button"
+        data-score="95"
+      >
+        <strong>S+</strong>
+        95点
+      </button>
+
+
+      <button
+        class="test-rank-button"
+        data-score="99"
+      >
+        <strong>SS</strong>
+        99点
+      </button>
+
+
+      <button
+        class="test-rank-button"
+        data-score="100"
+      >
+        <strong>SSS</strong>
+        100点
+      </button>
+
+    </div>
+
+
+    <div
+      class="test-manual"
+    >
+
+      <label
+        for="manual-score"
+      >
+        任意スコア：
+      </label>
+
+
+      <input
+        id="manual-score"
+        type="number"
+        min="0"
+        max="100"
+        value="95"
+      >
+
+
+      <button
+        id="manual-button"
+        type="button"
+      >
+        表示
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       本番と同じ外枠
+  ========================= -->
+
+  <main
+    class="
+      container
+      test-result-container
+    "
+    id="test-result-container"
+  >
+
+    <section
+      class="
+        quiz-card
+        hero-card
+      "
+      id="test-result-card"
+    >
+    </section>
+
+  </main>
+
+
+  <!-- 本番と共通のランク判定 -->
+
+  <script
+    src="rank.js"
+  ></script>
+
+
+  <script>
+
+    const testMenu =
+      document.getElementById(
+        "test-menu"
+      );
+
+
+    const resultContainer =
+      document.getElementById(
+        "test-result-container"
+      );
+
+
+    const resultCard =
+      document.getElementById(
+        "test-result-card"
+      );
+
+
+    /* =========================
+       HTMLエスケープ
+    ========================= */
+
+    function escapeHtml(
+      value
+    ) {
+
+      return String(
+        value
+      )
+
+        .replaceAll(
+          "&",
+          "&amp;"
+        )
+
+        .replaceAll(
+          "<",
+          "&lt;"
+        )
+
+        .replaceAll(
+          ">",
+          "&gt;"
+        )
+
+        .replaceAll(
+          '"',
+          "&quot;"
+        )
+
+        .replaceAll(
+          "'",
+          "&#039;"
+        );
+    }
+
+
+    /* =========================
+       カテゴリ別正答率
+       本番テスト用ダミー
+    ========================= */
+
+    function renderTestCategoryStats() {
+
+      const categories = [
+
+        {
+          name:
+            "モンスター",
+
+          correct:
+            19,
+
+          total:
+            20,
+
+          accuracy:
+            95,
+
+          bar:
+            "linear-gradient(90deg, #b88a1d, #f0d26d)",
+
+          color:
+            "#f0d26d"
+        },
+
+
+        {
+          name:
+            "アイテム",
+
+          correct:
+            16,
+
+          total:
+            20,
+
+          accuracy:
+            80,
+
+          bar:
+            "linear-gradient(90deg, #b88a1d, #f0d26d)",
+
+          color:
+            "#f0d26d"
+        },
+
+
+        {
+          name:
+            "ダンジョン",
+
+          correct:
+            15,
+
+          total:
+            19,
+
+          accuracy:
+            79,
+
+          bar:
+            "linear-gradient(90deg, #b96818, #e69a35)",
+
+          color:
+            "#e69a35"
+        },
+
+
+        {
+          name:
+            "仕様",
+
+          correct:
+            18,
+
+          total:
+            36,
+
+          accuracy:
+            50,
+
+          bar:
+            "linear-gradient(90deg, #b96818, #e69a35)",
+
+          color:
+            "#e69a35"
+        },
+
+
+        {
+          name:
+            "その他",
+
+          correct:
+            1,
+
+          total:
+            5,
+
+          accuracy:
+            20,
+
+          bar:
+            "linear-gradient(90deg, #9f3733, #df625b)",
+
+          color:
+            "#ef7772"
+        }
+
+      ];
+
+
+      return `
+
+        <section
+          class="category-results"
+        >
+
+          <div
+            class="category-results-title"
+          >
+            カテゴリ別正答率
+          </div>
+
+
+          <div
+            class="category-results-list"
+          >
+
+            ${categories
+
+              .map(
+                function (
+                  item
+                ) {
+
+                  return `
+
+                    <div
+                      class="category-result-row"
+                    >
+
+                      <div
+                        class="category-result-top"
+                      >
+
+                        <span
+                          class="category-result-name"
+                        >
+                          ${item.name}
+                        </span>
+
+
+                        <span
+                          class="category-result-score"
+                        >
+
+                          ${item.correct}
+                          /
+                          ${item.total}
+
+
+                          <strong
+                            class="category-result-accuracy"
+
+                            style="
+                              color:
+                                ${item.color};
+                            "
+                          >
+                            ${item.accuracy}%
+                          </strong>
+
+                        </span>
+
+                      </div>
+
+
+                      <div
+                        class="category-result-bar-wrap"
+                      >
+
+                        <div
+                          class="category-result-bar"
+
+                          style="
+                            width:
+                              ${item.accuracy}%;
+
+                            background:
+                              ${item.bar};
+                          "
+                        ></div>
+
+                      </div>
+
+                    </div>
+
+                  `;
+                }
+              )
+
+              .join("")}
+
+          </div>
+
+        </section>
+
+      `;
+    }
+
+
+    /* =========================
+       結果表示
+    ========================= */
+
+    function showTestResult(
+      score
+    ) {
+
+      score =
+        Number(
+          score
+        );
+
+
+      if (
+        Number.isNaN(
+          score
+        )
+
+        ||
+
+        score <
+          0
+
+        ||
+
+        score >
+          100
+      ) {
+
+        alert(
+          "0〜100の点数を入力してください。"
+        );
+
+        return;
+      }
+
+
+      const rankResult =
+        getRankResult(
+          score
+        );
+
+
+      if (
+        !rankResult
+      ) {
+
+        alert(
+          "ランク情報を取得できませんでした。rank.js を確認してください。"
+        );
+
+        return;
+      }
+
+
+      resultCard.innerHTML = `
+
+        <div
+          class="result-screen"
+        >
+
+          <p
+            class="hero-label"
+          >
+            RESULT TEST
+          </p>
+
+
+          <div
+            class="result-brand"
+          >
+
+            <div
+              class="result-brand-title"
+            >
+
+              <span
+                class="title-asuka"
+              >
+                アスカ見参
+              </span>
+
+
+              <span
+                class="title-haijin"
+              >
+                廃人検定
+              </span>
+
+            </div>
+
+
+            <h1
+              class="result-heading"
+            >
+              検定結果
+            </h1>
+
+          </div>
+
+
+          <div
+            style="
+              margin:
+                -12px 0
+                16px;
+
+              color:
+                #888;
+
+              font-size:
+                12px;
+
+              letter-spacing:
+                0.05em;
+            "
+          >
+            開発用結果画面テスト
+          </div>
+
+
+          <div
+            class="final-score"
+          >
+
+            ${score}
+
+            <span>
+              /
+              100
+            </span>
+
+          </div>
+
+
+          <div
+            class="percentage"
+          >
+            正答率
+            ${score}%
+          </div>
+
+
+          <div
+            class="rank-panel"
+          >
+
+            <div
+              class="rank-label"
+            >
+              あなたのランク・称号
+            </div>
+
+
+            <div
+              class="rank-grade"
+            >
+              ${escapeHtml(
+                rankResult.rank
+              )}
+            </div>
+
+
+            <div
+              class="rank"
+            >
+              ${escapeHtml(
+                rankResult.title
+              )}
+            </div>
+
+
+            <div
+              class="rank-comment"
+            >
+              ${rankResult.comment}
+            </div>
+
+          </div>
+
+
+          ${renderTestCategoryStats()}
+
+
+          <button
+            class="
+              restart-button
+              test-back-button
+            "
+            type="button"
+          >
+            テストメニューへ戻る
+          </button>
+
+        </div>
+
+      `;
+
+
+      testMenu.style.display =
+        "none";
+
+
+      resultContainer.style.display =
+        "block";
+
+
+      window.scrollTo(
+        {
+          top:
+            0,
+
+          behavior:
+            "auto"
+        }
+      );
+
+
+      document
+        .querySelector(
+          ".test-back-button"
+        )
+        .addEventListener(
+          "click",
+          showTestMenu
+        );
+    }
+
+
+    /* =========================
+       メニューへ戻る
+    ========================= */
+
+    function showTestMenu() {
+
+      resultContainer.style.display =
+        "none";
+
+
+      testMenu.style.display =
+        "block";
+
+
+      window.scrollTo(
+        {
+          top:
+            0,
+
+          behavior:
+            "auto"
+        }
+      );
+    }
+
+
+    /* =========================
+       ランクボタン
+    ========================= */
+
+    document
+      .querySelectorAll(
+        "[data-score]"
+      )
+      .forEach(
+        function (
+          button
+        ) {
+
+          button.addEventListener(
+            "click",
+            function () {
+
+              showTestResult(
+                button.dataset.score
+              );
+            }
+          );
+        }
+      );
+
+
+    /* =========================
+       任意スコア
+    ========================= */
+
+    document
+      .getElementById(
+        "manual-button"
+      )
+      .addEventListener(
+        "click",
+        function () {
+
+          showTestResult(
+            document
+              .getElementById(
+                "manual-score"
+              )
+              .value
+          );
+        }
+      );
+
+
+    document
+      .getElementById(
+        "manual-score"
+      )
+      .addEventListener(
+        "keydown",
+        function (
+          event
+        ) {
+
+          if (
+            event.key ===
+              "Enter"
+          ) {
+
+            showTestResult(
+              event
+                .currentTarget
+                .value
+            );
+          }
+        }
+      );
+
   </script>
+
 </body>
+
 </html>
