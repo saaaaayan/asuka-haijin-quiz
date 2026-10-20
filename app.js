@@ -62,6 +62,21 @@ document.addEventListener(
 
 
     /* =========================
+       テストモード
+       ?test=1 の時だけ
+       本番を5問で終了
+    ========================= */
+
+    const urlParams =
+      new URLSearchParams(
+        window.location.search
+      );
+
+    const isTestMode =
+      urlParams.get("test") === "1";
+
+
+    /* =========================
        トップページ
     ========================= */
 
@@ -104,6 +119,7 @@ document.addEventListener(
           }
 
           clearProgress();
+
           window.location.reload();
         }
       );
@@ -136,6 +152,7 @@ document.addEventListener(
 
 
         if (!response.ok) {
+
           throw new Error(
             "問題データを読み込めませんでした。"
           );
@@ -168,6 +185,7 @@ document.addEventListener(
 
 
         if (quizMode === "main") {
+
           saveProgress(0);
         }
 
@@ -198,6 +216,7 @@ document.addEventListener(
     function showQuestion() {
 
       if (quizMode === "main") {
+
         saveProgress(
           currentQuestionIndex
         );
@@ -574,6 +593,7 @@ document.addEventListener(
 
 
       if (isCorrect) {
+
         score++;
       }
 
@@ -1092,15 +1112,33 @@ document.addEventListener(
 
 
       /* =========================
-         本番100問
+         本番
       ========================= */
 
       clearProgress();
 
 
+      /*
+        テストモードでは5問しかないため
+        ランク判定だけ100点換算する
+      */
+
+      const rankScore =
+        isTestMode
+
+          ? Math.round(
+              (
+                score /
+                quizQuestions.length
+              ) * 100
+            )
+
+          : score;
+
+
       const rankResult =
         getRankResult(
-          score
+          rankScore
         );
 
 
@@ -1121,12 +1159,20 @@ document.addEventListener(
         <div class="result-screen">
 
           <p class="hero-label">
-            RESULT
+            ${
+              isTestMode
+                ? "TEST RESULT"
+                : "RESULT"
+            }
           </p>
 
 
           <h1>
-            検定結果
+            ${
+              isTestMode
+                ? "テスト結果"
+                : "検定結果"
+            }
           </h1>
 
 
@@ -1146,9 +1192,21 @@ document.addEventListener(
           </div>
 
 
-          <div class="rank-label">
-            あなたのランク・称号
-          </div>
+          ${
+            isTestMode
+
+              ? `
+                <div class="rank-label">
+                  テストモード・100点換算
+                </div>
+              `
+
+              : `
+                <div class="rank-label">
+                  あなたのランク・称号
+                </div>
+              `
+          }
 
 
           <div class="rank-grade">
@@ -1188,7 +1246,7 @@ document.addEventListener(
           function () {
 
             startQuiz(
-              100,
+              isTestMode ? 5 : 100,
               "main"
             );
           }
@@ -1320,6 +1378,7 @@ document.addEventListener(
 
 
         if (!confirmed) {
+
           return;
         }
 
@@ -1329,7 +1388,7 @@ document.addEventListener(
 
 
       startQuiz(
-        100,
+        isTestMode ? 5 : 100,
         "main"
       );
     }
@@ -1340,6 +1399,7 @@ document.addEventListener(
     ) {
 
       if (quizMode !== "main") {
+
         return;
       }
 
@@ -1409,6 +1469,7 @@ document.addEventListener(
 
 
         if (!raw) {
+
           return null;
         }
 
@@ -1749,7 +1810,9 @@ document.addEventListener(
       if (!categoryStats[group]) {
 
         categoryStats[group] = {
+
           correct: 0,
+
           total: 0
         };
       }
@@ -2033,6 +2096,7 @@ async function saveFirstAnswer(
         )
         .upsert(
           {
+
             user_id:
               user.id,
 
@@ -2049,6 +2113,7 @@ async function saveFirstAnswer(
               selectedIndex
           },
           {
+
             onConflict:
               "user_id,question_id",
 
@@ -2082,6 +2147,7 @@ async function saveFirstAnswer(
         .rpc(
           "get_question_stats",
           {
+
             p_question_id:
               questionId
           }
@@ -2161,6 +2227,7 @@ async function submitQuestionReport(
         )
         .insert(
           {
+
             user_id:
               user.id,
 
