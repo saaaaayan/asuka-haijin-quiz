@@ -1187,3 +1187,53 @@ h1 {
     width: 100%;
   }
 }
+
+.trial-result-button {
+  margin-top: 18px;
+  padding: 15px 30px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.18);
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #3e3e3e,
+      #303030
+    );
+
+  color: #f2f2f2;
+
+  font-size: 17px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.trial-result-button:hover {
+  transform: translateY(-2px);
+
+  background:
+    linear-gradient(
+      145deg,
+      #484848,
+      #393939
+    );
+
+  border-color:
+    rgba(255, 255, 255, 0.32);
+}
+
+@media (max-width: 700px) {
+  .trial-result-button {
+    width: 100%;
+  }
+}
