@@ -2093,6 +2093,20 @@ document.addEventListener(
       } else {
 
         showResult();
+
+
+        requestAnimationFrame(
+          function () {
+
+            window.scrollTo(
+              {
+                top: 0,
+                behavior: "auto"
+              }
+            );
+
+          }
+        );
       }
     }
 
