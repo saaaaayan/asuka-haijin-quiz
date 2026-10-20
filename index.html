@@ -1,13 +1,39 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>アスカ見参 廃人検定</title>
 
-  <link rel="stylesheet" href="style.css">
+  <!-- Yuji Syuku -->
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 </head>
+
 
 <body>
 
@@ -19,14 +45,17 @@
         ASUKA KENZAN / HAIJIN TEST
       </p>
 
+
       <h1>
         アスカ見参　廃人検定
       </h1>
+
 
       <p class="hero-catch">
         にわか知識では、まず通用しない。<br>
         あなたは本当にアスカを理解しているか？
       </p>
+
 
       <p class="subtitle">
         問題は毎回ランダムで出題。<br>
@@ -35,34 +64,42 @@
         「知っているつもり」を容赦なく暴く、アスカ見参ガチ勢向け検定です。
       </p>
 
+
       <p class="hero-warning">
         クリア回数だけでは語れない。<br>
         知識と理解で、本物かどうかがバレる。
       </p>
+
 
       <!-- 中断データがある時だけ表示 -->
       <div
         class="resume-area hidden"
         id="resume-area"
       >
+
         <div class="resume-heading">
           中断中の100問検定があります
         </div>
+
 
         <button
           class="resume-button"
           id="resume-button"
           type="button"
         >
+
           <span class="resume-main">
             続きから再開する
           </span>
+
 
           <span
             class="resume-detail"
             id="resume-detail"
           ></span>
+
         </button>
+
 
         <button
           class="resume-reset-button"
@@ -71,7 +108,9 @@
         >
           途中データを捨てて最初から
         </button>
+
       </div>
+
 
       <div class="hero-buttons">
 
@@ -81,14 +120,18 @@
           id="main-button"
           type="button"
         >
+
           <span class="button-main">
             廃人検定に挑戦する
           </span>
 
+
           <span class="button-sub">
             全100問・正式ランク判定
           </span>
+
         </button>
+
 
         <!-- お試し5問 -->
         <button
@@ -96,16 +139,20 @@
           id="trial-button"
           type="button"
         >
+
           <span class="trial-label">
             お試し版
           </span>
 
+
           <span class="trial-main">
             まずは5問やってみる
           </span>
+
         </button>
 
       </div>
+
 
       <p class="trial-note">
         ※お試し版は正式ランク判定の対象外です<br>
@@ -116,9 +163,15 @@
 
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+
   <script src="rank.js"></script>
+
   <script src="app.js"></script>
 
 </body>
+
 </html>
