@@ -160,6 +160,17 @@ document.addEventListener(
           </div>
 
         </div>
+        <div class="progress-wrap">
+  <div
+    class="progress-bar"
+    style="
+      width: ${
+        ((currentQuestionIndex + 1) /
+          quizQuestions.length) * 100
+      }%;
+    "
+  ></div>
+</div>
 
 
         <h2>
