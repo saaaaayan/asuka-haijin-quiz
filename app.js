@@ -1888,6 +1888,39 @@ document.addEventListener(
       `;
 
 
+      /* =========================
+         正誤結果へ自動スクロール
+      ========================= */
+
+      const resultBox =
+        document.querySelector(
+          ".result-box"
+        );
+
+
+      if (
+        resultBox
+      ) {
+
+        setTimeout(
+          function () {
+
+            resultBox.scrollIntoView(
+              {
+                behavior:
+                  "smooth",
+
+                block:
+                  "center"
+              }
+            );
+
+          },
+          80
+        );
+      }
+
+
       document
         .querySelector(
           ".answer-next-button"
