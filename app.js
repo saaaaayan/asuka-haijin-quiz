@@ -896,9 +896,9 @@ document.addEventListener(
         </div>
 
 
-        <button
-          class="next-button"
-        >
+<button
+  class="next-button answer-next-button"
+>
 
           ${
             currentQuestionIndex + 1 <
