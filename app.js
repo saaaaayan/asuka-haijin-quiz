@@ -620,9 +620,8 @@ document.addEventListener(
 
 
     /* =========================
-       前回結果を表示
-
-       通常結果と全く同じ見た目
+       前回結果表示
+       通常結果と同じ見た目
     ========================= */
 
     function showPreviousResult() {
@@ -2957,7 +2956,7 @@ ${escapeHtml(
 
 
     /* =========================
-       通常結果画面
+       通常結果
     ========================= */
 
     function showResult() {
@@ -3240,6 +3239,7 @@ ${escapeHtml(
                     restart-button
                     result-test-back-button
                   "
+                  type="button"
                 >
                   通常画面へ戻る
                 </button>
@@ -3251,19 +3251,6 @@ ${escapeHtml(
                 <button
                   class="
                     restart-button
-                    result-retry-button
-                  "
-                >
-                  もう一度挑戦する
-                </button>
-
-
-                <br>
-
-
-                <button
-                  class="
-                    trial-result-button
                     result-top-button
                   "
                   type="button"
@@ -3301,32 +3288,6 @@ ${escapeHtml(
 
 
         return;
-      }
-
-
-      const retryButton =
-        document.querySelector(
-          ".result-retry-button"
-        );
-
-
-      if (
-        retryButton
-      ) {
-
-        retryButton.addEventListener(
-          "click",
-          function () {
-
-            startQuiz(
-              isTestMode
-                ? 5
-                : 100,
-
-              "main"
-            );
-          }
-        );
       }
 
 
