@@ -154,11 +154,17 @@ h1 {
 
 .hero-card > h1 {
   display: flex;
+  justify-content: center;
   align-items: baseline;
 
-  gap: 0.9em;
+  gap: 0.35em;
 
   flex-wrap: nowrap;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  text-align: center;
 
   font-family:
     "Yuji Syuku",
@@ -166,9 +172,16 @@ h1 {
     "Hiragino Mincho ProN",
     serif;
 
+  font-size:
+    clamp(
+      42px,
+      5.8vw,
+      64px
+    );
+
   font-weight: 400;
 
-  letter-spacing: 0.045em;
+  letter-spacing: 0.035em;
 }
 
 
@@ -274,7 +287,7 @@ h1 {
 }
 
 
-/* 本番100問：左 */
+/* 本番100問 */
 
 .start-button {
   order: 1;
@@ -299,17 +312,15 @@ h1 {
       #f1d46f 100%
     );
 
-  color: #181818;
+  color: #171717;
 
   font-family: inherit;
 
   cursor: pointer;
 
   box-shadow:
-    0 10px 32px
-    rgba(212, 175, 55, 0.20),
-    inset 0 1px 0
-    rgba(255, 255, 255, 0.25);
+    0 10px 32px rgba(212, 175, 55, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
 
   transition:
     transform 0.15s ease,
@@ -322,10 +333,8 @@ h1 {
     translateY(-2px);
 
   box-shadow:
-    0 14px 38px
-    rgba(212, 175, 55, 0.30),
-    inset 0 1px 0
-    rgba(255, 255, 255, 0.28);
+    0 14px 38px rgba(212, 175, 55, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
 
@@ -353,7 +362,7 @@ h1 {
 }
 
 
-/* お試し5問：右 */
+/* お試し5問 */
 
 .trial-button {
   order: 2;
@@ -384,8 +393,7 @@ h1 {
   cursor: pointer;
 
   box-shadow:
-    inset 0 1px 0
-    rgba(255, 255, 255, 0.05);
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
 
   transition:
     transform 0.15s ease,
@@ -410,10 +418,8 @@ h1 {
     );
 
   box-shadow:
-    0 8px 24px
-    rgba(0, 0, 0, 0.25),
-    inset 0 1px 0
-    rgba(255, 255, 255, 0.06);
+    0 8px 24px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
 }
 
 
@@ -460,7 +466,7 @@ h1 {
 
 
 /* =========================
-   問題画面
+   問題表示
 ========================= */
 
 .quiz-card h2 {
@@ -477,20 +483,16 @@ h1 {
   color: #d9b94e;
 
   font-size: 14px;
-
   font-weight: bold;
 
   letter-spacing: 0.08em;
 }
 
 
-/* 問題上部情報 */
-
 .question-meta {
   display: flex;
 
-  justify-content:
-    space-between;
+  justify-content: space-between;
 
   gap: 20px;
 
@@ -499,13 +501,13 @@ h1 {
   color: #d9b94e;
 
   font-size: 14px;
-
   font-weight: bold;
 }
 
 
 .question-meta > span:first-child {
   font-size: 18px;
+
   font-weight: 800;
 }
 
@@ -541,8 +543,6 @@ h1 {
 }
 
 
-/* 複数選択等の注意 */
-
 .question-instruction {
   margin: -4px 0 20px;
 
@@ -559,6 +559,45 @@ h1 {
   font-size: 15px;
 
   font-weight: 700;
+}
+
+
+/* =========================
+   進捗バー
+========================= */
+
+.progress-wrap {
+  width: 100%;
+
+  height: 8px;
+
+  margin:
+    0 0
+    24px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background:
+    rgba(255, 255, 255, 0.07);
+}
+
+
+.progress-bar {
+  height: 100%;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #9d741c,
+      #f0d26d
+    );
+
+  transition:
+    width 0.3s ease;
 }
 
 
@@ -598,7 +637,6 @@ h1 {
   color: #f5f5f5;
 
   font-size: 16px;
-
   line-height: 1.5;
 
   text-align: left;
@@ -613,7 +651,8 @@ h1 {
 
 
 .choice-button:hover {
-  border-color: #d4af37;
+  border-color:
+    #d4af37;
 
   background:
     rgba(212, 175, 55, 0.08);
@@ -631,7 +670,8 @@ h1 {
 
 
 .choice-button.selected {
-  border-color: #d4af37;
+  border-color:
+    #d4af37;
 
   background:
     rgba(212, 175, 55, 0.12);
@@ -639,22 +679,26 @@ h1 {
 
 
 .choice-button.correct {
-  border-color: #4caf70;
+  border-color:
+    #4caf70;
 
   background:
     rgba(76, 175, 112, 0.15);
 
-  color: #d9ffe4;
+  color:
+    #d9ffe4;
 }
 
 
 .choice-button.incorrect {
-  border-color: #d9534f;
+  border-color:
+    #d9534f;
 
   background:
     rgba(217, 83, 79, 0.15);
 
-  color: #ffd7d5;
+  color:
+    #ffd7d5;
 }
 
 
@@ -673,7 +717,8 @@ h1 {
   background:
     rgba(212, 175, 55, 0.12);
 
-  color: #f0d26d;
+  color:
+    #f0d26d;
 
   font-size: 15px;
 
@@ -685,6 +730,45 @@ h1 {
 
 .choice-text {
   flex: 1;
+}
+
+
+/* =========================
+   複数回答ボタン
+========================= */
+
+.submit-answer-button {
+  width: 100%;
+
+  margin-top: 18px;
+
+  padding: 15px;
+
+  border: 0;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #c89e32,
+      #f0d26d
+    );
+
+  color: #181818;
+
+  font-size: 17px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+
+.submit-answer-button:disabled {
+  opacity: 0.35;
+
+  cursor: default;
 }
 
 
@@ -729,15 +813,15 @@ h1 {
 }
 
 
-.result-correct
-.result-title {
-  color: #77d997;
+.result-correct .result-title {
+  color:
+    #77d997;
 }
 
 
-.result-incorrect
-.result-title {
-  color: #ef7772;
+.result-incorrect .result-title {
+  color:
+    #ef7772;
 }
 
 
@@ -754,12 +838,14 @@ h1 {
 
   font-weight: bold;
 
-  color: #f2d36f;
+  color:
+    #f2d36f;
 }
 
 
 .correct-answer-title {
-  color: #f0d26d;
+  color:
+    #f0d26d;
 
   font-weight: 800;
 }
@@ -780,7 +866,8 @@ h1 {
   background:
     rgba(212, 175, 55, 0.14);
 
-  color: #f0d26d;
+  color:
+    #f0d26d;
 
   font-size: 15px;
 
@@ -791,7 +878,8 @@ h1 {
 
 
 .correct-answer-text {
-  color: #f5f5f5;
+  color:
+    #f5f5f5;
 
   font-weight: 700;
 }
@@ -804,7 +892,8 @@ h1 {
 
   font-weight: bold;
 
-  color: #d9b94e;
+  color:
+    #d9b94e;
 
   letter-spacing: 0.08em;
 }
@@ -817,213 +906,13 @@ h1 {
 
   line-height: 1.9;
 
-  color: #ddd;
+  color:
+    #ddd;
 }
 
 
 /* =========================
-   現在スコア
-========================= */
-
-.current-score {
-  display: flex;
-
-  align-items: center;
-
-  justify-content:
-    space-between;
-
-  margin-top: 22px;
-
-  padding: 16px 20px;
-
-  border:
-    1px solid
-    rgba(212, 175, 55, 0.16);
-
-  border-radius: 10px;
-
-  background:
-    rgba(212, 175, 55, 0.04);
-}
-
-
-.current-score-label {
-  color: #aaa;
-
-  font-size: 14px;
-
-  font-weight: 700;
-}
-
-
-.current-score-number {
-  color: #f0d26d;
-
-  font-size: 24px;
-
-  font-weight: 900;
-}
-
-
-/* =========================
-   次へ・戻る
-========================= */
-
-.next-button,
-.restart-button {
-  margin-top: 25px;
-
-  padding: 15px 30px;
-
-  border: none;
-
-  border-radius: 10px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #c89e32,
-      #f0d26d
-    );
-
-  color: #181818;
-
-  font-size: 17px;
-
-  font-weight: 800;
-
-  cursor: pointer;
-
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
-}
-
-
-.next-button:hover,
-.restart-button:hover {
-  transform:
-    translateY(-2px);
-
-  box-shadow:
-    0 10px 30px
-    rgba(212, 175, 55, 0.25);
-}
-
-
-/* =========================
-   複数選択の決定ボタン
-========================= */
-
-.submit-answer-button {
-  width: 100%;
-
-  margin-top: 18px;
-
-  padding: 15px;
-
-  border: 0;
-
-  border-radius: 10px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #c89e32,
-      #f0d26d
-    );
-
-  color: #181818;
-
-  font-size: 17px;
-
-  font-weight: 800;
-
-  cursor: pointer;
-}
-
-
-.submit-answer-button:disabled {
-  opacity: 0.35;
-
-  cursor: default;
-}
-
-
-/* =========================
-   最終結果画面
-========================= */
-
-.result-screen {
-  text-align: center;
-}
-
-
-.final-score {
-  margin-top: 25px;
-
-  font-size: 80px;
-
-  font-weight: 900;
-
-  color: #f0d26d;
-}
-
-
-.final-score span {
-  font-size: 28px;
-
-  color: #aaa;
-}
-
-
-.percentage {
-  margin-top: 8px;
-
-  font-size: 20px;
-
-  color: #ccc;
-}
-
-
-.rank-label {
-  margin-top: 35px;
-
-  font-size: 14px;
-
-  color: #aaa;
-
-  letter-spacing: 0.1em;
-}
-
-
-.rank-grade {
-  margin-top: 8px;
-
-  margin-bottom: 8px;
-
-  font-size: 2.4rem;
-
-  font-weight: 900;
-
-  letter-spacing: 0.08em;
-}
-
-
-.rank {
-  margin-top: 8px;
-
-  font-size: 36px;
-
-  font-weight: 900;
-
-  color: #f0d26d;
-}
-
-
-/* =========================
-   コミュニティ統計
+   みんなの正答率
 ========================= */
 
 .community-stats {
@@ -1049,7 +938,8 @@ h1 {
 
   font-weight: bold;
 
-  color: #aaa;
+  color:
+    #aaa;
 
   letter-spacing: 0.08em;
 }
@@ -1062,7 +952,8 @@ h1 {
 
   font-weight: 900;
 
-  color: #f0d26d;
+  color:
+    #f0d26d;
 }
 
 
@@ -1071,165 +962,70 @@ h1 {
 
   font-size: 14px;
 
-  color: #aaa;
+  color:
+    #aaa;
 }
 
 
 /* =========================
-   問題報告
+   現在の成績
 ========================= */
 
-.report-section {
-  margin-top: 28px;
+.current-score {
+  display: flex;
 
-  padding-top: 22px;
+  align-items: center;
 
-  border-top:
-    1px solid
-    rgba(255, 255, 255, 0.08);
-}
+  justify-content: space-between;
 
+  margin-top: 22px;
 
-.report-toggle-button {
-  padding: 10px 18px;
+  padding: 16px 20px;
 
   border:
     1px solid
-    rgba(255, 255, 255, 0.18);
+    rgba(212, 175, 55, 0.16);
 
-  border-radius: 9px;
+  border-radius: 10px;
 
   background:
-    rgba(255, 255, 255, 0.04);
+    rgba(212, 175, 55, 0.04);
+}
 
-  color: #bbb;
+
+.current-score-label {
+  color:
+    #aaa;
 
   font-size: 14px;
 
-  cursor: pointer;
-
-  transition:
-    border-color 0.15s ease,
-    color 0.15s ease,
-    background 0.15s ease;
+  font-weight: 700;
 }
 
 
-.report-toggle-button:hover {
-  border-color: #d4af37;
+.current-score-number {
+  color:
+    #f0d26d;
 
-  color: #f0d26d;
+  font-size: 24px;
 
-  background:
-    rgba(212, 175, 55, 0.06);
+  font-weight: 900;
 }
 
 
-.report-form {
-  margin-top: 20px;
+/* =========================
+   次へ・再挑戦ボタン
+========================= */
 
-  padding: 22px;
+.next-button,
+.restart-button {
+  margin-top: 25px;
 
-  border-radius: 12px;
+  padding: 15px 30px;
 
-  background:
-    rgba(0, 0, 0, 0.18);
+  border: none;
 
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.08);
-}
-
-
-.hidden {
-  display: none;
-}
-
-
-.report-heading {
-  margin-bottom: 14px;
-
-  font-size: 16px;
-
-  font-weight: bold;
-
-  color: #eee;
-}
-
-
-.report-type {
-  width: 100%;
-
-  padding: 12px;
-
-  margin-bottom: 14px;
-
-  border-radius: 8px;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.15);
-
-  background: #222;
-
-  color: #eee;
-
-  font-size: 15px;
-}
-
-
-.report-message {
-  width: 100%;
-
-  min-height: 130px;
-
-  padding: 14px;
-
-  resize: vertical;
-
-  border-radius: 8px;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.15);
-
-  background: #1d1d1d;
-
-  color: #eee;
-
-  font-family: inherit;
-
-  font-size: 15px;
-
-  line-height: 1.7;
-}
-
-
-.report-message:focus,
-.report-type:focus {
-  outline: none;
-
-  border-color: #d4af37;
-}
-
-
-.report-note {
-  margin: 10px 0 0;
-
-  color: #888;
-
-  font-size: 12px;
-}
-
-
-.report-submit-button {
-  margin-top: 16px;
-
-  padding: 11px 22px;
-
-  border: 0;
-
-  border-radius: 8px;
+  border-radius: 10px;
 
   background:
     linear-gradient(
@@ -1238,265 +1034,142 @@ h1 {
       #f0d26d
     );
 
-  color: #171717;
-
-  font-size: 15px;
-
-  font-weight: 800;
-
-  cursor: pointer;
-}
-
-
-.report-submit-button:disabled {
-  opacity: 0.6;
-
-  cursor: default;
-}
-
-
-.report-status {
-  margin-top: 14px;
-
-  font-size: 14px;
-}
-
-
-.report-status.success {
-  color: #77d997;
-}
-
-
-.report-status.error {
-  color: #ef7772;
-}
-
-
-/* =========================
-   スマホ
-========================= */
-
-@media (max-width: 700px) {
-
-  .container {
-    padding: 35px 0;
-  }
-
-
-  .quiz-card {
-    padding: 32px 24px;
-  }
-
-
-  /*
-    トップタイトルだけスマホで1行表示
-    「アスカ見参　廃人検定」
-  */
-
-  .hero-card > h1 {
-    display: flex;
-
-    gap: 0.5em;
-
-    font-size:
-      clamp(
-        24px,
-        7vw,
-        31px
-      );
-
-    line-height: 1.2;
-
-    letter-spacing: 0.015em;
-
-    white-space: nowrap;
-
-    word-break: keep-all;
-  }
-
-
-  .hero-catch {
-    font-size: 20px;
-  }
-
-
-  .subtitle,
-  .hero-warning {
-    font-size: 15px;
-  }
-
-
-  .hero-buttons {
-    flex-direction: column;
-  }
-
-
-  .start-button,
-  .trial-button {
-    width: 100%;
-
-    min-width: 0;
-  }
-
-
-  .start-button {
-    order: 1;
-  }
-
-
-  .trial-button {
-    order: 2;
-  }
-
-
-  .question-meta {
-    display: block;
-  }
-
-
-  .question-meta-right {
-    margin-left: 0;
-
-    margin-top: 8px;
-
-    align-items: flex-start;
-
-    text-align: left;
-  }
-
-
-  .category {
-    display: block;
-
-    margin-top: 6px;
-  }
-
-
-  .final-score {
-    font-size: 60px;
-  }
-
-
-  .rank {
-    font-size: 28px;
-  }
-
-
-  .next-button,
-  .restart-button {
-    width: 100%;
-  }
-}
-
-
-/* =========================
-   お試し結果ボタン
-========================= */
-
-.trial-result-button {
-  margin-top: 18px;
-
-  padding: 15px 30px;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.18);
-
-  border-radius: 10px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #3e3e3e,
-      #303030
-    );
-
-  color: #f2f2f2;
+  color:
+    #181818;
 
   font-size: 17px;
 
   font-weight: 800;
 
   cursor: pointer;
-
-  transition:
-    transform 0.15s ease,
-    background 0.15s ease,
-    border-color 0.15s ease;
-}
-
-
-.trial-result-button:hover {
-  transform: translateY(-2px);
-
-  background:
-    linear-gradient(
-      145deg,
-      #484848,
-      #393939
-    );
-
-  border-color:
-    rgba(255, 255, 255, 0.32);
-}
-
-
-@media (max-width: 700px) {
-
-  .trial-result-button {
-    width: 100%;
-  }
 }
 
 
 /* =========================
-   進捗バー
+   結果画面
 ========================= */
 
-.progress-wrap {
-  width: 100%;
-  height: 7px;
-
-  margin:
-    10px 0
-    24px;
-
-  overflow: hidden;
-
-  border-radius: 999px;
-
-  background:
-    rgba(255, 255, 255, 0.08);
+.result-screen {
+  text-align: center;
 }
 
 
-.progress-bar {
-  height: 100%;
+.final-score {
+  margin-top: 25px;
 
-  border-radius: 999px;
+  font-size: 80px;
 
-  background:
-    linear-gradient(
-      90deg,
-      #b88a1d,
-      #e0bd55
-    );
+  font-weight: 900;
 
-  transition:
-    width 0.3s ease;
+  color:
+    #f0d26d;
+}
+
+
+.final-score span {
+  font-size: 28px;
+
+  color:
+    #aaa;
+}
+
+
+.percentage {
+  margin-top: 8px;
+
+  font-size: 20px;
+
+  color:
+    #ccc;
+}
+
+
+.rank-label {
+  margin-top: 35px;
+
+  font-size: 14px;
+
+  color:
+    #aaa;
+
+  letter-spacing: 0.1em;
+}
+
+
+.rank-grade {
+  margin-top: 8px;
+
+  margin-bottom: 8px;
+
+  font-size: 2.4rem;
+
+  font-weight: 900;
+
+  letter-spacing: 0.08em;
+}
+
+
+.rank {
+  margin-top: 8px;
+
+  font-size: 36px;
+
+  font-weight: 900;
+
+  color:
+    #f0d26d;
+}
+
+
+.rank-comment {
+  margin-top: 18px;
+
+  color:
+    #ccc;
+
+  font-size: 15px;
+
+  line-height: 1.8;
 }
 
 
 /* =========================
-   中断・再開
+   お試し結果
+========================= */
+
+.trial-result-button {
+  margin-top: 12px;
+
+  padding: 13px 26px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.16);
+
+  border-radius: 10px;
+
+  background:
+    rgba(255, 255, 255, 0.04);
+
+  color:
+    #ddd;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+
+/* =========================
+   中断再開
 ========================= */
 
 .resume-area {
-  position: relative;
+  margin-top: 30px;
 
-  margin: 28px 0 6px;
-
-  padding: 18px;
+  padding: 20px;
 
   border:
     1px solid
@@ -1505,32 +1178,26 @@ h1 {
   border-radius: 14px;
 
   background:
-    rgba(212, 175, 55, 0.045);
-}
-
-
-.resume-area.hidden {
-  display: none;
+    rgba(212, 175, 55, 0.035);
 }
 
 
 .resume-heading {
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 
-  color: #d9b94e;
+  color:
+    #e7c65d;
 
-  font-size: 14px;
+  font-size: 16px;
 
-  font-weight: 800;
-
-  letter-spacing: 0.04em;
+  font-weight: 900;
 }
 
 
 .resume-button {
   width: 100%;
 
-  padding: 15px 22px;
+  padding: 15px 18px;
 
   border:
     1px solid
@@ -1541,7 +1208,8 @@ h1 {
   background:
     rgba(212, 175, 55, 0.08);
 
-  color: #f0d26d;
+  color:
+    #f0d26d;
 
   font-family: inherit;
 
@@ -1555,12 +1223,14 @@ h1 {
 
 
 .resume-button:hover {
-  transform: translateY(-1px);
+  transform:
+    translateY(-1px);
 
   background:
     rgba(212, 175, 55, 0.13);
 
-  border-color: #d4af37;
+  border-color:
+    #d4af37;
 }
 
 
@@ -1578,7 +1248,8 @@ h1 {
 
   margin-top: 5px;
 
-  color: #bbb;
+  color:
+    #bbb;
 
   font-size: 13px;
 
@@ -1602,7 +1273,8 @@ h1 {
   background:
     rgba(255, 255, 255, 0.035);
 
-  color: #aaa;
+  color:
+    #aaa;
 
   font-family: inherit;
 
@@ -1620,7 +1292,8 @@ h1 {
 
 
 .resume-reset-button:hover {
-  color: #eee;
+  color:
+    #eee;
 
   background:
     rgba(255, 255, 255, 0.065);
@@ -1665,7 +1338,8 @@ h1 {
   background:
     rgba(255, 255, 255, 0.045);
 
-  color: #aaa;
+  color:
+    #aaa;
 
   font-family: inherit;
 
@@ -1684,7 +1358,8 @@ h1 {
 
 
 .pause-button:hover {
-  color: #eee;
+  color:
+    #eee;
 
   background:
     rgba(255, 255, 255, 0.08);
@@ -1698,10 +1373,307 @@ h1 {
 
 
 /* =========================
-   中断・再開：スマホ
+   問題報告
+========================= */
+
+.report-section {
+  margin-top: 28px;
+
+  padding-top: 20px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+}
+
+
+.report-toggle-button {
+  padding: 11px 18px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.15);
+
+  border-radius: 9px;
+
+  background:
+    rgba(255, 255, 255, 0.04);
+
+  color:
+    #aaa;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+
+.report-toggle-button:hover {
+  color:
+    #eee;
+
+  background:
+    rgba(255, 255, 255, 0.07);
+}
+
+
+.report-form {
+  margin-top: 18px;
+
+  padding: 18px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  border-radius: 12px;
+
+  background:
+    rgba(0, 0, 0, 0.16);
+}
+
+
+.report-heading {
+  margin-bottom: 12px;
+
+  color:
+    #ddd;
+
+  font-size: 14px;
+
+  font-weight: 800;
+}
+
+
+.report-type,
+.report-message {
+  width: 100%;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.14);
+
+  border-radius: 9px;
+
+  background:
+    #18191b;
+
+  color:
+    #eee;
+
+  font-family: inherit;
+
+  font-size: 14px;
+}
+
+
+.report-type {
+  min-height: 44px;
+
+  padding:
+    0 12px;
+}
+
+
+.report-message {
+  min-height: 120px;
+
+  margin-top: 12px;
+
+  padding: 12px;
+
+  resize: vertical;
+
+  line-height: 1.7;
+}
+
+
+.report-note {
+  margin:
+    10px 0
+    0;
+
+  color:
+    #888;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+}
+
+
+.report-submit-button {
+  margin-top: 14px;
+
+  padding: 11px 20px;
+
+  border: 0;
+
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #a67b23,
+      #d8b655
+    );
+
+  color:
+    #151515;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  font-weight: 900;
+
+  cursor: pointer;
+}
+
+
+.report-submit-button:disabled {
+  opacity: 0.5;
+
+  cursor: default;
+}
+
+
+.report-status {
+  margin-top: 12px;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+
+.report-status.success {
+  color:
+    #77d997;
+}
+
+
+.report-status.error {
+  color:
+    #ef7772;
+}
+
+
+/* =========================
+   スマホ
 ========================= */
 
 @media (max-width: 700px) {
+
+  .container {
+    padding: 35px 0;
+  }
+
+
+  .quiz-card {
+    padding: 32px 24px;
+  }
+
+
+  /*
+    トップタイトルだけスマホで1行表示
+    「アスカ見参　廃人検定」
+  */
+
+  .hero-card > h1 {
+    display: flex;
+
+    justify-content: center;
+    align-items: baseline;
+
+    gap: 0.22em;
+
+    font-size:
+      clamp(
+        28px,
+        8.6vw,
+        36px
+      );
+
+    line-height: 1.08;
+
+    letter-spacing: 0.01em;
+
+    white-space: nowrap;
+
+    word-break: keep-all;
+
+    text-align: center;
+  }
+
+
+  .hero-catch {
+    font-size: 20px;
+  }
+
+
+  .subtitle,
+  .hero-warning {
+    font-size: 15px;
+  }
+
+
+  .hero-buttons {
+    flex-direction: column;
+  }
+
+
+  .start-button,
+  .trial-button {
+    width: 100%;
+
+    min-width: 0;
+  }
+
+
+  .question-meta {
+    display: block;
+  }
+
+
+  .question-meta-right {
+    margin-left: 0;
+
+    margin-top: 8px;
+
+    align-items: flex-start;
+
+    text-align: left;
+  }
+
+
+  .category {
+    display: block;
+
+    margin-top: 6px;
+  }
+
+
+  .final-score {
+    font-size: 60px;
+  }
+
+
+  .rank {
+    font-size: 28px;
+  }
+
+
+  .next-button,
+  .restart-button,
+  .trial-result-button {
+    width: 100%;
+  }
+
 
   .resume-area {
     padding: 15px;
@@ -1730,7 +1702,6 @@ h1 {
   position: fixed;
 
   left: 50%;
-
   bottom: 20px;
 
   width: 340px;
@@ -1750,11 +1721,8 @@ h1 {
   z-index: 1000;
 
   box-shadow:
-    0 8px 30px
-    rgba(0, 0, 0, 0.55),
-
-    0 5px 20px
-    rgba(212, 175, 55, 0.25);
+    0 8px 30px rgba(0, 0, 0, 0.55),
+    0 5px 20px rgba(212, 175, 55, 0.25);
 }
 
 
@@ -1818,7 +1786,8 @@ h1 {
 .category-results-title {
   margin-bottom: 18px;
 
-  color: #f0d26d;
+  color:
+    #f0d26d;
 
   font-size: 18px;
 
@@ -1857,7 +1826,8 @@ h1 {
 .category-result-name {
   min-width: 0;
 
-  color: #eee;
+  color:
+    #eee;
 
   font-size: 15px;
 
@@ -1868,7 +1838,8 @@ h1 {
 .category-result-score {
   flex-shrink: 0;
 
-  color: #aaa;
+  color:
+    #aaa;
 
   font-size: 14px;
 
@@ -1886,17 +1857,20 @@ h1 {
 
 
 .category-result-accuracy.high {
-  color: #f0d26d;
+  color:
+    #f0d26d;
 }
 
 
 .category-result-accuracy.middle {
-  color: #f0a44b;
+  color:
+    #f0a44b;
 }
 
 
 .category-result-accuracy.low {
-  color: #ef7772;
+  color:
+    #ef7772;
 }
 
 
@@ -1957,7 +1931,8 @@ h1 {
 .category-results-note {
   margin: 0;
 
-  color: #aaa;
+  color:
+    #aaa;
 
   font-size: 14px;
 
@@ -1996,67 +1971,113 @@ h1 {
 
 
 /* =========================
-   カテゴリ別正答率：成績カラー
+   前回結果
 ========================= */
 
-/* 80%以上：金 */
-
-.category-result-bar.high {
-  background:
-    linear-gradient(
-      90deg,
-      #b88a1d,
-      #f0d26d
-    );
+#previous-result-area {
+  position: relative;
 }
 
 
-.category-result-accuracy.high {
-  color: #f0d26d;
-}
-
-
-/* 50～79%：オレンジ */
-
-.category-result-bar.middle {
-  background:
-    linear-gradient(
-      90deg,
-      #b96818,
-      #e69a35
-    );
-}
-
-
-.category-result-accuracy.middle {
-  color: #e69a35;
-}
-
-
-/* 0～49%：赤 */
-
-.category-result-bar.low {
-  background:
-    linear-gradient(
-      90deg,
-      #9f3733,
-      #df625b
-    );
-}
-
-
-.category-result-accuracy.low {
-  color: #ef7772;
-}
-
-
-/* バーの伸びを少し滑らかに */
-
-.category-result-bar {
-  height: 100%;
-
-  border-radius: 999px;
-
+#previous-result-button {
   transition:
-    width 0.45s ease;
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+
+#previous-result-button:hover {
+  transform:
+    translateY(-1px);
+
+  background:
+    rgba(212, 175, 55, 0.075) !important;
+
+  border-color:
+    rgba(212, 175, 55, 0.42) !important;
+}
+
+
+/* =========================
+   hidden
+========================= */
+
+.hidden {
+  display: none !important;
+}
+
+
+/* =========================
+   追加スマホ微調整
+========================= */
+
+@media (max-width: 700px) {
+
+  body {
+    overflow-x: hidden;
+  }
+
+
+  .hero-label {
+    font-size: 12px;
+
+    letter-spacing: 0.13em;
+  }
+
+
+  .hero-warning {
+    padding: 14px 16px;
+  }
+
+
+  .button-main {
+    font-size: 23px;
+  }
+
+
+  .trial-label {
+    font-size: 20px;
+  }
+
+
+  .trial-main {
+    font-size: 16px;
+  }
+
+
+  .quiz-card h2 {
+    font-size: 22px;
+
+    line-height: 1.65;
+  }
+
+
+  .choice-button {
+    padding: 15px;
+
+    gap: 14px;
+  }
+
+
+  .result-box {
+    padding: 20px 18px;
+  }
+
+
+  .correct-answer {
+    flex-wrap: wrap;
+
+    gap: 10px;
+  }
+
+
+  .community-stats {
+    padding: 17px;
+  }
+
+
+  .current-score {
+    padding: 14px 16px;
+  }
 }
