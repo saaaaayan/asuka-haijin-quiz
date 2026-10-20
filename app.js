@@ -71,21 +71,9 @@ document.addEventListener(
       );
 
 
-    /*
-      ?test=1
-      → 実際に5問解いて
-        本番結果画面を確認
-    */
-
     const isTestMode =
       urlParams.get("test") === "1";
 
-
-    /*
-      ?resulttest=1
-      → 問題を解かずに
-        結果画面を直接表示
-    */
 
     const isResultTestMode =
       urlParams.get("resulttest") === "1";
@@ -159,12 +147,6 @@ document.addEventListener(
 
     updateResumeArea();
 
-
-    /*
-      結果画面テストの場合は
-      トップ画面を表示せず
-      ここで直接結果画面へ
-    */
 
     if (isResultTestMode) {
 
@@ -484,10 +466,6 @@ document.addEventListener(
       }
 
 
-      /* =========================
-         複数選択
-      ========================= */
-
       if (
         question.type ===
           "multiple"
@@ -581,10 +559,6 @@ document.addEventListener(
           }
         );
 
-
-      /* =========================
-         単一選択
-      ========================= */
 
       } else {
 
@@ -1017,13 +991,9 @@ document.addEventListener(
 
 
               <textarea
-                class="
-                  report-message
-                "
+                class="report-message"
                 maxlength="2000"
-                placeholder="
-                  具体的な内容を入力してください
-                "
+                placeholder="具体的な内容を入力してください"
               ></textarea>
 
 
@@ -1144,7 +1114,7 @@ document.addEventListener(
           if (!reportType) {
 
             reportStatus.textContent =
-              "指摘内容を選んでください.";
+              "指摘内容を選んでください。";
 
 
             reportStatus.className =
@@ -1251,30 +1221,6 @@ document.addEventListener(
 
     function showResultTest() {
 
-      /*
-        本番100問を解いたような
-        ダミーデータを作る
-
-        合計
-        70 / 100
-
-        モンスター
-        19 / 20 = 95%
-
-        アイテム
-        16 / 20 = 80%
-
-        ダンジョン
-        15 / 19 = 79%
-
-        仕様
-        20 / 40 = 50%
-
-        その他
-        0 / 1 = 0%
-      */
-
-
       quizMode =
         "main";
 
@@ -1287,8 +1233,30 @@ document.addEventListener(
         );
 
 
+      /*
+        100問ぶんになるよう調整
+
+        モンスター
+        19 / 20 = 95%
+
+        アイテム
+        16 / 20 = 80%
+
+        ダンジョン
+        15 / 19 = 79%
+
+        仕様
+        18 / 36 = 50%
+
+        その他
+        1 / 5 = 20%
+
+        合計
+        69 / 100
+      */
+
       score =
-        70;
+        69;
 
 
       categoryStats = {
@@ -1309,13 +1277,13 @@ document.addEventListener(
         },
 
         仕様: {
-          correct: 20,
-          total: 40
+          correct: 18,
+          total: 36
         },
 
         その他: {
-          correct: 0,
-          total: 1
+          correct: 1,
+          total: 5
         }
 
       };
@@ -1344,10 +1312,6 @@ document.addEventListener(
         );
 
 
-      /* =========================
-         お試し5問
-      ========================= */
-
       if (
         quizMode === "trial"
       ) {
@@ -1359,19 +1323,6 @@ document.addEventListener(
         return;
       }
 
-
-      /* =========================
-         本番
-      ========================= */
-
-
-      /*
-        通常プレイ終了時だけ
-        中断データを削除
-
-        resulttestでは
-        途中データを消さない
-      */
 
       if (
         !isResultTestMode
@@ -1747,11 +1698,6 @@ document.addEventListener(
         return;
       }
 
-
-      /*
-        結果画面テストでは
-        保存しない
-      */
 
       if (
         isResultTestMode
@@ -2290,10 +2236,6 @@ document.addEventListener(
       }
 
 
-      /*
-        表示順は固定
-      */
-
       const categoryOrder = [
 
         "モンスター",
@@ -2389,17 +2331,6 @@ document.addEventListener(
                       100
                     );
 
-
-                  /*
-                    80%以上
-                    → 金
-
-                    50～79%
-                    → オレンジ
-
-                    49%以下
-                    → 赤
-                  */
 
                   let barBackground;
 
