@@ -1662,6 +1662,7 @@ document.addEventListener(
     function renderCategoryStats() {
 
       if (!categoryStatsComplete) {
+
         return `
           <section class="category-results">
 
@@ -1679,21 +1680,29 @@ document.addEventListener(
       }
 
 
+      const categoryOrder = [
+        "モンスター",
+        "アイテム",
+        "ダンジョン",
+        "仕様",
+        "その他"
+      ];
+
+
       const entries =
-        Object.entries(
-          categoryStats
-        )
+        categoryOrder
+
+          .map(
+            (category) => [
+              category,
+              categoryStats[category]
+            ]
+          )
+
           .filter(
             ([, stats]) =>
               stats &&
               stats.total > 0
-          )
-          .sort(
-            ([a], [b]) =>
-              a.localeCompare(
-                b,
-                "ja"
-              )
           );
 
 
@@ -1727,16 +1736,34 @@ document.addEventListener(
                     );
 
 
-                  const accuracyClass =
-                    accuracy >= 80
+                  let barBackground;
+                  let accuracyColor;
 
-                      ? "high"
 
-                      : accuracy >= 50
+                  if (accuracy >= 80) {
 
-                        ? "middle"
+                    barBackground =
+                      "linear-gradient(90deg, #b88a1d, #f0d26d)";
 
-                        : "low";
+                    accuracyColor =
+                      "#f0d26d";
+
+                  } else if (accuracy >= 50) {
+
+                    barBackground =
+                      "linear-gradient(90deg, #b96818, #e69a35)";
+
+                    accuracyColor =
+                      "#e69a35";
+
+                  } else {
+
+                    barBackground =
+                      "linear-gradient(90deg, #9f3733, #df625b)";
+
+                    accuracyColor =
+                      "#ef7772";
+                  }
 
 
                   return `
@@ -1755,9 +1782,9 @@ document.addEventListener(
                           ${stats.correct} / ${stats.total}
 
                           <strong
-                            class="
-                              category-result-accuracy
-                              ${accuracyClass}
+                            class="category-result-accuracy"
+                            style="
+                              color: ${accuracyColor};
                             "
                           >
                             ${accuracy}%
@@ -1773,12 +1800,10 @@ document.addEventListener(
                       >
 
                         <div
-                          class="
-                            category-result-bar
-                            ${accuracyClass}
-                          "
+                          class="category-result-bar"
                           style="
                             width: ${accuracy}%;
+                            background: ${barBackground};
                           "
                         ></div>
 
