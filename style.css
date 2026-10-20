@@ -3556,3 +3556,394 @@ body {
 
   letter-spacing: 0.04em;
 }
+
+/* =========================================================
+   結果画面
+   ランク・称号を主役にする
+========================================================= */
+
+
+/* =========================
+   得点は少し控えめに
+========================= */
+
+.final-score {
+  margin-top: 18px;
+
+  font-size:
+    clamp(
+      58px,
+      7vw,
+      72px
+    );
+
+  line-height: 1;
+
+  font-family:
+    "Noto Sans JP",
+    "Yu Gothic",
+    sans-serif;
+
+  font-weight: 900;
+
+  letter-spacing: -0.035em;
+
+  color: #f0d26d;
+
+  font-variant-numeric:
+    tabular-nums;
+}
+
+
+.final-score span {
+  margin-left: 4px;
+
+  font-size:
+    25px;
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    0;
+
+  color:
+    #8f949a;
+}
+
+
+.percentage {
+  margin-top:
+    12px;
+
+  color:
+    #aeb3b9;
+
+  font-family:
+    "Noto Sans JP",
+    sans-serif;
+
+  font-size:
+    16px;
+
+  font-weight:
+    500;
+
+  letter-spacing:
+    0.03em;
+}
+
+
+/* =========================
+   ランク専用パネル
+========================= */
+
+.rank-panel {
+  position:
+    relative;
+
+  margin:
+    38px auto 0;
+
+  padding:
+    31px 28px
+    30px;
+
+  overflow:
+    hidden;
+
+  border:
+    1px solid
+    rgba(
+      212,
+      175,
+      55,
+      0.28
+    );
+
+  border-radius:
+    16px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(212, 175, 55, 0.065),
+      rgba(255, 255, 255, 0.018)
+    );
+
+  box-shadow:
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.035),
+    0 12px 36px
+    rgba(0, 0, 0, 0.18);
+}
+
+
+/* 上部の控えめな金ライン */
+
+.rank-panel::before {
+  content:
+    "";
+
+  position:
+    absolute;
+
+  top:
+    0;
+
+  left:
+    18%;
+
+  width:
+    64%;
+
+  height:
+    1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(240, 210, 109, 0.75),
+      transparent
+    );
+}
+
+
+/* =========================
+   あなたのランク・称号
+========================= */
+
+.rank-label {
+  margin-top:
+    0;
+
+  margin-bottom:
+    8px;
+
+  color:
+    #9fa4aa;
+
+  font-family:
+    "Noto Sans JP",
+    sans-serif;
+
+  font-size:
+    12px;
+
+  font-weight:
+    600;
+
+  letter-spacing:
+    0.16em;
+}
+
+
+/* =========================
+   B / A+ / SSS など
+========================= */
+
+.rank-grade {
+  margin:
+    0;
+
+  font-family:
+    "Noto Sans JP",
+    "Yu Gothic",
+    sans-serif;
+
+  font-size:
+    clamp(
+      62px,
+      8vw,
+      88px
+    );
+
+  font-weight:
+    900;
+
+  line-height:
+    1.05;
+
+  letter-spacing:
+    0.025em;
+
+  color:
+    #f1d36a;
+
+  text-shadow:
+    0 3px 16px
+    rgba(212, 175, 55, 0.20);
+}
+
+
+/* =========================
+   生粋のアスカっ子
+   廃人
+   開発者ですか？
+   など
+========================= */
+
+.rank {
+  margin:
+    11px 0 0;
+
+  color:
+    #fff7dc;
+
+  font-family:
+    "Noto Sans JP",
+    "Yu Gothic",
+    sans-serif;
+
+  font-size:
+    clamp(
+      28px,
+      4vw,
+      42px
+    );
+
+  font-weight:
+    900;
+
+  line-height:
+    1.4;
+
+  letter-spacing:
+    0.025em;
+
+  text-shadow:
+    0 2px 12px
+    rgba(0, 0, 0, 0.4);
+}
+
+
+/* =========================
+   称号コメント
+========================= */
+
+.rank-comment {
+  max-width:
+    680px;
+
+  margin:
+    18px auto 0;
+
+  padding-top:
+    18px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.075);
+
+  color:
+    #bec2c7;
+
+  font-family:
+    "Noto Sans JP",
+    sans-serif;
+
+  font-size:
+    15px;
+
+  font-weight:
+    400;
+
+  line-height:
+    1.9;
+
+  letter-spacing:
+    0.01em;
+}
+
+
+/* =========================
+   カテゴリ別成績との間隔
+========================= */
+
+.rank-panel + .category-results {
+  margin-top:
+    28px;
+}
+
+
+/* =========================
+   スマホ
+========================= */
+
+@media (max-width: 700px) {
+
+  .final-score {
+    font-size:
+      56px;
+  }
+
+
+  .final-score span {
+    font-size:
+      22px;
+  }
+
+
+  .rank-panel {
+    margin-top:
+      30px;
+
+    padding:
+      27px 18px
+      25px;
+
+    border-radius:
+      14px;
+  }
+
+
+  .rank-label {
+    font-size:
+      11px;
+
+    letter-spacing:
+      0.13em;
+  }
+
+
+  .rank-grade {
+    font-size:
+      clamp(
+        58px,
+        17vw,
+        76px
+      );
+  }
+
+
+  .rank {
+    margin-top:
+      9px;
+
+    font-size:
+      clamp(
+        25px,
+        7.5vw,
+        33px
+      );
+
+    line-height:
+      1.45;
+  }
+
+
+  .rank-comment {
+    margin-top:
+      16px;
+
+    padding-top:
+      16px;
+
+    font-size:
+      14px;
+
+    line-height:
+      1.85;
+  }
+}
