@@ -41,10 +41,7 @@
   >
 
 
-  <!--
-    テストメニューだけのCSS。
-    結果画面には極力独自CSSを当てない。
-  -->
+  <!-- テストページ専用 -->
 
   <style>
 
@@ -99,20 +96,96 @@
 
 
     .test-menu-description {
-      margin:
-        0;
+      margin: 0;
 
-      color:
-        #aaa;
+      color: #aaa;
 
       font-family:
         "Noto Sans JP",
         sans-serif;
 
-      line-height:
-        1.8;
+      line-height: 1.8;
     }
 
+
+    /* =========================
+       100問完走テスト
+    ========================= */
+
+    .completion-test-button {
+      display: block;
+
+      width: 100%;
+
+      margin-top: 24px;
+
+      padding:
+        18px 20px;
+
+      border:
+        1px solid
+        rgba(
+          240,
+          210,
+          109,
+          0.55
+        );
+
+      border-radius:
+        12px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(185, 133, 31, 0.9),
+          rgba(240, 210, 109, 0.95)
+        );
+
+      color: #171717;
+
+      font-family:
+        "Noto Sans JP",
+        sans-serif;
+
+      font-size: 18px;
+
+      font-weight: 900;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 8px 28px
+        rgba(
+          212,
+          175,
+          55,
+          0.18
+        );
+    }
+
+
+    .completion-test-button:hover {
+      transform:
+        translateY(-1px);
+    }
+
+
+    .completion-test-sub {
+      display: block;
+
+      margin-top: 4px;
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+      opacity: 0.72;
+    }
+
+
+    /* =========================
+       ランク一覧
+    ========================= */
 
     .test-rank-grid {
       display:
@@ -209,6 +282,10 @@
     }
 
 
+    /* =========================
+       任意点数
+    ========================= */
+
     .test-manual {
       display:
         flex;
@@ -295,6 +372,10 @@
     }
 
 
+    /* =========================
+       結果
+    ========================= */
+
     .test-result-container {
       display:
         none;
@@ -334,6 +415,12 @@
             1fr
           );
       }
+
+
+      .completion-test-button {
+        font-size:
+          16px;
+      }
     }
 
   </style>
@@ -344,7 +431,7 @@
 
 
   <!-- =========================
-       ランク選択メニュー
+       テストメニュー
   ========================= -->
 
   <section
@@ -360,10 +447,29 @@
     <p
       class="test-menu-description"
     >
-      ランクを押すと、そのランクの最低点で
-      本番とほぼ同じ結果画面を表示します。
+      ランク・称号や100問完走時の結果画面を
+      すぐに確認できます。
     </p>
 
+
+    <!-- 100問完走 -->
+
+    <button
+      class="completion-test-button"
+      id="completion-test-button"
+      type="button"
+    >
+      100問完走画面を確認
+
+      <span
+        class="completion-test-sub"
+      >
+        「100問完走」バッジ付きで表示
+      </span>
+    </button>
+
+
+    <!-- ランク一覧 -->
 
     <div
       class="test-rank-grid"
@@ -506,6 +612,8 @@
     </div>
 
 
+    <!-- 任意点数 -->
+
     <div
       class="test-manual"
     >
@@ -539,7 +647,7 @@
 
 
   <!-- =========================
-       本番と同じ外枠
+       結果画面
   ========================= -->
 
   <main
@@ -562,7 +670,7 @@
   </main>
 
 
-  <!-- 本番と共通のランク判定 -->
+  <!-- 本番と共通 -->
 
   <script
     src="rank.js"
@@ -630,7 +738,6 @@
 
     /* =========================
        カテゴリ別正答率
-       本番テスト用ダミー
     ========================= */
 
     function renderTestCategoryStats() {
@@ -849,7 +956,9 @@
     ========================= */
 
     function showTestResult(
-      score
+      score,
+      showCompletion =
+        false
     ) {
 
       score =
@@ -909,7 +1018,11 @@
           <p
             class="hero-label"
           >
-            RESULT TEST
+            ${
+              showCompletion
+                ? "COMPLETE TEST"
+                : "RESULT TEST"
+            }
           </p>
 
 
@@ -962,7 +1075,13 @@
                 0.05em;
             "
           >
-            開発用結果画面テスト
+            ${
+              showCompletion
+
+                ? "開発用・100問完走画面テスト"
+
+                : "開発用結果画面テスト"
+            }
           </div>
 
 
@@ -986,6 +1105,36 @@
             正答率
             ${score}%
           </div>
+
+
+          ${
+            showCompletion
+
+              ? `
+
+                <div
+                  class="full-completion-badge"
+                >
+
+                  <span
+                    class="full-completion-en"
+                  >
+                    ALL 100 QUESTIONS COMPLETE
+                  </span>
+
+
+                  <span
+                    class="full-completion-title"
+                  >
+                    100問完走
+                  </span>
+
+                </div>
+
+              `
+
+              : ""
+          }
 
 
           <div
@@ -1101,6 +1250,26 @@
 
 
     /* =========================
+       100問完走テスト
+    ========================= */
+
+    document
+      .getElementById(
+        "completion-test-button"
+      )
+      .addEventListener(
+        "click",
+        function () {
+
+          showTestResult(
+            69,
+            true
+          );
+        }
+      );
+
+
+    /* =========================
        ランクボタン
     ========================= */
 
@@ -1118,7 +1287,8 @@
             function () {
 
               showTestResult(
-                button.dataset.score
+                button.dataset.score,
+                false
               );
             }
           );
@@ -1143,7 +1313,9 @@
               .getElementById(
                 "manual-score"
               )
-              .value
+              .value,
+
+            false
           );
         }
       );
@@ -1167,7 +1339,9 @@
             showTestResult(
               event
                 .currentTarget
-                .value
+                .value,
+
+              false
             );
           }
         }
