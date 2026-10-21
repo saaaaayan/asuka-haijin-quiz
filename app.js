@@ -11,6 +11,16 @@ const QUIZ_LAST_RESULT_KEY =
   "asuka-haijin-quiz-last-result-v1";
 
 
+const STORAGE_SCHEMA_VERSION =
+  2;
+
+const QUESTION_SET_VERSION =
+  1;
+
+const CATEGORY_STATS_VERSION =
+  1;
+
+
 const VALID_QUESTION_CATEGORIES = [
   "モンスター",
   "アイテム",
@@ -479,7 +489,15 @@ document.addEventListener(
         const data = {
 
           version:
-            1,
+            STORAGE_SCHEMA_VERSION,
+
+
+          questionSetVersion:
+            QUESTION_SET_VERSION,
+
+
+          categoryStatsVersion:
+            CATEGORY_STATS_VERSION,
 
 
           score:
@@ -559,10 +577,61 @@ document.addEventListener(
         }
 
 
-        const data =
+        let data =
           JSON.parse(
             raw
           );
+
+
+        /* =========================
+           旧version 1をversion 2へ移行
+        ========================= */
+
+        if (
+          data
+
+          &&
+
+          data.version ===
+            1
+        ) {
+
+          data = {
+
+            ...data,
+
+
+            version:
+              2,
+
+
+            questionSetVersion:
+              1,
+
+
+            categoryStatsVersion:
+              1,
+
+
+            categoryStatsComplete:
+              typeof data
+                .categoryStatsComplete ===
+                "boolean"
+
+                ? data
+                    .categoryStatsComplete
+
+                : true
+          };
+
+
+          localStorage.setItem(
+            QUIZ_LAST_RESULT_KEY,
+            JSON.stringify(
+              data
+            )
+          );
+        }
 
 
         if (
@@ -571,7 +640,7 @@ document.addEventListener(
           ||
 
           data.version !==
-            1
+            STORAGE_SCHEMA_VERSION
 
           ||
 
@@ -592,9 +661,47 @@ document.addEventListener(
 
           typeof data.title !==
             "string"
+
+          ||
+
+          typeof data.questionSetVersion !==
+            "number"
+
+          ||
+
+          typeof data.categoryStatsVersion !==
+            "number"
         ) {
 
           return null;
+        }
+
+
+        /*
+          問題セットが更新されても、
+          前回の点数・ランク・称号は過去の記録として残す。
+
+          カテゴリ集計仕様だけが変わった場合は、
+          古いカテゴリ別正答率を表示しない。
+        */
+
+        if (
+          data.categoryStatsVersion !==
+            CATEGORY_STATS_VERSION
+        ) {
+
+          data = {
+
+            ...data,
+
+
+            categoryStats:
+              {},
+
+
+            categoryStatsComplete:
+              false
+          };
         }
 
 
@@ -711,7 +818,15 @@ document.addEventListener(
         const dummyData = {
 
           version:
-            1,
+            STORAGE_SCHEMA_VERSION,
+
+
+          questionSetVersion:
+            QUESTION_SET_VERSION,
+
+
+          categoryStatsVersion:
+            CATEGORY_STATS_VERSION,
 
 
           score:
@@ -3761,7 +3876,15 @@ ${escapeHtml(
         const data = {
 
           version:
-            1,
+            STORAGE_SCHEMA_VERSION,
+
+
+          questionSetVersion:
+            QUESTION_SET_VERSION,
+
+
+          categoryStatsVersion:
+            CATEGORY_STATS_VERSION,
 
 
           questionIds:
@@ -3838,10 +3961,76 @@ ${escapeHtml(
         }
 
 
-        const data =
+        let data =
           JSON.parse(
             raw
           );
+
+
+        /* =========================
+           旧version 1をversion 2へ移行
+        ========================= */
+
+        if (
+          data
+
+          &&
+
+          data.version ===
+            1
+        ) {
+
+          data = {
+
+            ...data,
+
+
+            version:
+              2,
+
+
+            questionSetVersion:
+              1,
+
+
+            categoryStatsVersion:
+              1,
+
+
+            categoryStats:
+              data.categoryStats
+
+              &&
+
+              typeof data.categoryStats ===
+                "object"
+
+                ? data.categoryStats
+
+                : {},
+
+
+            categoryStatsComplete:
+              typeof data
+                .categoryStatsComplete ===
+                "boolean"
+
+                ? data
+                    .categoryStatsComplete
+
+                : data
+                    .currentQuestionIndex ===
+                    0
+          };
+
+
+          localStorage.setItem(
+            QUIZ_SAVE_KEY,
+            JSON.stringify(
+              data
+            )
+          );
+        }
 
 
         if (
@@ -3850,7 +4039,7 @@ ${escapeHtml(
           ||
 
           data.version !==
-            1
+            STORAGE_SCHEMA_VERSION
 
           ||
 
@@ -3873,9 +4062,59 @@ ${escapeHtml(
 
           typeof data.score !==
             "number"
+
+          ||
+
+          typeof data.questionSetVersion !==
+            "number"
+
+          ||
+
+          typeof data.categoryStatsVersion !==
+            "number"
         ) {
 
           return null;
+        }
+
+
+        /*
+          カテゴリ集計仕様だけが変わった場合は、
+          クイズ自体は再開できる。
+
+          ただし旧カテゴリ集計と新カテゴリ集計を
+          混ぜないため、カテゴリ別正答率は無効扱いにする。
+        */
+
+        if (
+          data.categoryStatsVersion !==
+            CATEGORY_STATS_VERSION
+        ) {
+
+          data = {
+
+            ...data,
+
+
+            categoryStatsVersion:
+              CATEGORY_STATS_VERSION,
+
+
+            categoryStats:
+              {},
+
+
+            categoryStatsComplete:
+              false
+          };
+
+
+          localStorage.setItem(
+            QUIZ_SAVE_KEY,
+            JSON.stringify(
+              data
+            )
+          );
         }
 
 
@@ -3982,6 +4221,43 @@ ${escapeHtml(
 
 
       if (
+        saved.questionSetVersion !==
+          QUESTION_SET_VERSION
+      ) {
+
+        resumeDetail.textContent =
+          "問題データ更新済み・この途中データは再開できません";
+
+
+        if (
+          heroButtons
+        ) {
+
+          heroButtons
+            .classList
+            .add(
+              "hidden"
+            );
+        }
+
+
+        if (
+          trialNote
+        ) {
+
+          trialNote
+            .classList
+            .add(
+              "hidden"
+            );
+        }
+
+
+        return;
+      }
+
+
+      if (
         heroButtons
       ) {
 
@@ -4039,6 +4315,23 @@ ${escapeHtml(
       ) {
 
         updateResumeArea();
+
+
+        return;
+      }
+
+
+      if (
+        saved.questionSetVersion !==
+          QUESTION_SET_VERSION
+      ) {
+
+        alert(
+          "問題データが更新されたため、この途中データは再開できません。途中データを削除して、最初から挑戦してください。"
+        );
+
+
+        clearProgress();
 
 
         return;
