@@ -4710,3 +4710,27 @@ body {
     font-size: 16px;
   }
 }
+
+/* =========================
+   前回結果カード hover 最終調整
+========================= */
+
+#previous-result-button.previous-result-card:hover {
+  border-color:
+    rgba(
+      240,
+      210,
+      109,
+      0.48
+    ) !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(212, 175, 55, 0.085),
+      rgba(255, 255, 255, 0.025)
+    ) !important;
+
+  transform:
+    translateY(-1px);
+}
