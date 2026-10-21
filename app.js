@@ -3554,17 +3554,40 @@ ${escapeHtml(
 
 
           <div
-            class="rank-label"
+            class="trial-complete-panel"
           >
-            お試し版のため、
-            正式ランク判定はありません
-          </div>
+
+            <div
+              class="trial-complete-label"
+            >
+              TRIAL COMPLETE
+            </div>
 
 
-          <div
-            class="rank"
-          >
-            本当の廃人度は100問で判定
+            <div
+              class="trial-complete-title"
+            >
+              5問完走
+            </div>
+
+
+            <p
+              class="trial-complete-text"
+            >
+              ここまでは、まだウォーミングアップ。
+              <br>
+              正式なランク・称号は、
+              <strong>全100問</strong>
+              で決まります。
+            </p>
+
+
+            <p
+              class="trial-complete-warning"
+            >
+              あなたは本当にアスカを理解しているか？
+            </p>
+
           </div>
 
 
@@ -3572,13 +3595,25 @@ ${escapeHtml(
             class="
               next-button
               main-challenge-button
+              trial-main-cta
             "
+            type="button"
           >
-            廃人検定100問に挑戦する
+
+            <span
+              class="trial-main-cta-main"
+            >
+              廃人検定100問に挑戦する
+            </span>
+
+
+            <span
+              class="trial-main-cta-sub"
+            >
+              正式ランク・称号を判定
+            </span>
+
           </button>
-
-
-          <br>
 
 
           <button
@@ -3586,6 +3621,7 @@ ${escapeHtml(
               trial-result-button
               trial-again-button
             "
+            type="button"
           >
             もう一度5問やってみる
           </button>
