@@ -4048,3 +4048,252 @@ body {
       0.8px rgba(120, 69, 10, 0.75);
   }
 }
+
+/* =========================================================
+   お試し版 結果画面
+========================================================= */
+
+.trial-complete-panel {
+  position: relative;
+
+  max-width: 720px;
+
+  margin:
+    34px auto
+    0;
+
+  padding:
+    30px 26px;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    rgba(
+      212,
+      175,
+      55,
+      0.25
+    );
+
+  border-radius:
+    16px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(212, 175, 55, 0.055),
+      rgba(255, 255, 255, 0.018)
+    );
+
+  box-shadow:
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.035);
+}
+
+
+.trial-complete-panel::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+
+  left: 20%;
+
+  width: 60%;
+
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(240, 210, 109, 0.7),
+      transparent
+    );
+}
+
+
+.trial-complete-label {
+  color: #a5a9ae;
+
+  font-family:
+    "Noto Sans JP",
+    sans-serif;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.18em;
+}
+
+
+.trial-complete-title {
+  margin-top: 8px;
+
+  color: #f0d26d;
+
+  font-family:
+    "Noto Sans JP",
+    sans-serif;
+
+  font-size:
+    clamp(
+      30px,
+      4vw,
+      40px
+    );
+
+  font-weight: 900;
+
+  letter-spacing: 0.04em;
+}
+
+
+.trial-complete-text {
+  margin:
+    20px auto 0;
+
+  color: #d0d3d6;
+
+  font-family:
+    "Noto Sans JP",
+    sans-serif;
+
+  font-size: 15px;
+
+  font-weight: 400;
+
+  line-height: 2;
+}
+
+
+.trial-complete-text strong {
+  color: #f0d26d;
+
+  font-weight: 900;
+}
+
+
+.trial-complete-warning {
+  margin:
+    18px 0 0;
+
+  color: #f1e7be;
+
+  font-family:
+    "Noto Sans JP",
+    sans-serif;
+
+  font-size: 17px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.015em;
+}
+
+
+/* =========================
+   100問へのメインCTA
+========================= */
+
+.trial-main-cta {
+  width:
+    min(
+      440px,
+      100%
+    );
+
+  margin-top: 28px;
+
+  padding:
+    17px 24px;
+
+  box-shadow:
+    0 10px 30px
+    rgba(212, 175, 55, 0.18);
+}
+
+
+.trial-main-cta-main {
+  display: block;
+
+  font-size: 18px;
+
+  font-weight: 900;
+}
+
+
+.trial-main-cta-sub {
+  display: block;
+
+  margin-top: 4px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  opacity: 0.72;
+}
+
+
+/* もう一度5問 */
+
+.trial-again-button {
+  display: block;
+
+  width:
+    min(
+      440px,
+      100%
+    );
+
+  margin:
+    12px auto 0;
+}
+
+
+/* =========================
+   スマホ
+========================= */
+
+@media (max-width: 700px) {
+
+  .trial-complete-panel {
+    margin-top: 28px;
+
+    padding:
+      25px 18px;
+  }
+
+
+  .trial-complete-title {
+    font-size: 29px;
+  }
+
+
+  .trial-complete-text {
+    font-size: 14px;
+
+    line-height: 1.9;
+  }
+
+
+  .trial-complete-warning {
+    font-size: 15px;
+
+    line-height: 1.7;
+  }
+
+
+  .trial-main-cta {
+    margin-top: 24px;
+  }
+
+
+  .trial-main-cta-main {
+    font-size: 17px;
+  }
+}
