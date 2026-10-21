@@ -343,110 +343,105 @@ document.addEventListener(
 
         <button
           id="previous-result-button"
+          class="previous-result-card"
           type="button"
-
-          style="
-            width:
-              100%;
-
-            padding:
-              14px 18px;
-
-            border:
-              1px solid
-              rgba(
-                212,
-                175,
-                55,
-                0.24
-              );
-
-            border-radius:
-              12px;
-
-            background:
-              rgba(
-                212,
-                175,
-                55,
-                0.045
-              );
-
-            color:
-              #ddd;
-
-            font:
-              inherit;
-
-            cursor:
-              pointer;
-
-            text-align:
-              left;
-          "
         >
 
-          <span
-            style="
-              display:
-                block;
-
-              color:
-                #f0d26d;
-
-              font-size:
-                15px;
-
-              font-weight:
-                900;
-            "
-          >
-            前回の結果を見る
-          </span>
-
-
-          <span
-            style="
-              display:
-                block;
-
-              margin-top:
-                5px;
-
-              color:
-                #aaa;
-
-              font-size:
-                13px;
-
-              font-weight:
-                700;
-            "
+          <div
+            class="previous-result-head"
           >
 
-            ${saved.score}
-            /
-            ${saved.total}点
+            <span
+              class="previous-result-kicker"
+            >
+              LAST RESULT
+            </span>
 
-            ・
-
-            ${escapeHtml(
-              saved.rank
-            )}
-
-            ${escapeHtml(
-              saved.title
-            )}
 
             ${
               completedText
 
-                ? ` ・ ${completedText}`
+                ? `
+
+                  <span
+                    class="previous-result-date"
+                  >
+                    ${escapeHtml(
+                      completedText
+                    )}
+                  </span>
+
+                `
 
                 : ""
             }
 
-          </span>
+          </div>
+
+
+          <div
+            class="previous-result-main"
+          >
+
+            <div
+              class="previous-result-score"
+            >
+
+              <span
+                class="previous-result-score-value"
+              >
+                ${saved.score}
+              </span>
+
+
+              <span
+                class="previous-result-score-total"
+              >
+                /
+                ${saved.total}
+              </span>
+
+            </div>
+
+
+            <div
+              class="previous-result-rank-block"
+            >
+
+              <span
+                class="previous-result-rank"
+              >
+                ${escapeHtml(
+                  saved.rank
+                )}
+              </span>
+
+
+              <span
+                class="previous-result-title"
+              >
+                ${escapeHtml(
+                  saved.title
+                )}
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="previous-result-footer"
+          >
+            前回の結果を見る
+
+            <span
+              aria-hidden="true"
+            >
+              →
+            </span>
+
+          </div>
 
         </button>
 
@@ -3195,7 +3190,11 @@ ${escapeHtml(
 
 
           resultTest:
-            false
+            false,
+
+
+          showCompletion:
+            isOfficialFullCompletion
         }
       );
     }
@@ -3222,7 +3221,9 @@ ${escapeHtml(
 
         statsComplete,
 
-        resultTest = false
+        resultTest = false,
+
+        showCompletion = false
       }
     ) {
 
@@ -3352,6 +3353,36 @@ ${escapeHtml(
             正答率
             ${percentage}%
           </div>
+
+
+          ${
+            showCompletion
+
+              ? `
+
+                <div
+                  class="full-completion-badge"
+                >
+
+                  <span
+                    class="full-completion-en"
+                  >
+                    ALL 100 QUESTIONS COMPLETE
+                  </span>
+
+
+                  <span
+                    class="full-completion-title"
+                  >
+                    100問完走
+                  </span>
+
+                </div>
+
+              `
+
+              : ""
+          }
 
 
           <div
