@@ -16,7 +16,7 @@ const CATEGORY_STATS_VERSION = 1;
 
 
 /* =========================
-   カテゴリはこの5つで固定
+   カテゴリは5つで固定
 ========================= */
 
 const VALID_QUESTION_CATEGORIES = [
@@ -192,11 +192,18 @@ document.addEventListener(
     }
 
 
+    /*
+      途中データ破棄
+
+      Supabaseへの abandoned_at 保存が
+      完了してからページを更新する。
+    */
+
     if (resumeResetButton) {
 
       resumeResetButton.addEventListener(
         "click",
-        function () {
+        async function () {
 
           const confirmed =
             confirm(
@@ -217,7 +224,7 @@ document.addEventListener(
             saved.sessionId
           ) {
 
-            abandonQuizSession(
+            await abandonQuizSession(
               saved.sessionId
             );
           }
@@ -261,7 +268,7 @@ document.addEventListener(
 
 
     /* =========================
-       前回結果
+       前回結果表示
     ========================= */
 
     function setupPreviousResultArea() {
@@ -380,9 +387,11 @@ document.addEventListener(
 
           <div class="previous-result-footer">
             前回の結果を見る
+
             <span aria-hidden="true">
               →
             </span>
+
           </div>
 
         </button>
@@ -405,6 +414,10 @@ document.addEventListener(
       }
     }
 
+
+    /* =========================
+       前回結果保存
+    ========================= */
 
     function saveLastResult(
       rankResult
@@ -467,6 +480,10 @@ document.addEventListener(
       }
     }
 
+
+    /* =========================
+       前回結果読込
+    ========================= */
 
     function loadLastResult() {
 
@@ -553,6 +570,10 @@ document.addEventListener(
     }
 
 
+    /* =========================
+       前回結果表示
+    ========================= */
+
     function showPreviousResult() {
 
       const saved =
@@ -607,6 +628,10 @@ document.addEventListener(
       );
     }
 
+
+    /* =========================
+       前回結果テスト
+    ========================= */
 
     function runLastResultTest() {
 
@@ -708,6 +733,10 @@ document.addEventListener(
       }
     }
 
+
+    /* =========================
+       日時表示
+    ========================= */
 
     function formatCompletedAt(
       value
@@ -812,7 +841,7 @@ document.addEventListener(
 
 
         /*
-          挑戦開始をSupabaseへ記録
+          挑戦開始をSupabaseに記録
         */
 
         if (
@@ -911,6 +940,7 @@ document.addEventListener(
             全${quizQuestions.length}問
           </span>
 
+
           <div class="question-meta-right">
 
             <span class="question-id">
@@ -941,7 +971,9 @@ document.addEventListener(
         ${
           quizMode ===
             "main"
+
             ? `
+
               <div class="pause-row">
 
                 <button
@@ -952,7 +984,9 @@ document.addEventListener(
                 </button>
 
               </div>
+
             `
+
             : ""
         }
 
@@ -970,12 +1004,15 @@ document.addEventListener(
           question.instruction
 
             ? `
+
               <div class="question-instruction">
                 ${escapeHtml(
                   question.instruction
                 )}
               </div>
+
             `
+
             : ""
         }
 
@@ -1021,13 +1058,16 @@ document.addEventListener(
             "multiple"
 
             ? `
+
               <button
                 class="submit-answer-button"
                 disabled
               >
                 回答する
               </button>
+
             `
+
             : ""
         }
 
@@ -1057,6 +1097,10 @@ document.addEventListener(
         );
       }
 
+
+      /* =========================
+         複数選択
+      ========================= */
 
       if (
         question.type ===
@@ -1170,6 +1214,10 @@ document.addEventListener(
           }
         );
 
+
+      /* =========================
+         単一選択
+      ========================= */
 
       } else {
 
@@ -1316,7 +1364,9 @@ document.addEventListener(
 
             return (
               answer ===
-              correctAnswers[index]
+              correctAnswers[
+                index
+              ]
             );
           }
         );
@@ -1412,7 +1462,7 @@ document.addEventListener(
 
 
       /*
-        挑戦集計
+        挑戦単位の回答記録
       */
 
       if (
@@ -1633,6 +1683,7 @@ document.addEventListener(
               quizQuestions.length
 
               ? "次の問題へ"
+
               : "結果を見る"
           }
 
@@ -1921,7 +1972,7 @@ document.addEventListener(
 
 
     /* =========================
-       JSON読込
+       問題データ読込
     ========================= */
 
     async function loadQuestionsData() {
@@ -1992,7 +2043,7 @@ document.addEventListener(
 
 
     /* =========================
-       JSON検証
+       問題データ検証
     ========================= */
 
     function validateQuestionsData(
@@ -2116,7 +2167,7 @@ document.addEventListener(
 
 
           /*
-            カテゴリは5カテゴリ以外禁止
+            カテゴリは5種類のみ
           */
 
           if (
@@ -2329,6 +2380,10 @@ document.addEventListener(
     }
 
 
+    /* =========================
+       データエラー画面
+    ========================= */
+
     function showQuestionDataError(
       error,
       showDetail = false
@@ -2367,6 +2422,24 @@ document.addEventListener(
             )}
           </p>
 
+
+          ${
+            showDetail
+
+              ? `
+
+                <pre>
+${escapeHtml(
+  safeMessage
+)}
+                </pre>
+
+              `
+
+              : ""
+          }
+
+
           <button
             class="
               restart-button
@@ -2399,6 +2472,10 @@ document.addEventListener(
       }
     }
 
+
+    /* =========================
+       JSON検証テスト
+    ========================= */
 
     function runDataValidationTest() {
 
@@ -2440,7 +2517,7 @@ document.addEventListener(
 
 
     /* =========================
-       結果テスト
+       結果画面テスト
     ========================= */
 
     function showResultTest() {
@@ -2514,6 +2591,10 @@ document.addEventListener(
     ========================= */
 
     function showResult() {
+
+      /*
+        Supabase完走記録
+      */
 
       if (
         shouldTrackAnalytics() &&
@@ -2622,6 +2703,10 @@ document.addEventListener(
     }
 
 
+    /* =========================
+       本番結果表示
+    ========================= */
+
     function renderMainResultScreen(
       {
 
@@ -2700,7 +2785,9 @@ document.addEventListener(
 
           ${
             showCompletion
+
               ? `
+
                 <div class="full-completion-badge">
 
                   <span class="full-completion-en">
@@ -2712,7 +2799,9 @@ document.addEventListener(
                   </span>
 
                 </div>
+
               `
+
               : ""
           }
 
@@ -2780,6 +2869,10 @@ document.addEventListener(
       }
     }
 
+
+    /* =========================
+       お試し結果
+    ========================= */
 
     function showTrialResult(
       percentage
@@ -2852,6 +2945,10 @@ document.addEventListener(
               で決まります。
             </p>
 
+            <p class="trial-complete-warning">
+              あなたは本当にアスカを理解しているか？
+            </p>
+
           </div>
 
 
@@ -2918,10 +3015,10 @@ document.addEventListener(
 
 
     /* =========================
-       中断
+       100問版を最初から開始
     ========================= */
 
-    function startMainQuizFromBeginning() {
+    async function startMainQuizFromBeginning() {
 
       const saved =
         loadProgress();
@@ -2945,11 +3042,18 @@ document.addEventListener(
         }
 
 
+        /*
+          ここが重要。
+
+          abandoned_at の保存完了を待ってから
+          ローカルデータを消す。
+        */
+
         if (
           saved.sessionId
         ) {
 
-          abandonQuizSession(
+          await abandonQuizSession(
             saved.sessionId
           );
         }
@@ -2959,7 +3063,7 @@ document.addEventListener(
       }
 
 
-      startQuiz(
+      await startQuiz(
         isTestMode
           ? 5
           : 100,
@@ -2967,6 +3071,10 @@ document.addEventListener(
       );
     }
 
+
+    /* =========================
+       中断データ保存
+    ========================= */
 
     function saveProgress(
       nextQuestionIndex
@@ -3046,6 +3154,10 @@ document.addEventListener(
     }
 
 
+    /* =========================
+       中断データ読込
+    ========================= */
+
     function loadProgress() {
 
       try {
@@ -3075,6 +3187,8 @@ document.addEventListener(
           !Array.isArray(
             data.questionIds
           ) ||
+          data.questionIds.length ===
+            0 ||
           typeof data.currentQuestionIndex !==
             "number" ||
           typeof data.score !==
@@ -3100,6 +3214,10 @@ document.addEventListener(
     }
 
 
+    /* =========================
+       中断データ削除
+    ========================= */
+
     function clearProgress() {
 
       try {
@@ -3121,6 +3239,10 @@ document.addEventListener(
       updateResumeArea();
     }
 
+
+    /* =========================
+       再開表示更新
+    ========================= */
 
     function updateResumeArea() {
 
@@ -3221,6 +3343,10 @@ document.addEventListener(
     }
 
 
+    /* =========================
+       クイズ再開
+    ========================= */
+
     async function resumeQuiz() {
 
       const saved =
@@ -3230,6 +3356,8 @@ document.addEventListener(
       if (
         !saved
       ) {
+
+        updateResumeArea();
 
         return;
       }
@@ -3284,8 +3412,19 @@ document.addEventListener(
         ) {
 
           alert(
-            "問題データが更新されたため、途中データを再開できません。"
+            "問題データが更新されたため、途中データを再開できません。最初から挑戦してください。"
           );
+
+
+          if (
+            saved.sessionId
+          ) {
+
+            await abandonQuizSession(
+              saved.sessionId
+            );
+          }
+
 
           clearProgress();
 
@@ -3297,16 +3436,33 @@ document.addEventListener(
           restoredQuestions;
 
         currentQuestionIndex =
-          saved.currentQuestionIndex;
+          Math.max(
+            0,
+            saved.currentQuestionIndex
+          );
 
         score =
-          saved.score;
+          Math.max(
+            0,
+            saved.score
+          );
 
         categoryStats =
-          saved.categoryStats || {};
+          saved.categoryStats &&
+          typeof saved.categoryStats ===
+            "object"
+
+            ? saved.categoryStats
+
+            : {};
 
         categoryStatsComplete =
-          true;
+          typeof saved.categoryStatsComplete ===
+            "boolean"
+
+            ? saved.categoryStatsComplete
+
+            : true;
 
         quizMode =
           "main";
@@ -3314,6 +3470,12 @@ document.addEventListener(
         quizSessionId =
           saved.sessionId || null;
 
+
+        /*
+          古い途中データ等で
+          sessionIdがない場合だけ
+          新しくセッションを作る。
+        */
 
         if (
           shouldTrackAnalytics() &&
@@ -3351,6 +3513,12 @@ document.addEventListener(
 
       } catch (error) {
 
+        console.error(
+          "再開エラー:",
+          error
+        );
+
+
         showQuestionDataError(
           error
         );
@@ -3371,7 +3539,9 @@ document.addEventListener(
         VALID_QUESTION_CATEGORIES.includes(
           category
         )
+
           ? category
+
           : "その他";
 
 
@@ -3410,6 +3580,10 @@ document.addEventListener(
     }
 
 
+    /* =========================
+       カテゴリ結果表示
+    ========================= */
+
     function renderCategoryStatsFromData(
       statsSource,
       statsComplete = true
@@ -3417,6 +3591,16 @@ document.addEventListener(
 
       if (
         !statsComplete
+      ) {
+
+        return "";
+      }
+
+
+      if (
+        !statsSource ||
+        typeof statsSource !==
+          "object"
       ) {
 
         return "";
@@ -3582,6 +3766,10 @@ document.addEventListener(
     }
 
 
+    /* =========================
+       HTMLエスケープ
+    ========================= */
+
     function escapeHtml(
       value
     ) {
@@ -3617,58 +3805,76 @@ document.addEventListener(
 );
 
 
+/* =========================================================
+   Supabase
+========================================================= */
+
+
 /* =========================
-   Supabase 匿名ログイン
+   匿名ログイン
 ========================= */
 
 async function ensureAnonymousUser() {
 
-  const {
-    data: {
+  try {
+
+    const {
+      data: {
+        user
+      },
+      error:
+        userError
+    } =
+
+      await supabaseClient
+        .auth
+        .getUser();
+
+
+    if (
+      !userError &&
       user
-    },
-    error:
-      userError
-  } =
+    ) {
 
-    await supabaseClient
-      .auth
-      .getUser();
+      return user;
+    }
 
 
-  if (
-    !userError &&
-    user
-  ) {
+    const {
+      data,
+      error
+    } =
 
-    return user;
-  }
-
-
-  const {
-    data,
-    error
-  } =
-
-    await supabaseClient
-      .auth
-      .signInAnonymously();
+      await supabaseClient
+        .auth
+        .signInAnonymously();
 
 
-  if (
-    error
-  ) {
+    if (
+      error
+    ) {
+
+      console.error(
+        "匿名ログインエラー:",
+        error
+      );
+
+      return null;
+    }
+
+
+    return data.user;
+
+
+  } catch (error) {
 
     console.error(
-      "匿名ログインエラー:",
+      "匿名ログイン処理エラー:",
       error
     );
 
     return null;
   }
-
-
-  return data.user;
 }
 
 
@@ -3692,6 +3898,10 @@ async function createQuizSession(
     if (
       !user
     ) {
+
+      console.error(
+        "quiz_sessions作成失敗：ユーザーが取得できません"
+      );
 
       return null;
     }
@@ -3754,7 +3964,9 @@ async function createQuizSession(
     }
 
 
-    return data.id;
+    return data
+      ? data.id
+      : null;
 
 
   } catch (error) {
@@ -3770,7 +3982,7 @@ async function createQuizSession(
 
 
 /* =========================
-   1問回答記録
+   1問ごとの回答保存
 ========================= */
 
 async function recordQuizAnswer(
@@ -3868,7 +4080,7 @@ async function recordQuizAnswer(
 
 
 /* =========================
-   進捗更新
+   セッション進捗更新
 ========================= */
 
 async function updateQuizSessionProgress(
@@ -3943,7 +4155,7 @@ async function updateQuizSessionProgress(
 
 
 /* =========================
-   完走
+   完走記録
 ========================= */
 
 async function completeQuizSession(
@@ -4103,7 +4315,7 @@ async function abandonQuizSession(
 
 
 /* =========================
-   初回回答
+   初回回答保存
 ========================= */
 
 async function saveFirstAnswer(
@@ -4187,6 +4399,7 @@ async function saveFirstAnswer(
         .rpc(
           "get_question_stats",
           {
+
             p_question_id:
               questionId
           }
