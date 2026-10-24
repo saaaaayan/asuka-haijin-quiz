@@ -4327,16 +4327,7 @@ ${escapeHtml(
       );
 
 
-      ctx.textAlign =
-        "right";
 
-      ctx.fillText(
-        formatShareHost(
-          shareUrl
-        ),
-        1130,
-        590
-      );
 
 
       return canvas;
