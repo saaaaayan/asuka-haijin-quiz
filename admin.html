@@ -3721,6 +3721,10 @@
       [];
 
 
+    let playerNicknameMap =
+      new Map();
+
+
     let allQuestions =
       [];
 
@@ -4221,7 +4225,8 @@
           totalAnswers,
           firstAnswers,
           reports,
-          questions
+          questions,
+          playerNicknames
         ] =
           await Promise.all(
             [
@@ -4246,7 +4251,9 @@
               fetchAllRows(
                 "questions",
                 "*"
-              )
+              ),
+
+              fetchPlayerNicknames()
 
             ]
           );
@@ -4266,6 +4273,24 @@
 
         allReports =
           reports;
+
+
+        playerNicknameMap =
+          new Map(
+            playerNicknames.map(
+              function (
+                item
+              ) {
+
+                return [
+                  String(
+                    item.user_id
+                  ),
+                  item.nickname
+                ];
+              }
+            )
+          );
 
 
         refreshQuestionDerivedData();
@@ -4338,6 +4363,145 @@
             }
           )
         );
+    }
+
+
+
+    async function fetchPlayerNicknames() {
+
+      try {
+
+        const {
+          data:
+            profiles,
+          error:
+            profileError
+        } =
+
+          await adminClient
+            .from(
+              "player_profiles"
+            )
+            .select(
+              "user_id,nickname_id"
+            );
+
+
+        if (
+          profileError
+        ) {
+
+          console.warn(
+            "player_profiles未使用:",
+            profileError.message ||
+            profileError
+          );
+
+          return [];
+        }
+
+
+        if (
+          !profiles ||
+          !profiles.length
+        ) {
+
+          return [];
+        }
+
+
+        const {
+          data:
+            nicknames,
+          error:
+            nicknameError
+        } =
+
+          await adminClient
+            .from(
+              "nickname_pool"
+            )
+            .select(
+              "id,name"
+            );
+
+
+        if (
+          nicknameError
+        ) {
+
+          console.warn(
+            "nickname_pool未使用:",
+            nicknameError.message ||
+            nicknameError
+          );
+
+          return [];
+        }
+
+
+        const nicknameById =
+          new Map(
+            (
+              nicknames ||
+              []
+            ).map(
+              function (
+                item
+              ) {
+
+                return [
+                  String(
+                    item.id
+                  ),
+                  item.name
+                ];
+              }
+            )
+          );
+
+
+        return profiles
+          .map(
+            function (
+              profile
+            ) {
+
+              return {
+                user_id:
+                  profile.user_id,
+
+                nickname:
+                  nicknameById.get(
+                    String(
+                      profile.nickname_id
+                    )
+                  ) ||
+                  null
+              };
+            }
+          )
+          .filter(
+            function (
+              item
+            ) {
+
+              return !!item.nickname;
+            }
+          );
+
+
+      } catch (
+        error
+      ) {
+
+        console.warn(
+          "ニックネームDB読込は未使用:",
+          error
+        );
+
+        return [];
+      }
     }
 
 
@@ -9874,6 +10038,24 @@
         );
 
 
+      const databaseNickname =
+        playerNicknameMap.get(
+          text
+        );
+
+
+      if (
+        databaseNickname
+      ) {
+
+        return databaseNickname;
+      }
+
+
+      /*
+        DB未反映・未割当時のみ旧方式を使用。
+        DBが使える環境ではこの値は表示されない。
+      */
       let hash =
         2166136261;
 
