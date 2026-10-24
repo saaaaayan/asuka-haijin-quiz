@@ -3437,6 +3437,10 @@ ${escapeHtml(
             ),
 
             document.fonts.load(
+              '400 48px "Reggae One"'
+            ),
+
+            document.fonts.load(
               '600 15px "Noto Sans JP"'
             ),
 
@@ -4640,91 +4644,125 @@ ${escapeHtml(
         startSize;
 
 
+      const applyFont =
+        function () {
+
+          ctx.font =
+            `400 ${size}px "Reggae One", "Noto Sans JP", sans-serif`;
+
+
+          if (
+            "letterSpacing" in
+              ctx
+          ) {
+
+            ctx.letterSpacing =
+              `${size * 0.035}px`;
+          }
+        };
+
+
+      applyFont();
+
+
       while (
         size >
-          minSize
+          minSize &&
+        ctx.measureText(
+          text
+        ).width >
+          maxWidth
       ) {
-
-        ctx.font =
-          `400 ${size}px "Yuji Syuku", "Yu Mincho", "Hiragino Mincho ProN", serif`;
-
-
-        if (
-          ctx.measureText(
-            text
-          ).width <=
-            maxWidth
-        ) {
-
-          break;
-        }
-
 
         size -=
           1;
+
+        applyFont();
       }
-
-
-      const gradient =
-        ctx.createLinearGradient(
-          0,
-          y -
-            size,
-          0,
-          y +
-            8
-        );
-
-
-      gradient.addColorStop(
-        0,
-        "#fff1b0"
-      );
-
-      gradient.addColorStop(
-        0.38,
-        "#f1c45d"
-      );
-
-      gradient.addColorStop(
-        0.72,
-        "#d88a2f"
-      );
-
-      gradient.addColorStop(
-        1,
-        "#8f3d17"
-      );
 
 
       ctx.save();
 
-      ctx.fillStyle =
-        gradient;
-
-      ctx.shadowColor =
-        "rgba(70,28,8,0.95)";
-
-      ctx.shadowBlur =
-        3;
-
-      ctx.shadowOffsetX =
-        3;
-
-      ctx.shadowOffsetY =
-        4;
-
-      ctx.font =
-        `400 ${size}px "Yuji Syuku", "Yu Mincho", "Hiragino Mincho ProN", serif`;
+      applyFont();
 
       ctx.textAlign =
         "left";
+
+      ctx.lineJoin =
+        "round";
+
+      ctx.miterLimit =
+        2;
+
+
+      /* 本番CSS:
+         color #fff0b5
+         1px stroke
+         0 2px 0 #6b3608
+         0 4px 0 rgba(55,22,0,.72)
+         0 6px 18px rgba(212,151,40,.32)
+      */
+
+      ctx.strokeStyle =
+        "rgba(120,69,10,0.75)";
+
+      ctx.lineWidth =
+        Math.max(
+          1.4,
+          size /
+            30
+        );
+
+      ctx.strokeText(
+        text,
+        x,
+        y
+      );
+
+
+      ctx.fillStyle =
+        "#6b3608";
+
+      ctx.fillText(
+        text,
+        x,
+        y +
+          2
+      );
+
+
+      ctx.fillStyle =
+        "rgba(55,22,0,0.72)";
+
+      ctx.fillText(
+        text,
+        x,
+        y +
+          4
+      );
+
+
+      ctx.shadowColor =
+        "rgba(212,151,40,0.32)";
+
+      ctx.shadowBlur =
+        18;
+
+      ctx.shadowOffsetX =
+        0;
+
+      ctx.shadowOffsetY =
+        6;
+
+      ctx.fillStyle =
+        "#fff0b5";
 
       ctx.fillText(
         text,
         x,
         y
       );
+
 
       ctx.restore();
     }
