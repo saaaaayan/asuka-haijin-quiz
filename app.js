@@ -3765,24 +3765,54 @@ ${escapeHtml(
         `/ ${totalValue}`;
 
 
-      const scoreAreaWidth =
-        265;
+      const digitCount =
+        scoreText.length;
 
 
-      const scoreGap =
-        10;
+      const scoreFontSize =
+        digitCount >=
+          3
+
+          ? 80
+
+          : digitCount ===
+              2
+
+            ? 108
+
+            : 126;
 
 
       const totalFontSize =
-        32;
+        digitCount >=
+          3
+
+          ? 24
+
+          : 30;
 
 
-      let scoreFontSize =
-        126;
+      const scoreGap =
+        digitCount >=
+          3
+
+          ? 6
+
+          : 9;
 
 
-      let scoreWidth =
-        0;
+      ctx.textAlign =
+        "left";
+
+
+      ctx.font =
+        `900 ${scoreFontSize}px "Noto Sans JP", "Yu Gothic", sans-serif`;
+
+
+      const scoreWidth =
+        ctx.measureText(
+          scoreText
+        ).width;
 
 
       ctx.font =
@@ -3792,47 +3822,6 @@ ${escapeHtml(
       const totalWidth =
         ctx.measureText(
           totalText
-        ).width;
-
-
-      while (
-        scoreFontSize >
-          88
-      ) {
-
-        ctx.font =
-          `900 ${scoreFontSize}px "Noto Sans JP", "Yu Gothic", sans-serif`;
-
-
-        scoreWidth =
-          ctx.measureText(
-            scoreText
-          ).width;
-
-
-        if (
-          scoreWidth +
-          scoreGap +
-          totalWidth <=
-            scoreAreaWidth
-        ) {
-
-          break;
-        }
-
-
-        scoreFontSize -=
-          2;
-      }
-
-
-      ctx.font =
-        `900 ${scoreFontSize}px "Noto Sans JP", "Yu Gothic", sans-serif`;
-
-
-      scoreWidth =
-        ctx.measureText(
-          scoreText
         ).width;
 
 
@@ -3848,10 +3837,6 @@ ${escapeHtml(
         2;
 
 
-      ctx.textAlign =
-        "left";
-
-
       ctx.fillStyle =
         white;
 
@@ -3861,7 +3846,7 @@ ${escapeHtml(
       ctx.fillText(
         scoreText,
         scoreStartX,
-        323
+        309
       );
 
 
@@ -3876,7 +3861,7 @@ ${escapeHtml(
         scoreStartX +
           scoreWidth +
           scoreGap,
-        320
+        307
       );
 
 
@@ -3964,14 +3949,6 @@ ${escapeHtml(
         456;
 
 
-      const rankLabelY =
-        174;
-
-
-      const rankBaselineY =
-        228;
-
-
       ctx.fillStyle =
         muted;
 
@@ -3984,48 +3961,22 @@ ${escapeHtml(
       ctx.fillText(
         "ランク",
         rankX,
-        rankLabelY
+        174
       );
 
 
-      let rankFontSize =
-        54;
+      const rankFontSize =
+        rankResult.rank.length >=
+          3
 
+          ? 42
 
-      ctx.font =
-        `900 ${rankFontSize}px "Noto Sans JP", "Yu Gothic", sans-serif`;
+          : rankResult.rank.length ===
+              2
 
+            ? 48
 
-      let rankWidth =
-        ctx.measureText(
-          rankResult.rank
-        ).width;
-
-
-      const maxRankWidth =
-        105;
-
-
-      while (
-        rankFontSize >
-          42 &&
-        rankWidth >
-          maxRankWidth
-      ) {
-
-        rankFontSize -=
-          2;
-
-
-        ctx.font =
-          `900 ${rankFontSize}px "Noto Sans JP", "Yu Gothic", sans-serif`;
-
-
-        rankWidth =
-          ctx.measureText(
-            rankResult.rank
-          ).width;
-      }
+            : 54;
 
 
       ctx.fillStyle =
@@ -4037,48 +3988,16 @@ ${escapeHtml(
       ctx.fillText(
         rankResult.rank,
         rankX,
-        rankBaselineY
+        223
       );
-
-
-      const dividerX =
-        Math.max(
-          575,
-          rankX +
-          rankWidth +
-          24
-        );
-
-
-      ctx.strokeStyle =
-        "rgba(255,255,255,0.12)";
-
-      ctx.lineWidth =
-        1;
-
-      ctx.beginPath();
-
-      ctx.moveTo(
-        dividerX,
-        164
-      );
-
-      ctx.lineTo(
-        dividerX,
-        234
-      );
-
-      ctx.stroke();
 
 
       const titleX =
-        dividerX +
-        34;
+        610;
 
 
       const titleMaxWidth =
-        1090 -
-        titleX;
+        480;
 
 
       ctx.fillStyle =
