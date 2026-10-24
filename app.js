@@ -12,7 +12,7 @@ const QUIZ_LAST_RESULT_KEY =
 
 
 const STORAGE_SCHEMA_VERSION =
-  2;
+  3;
 
 const QUESTION_SET_VERSION =
   1;
@@ -136,6 +136,14 @@ document.addEventListener(
       false;
 
 
+    let currentSessionId =
+      null;
+
+
+    let sessionWriteQueue =
+      Promise.resolve();
+
+
     /* =========================
        開発用テストモード
     ========================= */
@@ -219,7 +227,7 @@ document.addEventListener(
 
       resumeResetButton.addEventListener(
         "click",
-        function () {
+        async function () {
 
           const confirmed =
             confirm(
@@ -232,6 +240,21 @@ document.addEventListener(
           ) {
 
             return;
+          }
+
+
+          const saved =
+            loadProgress();
+
+
+          if (
+            saved &&
+            saved.sessionId
+          ) {
+
+            await markQuizSessionAbandoned(
+              saved.sessionId
+            );
           }
 
 
@@ -584,7 +607,7 @@ document.addEventListener(
 
 
         /* =========================
-           旧version 1をversion 2へ移行
+           旧version 1 / 2をversion 3へ移行
         ========================= */
 
         if (
@@ -592,8 +615,15 @@ document.addEventListener(
 
           &&
 
-          data.version ===
-            1
+          (
+            data.version ===
+              1
+
+            ||
+
+            data.version ===
+              2
+          )
         ) {
 
           data = {
@@ -602,15 +632,29 @@ document.addEventListener(
 
 
             version:
-              2,
+              STORAGE_SCHEMA_VERSION,
 
 
             questionSetVersion:
-              1,
+              typeof data
+                .questionSetVersion ===
+                "number"
+
+                ? data
+                    .questionSetVersion
+
+                : 1,
 
 
             categoryStatsVersion:
-              1,
+              typeof data
+                .categoryStatsVersion ===
+                "number"
+
+                ? data
+                    .categoryStatsVersion
+
+                : 1,
 
 
             categoryStatsComplete:
@@ -1015,6 +1059,601 @@ document.addEventListener(
 
 
     /* =========================
+       プレイ集計
+    ========================= */
+
+    function shouldTrackQuiz() {
+
+      return (
+        !isTestMode
+        &&
+        !isResultTestMode
+        &&
+        !isDataTestMode
+        &&
+        !isLastResultTestMode
+      );
+    }
+
+
+    function queueSessionWrite(
+      task
+    ) {
+
+      sessionWriteQueue =
+        sessionWriteQueue
+
+          .then(
+            task
+          )
+
+          .catch(
+            function (
+              error
+            ) {
+
+              console.error(
+                "プレイ集計保存エラー:",
+                error
+              );
+            }
+          );
+
+
+      return sessionWriteQueue;
+    }
+
+
+    async function createQuizSession(
+      mode,
+      questionCount
+    ) {
+
+      if (
+        !shouldTrackQuiz()
+      ) {
+
+        return null;
+      }
+
+
+      try {
+
+        const user =
+          await ensureAnonymousUser();
+
+
+        if (
+          !user
+        ) {
+
+          console.error(
+            "プレイ開始を記録できませんでした：ユーザー情報がありません"
+          );
+
+
+          return null;
+        }
+
+
+        const {
+          data,
+          error
+        } =
+
+          await supabaseClient
+            .from(
+              "quiz_sessions"
+            )
+            .insert(
+              {
+
+                user_id:
+                  user.id,
+
+
+                mode:
+                  mode,
+
+
+                question_count:
+                  questionCount,
+
+
+                question_set_version:
+                  QUESTION_SET_VERSION
+              }
+            )
+            .select(
+              "id"
+            )
+            .single();
+
+
+        if (
+          error
+        ) {
+
+          console.error(
+            "プレイ開始記録エラー:",
+            error
+          );
+
+
+          return null;
+        }
+
+
+        return (
+          data &&
+          data.id
+
+            ? data.id
+
+            : null
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "プレイ開始記録処理エラー:",
+          error
+        );
+
+
+        return null;
+      }
+    }
+
+
+    function recordQuizAnswer(
+      question,
+      selectedAnswer,
+      isCorrect,
+      questionNumber
+    ) {
+
+      if (
+        !shouldTrackQuiz()
+        ||
+        !currentSessionId
+      ) {
+
+        return;
+      }
+
+
+      const sessionId =
+        currentSessionId;
+
+
+      const answeredCount =
+        questionNumber;
+
+
+      const scoreValue =
+        score;
+
+
+      const questionCount =
+        quizQuestions.length;
+
+
+      const selectedAnswerForSave =
+        Array.isArray(
+          selectedAnswer
+        )
+
+          ? [
+              ...selectedAnswer
+            ]
+
+          : selectedAnswer;
+
+
+      queueSessionWrite(
+        async function () {
+
+          const user =
+            await ensureAnonymousUser();
+
+
+          if (
+            !user
+          ) {
+
+            console.error(
+              "回答履歴を記録できませんでした：ユーザー情報がありません"
+            );
+
+
+            return;
+          }
+
+
+          const {
+            error:
+              answerError
+          } =
+
+            await supabaseClient
+              .from(
+                "quiz_answers"
+              )
+              .insert(
+                {
+
+                  session_id:
+                    sessionId,
+
+
+                  user_id:
+                    user.id,
+
+
+                  question_id:
+                    String(
+                      question.id
+                    ),
+
+
+                  question_number:
+                    questionNumber,
+
+
+                  category:
+                    String(
+                      question.category ||
+                      "その他"
+                    ),
+
+
+                  selected_answer:
+                    selectedAnswerForSave,
+
+
+                  is_correct:
+                    isCorrect
+                }
+              );
+
+
+          if (
+            answerError
+
+            &&
+
+            answerError.code !==
+              "23505"
+          ) {
+
+            console.error(
+              "回答履歴保存エラー:",
+              answerError
+            );
+
+
+            return;
+          }
+
+
+          const now =
+            new Date()
+              .toISOString();
+
+
+          const sessionUpdate = {
+
+            last_activity_at:
+              now,
+
+
+            answered_count:
+              answeredCount,
+
+
+            score:
+              scoreValue
+          };
+
+
+          if (
+            answeredCount >=
+              questionCount
+          ) {
+
+            sessionUpdate.completed_at =
+              now;
+          }
+
+
+          const {
+            error:
+              sessionError
+          } =
+
+            await supabaseClient
+              .from(
+                "quiz_sessions"
+              )
+              .update(
+                sessionUpdate
+              )
+              .eq(
+                "id",
+                sessionId
+              )
+              .eq(
+                "user_id",
+                user.id
+              );
+
+
+          if (
+            sessionError
+          ) {
+
+            console.error(
+              "プレイ進捗保存エラー:",
+              sessionError
+            );
+          }
+        }
+      );
+    }
+
+
+    function completeCurrentQuizSession() {
+
+      if (
+        !shouldTrackQuiz()
+        ||
+        !currentSessionId
+      ) {
+
+        return;
+      }
+
+
+      const sessionId =
+        currentSessionId;
+
+
+      const finalScore =
+        score;
+
+
+      const answeredCount =
+        quizQuestions.length;
+
+
+      queueSessionWrite(
+        async function () {
+
+          const user =
+            await ensureAnonymousUser();
+
+
+          if (
+            !user
+          ) {
+
+            return;
+          }
+
+
+          const now =
+            new Date()
+              .toISOString();
+
+
+          const {
+            error
+          } =
+
+            await supabaseClient
+              .from(
+                "quiz_sessions"
+              )
+              .update(
+                {
+
+                  last_activity_at:
+                    now,
+
+
+                  completed_at:
+                    now,
+
+
+                  answered_count:
+                    answeredCount,
+
+
+                  score:
+                    finalScore
+                }
+              )
+              .eq(
+                "id",
+                sessionId
+              )
+              .eq(
+                "user_id",
+                user.id
+              );
+
+
+          if (
+            error
+          ) {
+
+            console.error(
+              "完走記録エラー:",
+              error
+            );
+          }
+        }
+      );
+    }
+
+
+    async function markQuizSessionAbandoned(
+      sessionId
+    ) {
+
+      if (
+        !sessionId
+      ) {
+
+        return;
+      }
+
+
+      try {
+
+        const user =
+          await ensureAnonymousUser();
+
+
+        if (
+          !user
+        ) {
+
+          return;
+        }
+
+
+        const now =
+          new Date()
+            .toISOString();
+
+
+        const {
+          error
+        } =
+
+          await supabaseClient
+            .from(
+              "quiz_sessions"
+            )
+            .update(
+              {
+
+                last_activity_at:
+                  now,
+
+
+                abandoned_at:
+                  now
+              }
+            )
+            .eq(
+              "id",
+              sessionId
+            )
+            .eq(
+              "user_id",
+              user.id
+            )
+            .is(
+              "completed_at",
+              null
+            );
+
+
+        if (
+          error
+        ) {
+
+          console.error(
+            "中断破棄記録エラー:",
+            error
+          );
+        }
+
+
+      } catch (error) {
+
+        console.error(
+          "中断破棄記録処理エラー:",
+          error
+        );
+      }
+    }
+
+
+    function touchQuizSession(
+      sessionId
+    ) {
+
+      if (
+        !shouldTrackQuiz()
+        ||
+        !sessionId
+      ) {
+
+        return;
+      }
+
+
+      queueSessionWrite(
+        async function () {
+
+          const user =
+            await ensureAnonymousUser();
+
+
+          if (
+            !user
+          ) {
+
+            return;
+          }
+
+
+          const {
+            error
+          } =
+
+            await supabaseClient
+              .from(
+                "quiz_sessions"
+              )
+              .update(
+                {
+
+                  last_activity_at:
+                    new Date()
+                      .toISOString()
+                }
+              )
+              .eq(
+                "id",
+                sessionId
+              )
+              .eq(
+                "user_id",
+                user.id
+              );
+
+
+          if (
+            error
+          ) {
+
+            console.error(
+              "再開時刻更新エラー:",
+              error
+            );
+          }
+        }
+      );
+    }
+
+
+    /* =========================
        クイズ開始
     ========================= */
 
@@ -1065,6 +1704,17 @@ document.addEventListener(
 
         answerLocked =
           false;
+
+
+        sessionWriteQueue =
+          Promise.resolve();
+
+
+        currentSessionId =
+          await createQuizSession(
+            quizMode,
+            quizQuestions.length
+          );
 
 
         if (
@@ -1659,6 +2309,15 @@ document.addEventListener(
           1
         );
       }
+
+
+      recordQuizAnswer(
+        question,
+        selectedAnswer,
+        isCorrect,
+        answeredQuestionIndex +
+          1
+      );
 
 
       choiceButtons.forEach(
@@ -3211,6 +3870,9 @@ ${escapeHtml(
           "trial"
       ) {
 
+        completeCurrentQuizSession();
+
+
         const percentage =
           Math.round(
             (
@@ -3228,6 +3890,9 @@ ${escapeHtml(
 
         return;
       }
+
+
+      completeCurrentQuizSession();
 
 
       const rankResult =
@@ -3808,7 +4473,7 @@ ${escapeHtml(
        中断・再開
     ========================= */
 
-    function startMainQuizFromBeginning() {
+    async function startMainQuizFromBeginning() {
 
       const saved =
         loadProgress();
@@ -3832,11 +4497,21 @@ ${escapeHtml(
         }
 
 
+        if (
+          saved.sessionId
+        ) {
+
+          await markQuizSessionAbandoned(
+            saved.sessionId
+          );
+        }
+
+
         clearProgress();
       }
 
 
-      startQuiz(
+      await startQuiz(
         isTestMode
           ? 5
           : 100,
@@ -3885,6 +4560,10 @@ ${escapeHtml(
 
           categoryStatsVersion:
             CATEGORY_STATS_VERSION,
+
+
+          sessionId:
+            currentSessionId,
 
 
           questionIds:
@@ -3968,7 +4647,7 @@ ${escapeHtml(
 
 
         /* =========================
-           旧version 1をversion 2へ移行
+           旧version 1 / 2をversion 3へ移行
         ========================= */
 
         if (
@@ -3976,8 +4655,15 @@ ${escapeHtml(
 
           &&
 
-          data.version ===
-            1
+          (
+            data.version ===
+              1
+
+            ||
+
+            data.version ===
+              2
+          )
         ) {
 
           data = {
@@ -3986,15 +4672,40 @@ ${escapeHtml(
 
 
             version:
-              2,
+              STORAGE_SCHEMA_VERSION,
 
 
             questionSetVersion:
-              1,
+              typeof data
+                .questionSetVersion ===
+                "number"
+
+                ? data
+                    .questionSetVersion
+
+                : 1,
 
 
             categoryStatsVersion:
-              1,
+              typeof data
+                .categoryStatsVersion ===
+                "number"
+
+                ? data
+                    .categoryStatsVersion
+
+                : 1,
+
+
+            sessionId:
+              typeof data
+                .sessionId ===
+                "string"
+
+                ? data
+                    .sessionId
+
+                : null,
 
 
             categoryStats:
@@ -4331,6 +5042,16 @@ ${escapeHtml(
         );
 
 
+        if (
+          saved.sessionId
+        ) {
+
+          await markQuizSessionAbandoned(
+            saved.sessionId
+          );
+        }
+
+
         clearProgress();
 
 
@@ -4399,6 +5120,16 @@ ${escapeHtml(
           );
 
 
+          if (
+            saved.sessionId
+          ) {
+
+            await markQuizSessionAbandoned(
+              saved.sessionId
+            );
+          }
+
+
           clearProgress();
 
 
@@ -4454,6 +5185,48 @@ ${escapeHtml(
 
         quizMode =
           "main";
+
+
+        sessionWriteQueue =
+          Promise.resolve();
+
+
+        currentSessionId =
+
+          typeof saved.sessionId ===
+            "string"
+
+            ? saved.sessionId
+
+            : null;
+
+
+        if (
+          shouldTrackQuiz()
+
+          &&
+
+          !currentSessionId
+        ) {
+
+          currentSessionId =
+            await createQuizSession(
+              "main",
+              quizQuestions.length
+            );
+
+
+          saveProgress(
+            currentQuestionIndex
+          );
+
+
+        } else {
+
+          touchQuizSession(
+            currentSessionId
+          );
+        }
 
 
         if (
