@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
@@ -72,8 +73,7 @@
         1px solid
         #3c3725;
 
-      border-radius:
-        18px;
+      border-radius: 18px;
 
       background:
         linear-gradient(
@@ -97,8 +97,7 @@
       margin:
         80px auto;
 
-      padding:
-        40px;
+      padding: 40px;
     }
 
     .kicker {
@@ -109,7 +108,9 @@
     }
 
     h1 {
-      margin: 10px 0;
+      margin:
+        10px 0;
+
       font-size: 34px;
     }
 
@@ -119,6 +120,7 @@
 
     .login-form {
       margin-top: 30px;
+
       display: grid;
       gap: 16px;
     }
@@ -126,7 +128,9 @@
     label {
       display: grid;
       gap: 7px;
+
       color: #cbd0d6;
+
       font-size: 13px;
     }
 
@@ -146,6 +150,7 @@
 
       color: #fff;
       background: #11151a;
+
       outline: none;
     }
 
@@ -177,6 +182,7 @@
         );
 
       color: #17130a;
+
       font-weight: 800;
     }
 
@@ -200,7 +206,9 @@
 
     .login-error {
       min-height: 22px;
+
       color: #ff7770;
+
       font-size: 14px;
     }
 
@@ -280,6 +288,7 @@
 
     .stat-label {
       color: #9ea5ad;
+
       font-size: 13px;
       font-weight: 700;
     }
@@ -291,12 +300,15 @@
 
       font-size: 38px;
       font-weight: 900;
+
       line-height: 1;
     }
 
     .stat-sub {
       margin-top: 10px;
+
       color: #858d96;
+
       font-size: 12px;
     }
 
@@ -317,14 +329,21 @@
       margin-bottom: 18px;
     }
 
+    .section-head-start {
+      align-items: flex-start;
+    }
+
     .section-title {
       margin: 0;
+
       font-size: 20px;
     }
 
     .section-note {
       margin-top: 6px;
+
       color: #8f969e;
+
       font-size: 12px;
     }
 
@@ -334,7 +353,9 @@
 
     table {
       width: 100%;
+
       border-collapse: collapse;
+
       min-width: 1000px;
     }
 
@@ -356,7 +377,9 @@
 
     th {
       color: #d7b958;
+
       font-size: 12px;
+
       white-space: nowrap;
     }
 
@@ -432,16 +455,67 @@
     }
 
     .toolbar input {
-      width: 320px;
+      width: 300px;
     }
 
     .toolbar select {
       width: auto;
-      min-width: 150px;
+      min-width: 145px;
+    }
+
+    .question-toolbar {
+      margin-top: 16px;
+
+      padding:
+        14px;
+
+      border:
+        1px solid
+        #30363d;
+
+      border-radius: 12px;
+
+      background:
+        rgba(
+          10,
+          13,
+          16,
+          0.45
+        );
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(240px, 1.8fr)
+        repeat(
+          5,
+          minmax(135px, 1fr)
+        );
+
+      gap: 10px;
+    }
+
+    .question-toolbar input,
+    .question-toolbar select {
+      min-width: 0;
+    }
+
+    .filter-summary {
+      margin:
+        13px 0 4px;
+
+      color: #8f969e;
+
+      font-size: 12px;
+    }
+
+    .filter-summary strong {
+      color: #eac24d;
     }
 
     .accuracy {
       font-weight: 900;
+
       white-space: nowrap;
     }
 
@@ -468,6 +542,7 @@
       margin-top: 6px;
 
       border-radius: 999px;
+
       overflow: hidden;
 
       background: #2b3036;
@@ -578,6 +653,7 @@
 
     .difficulty-provisional {
       color: #9da4ac;
+
       font-size: 11px;
     }
 
@@ -587,11 +663,13 @@
 
     .question-text {
       max-width: 650px;
+
       line-height: 1.6;
     }
 
     .question-count {
       color: #eac24d;
+
       font-weight: 800;
     }
 
@@ -604,10 +682,29 @@
       border-radius: 6px;
 
       background: #262c33;
+
       color: #e7c15a;
 
       white-space: nowrap;
     }
+
+    .meta-badge {
+      display: inline-block;
+
+      padding:
+        3px 7px;
+
+      border-radius: 6px;
+
+      background: #21262c;
+
+      color: #bac1c8;
+
+      white-space: nowrap;
+
+      font-size: 11px;
+    }
+
 
     /* =========================
        物申す
@@ -640,6 +737,7 @@
 
     .report-summary-item strong {
       margin-left: 5px;
+
       color: #f0c64d;
     }
 
@@ -702,6 +800,7 @@
 
     .report-type {
       color: #efc44c;
+
       font-weight: 800;
     }
 
@@ -773,6 +872,7 @@
       color: #dfe3e7;
 
       font-weight: 700;
+
       line-height: 1.6;
     }
 
@@ -855,6 +955,7 @@
 
     .report-save-button:disabled {
       opacity: 0.55;
+
       cursor: default;
     }
 
@@ -917,6 +1018,24 @@
     }
 
     @media (
+      max-width: 1250px
+    ) {
+
+      .question-toolbar {
+        grid-template-columns:
+          repeat(
+            3,
+            1fr
+          );
+      }
+
+      .question-toolbar input {
+        grid-column:
+          span 3;
+      }
+    }
+
+    @media (
       max-width: 800px
     ) {
 
@@ -927,6 +1046,16 @@
 
       .report-save-result {
         text-align: left;
+      }
+
+      .question-toolbar {
+        grid-template-columns:
+          1fr;
+      }
+
+      .question-toolbar input {
+        grid-column:
+          auto;
       }
     }
 
@@ -946,6 +1075,7 @@
 
       .admin-header {
         align-items: flex-start;
+
         flex-direction: column;
       }
 
@@ -955,6 +1085,7 @@
 
       .login-panel {
         margin-top: 30px;
+
         padding: 25px;
       }
 
@@ -986,7 +1117,9 @@
   <main class="container">
 
 
-    <!-- ログイン -->
+    <!-- =========================
+         ログイン
+    ========================== -->
 
     <section
       id="login-screen"
@@ -1004,6 +1137,7 @@
       <p class="muted">
         管理者アカウントでログインしてください。
       </p>
+
 
       <form
         id="login-form"
@@ -1057,7 +1191,9 @@
 
 
 
-    <!-- 管理画面 -->
+    <!-- =========================
+         管理画面
+    ========================== -->
 
     <section
       id="admin-screen"
@@ -1145,7 +1281,9 @@
 
 
 
-      <!-- 集計 -->
+      <!-- =========================
+           集計
+      ========================== -->
 
       <section
         id="tab-dashboard"
@@ -1188,7 +1326,9 @@
 
 
 
-      <!-- 問題別統計 -->
+      <!-- =========================
+           問題別統計
+      ========================== -->
 
       <section
         id="tab-question-stats"
@@ -1305,7 +1445,9 @@
 
 
 
-      <!-- 物申す -->
+      <!-- =========================
+           物申す
+      ========================== -->
 
       <section
         id="tab-reports"
@@ -1378,7 +1520,9 @@
 
 
 
-      <!-- 問題一覧 -->
+      <!-- =========================
+           問題一覧
+      ========================== -->
 
       <section
         id="tab-questions"
@@ -1387,7 +1531,12 @@
 
         <div class="panel section-panel">
 
-          <div class="section-head">
+          <div
+            class="
+              section-head
+              section-head-start
+            "
+          >
 
             <div>
 
@@ -1401,24 +1550,156 @@
               ></div>
 
               <div class="section-note">
-                難易度は実際の初回正答率から自動算出。
-                20回答未満は暫定。
+                実測難易度・カテゴリ・検証状態・制作段階で絞り込みできます。
               </div>
 
             </div>
 
+          </div>
 
-            <div class="toolbar">
 
-              <input
-                id="question-search"
-                type="search"
-                placeholder="問題ID・本文・カテゴリで検索"
-              >
+          <div class="question-toolbar">
 
-            </div>
+            <input
+              id="question-search"
+              type="search"
+              placeholder="問題ID・問題文で検索"
+            >
+
+
+            <select
+              id="question-category-filter"
+            >
+
+              <option value="">
+                全カテゴリ
+              </option>
+
+              <option value="モンスター">
+                モンスター
+              </option>
+
+              <option value="アイテム">
+                アイテム
+              </option>
+
+              <option value="ダンジョン">
+                ダンジョン
+              </option>
+
+              <option value="仕様">
+                仕様
+              </option>
+
+              <option value="その他">
+                その他
+              </option>
+
+            </select>
+
+
+            <select
+              id="question-difficulty-filter"
+            >
+
+              <option value="">
+                全難易度
+              </option>
+
+              <option value="5">
+                難易度5
+              </option>
+
+              <option value="4">
+                難易度4
+              </option>
+
+              <option value="3">
+                難易度3
+              </option>
+
+              <option value="2">
+                難易度2
+              </option>
+
+              <option value="1">
+                難易度1
+              </option>
+
+              <option value="unrated">
+                未確定
+              </option>
+
+            </select>
+
+
+            <select
+              id="question-verification-filter"
+            >
+
+              <option value="">
+                全検証状態
+              </option>
+
+            </select>
+
+
+            <select
+              id="question-stage-filter"
+            >
+
+              <option value="">
+                全制作段階
+              </option>
+
+            </select>
+
+
+            <select
+              id="question-sort"
+            >
+
+              <option value="id-asc">
+                IDが小さい順
+              </option>
+
+              <option value="id-desc">
+                IDが大きい順
+              </option>
+
+              <option value="difficulty-desc">
+                難易度が高い順
+              </option>
+
+              <option value="difficulty-asc">
+                難易度が低い順
+              </option>
+
+              <option value="accuracy-asc">
+                正答率が低い順
+              </option>
+
+              <option value="accuracy-desc">
+                正答率が高い順
+              </option>
+
+              <option value="attempts-desc">
+                回答者数が多い順
+              </option>
+
+              <option value="attempts-asc">
+                回答者数が少ない順
+              </option>
+
+            </select>
 
           </div>
+
+
+          <div
+            id="question-filter-summary"
+            class="filter-summary"
+          ></div>
 
 
           <div
@@ -1584,9 +1865,45 @@
       );
 
 
+    const questionFilterSummary =
+      document.querySelector(
+        "#question-filter-summary"
+      );
+
+
     const questionSearch =
       document.querySelector(
         "#question-search"
+      );
+
+
+    const questionCategoryFilter =
+      document.querySelector(
+        "#question-category-filter"
+      );
+
+
+    const questionDifficultyFilter =
+      document.querySelector(
+        "#question-difficulty-filter"
+      );
+
+
+    const questionVerificationFilter =
+      document.querySelector(
+        "#question-verification-filter"
+      );
+
+
+    const questionStageFilter =
+      document.querySelector(
+        "#question-stage-filter"
+      );
+
+
+    const questionSort =
+      document.querySelector(
+        "#question-sort"
       );
 
 
@@ -2171,6 +2488,9 @@
           );
 
 
+        buildQuestionFilterOptions();
+
+
         renderStats(
           sessions,
           totalAnswers
@@ -2191,9 +2511,7 @@
         applyReportFilter();
 
 
-        renderQuestions(
-          questions
-        );
+        applyQuestionFilters();
 
 
       } catch (
@@ -2734,6 +3052,7 @@
                       </td>
 
                       <td>
+
                         ${
                           session.mode ===
                           "trial"
@@ -2742,6 +3061,7 @@
 
                             : "100問版"
                         }
+
                       </td>
 
                       <td>
@@ -2758,15 +3078,19 @@
                       </td>
 
                       <td>
+
                         ${
                           session.answered_count ??
                           0
                         }
+
                         /
+
                         ${
                           session.question_count ??
                           "-"
                         }
+
                       </td>
 
                       <td>
@@ -3026,11 +3350,9 @@
       ) {
 
         return `
-
           <span class="difficulty-none">
             未確定
           </span>
-
         `;
       }
 
@@ -3077,7 +3399,7 @@
 
 
     /* =========================
-       問題別統計フィルタ
+       問題別統計フィルター
     ========================= */
 
     questionStatsSearch.addEventListener(
@@ -3164,6 +3486,24 @@
 
 
       rows =
+        sortQuestionStats(
+          rows,
+          sort
+        );
+
+
+      renderQuestionStats(
+        rows
+      );
+    }
+
+
+    function sortQuestionStats(
+      rows,
+      sort
+    ) {
+
+      const result =
         [...rows];
 
 
@@ -3172,35 +3512,8 @@
         "accuracy-asc"
       ) {
 
-        rows.sort(
-          function (
-            a,
-            b
-          ) {
-
-            if (
-              a.accuracy ===
-              null
-            ) {
-
-              return 1;
-            }
-
-
-            if (
-              b.accuracy ===
-              null
-            ) {
-
-              return -1;
-            }
-
-
-            return (
-              a.accuracy -
-              b.accuracy
-            );
-          }
+        result.sort(
+          compareAccuracyAsc
         );
 
 
@@ -3209,35 +3522,8 @@
         "accuracy-desc"
       ) {
 
-        rows.sort(
-          function (
-            a,
-            b
-          ) {
-
-            if (
-              a.accuracy ===
-              null
-            ) {
-
-              return 1;
-            }
-
-
-            if (
-              b.accuracy ===
-              null
-            ) {
-
-              return -1;
-            }
-
-
-            return (
-              b.accuracy -
-              a.accuracy
-            );
-          }
+        result.sort(
+          compareAccuracyDesc
         );
 
 
@@ -3246,7 +3532,7 @@
         "attempts-desc"
       ) {
 
-        rows.sort(
+        result.sort(
           function (
             a,
             b
@@ -3265,7 +3551,7 @@
         "measured-desc"
       ) {
 
-        rows.sort(
+        result.sort(
           function (
             a,
             b
@@ -3306,7 +3592,7 @@
         "measured-asc"
       ) {
 
-        rows.sort(
+        result.sort(
           function (
             a,
             b
@@ -3344,7 +3630,7 @@
 
       } else {
 
-        rows.sort(
+        result.sort(
           function (
             a,
             b
@@ -3363,9 +3649,7 @@
       }
 
 
-      renderQuestionStats(
-        rows
-      );
+      return result;
     }
 
 
@@ -4330,14 +4614,7 @@
               );
 
 
-          const reportDate =
-            getReportDate(
-              report
-            );
-
-
           if (
-            reportDate &&
             report.created_at
           ) {
 
@@ -4398,7 +4675,8 @@
 
           allReports[
             reportIndex
-          ] = data;
+          ] =
+            data;
         }
 
 
@@ -4557,36 +4835,316 @@
 
 
     /* =========================
-       問題一覧
+       問題一覧フィルター
     ========================= */
 
     questionSearch.addEventListener(
       "input",
-      function () {
-
-        const keyword =
-          questionSearch
-            .value
-            .trim()
-            .toLowerCase();
+      applyQuestionFilters
+    );
 
 
-        if (
-          !keyword
-        ) {
-
-          renderQuestions(
-            allQuestions
-          );
-
-          return;
-        }
+    questionCategoryFilter.addEventListener(
+      "change",
+      applyQuestionFilters
+    );
 
 
-        const filtered =
-          allQuestions.filter(
+    questionDifficultyFilter.addEventListener(
+      "change",
+      applyQuestionFilters
+    );
+
+
+    questionVerificationFilter.addEventListener(
+      "change",
+      applyQuestionFilters
+    );
+
+
+    questionStageFilter.addEventListener(
+      "change",
+      applyQuestionFilters
+    );
+
+
+    questionSort.addEventListener(
+      "change",
+      applyQuestionFilters
+    );
+
+
+    function buildQuestionFilterOptions() {
+
+      const verificationValues =
+        [...new Set(
+          allQuestions
+            .map(
+              function (
+                question
+              ) {
+
+                return (
+                  question.verification ||
+                  ""
+                ).trim();
+              }
+            )
+            .filter(
+              Boolean
+            )
+        )]
+          .sort();
+
+
+      const stageValues =
+        [...new Set(
+          allQuestions
+            .map(
+              function (
+                question
+              ) {
+
+                return (
+                  question.production_stage ||
+                  ""
+                ).trim();
+              }
+            )
+            .filter(
+              Boolean
+            )
+        )]
+          .sort();
+
+
+      questionVerificationFilter.innerHTML = `
+
+        <option value="">
+          全検証状態
+        </option>
+
+        <option value="__empty__">
+          未設定
+        </option>
+
+        ${verificationValues
+          .map(
             function (
-              question
+              value
+            ) {
+
+              return `
+
+                <option value="${escapeHtml(
+                  value
+                )}">
+                  ${escapeHtml(
+                    value
+                  )}
+                </option>
+
+              `;
+            }
+          )
+          .join("")}
+
+      `;
+
+
+      questionStageFilter.innerHTML = `
+
+        <option value="">
+          全制作段階
+        </option>
+
+        <option value="__empty__">
+          未設定
+        </option>
+
+        ${stageValues
+          .map(
+            function (
+              value
+            ) {
+
+              return `
+
+                <option value="${escapeHtml(
+                  value
+                )}">
+                  ${escapeHtml(
+                    value
+                  )}
+                </option>
+
+              `;
+            }
+          )
+          .join("")}
+
+      `;
+    }
+
+
+    function applyQuestionFilters() {
+
+      const keyword =
+        questionSearch
+          .value
+          .trim()
+          .toLowerCase();
+
+
+      const category =
+        questionCategoryFilter.value;
+
+
+      const difficulty =
+        questionDifficultyFilter.value;
+
+
+      const verification =
+        questionVerificationFilter.value;
+
+
+      const stage =
+        questionStageFilter.value;
+
+
+      const sort =
+        questionSort.value;
+
+
+      let rows =
+        allQuestions.filter(
+          function (
+            question
+          ) {
+
+            const stats =
+              questionStatsMap.get(
+                String(
+                  question.id
+                )
+              );
+
+
+            if (
+              category &&
+              question.category !==
+              category
+            ) {
+
+              return false;
+            }
+
+
+            if (
+              difficulty
+            ) {
+
+              if (
+                difficulty ===
+                "unrated"
+              ) {
+
+                if (
+                  stats &&
+                  stats.measuredDifficulty !==
+                  null
+                ) {
+
+                  return false;
+                }
+
+
+              } else {
+
+                if (
+                  !stats ||
+                  String(
+                    stats.measuredDifficulty
+                  ) !==
+                  difficulty
+                ) {
+
+                  return false;
+                }
+              }
+            }
+
+
+            const questionVerification =
+              (
+                question.verification ||
+                ""
+              ).trim();
+
+
+            if (
+              verification
+            ) {
+
+              if (
+                verification ===
+                "__empty__"
+              ) {
+
+                if (
+                  questionVerification
+                ) {
+
+                  return false;
+                }
+
+
+              } else if (
+                questionVerification !==
+                verification
+              ) {
+
+                return false;
+              }
+            }
+
+
+            const questionStage =
+              (
+                question.production_stage ||
+                ""
+              ).trim();
+
+
+            if (
+              stage
+            ) {
+
+              if (
+                stage ===
+                "__empty__"
+              ) {
+
+                if (
+                  questionStage
+                ) {
+
+                  return false;
+                }
+
+
+              } else if (
+                questionStage !==
+                stage
+              ) {
+
+                return false;
+              }
+            }
+
+
+            if (
+              keyword
             ) {
 
               const text =
@@ -4604,33 +5162,428 @@
                   .toLowerCase();
 
 
-              return text.includes(
-                keyword
+              if (
+                !text.includes(
+                  keyword
+                )
+              ) {
+
+                return false;
+              }
+            }
+
+
+            return true;
+          }
+        );
+
+
+      rows =
+        sortQuestions(
+          rows,
+          sort
+        );
+
+
+      renderQuestions(
+        rows,
+        allQuestions.length
+      );
+    }
+
+
+
+    function sortQuestions(
+      questions,
+      sort
+    ) {
+
+      const rows =
+        [...questions];
+
+
+      rows.sort(
+        function (
+          a,
+          b
+        ) {
+
+          const statsA =
+            questionStatsMap.get(
+              String(
+                a.id
+              )
+            );
+
+
+          const statsB =
+            questionStatsMap.get(
+              String(
+                b.id
+              )
+            );
+
+
+          if (
+            sort ===
+            "id-desc"
+          ) {
+
+            return (
+              Number(
+                b.id
+              ) -
+              Number(
+                a.id
+              )
+            );
+          }
+
+
+          if (
+            sort ===
+            "difficulty-desc"
+          ) {
+
+            const av =
+              statsA &&
+              statsA.measuredDifficulty !==
+              null
+
+                ? statsA.measuredDifficulty
+
+                : -1;
+
+
+            const bv =
+              statsB &&
+              statsB.measuredDifficulty !==
+              null
+
+                ? statsB.measuredDifficulty
+
+                : -1;
+
+
+            if (
+              bv !==
+              av
+            ) {
+
+              return (
+                bv -
+                av
               );
             }
+
+
+            return (
+              Number(
+                a.id
+              ) -
+              Number(
+                b.id
+              )
+            );
+          }
+
+
+          if (
+            sort ===
+            "difficulty-asc"
+          ) {
+
+            const av =
+              statsA &&
+              statsA.measuredDifficulty !==
+              null
+
+                ? statsA.measuredDifficulty
+
+                : 99;
+
+
+            const bv =
+              statsB &&
+              statsB.measuredDifficulty !==
+              null
+
+                ? statsB.measuredDifficulty
+
+                : 99;
+
+
+            if (
+              av !==
+              bv
+            ) {
+
+              return (
+                av -
+                bv
+              );
+            }
+
+
+            return (
+              Number(
+                a.id
+              ) -
+              Number(
+                b.id
+              )
+            );
+          }
+
+
+          if (
+            sort ===
+            "accuracy-asc"
+          ) {
+
+            return compareQuestionAccuracy(
+              statsA,
+              statsB,
+              "asc",
+              a,
+              b
+            );
+          }
+
+
+          if (
+            sort ===
+            "accuracy-desc"
+          ) {
+
+            return compareQuestionAccuracy(
+              statsA,
+              statsB,
+              "desc",
+              a,
+              b
+            );
+          }
+
+
+          if (
+            sort ===
+            "attempts-desc"
+          ) {
+
+            const av =
+              statsA
+                ? statsA.attempts
+                : 0;
+
+
+            const bv =
+              statsB
+                ? statsB.attempts
+                : 0;
+
+
+            if (
+              bv !==
+              av
+            ) {
+
+              return (
+                bv -
+                av
+              );
+            }
+
+
+            return (
+              Number(
+                a.id
+              ) -
+              Number(
+                b.id
+              )
+            );
+          }
+
+
+          if (
+            sort ===
+            "attempts-asc"
+          ) {
+
+            const av =
+              statsA
+                ? statsA.attempts
+                : 0;
+
+
+            const bv =
+              statsB
+                ? statsB.attempts
+                : 0;
+
+
+            if (
+              av !==
+              bv
+            ) {
+
+              return (
+                av -
+                bv
+              );
+            }
+
+
+            return (
+              Number(
+                a.id
+              ) -
+              Number(
+                b.id
+              )
+            );
+          }
+
+
+          return (
+            Number(
+              a.id
+            ) -
+            Number(
+              b.id
+            )
           );
+        }
+      );
 
 
-        renderQuestions(
-          filtered,
-          allQuestions.length
+      return rows;
+    }
+
+
+    function compareQuestionAccuracy(
+      statsA,
+      statsB,
+      direction,
+      questionA,
+      questionB
+    ) {
+
+      const aMissing =
+        !statsA ||
+        statsA.accuracy ===
+        null;
+
+
+      const bMissing =
+        !statsB ||
+        statsB.accuracy ===
+        null;
+
+
+      if (
+        aMissing &&
+        bMissing
+      ) {
+
+        return (
+          Number(
+            questionA.id
+          ) -
+          Number(
+            questionB.id
+          )
         );
       }
-    );
 
+
+      if (
+        aMissing
+      ) {
+
+        return 1;
+      }
+
+
+      if (
+        bMissing
+      ) {
+
+        return -1;
+      }
+
+
+      if (
+        statsA.accuracy ===
+        statsB.accuracy
+      ) {
+
+        return (
+          Number(
+            questionA.id
+          ) -
+          Number(
+            questionB.id
+          )
+        );
+      }
+
+
+      if (
+        direction ===
+        "desc"
+      ) {
+
+        return (
+          statsB.accuracy -
+          statsA.accuracy
+        );
+      }
+
+
+      return (
+        statsA.accuracy -
+        statsB.accuracy
+      );
+    }
+
+
+
+    /* =========================
+       問題一覧表示
+    ========================= */
 
     function renderQuestions(
       questions,
-      total = null
+      total =
+        null
     ) {
 
-      questionCount.textContent =
+      const totalQuestions =
         total ===
         null
 
-          ? `全${questions.length}問`
+          ? questions.length
 
-          : `${questions.length} / ${total}問`;
+          : total;
+
+
+      questionCount.textContent =
+        `全${totalQuestions}問`;
+
+
+      questionFilterSummary.innerHTML = `
+
+        表示中：
+        <strong>
+          ${questions.length}
+        </strong>
+        /
+        ${totalQuestions}
+        問
+
+      `;
 
 
       if (
@@ -4639,7 +5592,7 @@
       ) {
 
         questionsTable.innerHTML =
-          `<div class="empty">該当する問題はありません。</div>`;
+          `<div class="empty">条件に該当する問題はありません。</div>`;
 
         return;
       }
@@ -4698,7 +5651,9 @@
 
                   const attempts =
                     stats
+
                       ? stats.attempts
+
                       : 0;
 
 
@@ -4725,6 +5680,7 @@
 
 
                       <td>
+
                         ${
                           question.type ===
                           "multiple"
@@ -4733,6 +5689,7 @@
 
                             : "単一選択"
                         }
+
                       </td>
 
 
@@ -4778,18 +5735,30 @@
 
 
                       <td>
-                        ${escapeHtml(
-                          question.verification ||
-                          "-"
-                        )}
+
+                        <span class="meta-badge">
+
+                          ${escapeHtml(
+                            question.verification ||
+                            "未設定"
+                          )}
+
+                        </span>
+
                       </td>
 
 
                       <td>
-                        ${escapeHtml(
-                          question.production_stage ||
-                          "-"
-                        )}
+
+                        <span class="meta-badge">
+
+                          ${escapeHtml(
+                            question.production_stage ||
+                            "未設定"
+                          )}
+
+                        </span>
+
                       </td>
 
                     </tr>
@@ -4804,6 +5773,107 @@
         </table>
 
       `;
+    }
+
+
+
+    /* =========================
+       比較
+    ========================= */
+
+    function compareAccuracyAsc(
+      a,
+      b
+    ) {
+
+      if (
+        a.accuracy ===
+        null &&
+        b.accuracy ===
+        null
+      ) {
+
+        return (
+          Number(
+            a.id
+          ) -
+          Number(
+            b.id
+          )
+        );
+      }
+
+
+      if (
+        a.accuracy ===
+        null
+      ) {
+
+        return 1;
+      }
+
+
+      if (
+        b.accuracy ===
+        null
+      ) {
+
+        return -1;
+      }
+
+
+      return (
+        a.accuracy -
+        b.accuracy
+      );
+    }
+
+
+    function compareAccuracyDesc(
+      a,
+      b
+    ) {
+
+      if (
+        a.accuracy ===
+        null &&
+        b.accuracy ===
+        null
+      ) {
+
+        return (
+          Number(
+            a.id
+          ) -
+          Number(
+            b.id
+          )
+        );
+      }
+
+
+      if (
+        a.accuracy ===
+        null
+      ) {
+
+        return 1;
+      }
+
+
+      if (
+        b.accuracy ===
+        null
+      ) {
+
+        return -1;
+      }
+
+
+      return (
+        b.accuracy -
+        a.accuracy
+      );
     }
 
 
@@ -4848,7 +5918,9 @@
 
       if (
         value ===
-        null
+        null ||
+        value ===
+        undefined
       ) {
 
         return "accuracy-none";
