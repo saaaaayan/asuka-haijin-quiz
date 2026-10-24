@@ -3166,6 +3166,9 @@ ${escapeHtml(
         `&url=${encodeURIComponent(shareUrl)}`;
 
 
+      await ensureShareFontsReady();
+
+
       const canvas =
         createResultShareCanvas(
           {
@@ -3405,6 +3408,59 @@ ${escapeHtml(
     }
 
 
+    async function ensureShareFontsReady() {
+
+      if (
+        !document.fonts
+      ) {
+
+        return;
+      }
+
+
+      try {
+
+        await Promise.all(
+          [
+            document.fonts.ready,
+
+            document.fonts.load(
+              '400 38px "Yuji Syuku"'
+            ),
+
+            document.fonts.load(
+              '800 30px "Yuji Syuku"'
+            ),
+
+            document.fonts.load(
+              '400 32px "Yuji Syuku"'
+            ),
+
+            document.fonts.load(
+              '600 15px "Noto Sans JP"'
+            ),
+
+            document.fonts.load(
+              '700 18px "Noto Sans JP"'
+            ),
+
+            document.fonts.load(
+              '900 54px "Noto Sans JP"'
+            )
+          ]
+        );
+
+
+      } catch (error) {
+
+        console.warn(
+          "共有画像用フォントの読み込み待ちに失敗しました:",
+          error
+        );
+      }
+    }
+
+
     function createResultShareCanvas(
       {
         scoreValue,
@@ -3475,9 +3531,6 @@ ${escapeHtml(
       const gold =
         "#e5bd55";
 
-      const goldSoft =
-        "#b9923f";
-
       const white =
         "#f6f2e8";
 
@@ -3507,14 +3560,19 @@ ${escapeHtml(
 
 
       /* =========================
-         本番結果画面と同じタイトル表現
+         タイトル
+         本番結果画面と同じフォント構成
       ========================= */
+
+      const brandFont =
+        '"Yuji Syuku", "Yu Mincho", "Hiragino Mincho ProN", serif';
+
+
+      ctx.font =
+        `400 38px ${brandFont}`;
 
       ctx.textAlign =
         "left";
-
-      ctx.font =
-        '400 38px "Yuji Syuku", "Yu Mincho", "Hiragino Mincho ProN", serif';
 
 
       const asukaTitle =
@@ -3522,6 +3580,38 @@ ${escapeHtml(
 
       const haijinTitle =
         "廃人検定";
+
+
+      const asukaWidth =
+        ctx.measureText(
+          asukaTitle
+        ).width;
+
+
+      const haijinWidth =
+        ctx.measureText(
+          haijinTitle
+        ).width;
+
+
+      const brandGap =
+        18;
+
+
+      const brandWidth =
+        asukaWidth +
+        brandGap +
+        haijinWidth;
+
+
+      const brandStartX =
+        600 -
+        brandWidth /
+        2;
+
+
+      const brandY =
+        72;
 
 
       ctx.save();
@@ -3543,25 +3633,21 @@ ${escapeHtml(
 
       ctx.fillText(
         asukaTitle,
-        70,
-        72
+        brandStartX,
+        brandY
       );
 
       ctx.restore();
 
 
-      const asukaWidth =
-        ctx.measureText(
-          asukaTitle
-        ).width;
-
-
       const haijinGradient =
         ctx.createLinearGradient(
           0,
-          42,
+          brandY -
+            40,
           0,
-          82
+          brandY +
+            10
         );
 
 
@@ -3605,24 +3691,27 @@ ${escapeHtml(
 
       ctx.fillText(
         haijinTitle,
-        70 +
+        brandStartX +
           asukaWidth +
-          16,
-        72
+          brandGap,
+        brandY
       );
 
       ctx.restore();
 
 
       ctx.fillStyle =
-        white;
+        "#f5f5f5";
 
       ctx.font =
-        '800 30px "Yuji Syuku", "Yu Mincho", "Hiragino Mincho ProN", serif';
+        `800 30px ${brandFont}`;
+
+      ctx.textAlign =
+        "center";
 
       ctx.fillText(
         "検定結果",
-        70,
+        600,
         116
       );
 
@@ -3650,7 +3739,7 @@ ${escapeHtml(
         muted;
 
       ctx.font =
-        '700 18px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+        '700 18px "Noto Sans JP", "Yu Gothic", sans-serif';
 
       ctx.textAlign =
         "center";
@@ -3676,7 +3765,7 @@ ${escapeHtml(
         "left";
 
       ctx.font =
-        '900 126px "Arial", "Yu Gothic", sans-serif';
+        '900 126px "Noto Sans JP", "Yu Gothic", sans-serif';
 
 
       const scoreWidth =
@@ -3686,7 +3775,7 @@ ${escapeHtml(
 
 
       ctx.font =
-        '800 36px "Arial", "Yu Gothic", sans-serif';
+        '800 36px "Noto Sans JP", "Yu Gothic", sans-serif';
 
 
       const totalWidth =
@@ -3715,7 +3804,7 @@ ${escapeHtml(
         white;
 
       ctx.font =
-        '900 126px "Arial", "Yu Gothic", sans-serif';
+        '900 126px "Noto Sans JP", "Yu Gothic", sans-serif';
 
       ctx.fillText(
         scoreText,
@@ -3728,7 +3817,7 @@ ${escapeHtml(
         gold;
 
       ctx.font =
-        '800 36px "Arial", "Yu Gothic", sans-serif';
+        '800 36px "Noto Sans JP", "Yu Gothic", sans-serif';
 
       ctx.fillText(
         totalText,
@@ -3757,7 +3846,7 @@ ${escapeHtml(
         muted;
 
       ctx.font =
-        '700 17px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+        '700 17px "Noto Sans JP", "Yu Gothic", sans-serif';
 
       ctx.fillText(
         `正答率 ${percentage}%`,
@@ -3791,7 +3880,7 @@ ${escapeHtml(
         gold;
 
       ctx.font =
-        '800 18px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+        '800 18px "Noto Sans JP", "Yu Gothic", sans-serif';
 
       ctx.fillText(
         "あなたは何点取れる？",
@@ -3823,7 +3912,7 @@ ${escapeHtml(
         muted;
 
       ctx.font =
-        '700 13px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+        '600 13px "Noto Sans JP", sans-serif';
 
       ctx.textAlign =
         "left";
@@ -3836,10 +3925,10 @@ ${escapeHtml(
 
 
       ctx.fillStyle =
-        gold;
+        "#f1d36a";
 
       ctx.font =
-        '900 54px "Arial", "Yu Gothic", sans-serif';
+        '900 54px "Noto Sans JP", "Yu Gothic", sans-serif';
 
       ctx.fillText(
         rankResult.rank,
@@ -3873,7 +3962,7 @@ ${escapeHtml(
         muted;
 
       ctx.font =
-        '700 13px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+        '600 13px "Noto Sans JP", sans-serif';
 
       ctx.fillText(
         "称号",
@@ -3947,7 +4036,7 @@ ${escapeHtml(
           white;
 
         ctx.font =
-          '800 28px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+          '800 28px "Noto Sans JP", "Yu Gothic", sans-serif';
 
         ctx.textAlign =
           "center";
@@ -3963,7 +4052,7 @@ ${escapeHtml(
           gold;
 
         ctx.font =
-          '700 18px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+          '700 18px "Noto Sans JP", "Yu Gothic", sans-serif';
 
         ctx.fillText(
           "挑戦者、求む。",
@@ -4065,7 +4154,7 @@ ${escapeHtml(
                   muted;
 
                 ctx.font =
-                  '700 15px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+                  '700 15px "Noto Sans JP", "Yu Gothic", sans-serif';
 
                 ctx.textAlign =
                   "left";
@@ -4121,7 +4210,7 @@ ${escapeHtml(
                   white;
 
                 ctx.font =
-                  '800 17px "Arial", "Yu Gothic", sans-serif';
+                  '800 17px "Noto Sans JP", "Yu Gothic", sans-serif';
 
                 ctx.textAlign =
                   "right";
@@ -4147,7 +4236,7 @@ ${escapeHtml(
         muted;
 
       ctx.font =
-        '600 14px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+        '600 14px "Noto Sans JP", "Yu Gothic", sans-serif';
 
       ctx.textAlign =
         "left";
