@@ -52,7 +52,8 @@ body {
     20px;
 
   padding:
-    62px 68px;
+    54px 64px
+    48px;
 }
 
 
@@ -131,101 +132,6 @@ body {
 }
 
 
-.hero-card::before {
-  content:
-    "";
-
-  position:
-    absolute;
-
-  left:
-    50%;
-
-  top:
-    170px;
-
-  width:
-    min(
-      760px,
-      72%
-    );
-
-  height:
-    1px;
-
-  transform:
-    translateX(
-      -50%
-    );
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(
-        212,
-        175,
-        55,
-        0.22
-      ) 18%,
-      rgba(
-        212,
-        175,
-        55,
-        0.60
-      ) 50%,
-      rgba(
-        212,
-        175,
-        55,
-        0.22
-      ) 82%,
-      transparent
-    );
-
-  pointer-events:
-    none;
-}
-
-
-.hero-card::after {
-  content:
-    "◆";
-
-  position:
-    absolute;
-
-  left:
-    50%;
-
-  top:
-    158px;
-
-  transform:
-    translateX(
-      -50%
-    );
-
-  padding:
-    0 10px;
-
-  color:
-    #d8b34e;
-
-  background:
-    #11161b;
-
-  font-size:
-    10px;
-
-  line-height:
-    24px;
-
-  pointer-events:
-    none;
-}
-
-
 .hero-label {
   position:
     relative;
@@ -292,7 +198,7 @@ h1 {
     auto;
 
   margin-bottom:
-    42px;
+    34px;
 
   text-align:
     center;
@@ -357,7 +263,7 @@ h1 {
 
   margin:
     0 auto
-    34px;
+    28px;
 
   color:
     #f5f0df;
@@ -417,11 +323,11 @@ h1 {
     900px;
 
   margin:
-    36px auto
-    38px;
+    30px auto
+    30px;
 
   padding:
-    22px 34px;
+    19px 28px;
 
   border:
     1px solid
@@ -429,27 +335,18 @@ h1 {
       214,
       174,
       65,
-      0.40
+      0.24
     );
 
   border-radius:
-    4px;
+    10px;
 
   background:
-    linear-gradient(
-      90deg,
-      rgba(
-        212,
-        175,
-        55,
-        0.035
-      ),
-      rgba(
-        212,
-        175,
-        55,
-        0.018
-      )
+    rgba(
+      212,
+      175,
+      55,
+      0.028
     );
 
   color:
@@ -483,40 +380,6 @@ h1 {
         55,
         0.018
       );
-}
-
-
-.hero-warning::before,
-.hero-warning::after {
-  content:
-    "";
-
-  position:
-    absolute;
-
-  top:
-    -1px;
-
-  width:
-    52px;
-
-  height:
-    1px;
-
-  background:
-    #d5ad42;
-}
-
-
-.hero-warning::before {
-  left:
-    -1px;
-}
-
-
-.hero-warning::after {
-  right:
-    -1px;
 }
 
 
@@ -842,7 +705,7 @@ h1 {
     );
 
   margin:
-    18px auto
+    16px auto
     0;
 
   color:
@@ -2049,13 +1912,6 @@ h1 {
   /*
     トップタイトルだけスマホで1行表示
   */
-
-  .hero-card::before,
-  .hero-card::after {
-    display:
-      none;
-  }
-
 
   .hero-card > h1 {
     display: flex;
