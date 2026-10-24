@@ -3882,17 +3882,14 @@ ${escapeHtml(
       );
 
 
-      ctx.fillStyle =
-        white;
-
-      drawFittedText(
+      drawRankTitleText(
         ctx,
         rankResult.title,
         590,
         221,
         500,
-        29,
-        20
+        31,
+        21
       );
 
 
@@ -4537,6 +4534,110 @@ ${escapeHtml(
 
       ctx.textBaseline =
         "alphabetic";
+    }
+
+
+    function drawRankTitleText(
+      ctx,
+      text,
+      x,
+      y,
+      maxWidth,
+      startSize,
+      minSize
+    ) {
+
+      let size =
+        startSize;
+
+
+      while (
+        size >
+          minSize
+      ) {
+
+        ctx.font =
+          `400 ${size}px "Yuji Syuku", "Yu Mincho", "Hiragino Mincho ProN", serif`;
+
+
+        if (
+          ctx.measureText(
+            text
+          ).width <=
+            maxWidth
+        ) {
+
+          break;
+        }
+
+
+        size -=
+          1;
+      }
+
+
+      const gradient =
+        ctx.createLinearGradient(
+          0,
+          y -
+            size,
+          0,
+          y +
+            8
+        );
+
+
+      gradient.addColorStop(
+        0,
+        "#fff1b0"
+      );
+
+      gradient.addColorStop(
+        0.38,
+        "#f1c45d"
+      );
+
+      gradient.addColorStop(
+        0.72,
+        "#d88a2f"
+      );
+
+      gradient.addColorStop(
+        1,
+        "#8f3d17"
+      );
+
+
+      ctx.save();
+
+      ctx.fillStyle =
+        gradient;
+
+      ctx.shadowColor =
+        "rgba(70,28,8,0.95)";
+
+      ctx.shadowBlur =
+        3;
+
+      ctx.shadowOffsetX =
+        3;
+
+      ctx.shadowOffsetY =
+        4;
+
+      ctx.font =
+        `400 ${size}px "Yuji Syuku", "Yu Mincho", "Hiragino Mincho ProN", serif`;
+
+      ctx.textAlign =
+        "left";
+
+      ctx.fillText(
+        text,
+        x,
+        y
+      );
+
+      ctx.restore();
     }
 
 
