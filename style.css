@@ -447,7 +447,17 @@ h1 {
 /* 本番100問 */
 
 .start-button {
-  order: 1;
+  order:
+    1;
+
+  position:
+    relative;
+
+  isolation:
+    isolate;
+
+  overflow:
+    hidden;
 
   width:
     100%;
@@ -464,54 +474,172 @@ h1 {
 
   border:
     1px solid
-    rgba(255, 222, 115, 0.55);
+    rgba(
+      222,
+      169,
+      61,
+      0.58
+    );
 
   border-radius:
     14px;
 
   background:
+    radial-gradient(
+      circle at 24% 0%,
+      rgba(
+        164,
+        48,
+        28,
+        0.34
+      ),
+      transparent 42%
+    ),
     linear-gradient(
-      135deg,
-      #b68118 0%,
-      #dfb33d 43%,
-      #f4d96d 100%
+      145deg,
+      #211311 0%,
+      #140f11 48%,
+      #090b0e 100%
     );
 
-  color: #171717;
+  color:
+    #f0ca69;
 
-  font-family: inherit;
+  font-family:
+    inherit;
 
-  cursor: pointer;
+  cursor:
+    pointer;
 
   box-shadow:
     0 12px 30px
       rgba(
-        212,
-        175,
-        55,
-        0.16
+        72,
+        8,
+        7,
+        0.34
+      ),
+    0 0 0 1px
+      rgba(
+        255,
+        199,
+        78,
+        0.04
       ),
     inset 0 1px 0
       rgba(
         255,
-        255,
-        255,
-        0.28
+        220,
+        132,
+        0.08
+      ),
+    inset 0 -18px 30px
+      rgba(
+        95,
+        12,
+        10,
+        0.16
       );
 
   transition:
     transform 0.15s ease,
-    box-shadow 0.15s ease;
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+
+.start-button::before {
+  content:
+    "";
+
+  position:
+    absolute;
+
+  inset:
+    0;
+
+  z-index:
+    -1;
+
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(
+        255,
+        199,
+        86,
+        0.028
+      ) 0,
+      rgba(
+        255,
+        199,
+        86,
+        0.028
+      ) 1px,
+      transparent 1px,
+      transparent 9px
+    );
+
+  pointer-events:
+    none;
 }
 
 
 .start-button:hover {
   transform:
-    translateY(-2px);
+    translateY(
+      -2px
+    );
+
+  border-color:
+    rgba(
+      237,
+      185,
+      74,
+      0.80
+    );
+
+  background:
+    radial-gradient(
+      circle at 24% 0%,
+      rgba(
+        179,
+        52,
+        28,
+        0.42
+      ),
+      transparent 44%
+    ),
+    linear-gradient(
+      145deg,
+      #281512 0%,
+      #181013 48%,
+      #0a0c0f 100%
+    );
 
   box-shadow:
-    0 14px 38px rgba(212, 175, 55, 0.30),
-    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    0 16px 38px
+      rgba(
+        83,
+        8,
+        7,
+        0.42
+      ),
+    0 0 22px
+      rgba(
+        213,
+        154,
+        44,
+        0.09
+      ),
+    inset 0 1px 0
+      rgba(
+        255,
+        220,
+        132,
+        0.10
+      );
 }
 
 
@@ -533,6 +661,9 @@ h1 {
       -52%
     );
 
+  color:
+    #e2b84f;
+
   font-size:
     34px;
 
@@ -541,7 +672,7 @@ h1 {
 
   line-height:
     1;
-}
+
 
 
 .start-button {
@@ -551,8 +682,17 @@ h1 {
 
 
 .button-main {
+  position:
+    relative;
+
+  z-index:
+    1;
+
   display:
     block;
+
+  color:
+    #f1cb68;
 
   font-family:
     "Reggae One",
@@ -569,40 +709,61 @@ h1 {
     400;
 
   letter-spacing:
-    0.025em;
+    0.035em;
 
   text-shadow:
-    0 1px 0
-    rgba(
-      255,
-      255,
-      255,
-      0.18
-    );
+    0 2px 0
+      rgba(
+        53,
+        13,
+        8,
+        0.95
+      ),
+    0 0 13px
+      rgba(
+        225,
+        155,
+        45,
+        0.13
+      );
 }
 
 
 .button-sub {
-  display: block;
+  position:
+    relative;
 
-  margin-top: 7px;
+  z-index:
+    1;
+
+  display:
+    block;
+
+  margin-top:
+    7px;
+
+  color:
+    #d6bda0;
 
   font-size:
-    14px;
+    13px;
 
   line-height:
     1.35;
 
-  font-weight: 700;
+  font-weight:
+    700;
 
-  opacity: 0.8;
+  letter-spacing:
+    0.025em;
 }
 
 
 /* お試し5問 */
 
 .trial-button {
-  order: 2;
+  order:
+    2;
 
   width:
     100%;
@@ -619,7 +780,12 @@ h1 {
 
   border:
     1px solid
-    rgba(134, 160, 194, 0.30);
+    rgba(
+      158,
+      183,
+      211,
+      0.24
+    );
 
   border-radius:
     14px;
@@ -627,18 +793,27 @@ h1 {
   background:
     linear-gradient(
       145deg,
-      #293541,
-      #1b2530
+      #35414d,
+      #27323d
     );
 
-  color: #f3f5f8;
+  color:
+    #f3f5f8;
 
-  font-family: inherit;
+  font-family:
+    inherit;
 
-  cursor: pointer;
+  cursor:
+    pointer;
 
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+    inset 0 1px 0
+      rgba(
+        255,
+        255,
+        255,
+        0.07
+      );
 
   transition:
     transform 0.15s ease,
@@ -650,21 +825,40 @@ h1 {
 
 .trial-button:hover {
   transform:
-    translateY(-2px);
+    translateY(
+      -2px
+    );
 
   border-color:
-    rgba(158, 188, 227, 0.48);
+    rgba(
+      177,
+      203,
+      230,
+      0.40
+    );
 
   background:
     linear-gradient(
       145deg,
-      #394452,
-      #29323c
+      #3b4855,
+      #2c3844
     );
 
   box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    0 8px 22px
+      rgba(
+        0,
+        0,
+        0,
+        0.20
+      ),
+    inset 0 1px 0
+      rgba(
+        255,
+        255,
+        255,
+        0.09
+      );
 }
 
 
@@ -693,7 +887,7 @@ h1 {
     );
 
   color:
-    #f4f7fb;
+    #cddbe8;
 
   font-size:
     34px;
@@ -711,37 +905,37 @@ h1 {
     block;
 
   margin-bottom:
-    5px;
+    4px;
 
   color:
-    #e7eef7;
+    #eef3f8;
 
   font-family:
-    "Yuji Syuku",
     "Shippori Mincho B1",
     "Yu Mincho",
+    "Hiragino Mincho ProN",
     serif;
 
   font-size:
-    24px;
+    23px;
 
   line-height:
-    1.25;
+    1.3;
 
   font-weight:
-    400;
+    500;
 
   letter-spacing:
-    0.08em;
+    0.12em;
 
   text-shadow:
-    0 1px 10px
-    rgba(
-      170,
-      205,
-      240,
-      0.12
-    );
+    0 1px 9px
+      rgba(
+        184,
+        211,
+        236,
+        0.10
+      );
 }
 
 
@@ -750,7 +944,7 @@ h1 {
     block;
 
   color:
-    #f4f7fb;
+    #dce6ef;
 
   font-family:
     "Noto Sans JP",
@@ -758,16 +952,16 @@ h1 {
     sans-serif;
 
   font-size:
-    16px;
+    15px;
 
   line-height:
     1.35;
 
   font-weight:
-    700;
+    600;
 
   letter-spacing:
-    0.015em;
+    0.02em;
 }
 
 
