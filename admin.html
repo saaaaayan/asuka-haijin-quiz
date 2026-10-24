@@ -480,26 +480,96 @@
       align-items: center;
       justify-content: center;
 
-      width: 31px;
-      height: 31px;
+      width: 32px;
+      height: 32px;
 
       border:
         1px solid
-        #78621e;
+        #666;
 
       border-radius: 50%;
 
-      color: #f0c94f;
+      font-weight: 900;
+    }
+
+    /* 難易度1：緑 */
+    .difficulty-1 {
+      color: #73df96;
+
+      border-color:
+        #397f50;
 
       background:
         rgba(
-          218,
-          173,
-          46,
-          0.08
+          60,
+          175,
+          95,
+          0.12
         );
+    }
 
-      font-weight: 900;
+    /* 難易度2：青緑 */
+    .difficulty-2 {
+      color: #5fd6c7;
+
+      border-color:
+        #347d75;
+
+      background:
+        rgba(
+          60,
+          180,
+          165,
+          0.12
+        );
+    }
+
+    /* 難易度3：黄 */
+    .difficulty-3 {
+      color: #f0d05b;
+
+      border-color:
+        #8d772c;
+
+      background:
+        rgba(
+          220,
+          185,
+          55,
+          0.12
+        );
+    }
+
+    /* 難易度4：オレンジ */
+    .difficulty-4 {
+      color: #f0a34d;
+
+      border-color:
+        #945e27;
+
+      background:
+        rgba(
+          225,
+          125,
+          40,
+          0.13
+        );
+    }
+
+    /* 難易度5：赤 */
+    .difficulty-5 {
+      color: #ff6f69;
+
+      border-color:
+        #9d3d39;
+
+      background:
+        rgba(
+          215,
+          65,
+          60,
+          0.14
+        );
     }
 
     .difficulty-provisional {
@@ -2395,10 +2465,6 @@
     }
 
 
-    /* =========================
-       実測難易度集計
-    ========================= */
-
     function buildQuestionStats(
       questions,
       firstAnswers
@@ -2589,13 +2655,22 @@
           20;
 
 
+      const difficulty =
+        item.measuredDifficulty;
+
+
       return `
 
         <span class="difficulty-measured">
 
-          <span class="difficulty-number">
+          <span
+            class="
+              difficulty-number
+              difficulty-${difficulty}
+            "
+          >
 
-            ${item.measuredDifficulty}
+            ${difficulty}
 
           </span>
 
