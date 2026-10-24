@@ -3913,17 +3913,7 @@ ${escapeHtml(
       ctx.stroke();
 
 
-      ctx.fillStyle =
-        gold;
 
-      ctx.font =
-        '800 18px "Noto Sans JP", "Yu Gothic", sans-serif';
-
-      ctx.fillText(
-        "あなたは何点取れる？",
-        227,
-        443
-      );
 
 
       /* =========================
