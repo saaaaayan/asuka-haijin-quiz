@@ -4021,16 +4021,53 @@ ${escapeHtml(
         ctx.textAlign =
           "center";
 
-        drawWrappedText(
+        drawWrappedTextInBox(
           ctx,
           plainComment,
-          775,
-          302,
-          640,
-          21,
-          15,
-          25,
-          8
+          {
+            x:
+              420,
+
+            y:
+              269,
+
+            width:
+              710,
+
+            height:
+              215
+          },
+          {
+            startSize:
+              21,
+
+            minSize:
+              13,
+
+            lineHeightRatio:
+              1.34,
+
+            paddingX:
+              28,
+
+            paddingY:
+              18,
+
+            fontWeight:
+              700,
+
+            fontFamily:
+              '"Noto Sans JP", "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif',
+
+            color:
+              white,
+
+            align:
+              "center",
+
+            valign:
+              "middle"
+          }
         );
 
 
@@ -4414,31 +4451,29 @@ ${escapeHtml(
     }
 
 
-    function drawWrappedText(
+    function wrapShareTextByWidth(
       ctx,
       text,
-      centerX,
-      startY,
-      maxWidth,
-      startSize,
-      minSize,
-      lineHeight,
-      maxLines
+      maxWidth
     ) {
 
       const paragraphs =
         String(
           text || ""
         )
+          .replace(
+            /\r/g,
+            ""
+          )
           .split(
             /\n+/
           )
           .map(
             function (
-              line
+              paragraph
             ) {
 
-              return line.trim();
+              return paragraph.trim();
             }
           )
           .filter(
@@ -4446,169 +4481,368 @@ ${escapeHtml(
           );
 
 
-      let fontSize =
-        startSize;
-
-      let lines =
+      const lines =
         [];
 
 
-      const buildLines =
+      paragraphs.forEach(
         function (
-          size
+          paragraph
         ) {
 
-          ctx.font =
-            `700 ${size}px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif`;
+          let current =
+            "";
 
 
-          const built =
-            [];
-
-
-          paragraphs.forEach(
+          Array.from(
+            paragraph
+          ).forEach(
             function (
-              paragraph
+              char
             ) {
 
-              let current =
-                "";
-
-
-              Array.from(
-                paragraph
-              ).forEach(
-                function (
-                  char
-                ) {
-
-                  const test =
-                    current +
-                    char;
-
-
-                  if (
-                    current &&
-                    ctx.measureText(
-                      test
-                    ).width >
-                      maxWidth
-                  ) {
-
-                    built.push(
-                      current
-                    );
-
-                    current =
-                      char;
-
-
-                  } else {
-
-                    current =
-                      test;
-                  }
-                }
-              );
+              const candidate =
+                current +
+                char;
 
 
               if (
-                current
+                current &&
+                ctx.measureText(
+                  candidate
+                ).width >
+                  maxWidth
               ) {
 
-                built.push(
+                lines.push(
                   current
                 );
+
+                current =
+                  char;
+
+
+              } else {
+
+                current =
+                  candidate;
               }
             }
           );
 
 
-          return built;
-        };
+          if (
+            current
+          ) {
 
-
-      while (
-        fontSize >
-          minSize
-      ) {
-
-        lines =
-          buildLines(
-            fontSize
-          );
-
-
-        if (
-          lines.length <=
-            maxLines
-        ) {
-
-          break;
+            lines.push(
+              current
+            );
+          }
         }
+      );
 
 
-        fontSize -=
-          1;
-      }
+      return lines;
+    }
 
 
-      lines =
-        buildLines(
-          fontSize
-        );
+    function drawWrappedTextInBox(
+      ctx,
+      text,
+      box,
+      options = {}
+    ) {
+
+      const startSize =
+        options.startSize ??
+        21;
 
 
-      if (
-        lines.length >
-          maxLines
-      ) {
-
-        lines =
-          lines.slice(
-            0,
-            maxLines
-          );
+      const minSize =
+        options.minSize ??
+        13;
 
 
-        const lastIndex =
-          lines.length -
-          1;
+      const lineHeightRatio =
+        options.lineHeightRatio ??
+        1.34;
 
 
-        lines[
-          lastIndex
-        ] =
-          lines[
-            lastIndex
-          ]
-            .replace(
-              /[。！？!?、,\s]+$/g,
-              ""
-            ) +
-          "…";
-      }
+      const paddingX =
+        options.paddingX ??
+        28;
 
 
-      ctx.font =
-        `700 ${fontSize}px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif`;
+      const paddingY =
+        options.paddingY ??
+        18;
 
-      ctx.textAlign =
+
+      const fontWeight =
+        options.fontWeight ??
+        700;
+
+
+      const fontFamily =
+        options.fontFamily ??
+        '"Noto Sans JP", "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+
+
+      const color =
+        options.color ??
+        "#f6f2e8";
+
+
+      const align =
+        options.align ??
         "center";
 
-      ctx.textBaseline =
+
+      const valign =
+        options.valign ??
         "middle";
 
 
-      const actualLineHeight =
+      const innerWidth =
         Math.max(
-          lineHeight,
-          fontSize +
-            6
+          1,
+          box.width -
+            paddingX *
+            2
         );
 
 
-      lines.forEach(
+      const innerHeight =
+        Math.max(
+          1,
+          box.height -
+            paddingY *
+            2
+        );
+
+
+      let fitted =
+        null;
+
+
+      for (
+        let size =
+          startSize;
+        size >=
+          minSize;
+        size -=
+          1
+      ) {
+
+        ctx.font =
+          `${fontWeight} ${size}px ${fontFamily}`;
+
+
+        const lines =
+          wrapShareTextByWidth(
+            ctx,
+            text,
+            innerWidth
+          );
+
+
+        const lineHeight =
+          Math.ceil(
+            size *
+            lineHeightRatio
+          );
+
+
+        const totalHeight =
+          lines.length *
+          lineHeight;
+
+
+        if (
+          totalHeight <=
+            innerHeight
+        ) {
+
+          fitted = {
+            size,
+            lines,
+            lineHeight,
+            truncated:
+              false
+          };
+
+          break;
+        }
+      }
+
+
+      if (
+        !fitted
+      ) {
+
+        const size =
+          minSize;
+
+
+        ctx.font =
+          `${fontWeight} ${size}px ${fontFamily}`;
+
+
+        const lineHeight =
+          Math.ceil(
+            size *
+            lineHeightRatio
+          );
+
+
+        const maxLines =
+          Math.max(
+            1,
+            Math.floor(
+              innerHeight /
+              lineHeight
+            )
+          );
+
+
+        let lines =
+          wrapShareTextByWidth(
+            ctx,
+            text,
+            innerWidth
+          );
+
+
+        const truncated =
+          lines.length >
+          maxLines;
+
+
+        if (
+          truncated
+        ) {
+
+          lines =
+            lines.slice(
+              0,
+              maxLines
+            );
+
+
+          const lastIndex =
+            lines.length -
+            1;
+
+
+          let lastLine =
+            lines[
+              lastIndex
+            ]
+              .replace(
+                /[。！？!?、,\s]+$/g,
+                ""
+              );
+
+
+          while (
+            lastLine &&
+            ctx.measureText(
+              lastLine +
+              "…"
+            ).width >
+              innerWidth
+          ) {
+
+            lastLine =
+              lastLine.slice(
+                0,
+                -1
+              );
+          }
+
+
+          lines[
+            lastIndex
+          ] =
+            lastLine +
+            "…";
+        }
+
+
+        fitted = {
+          size,
+          lines,
+          lineHeight,
+          truncated
+        };
+      }
+
+
+      ctx.save();
+
+
+      ctx.font =
+        `${fontWeight} ${fitted.size}px ${fontFamily}`;
+
+      ctx.fillStyle =
+        color;
+
+      ctx.textAlign =
+        align;
+
+      ctx.textBaseline =
+        "alphabetic";
+
+
+      const contentHeight =
+        fitted.lines.length *
+        fitted.lineHeight;
+
+
+      let firstBaseline =
+        box.y +
+        paddingY +
+        fitted.size;
+
+
+      if (
+        valign ===
+          "middle"
+      ) {
+
+        firstBaseline =
+          box.y +
+          (
+            box.height -
+            contentHeight
+          ) /
+          2 +
+          fitted.size *
+          0.86;
+      }
+
+
+      const drawX =
+        align ===
+          "left"
+
+          ? box.x +
+            paddingX
+
+          : align ===
+              "right"
+
+            ? box.x +
+              box.width -
+              paddingX
+
+            : box.x +
+              box.width /
+              2;
+
+
+      fitted.lines.forEach(
         function (
           line,
           index
@@ -4616,17 +4850,19 @@ ${escapeHtml(
 
           ctx.fillText(
             line,
-            centerX,
-            startY +
+            drawX,
+            firstBaseline +
               index *
-              actualLineHeight
+              fitted.lineHeight
           );
         }
       );
 
 
-      ctx.textBaseline =
-        "alphabetic";
+      ctx.restore();
+
+
+      return fitted;
     }
 
 
