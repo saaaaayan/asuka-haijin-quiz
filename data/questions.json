@@ -897,7 +897,8 @@
     "source": "https://w.atwiki.jp/feimon_db/pages/32.html",
     "review_status": "確認済",
     "audit_status": "単一資料整合",
-    "quality_status": "残す候補","audit_note": "元出典との整合性/計算は確認。両Wiki照合は未完了。",
+    "quality_status": "残す候補",
+    "audit_note": "元出典との整合性/計算は確認。両Wiki照合は未完了。",
     "audit_date": "2026-10-19",
     "production_stage": "仮作成"
   },
@@ -1796,7 +1797,8 @@
     "tags": [
       "トンネルの杖",
       "水路",
-      "壁"],
+      "壁"
+    ],
     "verification": "source_checked",
     "difficulty_author": 5,
     "source": "https://w.atwiki.jp/feimon_db/pages/12.html",
@@ -2695,7 +2697,8 @@
     "type": "single",
     "question": "通過の腕輪を装備した状態で、水中の敵へ向かって秘技「体当」を使うとどうなる？",
     "choices": [
-      "敵にぶつかって止まる","敵をつかんで進む",
+      "敵にぶつかって止まる",
+      "敵をつかんで進む",
       "敵の頭上を通り過ぎる",
       "秘技が不発になる"
     ],
@@ -2894,7 +2897,7 @@
   },
   {
     "id": 103,
-    "category": "ワナ",
+    "category": "仕様",
     "type": "single",
     "question": "裏白蛇で落とし穴ダメージで死亡したとき、復活の草を持っていたらどうなる？",
     "choices": [
@@ -2925,7 +2928,7 @@
   },
   {
     "id": 104,
-    "category": "フェイの問題",
+    "category": "仕様",
     "type": "single",
     "question": "フェイ問で落とし穴に落ちたとき、復活の草を持っていたらどうなる？",
     "choices": [
@@ -2985,7 +2988,7 @@
   },
   {
     "id": 106,
-    "category": "装備",
+    "category": "アイテム",
     "type": "single",
     "question": "次のうち、防御力が一番高くなるのは？",
     "choices": [
@@ -3017,7 +3020,7 @@
   },
   {
     "id": 107,
-    "category": "装備",
+    "category": "アイテム",
     "type": "single",
     "question": "身代わりの腕輪が、あと1回攻撃を受けると壊れる状態で、アスカが攻撃されて力尽きるとどうなる？",
     "choices": [
