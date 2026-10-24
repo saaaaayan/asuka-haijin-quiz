@@ -781,6 +781,57 @@
     }
 
 
+    .player-identity {
+      display:
+        inline-flex;
+
+      align-items:
+        baseline;
+
+      gap:
+        7px;
+
+      min-width:
+        0;
+    }
+
+
+    .player-nickname {
+      color:
+        #f0c64d;
+
+      font-weight:
+        800;
+
+      white-space:
+        nowrap;
+    }
+
+
+    .player-id-short {
+      color:
+        #858d96;
+
+      font-size:
+        11px;
+
+      white-space:
+        nowrap;
+    }
+
+
+    .report-player {
+      display:
+        inline-flex;
+
+      align-items:
+        baseline;
+
+      gap:
+        6px;
+    }
+
+
     @media (
       max-width:
       1100px
@@ -2281,7 +2332,7 @@
               <input
                 id="session-player-search"
                 type="search"
-                placeholder="プレイヤーIDで検索"
+                placeholder="ニックネーム・プレイヤーIDで検索"
               >
 
 
@@ -4844,8 +4895,18 @@
                     .toLowerCase();
 
 
+                const nickname =
+                  playerNickname(
+                    session.user_id
+                  )
+                    .toLowerCase();
+
+
                 if (
                   !playerId.includes(
+                    playerQuery
+                  ) &&
+                  !nickname.includes(
                     playerQuery
                   )
                 ) {
@@ -5056,11 +5117,29 @@
                           data-player-id="${escapeHtml(
                             playerId
                           )}"
-                          title="このプレイヤーだけ表示"
-                        >
-                          ${shortId(
+                          title="プレイヤーID: ${escapeHtml(
                             playerId
-                          )}
+                          )} / クリックで絞り込み"
+                        >
+
+                          <span class="player-identity">
+
+                            <span class="player-nickname">
+                              ${escapeHtml(
+                                playerNickname(
+                                  playerId
+                                )
+                              )}
+                            </span>
+
+                            <span class="player-id-short">
+                              ${shortId(
+                                playerId
+                              )}
+                            </span>
+
+                          </span>
+
                         </button>
 
                       </td>
@@ -6106,12 +6185,31 @@
 
                       </span>
 
-                      <span>
+                      <span
+                        class="report-player"
+                        title="プレイヤーID: ${escapeHtml(
+                          report.user_id ||
+                          ""
+                        )}"
+                      >
 
-                        投稿者
-                        ${shortId(
-                          report.user_id
-                        )}
+                        <span>
+                          投稿者
+                        </span>
+
+                        <span class="player-nickname">
+                          ${escapeHtml(
+                            playerNickname(
+                              report.user_id
+                            )
+                          )}
+                        </span>
+
+                        <span class="player-id-short">
+                          ${shortId(
+                            report.user_id
+                          )}
+                        </span>
 
                       </span>
 
@@ -9697,6 +9795,120 @@
         text ||
         null
       );
+    }
+
+
+
+    /*
+      プレイヤー自動ニックネーム
+      順番を変更すると既存プレイヤーの名前が変わるため、
+      公開後は既存要素の並び順を変更しない。
+    */
+    const PLAYER_NICKNAMES = [
+      "アスカ",
+      "ミナモ",
+      "おうごんマムル",
+      "洞窟マムル",
+      "ンドゥバ",
+      "しおいやん",
+      "ゲイズ",
+      "にぎりへんげ",
+      "怪盗ペリカン",
+      "ひまガッパ",
+      "ボウヤー",
+      "コドモ戦車",
+      "うしわか丸",
+      "クロウ丸",
+      "デビルカンガルー",
+      "アークドラゴン",
+      "ドドロ",
+      "ノロージョの母",
+      "メガタウロス",
+      "プチフェニックス",
+      "くねくねハニー",
+      "タウロス",
+      "ケンゴウ",
+      "エーテルデビル",
+      "キグニ族",
+      "ミドロ",
+      "シューベル",
+      "ラグーン",
+      "ロケットイノシシ",
+      "ソニックイノシシ",
+      "鉄扇",
+      "獣王の盾",
+      "鉄甲の盾",
+      "回復の剣",
+      "白紙の巻物",
+      "あかりの巻物",
+      "混乱の巻物",
+      "火種の巻物",
+      "壺われずの巻物",
+      "水がめ",
+      "身代わりの腕輪",
+      "会心の腕輪",
+      "場所がえの杖",
+      "一時しのぎの杖",
+      "ふきとばしの杖",
+      "倍速の杖",
+      "めぐすり草",
+      "いかずちのワナ"
+    ];
+
+
+    function playerNickname(
+      value
+    ) {
+
+      if (
+        !value
+      ) {
+
+        return "未識別";
+      }
+
+
+      const text =
+        String(
+          value
+        );
+
+
+      let hash =
+        2166136261;
+
+
+      for (
+        let index = 0;
+        index < text.length;
+        index++
+      ) {
+
+        hash ^=
+          text.charCodeAt(
+            index
+          );
+
+
+        hash =
+          Math.imul(
+            hash,
+            16777619
+          );
+      }
+
+
+      const nicknameIndex =
+        (
+          hash >>>
+          0
+        ) %
+        PLAYER_NICKNAMES.length;
+
+
+      return PLAYER_NICKNAMES[
+        nicknameIndex
+      ];
     }
 
 
