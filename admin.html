@@ -679,6 +679,143 @@
         );
     }
 
+
+    .session-toolbar {
+      display:
+        grid;
+
+      grid-template-columns:
+        minmax(
+          230px,
+          2fr
+        )
+        repeat(
+          3,
+          minmax(
+            140px,
+            1fr
+          )
+        )
+        auto;
+
+      gap:
+        10px;
+
+      margin:
+        4px 0 10px;
+
+      padding:
+        14px;
+
+      border:
+        1px solid
+        #30363d;
+
+      border-radius:
+        12px;
+
+      background:
+        rgba(
+          10,
+          13,
+          16,
+          0.45
+        );
+    }
+
+
+    .session-toolbar input,
+    .session-toolbar select {
+      min-width:
+        0;
+    }
+
+
+    .session-filter-reset {
+      white-space:
+        nowrap;
+    }
+
+
+    .session-player-filter-button {
+      padding:
+        0;
+
+      border:
+        0;
+
+      background:
+        transparent;
+
+      color:
+        #cfd5dc;
+
+      font:
+        inherit;
+
+      cursor:
+        pointer;
+
+      text-decoration:
+        underline;
+
+      text-decoration-color:
+        rgba(
+          212,
+          175,
+          55,
+          0.30
+        );
+
+      text-underline-offset:
+        3px;
+    }
+
+
+    .session-player-filter-button:hover {
+      color:
+        #f0c64d;
+
+      text-decoration-color:
+        #f0c64d;
+    }
+
+
+    @media (
+      max-width:
+      1100px
+    ) {
+
+      .session-toolbar {
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(
+              0,
+              1fr
+            )
+          );
+      }
+
+
+      .session-filter-reset {
+        width:
+          100%;
+      }
+    }
+
+
+    @media (
+      max-width:
+      650px
+    ) {
+
+      .session-toolbar {
+        grid-template-columns:
+          1fr;
+      }
+    }
+
     .question-toolbar input {
       flex:
         2 1 250px;
@@ -2124,15 +2261,108 @@
 
             <div class="section-head">
 
-              <h2 class="section-title">
-                最近の挑戦
-              </h2>
+              <div>
 
-              <span class="muted">
-                時刻は日本時間
-              </span>
+                <h2 class="section-title">
+                  最近の挑戦
+                </h2>
+
+                <div class="section-note">
+                  開始日時の新しい順。時刻は日本時間です。
+                </div>
+
+              </div>
 
             </div>
+
+
+            <div class="session-toolbar">
+
+              <input
+                id="session-player-search"
+                type="search"
+                placeholder="プレイヤーIDで検索"
+              >
+
+
+              <select id="session-mode-filter">
+
+                <option value="">
+                  全種類
+                </option>
+
+                <option value="main">
+                  100問版
+                </option>
+
+                <option value="trial">
+                  お試し版
+                </option>
+
+              </select>
+
+
+              <select id="session-status-filter">
+
+                <option value="">
+                  全状態
+                </option>
+
+                <option value="complete">
+                  完走
+                </option>
+
+                <option value="abandoned">
+                  途中破棄
+                </option>
+
+                <option value="active">
+                  進行中
+                </option>
+
+              </select>
+
+
+              <select id="session-limit-filter">
+
+                <option value="25">
+                  25件表示
+                </option>
+
+                <option value="50">
+                  50件表示
+                </option>
+
+                <option value="100" selected>
+                  100件表示
+                </option>
+
+                <option value="200">
+                  200件表示
+                </option>
+
+                <option value="all">
+                  全件表示
+                </option>
+
+              </select>
+
+
+              <button
+                id="session-filter-reset"
+                type="button"
+                class="secondary-button session-filter-reset"
+              >
+                絞り込み解除
+              </button>
+
+            </div>
+
+
+            <div
+              id="session-filter-summary"
+              class="filter-summary"
+            ></div>
 
 
             <div
@@ -3138,6 +3368,42 @@
       );
 
 
+    const sessionPlayerSearch =
+      document.querySelector(
+        "#session-player-search"
+      );
+
+
+    const sessionModeFilter =
+      document.querySelector(
+        "#session-mode-filter"
+      );
+
+
+    const sessionStatusFilter =
+      document.querySelector(
+        "#session-status-filter"
+      );
+
+
+    const sessionLimitFilter =
+      document.querySelector(
+        "#session-limit-filter"
+      );
+
+
+    const sessionFilterReset =
+      document.querySelector(
+        "#session-filter-reset"
+      );
+
+
+    const sessionFilterSummary =
+      document.querySelector(
+        "#session-filter-summary"
+      );
+
+
     const questionStatsTable =
       document.querySelector(
         "#question-stats-table"
@@ -3398,6 +3664,10 @@
         )
       ];
 
+
+
+    let allSessions =
+      [];
 
 
     let allQuestions =
@@ -3707,6 +3977,80 @@
     );
 
 
+    sessionPlayerSearch.addEventListener(
+      "input",
+      applySessionFilters
+    );
+
+
+    sessionModeFilter.addEventListener(
+      "change",
+      applySessionFilters
+    );
+
+
+    sessionStatusFilter.addEventListener(
+      "change",
+      applySessionFilters
+    );
+
+
+    sessionLimitFilter.addEventListener(
+      "change",
+      applySessionFilters
+    );
+
+
+    sessionFilterReset.addEventListener(
+      "click",
+      function () {
+
+        sessionPlayerSearch.value =
+          "";
+
+        sessionModeFilter.value =
+          "";
+
+        sessionStatusFilter.value =
+          "";
+
+        sessionLimitFilter.value =
+          "100";
+
+        applySessionFilters();
+      }
+    );
+
+
+    sessionsTable.addEventListener(
+      "click",
+      function (
+        event
+      ) {
+
+        const button =
+          event.target.closest(
+            ".session-player-filter-button"
+          );
+
+
+        if (
+          !button
+        ) {
+
+          return;
+        }
+
+
+        sessionPlayerSearch.value =
+          button.dataset.playerId ||
+          "";
+
+        applySessionFilters();
+      }
+    );
+
+
 
     function showLogin() {
 
@@ -3857,6 +4201,10 @@
           );
 
 
+        allSessions =
+          sessions;
+
+
         allQuestions =
           questions;
 
@@ -3881,9 +4229,7 @@
         );
 
 
-        renderSessions(
-          sessions
-        );
+        applySessionFilters();
 
 
         applyQuestionStatsFilters();
@@ -4412,12 +4758,106 @@
 
 
 
-    function renderSessions(
-      sessions
+    function getSessionStatusKey(
+      session
     ) {
 
-      const rows =
-        [...sessions]
+      if (
+        session.completed_at
+      ) {
+
+        return "complete";
+      }
+
+
+      if (
+        session.abandoned_at
+      ) {
+
+        return "abandoned";
+      }
+
+
+      return "active";
+    }
+
+
+
+    function applySessionFilters() {
+
+      const playerQuery =
+        sessionPlayerSearch.value
+          .trim()
+          .toLowerCase();
+
+
+      const mode =
+        sessionModeFilter.value;
+
+
+      const status =
+        sessionStatusFilter.value;
+
+
+      const limitValue =
+        sessionLimitFilter.value;
+
+
+      const filtered =
+        [...allSessions]
+          .filter(
+            function (
+              session
+            ) {
+
+              if (
+                mode &&
+                session.mode !==
+                  mode
+              ) {
+
+                return false;
+              }
+
+
+              if (
+                status &&
+                getSessionStatusKey(
+                  session
+                ) !==
+                  status
+              ) {
+
+                return false;
+              }
+
+
+              if (
+                playerQuery
+              ) {
+
+                const playerId =
+                  String(
+                    session.user_id ||
+                    ""
+                  )
+                    .toLowerCase();
+
+
+                if (
+                  !playerId.includes(
+                    playerQuery
+                  )
+                ) {
+
+                  return false;
+                }
+              }
+
+
+              return true;
+            }
+          )
           .sort(
             function (
               a,
@@ -4433,19 +4873,69 @@
                 )
               );
             }
-          )
-          .slice(
-            0,
-            100
           );
 
+
+      const visibleRows =
+        limitValue ===
+          "all"
+
+          ? filtered
+
+          : filtered.slice(
+              0,
+              Number(
+                limitValue
+              )
+            );
+
+
+      sessionFilterSummary.innerHTML = `
+
+        全
+        <strong>
+          ${allSessions.length.toLocaleString(
+            "ja-JP"
+          )}
+        </strong>
+        件中、
+
+        条件一致
+        <strong>
+          ${filtered.length.toLocaleString(
+            "ja-JP"
+          )}
+        </strong>
+        件 /
+
+        現在
+        <strong>
+          ${visibleRows.length.toLocaleString(
+            "ja-JP"
+          )}
+        </strong>
+        件を表示
+
+      `;
+
+
+      renderSessions(
+        visibleRows
+      );
+    }
+
+
+
+    function renderSessions(
+      rows
+    ) {
 
       if (
         !rows.length
       ) {
 
         sessionsTable.innerHTML =
-          `<div class="empty">挑戦記録はありません。</div>`;
+          `<div class="empty">条件に一致する挑戦記録はありません。</div>`;
 
         return;
       }
@@ -4486,6 +4976,13 @@
                     );
 
 
+                  const playerId =
+                    String(
+                      session.user_id ||
+                      ""
+                    );
+
+
                   return `
 
                     <tr>
@@ -4502,7 +4999,7 @@
                           session.mode ===
                           "trial"
 
-                            ? "お試し5問"
+                            ? "お試し版"
 
                             : "100問版"
                         }
@@ -4552,9 +5049,20 @@
                       </td>
 
                       <td>
-                        ${shortId(
-                          session.user_id
-                        )}
+
+                        <button
+                          type="button"
+                          class="session-player-filter-button"
+                          data-player-id="${escapeHtml(
+                            playerId
+                          )}"
+                          title="このプレイヤーだけ表示"
+                        >
+                          ${shortId(
+                            playerId
+                          )}
+                        </button>
+
                       </td>
 
                     </tr>
