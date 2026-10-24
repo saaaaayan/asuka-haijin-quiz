@@ -3935,8 +3935,32 @@ ${escapeHtml(
       ctx.fill();
 
 
-      const rankX =
-        456;
+      const rankAreaLeft =
+        430;
+
+
+      const rankAreaWidth =
+        150;
+
+
+      const rankCenterX =
+        rankAreaLeft +
+        rankAreaWidth /
+        2;
+
+
+      const titleAreaLeft =
+        610;
+
+
+      const titleAreaWidth =
+        430;
+
+
+      const titleCenterX =
+        titleAreaLeft +
+        titleAreaWidth /
+        2;
 
 
       ctx.fillStyle =
@@ -3946,11 +3970,11 @@ ${escapeHtml(
         '600 13px "Noto Sans JP", sans-serif';
 
       ctx.textAlign =
-        "left";
+        "center";
 
       ctx.fillText(
         "ランク",
-        rankX,
+        rankCenterX,
         174
       );
 
@@ -3977,17 +4001,9 @@ ${escapeHtml(
 
       ctx.fillText(
         rankResult.rank,
-        rankX,
+        rankCenterX,
         223
       );
-
-
-      const titleX =
-        610;
-
-
-      const titleMaxWidth =
-        480;
 
 
       ctx.fillStyle =
@@ -3996,9 +4012,12 @@ ${escapeHtml(
       ctx.font =
         '600 13px "Noto Sans JP", sans-serif';
 
+      ctx.textAlign =
+        "center";
+
       ctx.fillText(
         "称号",
-        titleX,
+        titleCenterX,
         174
       );
 
@@ -4006,11 +4025,12 @@ ${escapeHtml(
       drawRankTitleText(
         ctx,
         rankResult.title,
-        titleX,
+        titleCenterX,
         221,
-        titleMaxWidth,
+        titleAreaWidth,
         31,
-        19
+        19,
+        "center"
       );
 
 
@@ -4892,7 +4912,8 @@ ${escapeHtml(
       y,
       maxWidth,
       startSize,
-      minSize
+      minSize,
+      align = "left"
     ) {
 
       let size =
@@ -4941,7 +4962,7 @@ ${escapeHtml(
       applyFont();
 
       ctx.textAlign =
-        "left";
+        align;
 
       ctx.lineJoin =
         "round";
