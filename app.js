@@ -330,8 +330,16 @@ document.addEventListener(
 
           <div class="previous-result-head">
 
-            <span class="previous-result-kicker">
-              LAST RESULT
+            <span class="previous-result-labels">
+
+              <span class="previous-result-kicker">
+                LAST RESULT
+              </span>
+
+              <span class="previous-result-kicker-ja">
+                前回の結果
+              </span>
+
             </span>
 
             ${
