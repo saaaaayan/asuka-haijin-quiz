@@ -1255,6 +1255,31 @@
         1.6;
     }
 
+
+    .report-question-actions {
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      gap:
+        7px;
+
+      flex:
+        0 0 auto;
+
+      white-space:
+        nowrap;
+    }
+
+
+    .report-preview-question-button {
+      flex:
+        0 0 auto;
+    }
+
+
     .report-edit-question-button {
       flex:
         0 0 auto;
@@ -5362,22 +5387,47 @@
                     </div>
 
 
-                    <button
-                      type="button"
-                      class="report-edit-question-button"
-                      data-question-id="${escapeHtml(
-                        report.question_id
-                      )}"
-                      ${
-                        question
+                    <div class="report-question-actions">
 
-                          ? ""
+                      <button
+                        type="button"
+                        class="
+                          preview-question-button
+                          report-preview-question-button
+                        "
+                        data-question-id="${escapeHtml(
+                          report.question_id
+                        )}"
+                        ${
+                          question
 
-                          : "disabled"
-                      }
-                    >
-                      この問題を編集
-                    </button>
+                            ? ""
+
+                            : "disabled"
+                        }
+                      >
+                        プレビュー
+                      </button>
+
+
+                      <button
+                        type="button"
+                        class="report-edit-question-button"
+                        data-question-id="${escapeHtml(
+                          report.question_id
+                        )}"
+                        ${
+                          question
+
+                            ? ""
+
+                            : "disabled"
+                        }
+                      >
+                        この問題を編集
+                      </button>
+
+                    </div>
 
                   </div>
 
@@ -5522,6 +5572,52 @@
       async function (
         event
       ) {
+
+        const previewButton =
+          event.target.closest(
+            ".report-preview-question-button"
+          );
+
+
+        if (
+          previewButton
+        ) {
+
+          const questionId =
+            previewButton.dataset.questionId;
+
+
+          const question =
+            allQuestions.find(
+              function (
+                item
+              ) {
+
+                return (
+                  String(
+                    item.id
+                  ) ===
+                  String(
+                    questionId
+                  )
+                );
+              }
+            );
+
+
+          if (
+            question
+          ) {
+
+            openQuestionPreview(
+              question
+            );
+          }
+
+
+          return;
+        }
+
 
         const editButton =
           event.target.closest(
