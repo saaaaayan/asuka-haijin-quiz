@@ -2558,8 +2558,35 @@ ${escapeHtml(
 
     function showResultTest() {
 
+      const requestedScore =
+        Number(
+          urlParams.get(
+            "score"
+          )
+        );
+
+
       const testScore =
-        69;
+        Number.isFinite(
+          requestedScore
+        ) &&
+        requestedScore >=
+          0 &&
+        requestedScore <=
+          100
+
+          ? Math.round(
+              requestedScore
+            )
+
+          : 69;
+
+
+      const showCompletion =
+        urlParams.get(
+          "completion"
+        ) ===
+          "1";
 
 
       const testStats = {
@@ -2616,7 +2643,10 @@ ${escapeHtml(
             true,
 
           resultTest:
-            true
+            true,
+
+          showCompletion:
+            showCompletion
         }
       );
     }
@@ -3112,7 +3142,14 @@ ${escapeHtml(
     ) {
 
       const shareUrl =
-        `${window.location.origin}${window.location.pathname}`;
+        isResultTestMode
+
+          ? new URL(
+              "./",
+              window.location.href
+            ).href
+
+          : `${window.location.origin}${window.location.pathname}`;
 
 
       const shareText =
