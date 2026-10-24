@@ -13,9 +13,6 @@
     アスカ見参 廃人検定｜結果画面テスト
   </title>
 
-
-  <!-- 本番と同じフォント -->
-
   <link
     rel="preconnect"
     href="https://fonts.googleapis.com"
@@ -32,16 +29,10 @@
     rel="stylesheet"
   >
 
-
-  <!-- 本番と同じCSS -->
-
   <link
     rel="stylesheet"
     href="style.css"
   >
-
-
-  <!-- テストページ専用 -->
 
   <style>
 
@@ -96,28 +87,30 @@
 
 
     .test-menu-description {
-      margin: 0;
+      margin:
+        0;
 
-      color: #aaa;
+      color:
+        #aaa;
 
       font-family:
         "Noto Sans JP",
         sans-serif;
 
-      line-height: 1.8;
+      line-height:
+        1.8;
     }
 
 
-    /* =========================
-       100問完走テスト
-    ========================= */
-
     .completion-test-button {
-      display: block;
+      display:
+        block;
 
-      width: 100%;
+      width:
+        100%;
 
-      margin-top: 24px;
+      margin-top:
+        24px;
 
       padding:
         18px 20px;
@@ -141,51 +134,41 @@
           rgba(240, 210, 109, 0.95)
         );
 
-      color: #171717;
+      color:
+        #171717;
 
       font-family:
         "Noto Sans JP",
         sans-serif;
 
-      font-size: 18px;
+      font-size:
+        18px;
 
-      font-weight: 900;
+      font-weight:
+        900;
 
-      cursor: pointer;
-
-      box-shadow:
-        0 8px 28px
-        rgba(
-          212,
-          175,
-          55,
-          0.18
-        );
-    }
-
-
-    .completion-test-button:hover {
-      transform:
-        translateY(-1px);
+      cursor:
+        pointer;
     }
 
 
     .completion-test-sub {
-      display: block;
+      display:
+        block;
 
-      margin-top: 4px;
+      margin-top:
+        4px;
 
-      font-size: 12px;
+      font-size:
+        12px;
 
-      font-weight: 700;
+      font-weight:
+        700;
 
-      opacity: 0.72;
+      opacity:
+        0.72;
     }
 
-
-    /* =========================
-       ランク一覧
-    ========================= */
 
     .test-rank-grid {
       display:
@@ -282,10 +265,6 @@
     }
 
 
-    /* =========================
-       任意点数
-    ========================= */
-
     .test-manual {
       display:
         flex;
@@ -372,19 +351,10 @@
     }
 
 
-    /* =========================
-       結果
-    ========================= */
-
-    .test-result-container {
+    .test-result-container[hidden],
+    .test-menu[hidden] {
       display:
-        none;
-    }
-
-
-    .test-back-button {
-      margin-top:
-        28px;
+        none !important;
     }
 
 
@@ -429,11 +399,6 @@
 
 <body>
 
-
-  <!-- =========================
-       テストメニュー
-  ========================= -->
-
   <section
     class="test-menu"
     id="test-menu"
@@ -447,12 +412,11 @@
     <p
       class="test-menu-description"
     >
-      ランク・称号や100問完走時の結果画面を
-      すぐに確認できます。
+      ここは結果テストの入口だけです。<br>
+      結果表示・ランクコメント・X共有・共有画像生成は、
+      すべて本番と同じ app.js の処理を実行します。
     </p>
 
-
-    <!-- 100問完走 -->
 
     <button
       class="completion-test-button"
@@ -464,155 +428,33 @@
       <span
         class="completion-test-sub"
       >
-        「100問完走」バッジ付きで表示
+        69点・「100問完走」バッジ付きで表示
       </span>
     </button>
 
-
-    <!-- ランク一覧 -->
 
     <div
       class="test-rank-grid"
     >
 
-      <button
-        class="test-rank-button"
-        data-score="0"
-      >
-        <strong>D</strong>
-        0点
-      </button>
-
-
-      <button
-        class="test-rank-button"
-        data-score="20"
-      >
-        <strong>D+</strong>
-        20点
-      </button>
-
-
-      <button
-        class="test-rank-button"
-        data-score="35"
-      >
-        <strong>C−</strong>
-        35点
-      </button>
-
-
-      <button
-        class="test-rank-button"
-        data-score="40"
-      >
-        <strong>C</strong>
-        40点
-      </button>
-
-
-      <button
-        class="test-rank-button"
-        data-score="50"
-      >
-        <strong>C+</strong>
-        50点
-      </button>
-
-
-      <button
-        class="test-rank-button"
-        data-score="60"
-      >
-        <strong>B−</strong>
-        60点
-      </button>
-
-
-      <button
-        class="test-rank-button"
-        data-score="65"
-      >
-        <strong>B</strong>
-        65点
-      </button>
-
-
-      <button
-        class="test-rank-button"
-        data-score="70"
-      >
-        <strong>B+</strong>
-        70点
-      </button>
-
-
-      <button
-        class="test-rank-button"
-        data-score="75"
-      >
-        <strong>A−</strong>
-        75点
-      </button>
-
-
-      <button
-        class="test-rank-button"
-        data-score="80"
-      >
-        <strong>A</strong>
-        80点
-      </button>
-
-
-      <button
-        class="test-rank-button"
-        data-score="85"
-      >
-        <strong>A+</strong>
-        85点
-      </button>
-
-
-      <button
-        class="test-rank-button"
-        data-score="90"
-      >
-        <strong>S</strong>
-        90点
-      </button>
-
-
-      <button
-        class="test-rank-button"
-        data-score="95"
-      >
-        <strong>S+</strong>
-        95点
-      </button>
-
-
-      <button
-        class="test-rank-button"
-        data-score="99"
-      >
-        <strong>SS</strong>
-        99点
-      </button>
-
-
-      <button
-        class="test-rank-button"
-        data-score="100"
-      >
-        <strong>SSS</strong>
-        100点
-      </button>
+      <button class="test-rank-button" data-score="0"><strong>D</strong>0点</button>
+      <button class="test-rank-button" data-score="20"><strong>D+</strong>20点</button>
+      <button class="test-rank-button" data-score="35"><strong>C−</strong>35点</button>
+      <button class="test-rank-button" data-score="40"><strong>C</strong>40点</button>
+      <button class="test-rank-button" data-score="50"><strong>C+</strong>50点</button>
+      <button class="test-rank-button" data-score="60"><strong>B−</strong>60点</button>
+      <button class="test-rank-button" data-score="65"><strong>B</strong>65点</button>
+      <button class="test-rank-button" data-score="70"><strong>B+</strong>70点</button>
+      <button class="test-rank-button" data-score="75"><strong>A−</strong>75点</button>
+      <button class="test-rank-button" data-score="80"><strong>A</strong>80点</button>
+      <button class="test-rank-button" data-score="85"><strong>A+</strong>85点</button>
+      <button class="test-rank-button" data-score="90"><strong>S</strong>90点</button>
+      <button class="test-rank-button" data-score="95"><strong>S+</strong>95点</button>
+      <button class="test-rank-button" data-score="99"><strong>SS</strong>99点</button>
+      <button class="test-rank-button" data-score="100"><strong>SSS</strong>100点</button>
 
     </div>
 
-
-    <!-- 任意点数 -->
 
     <div
       class="test-manual"
@@ -630,7 +472,7 @@
         type="number"
         min="0"
         max="100"
-        value="95"
+        value="69"
       >
 
 
@@ -646,2276 +488,229 @@
   </section>
 
 
-  <!-- =========================
-       結果画面
-  ========================= -->
-
   <main
-    class="
-      container
-      test-result-container
-    "
+    class="container test-result-container"
     id="test-result-container"
+    hidden
   >
 
     <section
-      class="
-        quiz-card
-        hero-card
-      "
-      id="test-result-card"
+      class="quiz-card hero-card"
     >
     </section>
 
   </main>
 
 
-  <!-- 本番と共通 -->
+  <script>
+
+    (function () {
+
+      const params =
+        new URLSearchParams(
+          window.location.search
+        );
+
+
+      const isResultTest =
+        params.get(
+          "resulttest"
+        ) ===
+          "1";
+
+
+      const menu =
+        document.getElementById(
+          "test-menu"
+        );
+
+
+      const resultContainer =
+        document.getElementById(
+          "test-result-container"
+        );
+
+
+      if (
+        isResultTest
+      ) {
+
+        menu.hidden =
+          true;
+
+        resultContainer.hidden =
+          false;
+      }
+
+
+      function openResultTest(
+        score,
+        completion =
+          false
+      ) {
+
+        const next =
+          new URL(
+            window.location.href
+          );
+
+
+        next.search =
+          "";
+
+        next.searchParams.set(
+          "resulttest",
+          "1"
+        );
+
+        next.searchParams.set(
+          "score",
+          String(
+            score
+          )
+        );
+
+
+        if (
+          completion
+        ) {
+
+          next.searchParams.set(
+            "completion",
+            "1"
+          );
+        }
+
+
+        window.location.href =
+          next.toString();
+      }
+
+
+      document
+        .getElementById(
+          "completion-test-button"
+        )
+        .addEventListener(
+          "click",
+          function () {
+
+            openResultTest(
+              69,
+              true
+            );
+          }
+        );
+
+
+      document
+        .querySelectorAll(
+          "[data-score]"
+        )
+        .forEach(
+          function (
+            button
+          ) {
+
+            button.addEventListener(
+              "click",
+              function () {
+
+                openResultTest(
+                  Number(
+                    button.dataset.score
+                  )
+                );
+              }
+            );
+          }
+        );
+
+
+      function openManualScore() {
+
+        const value =
+          Number(
+            document
+              .getElementById(
+                "manual-score"
+              )
+              .value
+          );
+
+
+        if (
+          !Number.isFinite(
+            value
+          ) ||
+          value <
+            0 ||
+          value >
+            100
+        ) {
+
+          alert(
+            "0〜100の点数を入力してください。"
+          );
+
+          return;
+        }
+
+
+        openResultTest(
+          Math.round(
+            value
+          )
+        );
+      }
+
+
+      document
+        .getElementById(
+          "manual-button"
+        )
+        .addEventListener(
+          "click",
+          openManualScore
+        );
+
+
+      document
+        .getElementById(
+          "manual-score"
+        )
+        .addEventListener(
+          "keydown",
+          function (
+            event
+          ) {
+
+            if (
+              event.key ===
+                "Enter"
+            ) {
+
+              openManualScore();
+            }
+          }
+        );
+
+    })();
+
+  </script>
+
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
 
   <script
     src="rank.js"
   ></script>
 
-
-  <script>
-
-    const testMenu =
-      document.getElementById(
-        "test-menu"
-      );
-
-
-    const resultContainer =
-      document.getElementById(
-        "test-result-container"
-      );
-
-
-    const resultCard =
-      document.getElementById(
-        "test-result-card"
-      );
-
-
-    const VALID_QUESTION_CATEGORIES = [
-      "モンスター",
-      "アイテム",
-      "ダンジョン",
-      "仕様",
-      "その他"
-    ];
-
-
-    /* =========================
-       HTMLエスケープ
-    ========================= */
-
-    function escapeHtml(
-      value
-    ) {
-
-      return String(
-        value
-      )
-
-        .replaceAll(
-          "&",
-          "&amp;"
-        )
-
-        .replaceAll(
-          "<",
-          "&lt;"
-        )
-
-        .replaceAll(
-          ">",
-          "&gt;"
-        )
-
-        .replaceAll(
-          '"',
-          "&quot;"
-        )
-
-        .replaceAll(
-          "'",
-          "&#039;"
-        );
-    }
-
-
-    /* =========================
-       カテゴリ別正答率
-    ========================= */
-
-    function getTestCategoryStatsData() {
-
-      return {
-
-        モンスター: {
-          correct: 19,
-          total: 20
-        },
-
-        アイテム: {
-          correct: 16,
-          total: 20
-        },
-
-        ダンジョン: {
-          correct: 15,
-          total: 19
-        },
-
-        仕様: {
-          correct: 18,
-          total: 36
-        },
-
-        その他: {
-          correct: 1,
-          total: 5
-        }
-      };
-    }
-
-
-    function renderTestCategoryStats() {
-
-      const categories = [
-
-        {
-          name:
-            "モンスター",
-
-          correct:
-            19,
-
-          total:
-            20,
-
-          accuracy:
-            95,
-
-          bar:
-            "linear-gradient(90deg, #b88a1d, #f0d26d)",
-
-          color:
-            "#f0d26d"
-        },
-
-
-        {
-          name:
-            "アイテム",
-
-          correct:
-            16,
-
-          total:
-            20,
-
-          accuracy:
-            80,
-
-          bar:
-            "linear-gradient(90deg, #b88a1d, #f0d26d)",
-
-          color:
-            "#f0d26d"
-        },
-
-
-        {
-          name:
-            "ダンジョン",
-
-          correct:
-            15,
-
-          total:
-            19,
-
-          accuracy:
-            79,
-
-          bar:
-            "linear-gradient(90deg, #b96818, #e69a35)",
-
-          color:
-            "#e69a35"
-        },
-
-
-        {
-          name:
-            "仕様",
-
-          correct:
-            18,
-
-          total:
-            36,
-
-          accuracy:
-            50,
-
-          bar:
-            "linear-gradient(90deg, #b96818, #e69a35)",
-
-          color:
-            "#e69a35"
-        },
-
-
-        {
-          name:
-            "その他",
-
-          correct:
-            1,
-
-          total:
-            5,
-
-          accuracy:
-            20,
-
-          bar:
-            "linear-gradient(90deg, #9f3733, #df625b)",
-
-          color:
-            "#ef7772"
-        }
-
-      ];
-
-
-      return `
-
-        <section
-          class="category-results"
-        >
-
-          <div
-            class="category-results-title"
-          >
-            カテゴリ別正答率
-          </div>
-
-
-          <div
-            class="category-results-list"
-          >
-
-            ${categories
-
-              .map(
-                function (
-                  item
-                ) {
-
-                  return `
-
-                    <div
-                      class="category-result-row"
-                    >
-
-                      <div
-                        class="category-result-top"
-                      >
-
-                        <span
-                          class="category-result-name"
-                        >
-                          ${item.name}
-                        </span>
-
-
-                        <span
-                          class="category-result-score"
-                        >
-
-                          ${item.correct}
-                          /
-                          ${item.total}
-
-
-                          <strong
-                            class="category-result-accuracy"
-
-                            style="
-                              color:
-                                ${item.color};
-                            "
-                          >
-                            ${item.accuracy}%
-                          </strong>
-
-                        </span>
-
-                      </div>
-
-
-                      <div
-                        class="category-result-bar-wrap"
-                      >
-
-                        <div
-                          class="category-result-bar"
-
-                          style="
-                            width:
-                              ${item.accuracy}%;
-
-                            background:
-                              ${item.bar};
-                          "
-                        ></div>
-
-                      </div>
-
-                    </div>
-
-                  `;
-                }
-              )
-
-              .join("")}
-
-          </div>
-
-        </section>
-
-      `;
-    }
-
-
-    /* =========================
-       結果表示
-    ========================= */
-
-    function showTestResult(
-      score,
-      showCompletion =
-        false
-    ) {
-
-      score =
-        Number(
-          score
-        );
-
-
-      if (
-        Number.isNaN(
-          score
-        )
-
-        ||
-
-        score <
-          0
-
-        ||
-
-        score >
-          100
-      ) {
-
-        alert(
-          "0〜100の点数を入力してください。"
-        );
-
-        return;
-      }
-
-
-      const rankResult =
-        getRankResult(
-          score
-        );
-
-
-      if (
-        !rankResult
-      ) {
-
-        alert(
-          "ランク情報を取得できませんでした。rank.js を確認してください。"
-        );
-
-        return;
-      }
-
-
-      resultCard.innerHTML = `
-
-        <div
-          class="result-screen"
-        >
-
-          <p
-            class="hero-label"
-          >
-            ${
-              showCompletion
-                ? "COMPLETE TEST"
-                : "RESULT TEST"
-            }
-          </p>
-
-
-          <div
-            class="result-brand"
-          >
-
-            <div
-              class="result-brand-title"
-            >
-
-              <span
-                class="title-asuka"
-              >
-                アスカ見参
-              </span>
-
-
-              <span
-                class="title-haijin"
-              >
-                廃人検定
-              </span>
-
-            </div>
-
-
-            <h1
-              class="result-heading"
-            >
-              検定結果
-            </h1>
-
-          </div>
-
-
-          <div
-            style="
-              margin:
-                -12px 0
-                16px;
-
-              color:
-                #888;
-
-              font-size:
-                12px;
-
-              letter-spacing:
-                0.05em;
-            "
-          >
-            ${
-              showCompletion
-
-                ? "開発用・100問完走画面テスト"
-
-                : "開発用結果画面テスト"
-            }
-          </div>
-
-
-          <div
-            class="final-score"
-          >
-
-            ${score}
-
-            <span>
-              /
-              100
-            </span>
-
-          </div>
-
-
-          <div
-            class="percentage"
-          >
-            正答率
-            ${score}%
-          </div>
-
-
-          ${
-            showCompletion
-
-              ? `
-
-                <div
-                  class="full-completion-badge"
-                >
-
-                  <span
-                    class="full-completion-en"
-                  >
-                    ALL 100 QUESTIONS COMPLETE
-                  </span>
-
-
-                  <span
-                    class="full-completion-title"
-                  >
-                    100問完走
-                  </span>
-
-                </div>
-
-              `
-
-              : ""
-          }
-
-
-          <div
-            class="rank-panel"
-          >
-
-            <div
-              class="rank-label"
-            >
-              あなたのランク・称号
-            </div>
-
-
-            <div
-              class="rank-grade"
-            >
-              ${escapeHtml(
-                rankResult.rank
-              )}
-            </div>
-
-
-            <div
-              class="rank"
-            >
-              ${escapeHtml(
-                rankResult.title
-              )}
-            </div>
-
-
-            <div
-              class="rank-comment"
-            >
-              ${rankResult.comment}
-            </div>
-
-          </div>
-
-
-          ${renderTestCategoryStats()}
-
-
-          <button
-            class="
-              next-button
-              result-share-button
-            "
-            type="button"
-          >
-            <span
-              style="
-                display:inline-flex;
-                align-items:center;
-                justify-content:center;
-                gap:10px;
-              "
-            >
-              <svg
-                viewBox="0 0 24 24"
-                width="22"
-                height="22"
-                aria-hidden="true"
-                focusable="false"
-                style="
-                  display:block;
-                  fill:currentColor;
-                  flex:0 0 auto;
-                "
-              >
-                <path
-                  d="M18.244 2H21.5l-7.1 8.114L22.75 22h-6.54l-5.12-6.71L5.33 22H2.07l7.6-8.69L1.25 2h6.71l4.63 6.12L18.244 2Zm-1.15 18h1.8L6.38 3.9H4.48L17.094 20Z"
-                ></path>
-              </svg>
-
-              <span>
-                結果をシェア
-              </span>
-            </span>
-          </button>
-
-
-          <div
-            class="result-share-status"
-            aria-live="polite"
-            style="
-              min-height:1.5em;
-              margin-top:10px;
-              font-size:0.9rem;
-              opacity:0.82;
-            "
-          ></div>
-
-
-          <button
-            class="
-              restart-button
-              test-back-button
-            "
-            type="button"
-          >
-            テストメニューへ戻る
-          </button>
-
-        </div>
-
-      `;
-
-
-      testMenu.style.display =
-        "none";
-
-
-      resultContainer.style.display =
-        "block";
-
-
-      window.scrollTo(
-        {
-          top:
-            0,
-
-          behavior:
-            "auto"
-        }
-      );
-
-
-      document
-        .querySelector(
-          ".test-back-button"
-        )
-        .addEventListener(
-          "click",
-          showTestMenu
-        );
-
-
-      const shareButton =
-        document.querySelector(
-          ".result-share-button"
-        );
-
-
-      const shareStatus =
-        document.querySelector(
-          ".result-share-status"
-        );
-
-
-      if (
-        shareButton
-      ) {
-
-        shareButton.addEventListener(
-          "click",
-          async function () {
-
-            const originalHtml =
-              shareButton.innerHTML;
-
-
-            shareButton.disabled =
-              true;
-
-            shareButton.textContent =
-              "結果画像を作成中...";
-
-
-            if (
-              shareStatus
-            ) {
-
-              shareStatus.textContent =
-                "X投稿用の結果カードを作成しています。";
-            }
-
-
-            try {
-
-              const shareMode =
-                await shareQuizResult(
-                  {
-                    scoreValue:
-                      score,
-
-                    totalValue:
-                      100,
-
-                    rankResult:
-                      rankResult,
-
-                    statsSource:
-                      getTestCategoryStatsData(),
-
-                    statsComplete:
-                      true
-                  }
-                );
-
-
-              if (
-                shareStatus
-              ) {
-
-                if (
-                  shareMode ===
-                    "native-share"
-                ) {
-
-                  shareStatus.textContent =
-                    "共有画面を開きました。Xを選んで投稿してください。";
-
-                } else if (
-                  shareMode ===
-                    "desktop-clipboard"
-                ) {
-
-                  shareStatus.textContent =
-                    "結果画像をコピーしました。Xの投稿画面で Ctrl+V を押してください。";
-
-                } else {
-
-                  shareStatus.textContent =
-                    "結果画像を保存しました。Xの投稿画面で画像を添付してください。";
-                }
-              }
-
-
-            } catch (error) {
-
-              if (
-                error &&
-                error.name ===
-                  "AbortError"
-              ) {
-
-                if (
-                  shareStatus
-                ) {
-
-                  shareStatus.textContent =
-                    "共有をキャンセルしました。";
-                }
-
-
-              } else {
-
-                console.error(
-                  "結果共有エラー:",
-                  error
-                );
-
-
-                if (
-                  shareStatus
-                ) {
-
-                  shareStatus.textContent =
-                    "共有できませんでした。もう一度お試しください。";
-                }
-              }
-
-
-            } finally {
-
-              shareButton.disabled =
-                false;
-
-              shareButton.innerHTML =
-                originalHtml;
-            }
-          }
-        );
-      }
-    }
-
-
-    async function shareQuizResult(
-      {
-        scoreValue,
-        totalValue,
-        rankResult,
-        statsSource,
-        statsComplete
-      }
-    ) {
-
-      const shareUrl =
-        new URL(
-          "./",
-          window.location.href
-        ).href;
-
-
-      const shareText =
-        `アスカ見参 廃人検定\n` +
-        `${scoreValue} / ${totalValue}点\n` +
-        `${rankResult.rank}「${rankResult.title}」\n\n` +
-        `あなたは何点取れる？\n` +
-        `#アスカ見参 #アスカ見参廃人検定`;
-
-
-      const intentUrl =
-        "https://x.com/intent/tweet" +
-        `?text=${encodeURIComponent(shareText)}` +
-        `&url=${encodeURIComponent(shareUrl)}`;
-
-
-      const canvas =
-        createResultShareCanvas(
-          {
-            scoreValue,
-            totalValue,
-            rankResult,
-            statsSource,
-            statsComplete,
-            shareUrl,
-            comment:
-              rankResult.comment || ""
-          }
-        );
-
-
-      const blob =
-        await canvasToBlob(
-          canvas
-        );
-
-
-      const file =
-        new File(
-          [blob],
-          `asuka-haijin-kentei-${scoreValue}.png`,
-          {
-            type:
-              "image/png"
-          }
-        );
-
-
-      const shareData = {
-
-        title:
-          "アスカ見参 廃人検定",
-
-        text:
-          shareText,
-
-        url:
-          shareUrl,
-
-        files: [
-          file
-        ]
-      };
-
-
-      const isMobile =
-        isMobileShareEnvironment();
-
-
-      if (
-        isMobile &&
-        navigator.share &&
-        navigator.canShare &&
-        navigator.canShare(
-          {
-            files: [
-              file
-            ]
-          }
-        )
-      ) {
-
-        await navigator.share(
-          shareData
-        );
-
-        return "native-share";
-      }
-
-
-      const copied =
-        await copyResultImageToClipboard(
-          blob
-        );
-
-
-      if (
-        copied
-      ) {
-
-        alert(
-          "結果画像をクリップボードにコピーしました。\n\nこれからXの投稿画面を開きます。\n投稿画面で Ctrl+V を押すと画像を添付できます。"
-        );
-
-        openXIntent(
-          intentUrl
-        );
-
-        return "desktop-clipboard";
-      }
-
-
-      downloadResultImage(
-        blob,
-        file.name
-      );
-
-
-      alert(
-        "このブラウザでは画像をクリップボードへコピーできなかったため、結果画像をPNGで保存しました。\n\nこれからXの投稿画面を開きます。保存した画像を添付してください。"
-      );
-
-
-      openXIntent(
-        intentUrl
-      );
-
-
-      return "desktop-download";
-    }
-
-
-    function isMobileShareEnvironment() {
-
-      if (
-        navigator.userAgentData &&
-        typeof navigator.userAgentData.mobile ===
-          "boolean"
-      ) {
-
-        return navigator.userAgentData.mobile;
-      }
-
-
-      const userAgent =
-        navigator.userAgent ||
-        "";
-
-
-      if (
-        /Android|iPhone|iPod|Mobile/i.test(
-          userAgent
-        )
-      ) {
-
-        return true;
-      }
-
-
-      if (
-        /iPad/i.test(
-          userAgent
-        )
-      ) {
-
-        return true;
-      }
-
-
-      if (
-        /Macintosh/i.test(
-          userAgent
-        ) &&
-        navigator.maxTouchPoints >
-          1
-      ) {
-
-        return true;
-      }
-
-
-      return false;
-    }
-
-
-    async function copyResultImageToClipboard(
-      blob
-    ) {
-
-      if (
-        !navigator.clipboard ||
-        typeof navigator.clipboard.write !==
-          "function" ||
-        typeof ClipboardItem ===
-          "undefined"
-      ) {
-
-        return false;
-      }
-
-
-      try {
-
-        const clipboardItem =
-          new ClipboardItem(
-            {
-              "image/png":
-                blob
-            }
-          );
-
-
-        await navigator.clipboard.write(
-          [
-            clipboardItem
-          ]
-        );
-
-
-        return true;
-
-
-      } catch (error) {
-
-        console.warn(
-          "結果画像のクリップボードコピーに失敗しました:",
-          error
-        );
-
-        return false;
-      }
-    }
-
-
-    function openXIntent(
-      intentUrl
-    ) {
-
-      const openedWindow =
-        window.open(
-          intentUrl,
-          "_blank"
-        );
-
-
-      if (
-        !openedWindow
-      ) {
-
-        window.location.href =
-          intentUrl;
-      }
-    }
-
-
-    function createResultShareCanvas(
-      {
-        scoreValue,
-        totalValue,
-        rankResult,
-        statsSource,
-        statsComplete,
-        shareUrl,
-        comment
-      }
-    ) {
-
-      const canvas =
-        document.createElement(
-          "canvas"
-        );
-
-
-      canvas.width =
-        1200;
-
-      canvas.height =
-        630;
-
-
-      const ctx =
-        canvas.getContext(
-          "2d"
-        );
-
-
-      const background =
-        ctx.createLinearGradient(
-          0,
-          0,
-          1200,
-          630
-        );
-
-
-      background.addColorStop(
-        0,
-        "#0b0d12"
-      );
-
-      background.addColorStop(
-        0.58,
-        "#15131a"
-      );
-
-      background.addColorStop(
-        1,
-        "#21170d"
-      );
-
-
-      ctx.fillStyle =
-        background;
-
-      ctx.fillRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-      );
-
-
-      const gold =
-        "#e5bd55";
-
-      const goldSoft =
-        "#b9923f";
-
-      const white =
-        "#f6f2e8";
-
-      const muted =
-        "#b9b3a9";
-
-      const panel =
-        "rgba(255,255,255,0.055)";
-
-
-      ctx.strokeStyle =
-        "rgba(229,189,85,0.55)";
-
-      ctx.lineWidth =
-        2;
-
-      roundRect(
-        ctx,
-        26,
-        26,
-        1148,
-        578,
-        28
-      );
-
-      ctx.stroke();
-
-
-      /* =========================
-         タイトル
-      ========================= */
-
-      ctx.fillStyle =
-        goldSoft;
-
-      ctx.font =
-        '700 20px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
-
-      ctx.textAlign =
-        "left";
-
-      ctx.fillText(
-        "ASUKA KENZAN",
-        70,
-        68
-      );
-
-
-      ctx.fillStyle =
-        white;
-
-      ctx.font =
-        '800 40px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
-
-      ctx.fillText(
-        "アスカ見参 廃人検定",
-        70,
-        111
-      );
-
-
-      ctx.fillStyle =
-        muted;
-
-      ctx.font =
-        '600 16px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
-
-      ctx.fillText(
-        "全100問・アスカ見参ガチ勢向け知識検定",
-        72,
-        140
-      );
-
-
-      /* =========================
-         スコア
-      ========================= */
-
-      ctx.fillStyle =
-        panel;
-
-      roundRect(
-        ctx,
-        65,
-        168,
-        440,
-        270,
-        26
-      );
-
-      ctx.fill();
-
-
-      ctx.fillStyle =
-        muted;
-
-      ctx.font =
-        '700 18px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
-
-      ctx.textAlign =
-        "center";
-
-      ctx.fillText(
-        "SCORE",
-        285,
-        210
-      );
-
-
-      ctx.fillStyle =
-        white;
-
-      ctx.font =
-        '900 122px "Arial", "Yu Gothic", sans-serif';
-
-      ctx.fillText(
-        String(
-          scoreValue
-        ),
-        245,
-        342
-      );
-
-
-      ctx.fillStyle =
-        gold;
-
-      ctx.font =
-        '800 40px "Arial", "Yu Gothic", sans-serif';
-
-      ctx.fillText(
-        `/ ${totalValue}`,
-        395,
-        340
-      );
-
-
-      ctx.fillStyle =
-        muted;
-
-      ctx.font =
-        '700 19px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
-
-      ctx.fillText(
-        "あなたは何点取れる？",
-        285,
-        405
-      );
-
-
-      /* =========================
-         ランク・称号
-      ========================= */
-
-      ctx.fillStyle =
-        "rgba(229,189,85,0.15)";
-
-      roundRect(
-        ctx,
-        545,
-        168,
-        585,
-        104,
-        24
-      );
-
-      ctx.fill();
-
-
-      ctx.fillStyle =
-        gold;
-
-      ctx.font =
-        '900 62px "Arial", "Yu Gothic", sans-serif';
-
-      ctx.textAlign =
-        "left";
-
-      ctx.fillText(
-        rankResult.rank,
-        580,
-        236
-      );
-
-
-      ctx.fillStyle =
-        white;
-
-      ctx.font =
-        '800 27px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
-
-      drawFittedText(
-        ctx,
-        rankResult.title,
-        700,
-        231,
-        385,
-        27,
-        20
-      );
-
-
-      /* =========================
-         ランクコメント
-      ========================= */
-
-      ctx.fillStyle =
-        panel;
-
-      roundRect(
-        ctx,
-        545,
-        288,
-        585,
-        212,
-        24
-      );
-
-      ctx.fill();
-
-
-      const plainComment =
-        stripHtmlForShare(
-          comment || ""
-        );
-
-
-      if (
-        plainComment
-      ) {
-
-        ctx.fillStyle =
-          white;
-
-        ctx.textAlign =
-          "center";
-
-        drawWrappedText(
-          ctx,
-          plainComment,
-          837,
-          320,
-          515,
-          22,
-          14,
-          25,
-          8
-        );
-
-
-      } else {
-
-        ctx.fillStyle =
-          white;
-
-        ctx.font =
-          '800 29px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
-
-        ctx.textAlign =
-          "center";
-
-        ctx.fillText(
-          "あなたは何点取れる？",
-          837,
-          374
-        );
-
-
-        ctx.fillStyle =
-          gold;
-
-        ctx.font =
-          '700 19px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
-
-        ctx.fillText(
-          "挑戦者、求む。",
-          837,
-          414
-        );
-      }
-
-
-      /* =========================
-         カテゴリ別正答率
-      ========================= */
-
-      if (
-        statsComplete &&
-        statsSource &&
-        typeof statsSource ===
-          "object"
-      ) {
-
-        const categories =
-          VALID_QUESTION_CATEGORIES
-            .map(
-              function (
-                category
-              ) {
-
-                return [
-                  category,
-                  statsSource[
-                    category
-                  ]
-                ];
-              }
-            )
-            .filter(
-              function (
-                entry
-              ) {
-
-                return (
-                  entry[1] &&
-                  entry[1].total >
-                    0
-                );
-              }
-            );
-
-
-        if (
-          categories.length >
-            0
-        ) {
-
-          const startX =
-            70;
-
-          const startY =
-            531;
-
-          const gap =
-            212;
-
-
-          categories
-            .slice(
-              0,
-              5
-            )
-            .forEach(
-              function (
-                entry,
-                index
-              ) {
-
-                const category =
-                  entry[0];
-
-                const stat =
-                  entry[1];
-
-                const accuracy =
-                  Math.round(
-                    (
-                      stat.correct /
-                      stat.total
-                    ) *
-                    100
-                  );
-
-
-                const x =
-                  startX +
-                  gap *
-                  index;
-
-
-                ctx.fillStyle =
-                  muted;
-
-                ctx.font =
-                  '700 15px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
-
-                ctx.textAlign =
-                  "left";
-
-                ctx.fillText(
-                  category,
-                  x,
-                  startY
-                );
-
-
-                ctx.fillStyle =
-                  "rgba(255,255,255,0.12)";
-
-                roundRect(
-                  ctx,
-                  x,
-                  startY +
-                    13,
-                  142,
-                  9,
-                  5
-                );
-
-                ctx.fill();
-
-
-                ctx.fillStyle =
-                  gold;
-
-                roundRect(
-                  ctx,
-                  x,
-                  startY +
-                    13,
-                  142 *
-                    Math.max(
-                      0,
-                      Math.min(
-                        100,
-                        accuracy
-                      )
-                    ) /
-                    100,
-                  9,
-                  5
-                );
-
-                ctx.fill();
-
-
-                ctx.fillStyle =
-                  white;
-
-                ctx.font =
-                  '800 17px "Arial", "Yu Gothic", sans-serif';
-
-                ctx.textAlign =
-                  "right";
-
-                ctx.fillText(
-                  `${accuracy}%`,
-                  x +
-                    187,
-                  startY +
-                    21
-                );
-              }
-            );
-        }
-      }
-
-
-      /* =========================
-         フッター
-      ========================= */
-
-      ctx.fillStyle =
-        muted;
-
-      ctx.font =
-        '600 15px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
-
-      ctx.textAlign =
-        "left";
-
-      ctx.fillText(
-        "#アスカ見参  #廃人検定",
-        70,
-        590
-      );
-
-
-      ctx.textAlign =
-        "right";
-
-      ctx.fillText(
-        formatShareHost(
-          shareUrl
-        ),
-        1130,
-        590
-      );
-
-
-      return canvas;
-    }
-
-
-    function canvasToBlob(
-      canvas
-    ) {
-
-      return new Promise(
-        function (
-          resolve,
-          reject
-        ) {
-
-          canvas.toBlob(
-            function (
-              blob
-            ) {
-
-              if (
-                blob
-              ) {
-
-                resolve(
-                  blob
-                );
-
-
-              } else {
-
-                reject(
-                  new Error(
-                    "結果画像を作成できませんでした。"
-                  )
-                );
-              }
-            },
-            "image/png"
-          );
-        }
-      );
-    }
-
-
-    function downloadResultImage(
-      blob,
-      filename
-    ) {
-
-      const objectUrl =
-        URL.createObjectURL(
-          blob
-        );
-
-
-      const link =
-        document.createElement(
-          "a"
-        );
-
-
-      link.href =
-        objectUrl;
-
-      link.download =
-        filename;
-
-
-      document.body.appendChild(
-        link
-      );
-
-
-      link.click();
-
-
-      link.remove();
-
-
-      setTimeout(
-        function () {
-
-          URL.revokeObjectURL(
-            objectUrl
-          );
-        },
-        1000
-      );
-    }
-
-
-    function formatShareHost(
-      value
-    ) {
-
-      try {
-
-        return new URL(
-          value
-        ).host;
-
-
-      } catch (error) {
-
-        return "";
-      }
-    }
-
-
-    function stripHtmlForShare(
-      value
-    ) {
-
-      const temp =
-        document.createElement(
-          "div"
-        );
-
-
-      temp.innerHTML =
-        String(
-          value || ""
-        )
-          .replace(
-            /<\s*\/p\s*>/gi,
-            "\n"
-          )
-          .replace(
-            /<\s*br\s*\/?\s*>/gi,
-            "\n"
-          );
-
-
-      const text =
-        (
-          temp.textContent ||
-          temp.innerText ||
-          ""
-        )
-          .replace(
-            /\n\s*\n+/g,
-            "\n"
-          )
-          .trim();
-
-
-      return text;
-    }
-
-
-    function drawWrappedText(
-      ctx,
-      text,
-      centerX,
-      startY,
-      maxWidth,
-      startSize,
-      minSize,
-      lineHeight,
-      maxLines
-    ) {
-
-      const paragraphs =
-        String(
-          text || ""
-        )
-          .split(
-            /\n+/
-          )
-          .map(
-            function (
-              line
-            ) {
-
-              return line.trim();
-            }
-          )
-          .filter(
-            Boolean
-          );
-
-
-      let fontSize =
-        startSize;
-
-      let lines =
-        [];
-
-
-      const buildLines =
-        function (
-          size
-        ) {
-
-          ctx.font =
-            `700 ${size}px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif`;
-
-
-          const built =
-            [];
-
-
-          paragraphs.forEach(
-            function (
-              paragraph
-            ) {
-
-              let current =
-                "";
-
-
-              Array.from(
-                paragraph
-              ).forEach(
-                function (
-                  char
-                ) {
-
-                  const test =
-                    current +
-                    char;
-
-
-                  if (
-                    current &&
-                    ctx.measureText(
-                      test
-                    ).width >
-                      maxWidth
-                  ) {
-
-                    built.push(
-                      current
-                    );
-
-                    current =
-                      char;
-
-
-                  } else {
-
-                    current =
-                      test;
-                  }
-                }
-              );
-
-
-              if (
-                current
-              ) {
-
-                built.push(
-                  current
-                );
-              }
-            }
-          );
-
-
-          return built;
-        };
-
-
-      while (
-        fontSize >
-          minSize
-      ) {
-
-        lines =
-          buildLines(
-            fontSize
-          );
-
-
-        if (
-          lines.length <=
-            maxLines
-        ) {
-
-          break;
-        }
-
-
-        fontSize -=
-          1;
-      }
-
-
-      lines =
-        buildLines(
-          fontSize
-        );
-
-
-      if (
-        lines.length >
-          maxLines
-      ) {
-
-        lines =
-          lines.slice(
-            0,
-            maxLines
-          );
-
-
-        const lastIndex =
-          lines.length -
-          1;
-
-
-        lines[
-          lastIndex
-        ] =
-          lines[
-            lastIndex
-          ]
-            .replace(
-              /[。！？!?、,\s]+$/g,
-              ""
-            ) +
-          "…";
-      }
-
-
-      ctx.font =
-        `700 ${fontSize}px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif`;
-
-      ctx.textAlign =
-        "center";
-
-      ctx.textBaseline =
-        "middle";
-
-
-      const actualLineHeight =
-        Math.max(
-          lineHeight,
-          fontSize +
-            6
-        );
-
-
-      lines.forEach(
-        function (
-          line,
-          index
-        ) {
-
-          ctx.fillText(
-            line,
-            centerX,
-            startY +
-              index *
-              actualLineHeight
-          );
-        }
-      );
-
-
-      ctx.textBaseline =
-        "alphabetic";
-    }
-
-
-    function drawFittedText(
-      ctx,
-      text,
-      x,
-      y,
-      maxWidth,
-      startSize,
-      minSize
-    ) {
-
-      let size =
-        startSize;
-
-
-      while (
-        size >
-          minSize
-      ) {
-
-        ctx.font =
-          `800 ${size}px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif`;
-
-
-        if (
-          ctx.measureText(
-            text
-          ).width <=
-            maxWidth
-        ) {
-
-          break;
-        }
-
-
-        size -=
-          1;
-      }
-
-
-      ctx.fillText(
-        text,
-        x,
-        y
-      );
-    }
-
-
-    function roundRect(
-      ctx,
-      x,
-      y,
-      width,
-      height,
-      radius
-    ) {
-
-      const safeRadius =
-        Math.min(
-          radius,
-          width /
-            2,
-          height /
-            2
-        );
-
-
-      ctx.beginPath();
-
-      ctx.moveTo(
-        x +
-          safeRadius,
-        y
-      );
-
-      ctx.lineTo(
-        x +
-          width -
-          safeRadius,
-        y
-      );
-
-      ctx.quadraticCurveTo(
-        x +
-          width,
-        y,
-        x +
-          width,
-        y +
-          safeRadius
-      );
-
-      ctx.lineTo(
-        x +
-          width,
-        y +
-          height -
-          safeRadius
-      );
-
-      ctx.quadraticCurveTo(
-        x +
-          width,
-        y +
-          height,
-        x +
-          width -
-          safeRadius,
-        y +
-          height
-      );
-
-      ctx.lineTo(
-        x +
-          safeRadius,
-        y +
-          height
-      );
-
-      ctx.quadraticCurveTo(
-        x,
-        y +
-          height,
-        x,
-        y +
-          height -
-          safeRadius
-      );
-
-      ctx.lineTo(
-        x,
-        y +
-          safeRadius
-      );
-
-      ctx.quadraticCurveTo(
-        x,
-        y,
-        x +
-          safeRadius,
-        y
-      );
-
-      ctx.closePath();
-    }
-
-
-
-
-    /* =========================
-       メニューへ戻る
-    ========================= */
-
-    function showTestMenu() {
-
-      resultContainer.style.display =
-        "none";
-
-
-      testMenu.style.display =
-        "block";
-
-
-      window.scrollTo(
-        {
-          top:
-            0,
-
-          behavior:
-            "auto"
-        }
-      );
-    }
-
-
-    /* =========================
-       100問完走テスト
-    ========================= */
-
-    document
-      .getElementById(
-        "completion-test-button"
-      )
-      .addEventListener(
-        "click",
-        function () {
-
-          showTestResult(
-            69,
-            true
-          );
-        }
-      );
-
-
-    /* =========================
-       ランクボタン
-    ========================= */
-
-    document
-      .querySelectorAll(
-        "[data-score]"
-      )
-      .forEach(
-        function (
-          button
-        ) {
-
-          button.addEventListener(
-            "click",
-            function () {
-
-              showTestResult(
-                button.dataset.score,
-                false
-              );
-            }
-          );
-        }
-      );
-
-
-    /* =========================
-       任意スコア
-    ========================= */
-
-    document
-      .getElementById(
-        "manual-button"
-      )
-      .addEventListener(
-        "click",
-        function () {
-
-          showTestResult(
-            document
-              .getElementById(
-                "manual-score"
-              )
-              .value,
-
-            false
-          );
-        }
-      );
-
-
-    document
-      .getElementById(
-        "manual-score"
-      )
-      .addEventListener(
-        "keydown",
-        function (
-          event
-        ) {
-
-          if (
-            event.key ===
-              "Enter"
-          ) {
-
-            showTestResult(
-              event
-                .currentTarget
-                .value,
-
-              false
-            );
-          }
-        }
-      );
-
-  </script>
+  <script
+    src="app.js"
+  ></script>
 
 </body>
 
