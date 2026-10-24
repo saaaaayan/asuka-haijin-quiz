@@ -697,6 +697,15 @@
       );
 
 
+    const VALID_QUESTION_CATEGORIES = [
+      "モンスター",
+      "アイテム",
+      "ダンジョン",
+      "仕様",
+      "その他"
+    ];
+
+
     /* =========================
        HTMLエスケープ
     ========================= */
@@ -739,6 +748,38 @@
     /* =========================
        カテゴリ別正答率
     ========================= */
+
+    function getTestCategoryStatsData() {
+
+      return {
+
+        モンスター: {
+          correct: 19,
+          total: 20
+        },
+
+        アイテム: {
+          correct: 16,
+          total: 20
+        },
+
+        ダンジョン: {
+          correct: 15,
+          total: 19
+        },
+
+        仕様: {
+          correct: 18,
+          total: 36
+        },
+
+        その他: {
+          correct: 1,
+          total: 5
+        }
+      };
+    }
+
 
     function renderTestCategoryStats() {
 
@@ -1180,6 +1221,57 @@
 
           <button
             class="
+              next-button
+              result-share-button
+            "
+            type="button"
+          >
+            <span
+              style="
+                display:inline-flex;
+                align-items:center;
+                justify-content:center;
+                gap:10px;
+              "
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="22"
+                height="22"
+                aria-hidden="true"
+                focusable="false"
+                style="
+                  display:block;
+                  fill:currentColor;
+                  flex:0 0 auto;
+                "
+              >
+                <path
+                  d="M18.244 2H21.5l-7.1 8.114L22.75 22h-6.54l-5.12-6.71L5.33 22H2.07l7.6-8.69L1.25 2h6.71l4.63 6.12L18.244 2Zm-1.15 18h1.8L6.38 3.9H4.48L17.094 20Z"
+                ></path>
+              </svg>
+
+              <span>
+                結果をシェア
+              </span>
+            </span>
+          </button>
+
+
+          <div
+            class="result-share-status"
+            aria-live="polite"
+            style="
+              min-height:1.5em;
+              margin-top:10px;
+              font-size:0.9rem;
+              opacity:0.82;
+            "
+          ></div>
+
+
+          <button
+            class="
               restart-button
               test-back-button
             "
@@ -1220,7 +1312,1483 @@
           "click",
           showTestMenu
         );
+
+
+      const shareButton =
+        document.querySelector(
+          ".result-share-button"
+        );
+
+
+      const shareStatus =
+        document.querySelector(
+          ".result-share-status"
+        );
+
+
+      if (
+        shareButton
+      ) {
+
+        shareButton.addEventListener(
+          "click",
+          async function () {
+
+            const originalHtml =
+              shareButton.innerHTML;
+
+
+            shareButton.disabled =
+              true;
+
+            shareButton.textContent =
+              "結果画像を作成中...";
+
+
+            if (
+              shareStatus
+            ) {
+
+              shareStatus.textContent =
+                "X投稿用の結果カードを作成しています。";
+            }
+
+
+            try {
+
+              const shareMode =
+                await shareQuizResult(
+                  {
+                    scoreValue:
+                      score,
+
+                    totalValue:
+                      100,
+
+                    rankResult:
+                      rankResult,
+
+                    statsSource:
+                      getTestCategoryStatsData(),
+
+                    statsComplete:
+                      true
+                  }
+                );
+
+
+              if (
+                shareStatus
+              ) {
+
+                if (
+                  shareMode ===
+                    "native-share"
+                ) {
+
+                  shareStatus.textContent =
+                    "共有画面を開きました。Xを選んで投稿してください。";
+
+                } else if (
+                  shareMode ===
+                    "desktop-clipboard"
+                ) {
+
+                  shareStatus.textContent =
+                    "結果画像をコピーしました。Xの投稿画面で Ctrl+V を押してください。";
+
+                } else {
+
+                  shareStatus.textContent =
+                    "結果画像を保存しました。Xの投稿画面で画像を添付してください。";
+                }
+              }
+
+
+            } catch (error) {
+
+              if (
+                error &&
+                error.name ===
+                  "AbortError"
+              ) {
+
+                if (
+                  shareStatus
+                ) {
+
+                  shareStatus.textContent =
+                    "共有をキャンセルしました。";
+                }
+
+
+              } else {
+
+                console.error(
+                  "結果共有エラー:",
+                  error
+                );
+
+
+                if (
+                  shareStatus
+                ) {
+
+                  shareStatus.textContent =
+                    "共有できませんでした。もう一度お試しください。";
+                }
+              }
+
+
+            } finally {
+
+              shareButton.disabled =
+                false;
+
+              shareButton.innerHTML =
+                originalHtml;
+            }
+          }
+        );
+      }
     }
+
+
+    async function shareQuizResult(
+      {
+        scoreValue,
+        totalValue,
+        rankResult,
+        statsSource,
+        statsComplete
+      }
+    ) {
+
+      const shareUrl =
+        new URL(
+          "./",
+          window.location.href
+        ).href;
+
+
+      const shareText =
+        `アスカ見参 廃人検定\n` +
+        `${scoreValue} / ${totalValue}点\n` +
+        `${rankResult.rank}「${rankResult.title}」\n\n` +
+        `あなたは何点取れる？\n` +
+        `#アスカ見参 #アスカ見参廃人検定`;
+
+
+      const intentUrl =
+        "https://x.com/intent/tweet" +
+        `?text=${encodeURIComponent(shareText)}` +
+        `&url=${encodeURIComponent(shareUrl)}`;
+
+
+      const canvas =
+        createResultShareCanvas(
+          {
+            scoreValue,
+            totalValue,
+            rankResult,
+            statsSource,
+            statsComplete,
+            shareUrl,
+            comment:
+              rankResult.comment || ""
+          }
+        );
+
+
+      const blob =
+        await canvasToBlob(
+          canvas
+        );
+
+
+      const file =
+        new File(
+          [blob],
+          `asuka-haijin-kentei-${scoreValue}.png`,
+          {
+            type:
+              "image/png"
+          }
+        );
+
+
+      const shareData = {
+
+        title:
+          "アスカ見参 廃人検定",
+
+        text:
+          shareText,
+
+        url:
+          shareUrl,
+
+        files: [
+          file
+        ]
+      };
+
+
+      const isMobile =
+        isMobileShareEnvironment();
+
+
+      if (
+        isMobile &&
+        navigator.share &&
+        navigator.canShare &&
+        navigator.canShare(
+          {
+            files: [
+              file
+            ]
+          }
+        )
+      ) {
+
+        await navigator.share(
+          shareData
+        );
+
+        return "native-share";
+      }
+
+
+      const copied =
+        await copyResultImageToClipboard(
+          blob
+        );
+
+
+      if (
+        copied
+      ) {
+
+        alert(
+          "結果画像をクリップボードにコピーしました。\n\nこれからXの投稿画面を開きます。\n投稿画面で Ctrl+V を押すと画像を添付できます。"
+        );
+
+        openXIntent(
+          intentUrl
+        );
+
+        return "desktop-clipboard";
+      }
+
+
+      downloadResultImage(
+        blob,
+        file.name
+      );
+
+
+      alert(
+        "このブラウザでは画像をクリップボードへコピーできなかったため、結果画像をPNGで保存しました。\n\nこれからXの投稿画面を開きます。保存した画像を添付してください。"
+      );
+
+
+      openXIntent(
+        intentUrl
+      );
+
+
+      return "desktop-download";
+    }
+
+
+    function isMobileShareEnvironment() {
+
+      if (
+        navigator.userAgentData &&
+        typeof navigator.userAgentData.mobile ===
+          "boolean"
+      ) {
+
+        return navigator.userAgentData.mobile;
+      }
+
+
+      const userAgent =
+        navigator.userAgent ||
+        "";
+
+
+      if (
+        /Android|iPhone|iPod|Mobile/i.test(
+          userAgent
+        )
+      ) {
+
+        return true;
+      }
+
+
+      if (
+        /iPad/i.test(
+          userAgent
+        )
+      ) {
+
+        return true;
+      }
+
+
+      if (
+        /Macintosh/i.test(
+          userAgent
+        ) &&
+        navigator.maxTouchPoints >
+          1
+      ) {
+
+        return true;
+      }
+
+
+      return false;
+    }
+
+
+    async function copyResultImageToClipboard(
+      blob
+    ) {
+
+      if (
+        !navigator.clipboard ||
+        typeof navigator.clipboard.write !==
+          "function" ||
+        typeof ClipboardItem ===
+          "undefined"
+      ) {
+
+        return false;
+      }
+
+
+      try {
+
+        const clipboardItem =
+          new ClipboardItem(
+            {
+              "image/png":
+                blob
+            }
+          );
+
+
+        await navigator.clipboard.write(
+          [
+            clipboardItem
+          ]
+        );
+
+
+        return true;
+
+
+      } catch (error) {
+
+        console.warn(
+          "結果画像のクリップボードコピーに失敗しました:",
+          error
+        );
+
+        return false;
+      }
+    }
+
+
+    function openXIntent(
+      intentUrl
+    ) {
+
+      const openedWindow =
+        window.open(
+          intentUrl,
+          "_blank"
+        );
+
+
+      if (
+        !openedWindow
+      ) {
+
+        window.location.href =
+          intentUrl;
+      }
+    }
+
+
+    function createResultShareCanvas(
+      {
+        scoreValue,
+        totalValue,
+        rankResult,
+        statsSource,
+        statsComplete,
+        shareUrl,
+        comment
+      }
+    ) {
+
+      const canvas =
+        document.createElement(
+          "canvas"
+        );
+
+
+      canvas.width =
+        1200;
+
+      canvas.height =
+        630;
+
+
+      const ctx =
+        canvas.getContext(
+          "2d"
+        );
+
+
+      const background =
+        ctx.createLinearGradient(
+          0,
+          0,
+          1200,
+          630
+        );
+
+
+      background.addColorStop(
+        0,
+        "#0b0d12"
+      );
+
+      background.addColorStop(
+        0.58,
+        "#15131a"
+      );
+
+      background.addColorStop(
+        1,
+        "#21170d"
+      );
+
+
+      ctx.fillStyle =
+        background;
+
+      ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+
+      const gold =
+        "#e5bd55";
+
+      const goldSoft =
+        "#b9923f";
+
+      const white =
+        "#f6f2e8";
+
+      const muted =
+        "#b9b3a9";
+
+      const panel =
+        "rgba(255,255,255,0.055)";
+
+
+      ctx.strokeStyle =
+        "rgba(229,189,85,0.55)";
+
+      ctx.lineWidth =
+        2;
+
+      roundRect(
+        ctx,
+        26,
+        26,
+        1148,
+        578,
+        28
+      );
+
+      ctx.stroke();
+
+
+      /* =========================
+         タイトル
+      ========================= */
+
+      ctx.fillStyle =
+        goldSoft;
+
+      ctx.font =
+        '700 20px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+
+      ctx.textAlign =
+        "left";
+
+      ctx.fillText(
+        "ASUKA KENZAN",
+        70,
+        68
+      );
+
+
+      ctx.fillStyle =
+        white;
+
+      ctx.font =
+        '800 40px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+
+      ctx.fillText(
+        "アスカ見参 廃人検定",
+        70,
+        111
+      );
+
+
+      ctx.fillStyle =
+        muted;
+
+      ctx.font =
+        '600 16px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+
+      ctx.fillText(
+        "全100問・アスカ見参ガチ勢向け知識検定",
+        72,
+        140
+      );
+
+
+      /* =========================
+         スコア
+      ========================= */
+
+      ctx.fillStyle =
+        panel;
+
+      roundRect(
+        ctx,
+        65,
+        168,
+        440,
+        270,
+        26
+      );
+
+      ctx.fill();
+
+
+      ctx.fillStyle =
+        muted;
+
+      ctx.font =
+        '700 18px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+
+      ctx.textAlign =
+        "center";
+
+      ctx.fillText(
+        "SCORE",
+        285,
+        210
+      );
+
+
+      ctx.fillStyle =
+        white;
+
+      ctx.font =
+        '900 122px "Arial", "Yu Gothic", sans-serif';
+
+      ctx.fillText(
+        String(
+          scoreValue
+        ),
+        245,
+        342
+      );
+
+
+      ctx.fillStyle =
+        gold;
+
+      ctx.font =
+        '800 40px "Arial", "Yu Gothic", sans-serif';
+
+      ctx.fillText(
+        `/ ${totalValue}`,
+        395,
+        340
+      );
+
+
+      ctx.fillStyle =
+        muted;
+
+      ctx.font =
+        '700 19px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+
+      ctx.fillText(
+        "あなたは何点取れる？",
+        285,
+        405
+      );
+
+
+      /* =========================
+         ランク・称号
+      ========================= */
+
+      ctx.fillStyle =
+        "rgba(229,189,85,0.15)";
+
+      roundRect(
+        ctx,
+        545,
+        168,
+        585,
+        104,
+        24
+      );
+
+      ctx.fill();
+
+
+      ctx.fillStyle =
+        gold;
+
+      ctx.font =
+        '900 62px "Arial", "Yu Gothic", sans-serif';
+
+      ctx.textAlign =
+        "left";
+
+      ctx.fillText(
+        rankResult.rank,
+        580,
+        236
+      );
+
+
+      ctx.fillStyle =
+        white;
+
+      ctx.font =
+        '800 27px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+
+      drawFittedText(
+        ctx,
+        rankResult.title,
+        700,
+        231,
+        385,
+        27,
+        20
+      );
+
+
+      /* =========================
+         ランクコメント
+      ========================= */
+
+      ctx.fillStyle =
+        panel;
+
+      roundRect(
+        ctx,
+        545,
+        288,
+        585,
+        212,
+        24
+      );
+
+      ctx.fill();
+
+
+      const plainComment =
+        stripHtmlForShare(
+          comment || ""
+        );
+
+
+      if (
+        plainComment
+      ) {
+
+        ctx.fillStyle =
+          white;
+
+        ctx.textAlign =
+          "center";
+
+        drawWrappedText(
+          ctx,
+          plainComment,
+          837,
+          320,
+          515,
+          22,
+          14,
+          25,
+          8
+        );
+
+
+      } else {
+
+        ctx.fillStyle =
+          white;
+
+        ctx.font =
+          '800 29px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+
+        ctx.textAlign =
+          "center";
+
+        ctx.fillText(
+          "あなたは何点取れる？",
+          837,
+          374
+        );
+
+
+        ctx.fillStyle =
+          gold;
+
+        ctx.font =
+          '700 19px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+
+        ctx.fillText(
+          "挑戦者、求む。",
+          837,
+          414
+        );
+      }
+
+
+      /* =========================
+         カテゴリ別正答率
+      ========================= */
+
+      if (
+        statsComplete &&
+        statsSource &&
+        typeof statsSource ===
+          "object"
+      ) {
+
+        const categories =
+          VALID_QUESTION_CATEGORIES
+            .map(
+              function (
+                category
+              ) {
+
+                return [
+                  category,
+                  statsSource[
+                    category
+                  ]
+                ];
+              }
+            )
+            .filter(
+              function (
+                entry
+              ) {
+
+                return (
+                  entry[1] &&
+                  entry[1].total >
+                    0
+                );
+              }
+            );
+
+
+        if (
+          categories.length >
+            0
+        ) {
+
+          const startX =
+            70;
+
+          const startY =
+            531;
+
+          const gap =
+            212;
+
+
+          categories
+            .slice(
+              0,
+              5
+            )
+            .forEach(
+              function (
+                entry,
+                index
+              ) {
+
+                const category =
+                  entry[0];
+
+                const stat =
+                  entry[1];
+
+                const accuracy =
+                  Math.round(
+                    (
+                      stat.correct /
+                      stat.total
+                    ) *
+                    100
+                  );
+
+
+                const x =
+                  startX +
+                  gap *
+                  index;
+
+
+                ctx.fillStyle =
+                  muted;
+
+                ctx.font =
+                  '700 15px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+
+                ctx.textAlign =
+                  "left";
+
+                ctx.fillText(
+                  category,
+                  x,
+                  startY
+                );
+
+
+                ctx.fillStyle =
+                  "rgba(255,255,255,0.12)";
+
+                roundRect(
+                  ctx,
+                  x,
+                  startY +
+                    13,
+                  142,
+                  9,
+                  5
+                );
+
+                ctx.fill();
+
+
+                ctx.fillStyle =
+                  gold;
+
+                roundRect(
+                  ctx,
+                  x,
+                  startY +
+                    13,
+                  142 *
+                    Math.max(
+                      0,
+                      Math.min(
+                        100,
+                        accuracy
+                      )
+                    ) /
+                    100,
+                  9,
+                  5
+                );
+
+                ctx.fill();
+
+
+                ctx.fillStyle =
+                  white;
+
+                ctx.font =
+                  '800 17px "Arial", "Yu Gothic", sans-serif';
+
+                ctx.textAlign =
+                  "right";
+
+                ctx.fillText(
+                  `${accuracy}%`,
+                  x +
+                    187,
+                  startY +
+                    21
+                );
+              }
+            );
+        }
+      }
+
+
+      /* =========================
+         フッター
+      ========================= */
+
+      ctx.fillStyle =
+        muted;
+
+      ctx.font =
+        '600 15px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+
+      ctx.textAlign =
+        "left";
+
+      ctx.fillText(
+        "#アスカ見参  #廃人検定",
+        70,
+        590
+      );
+
+
+      ctx.textAlign =
+        "right";
+
+      ctx.fillText(
+        formatShareHost(
+          shareUrl
+        ),
+        1130,
+        590
+      );
+
+
+      return canvas;
+    }
+
+
+    function canvasToBlob(
+      canvas
+    ) {
+
+      return new Promise(
+        function (
+          resolve,
+          reject
+        ) {
+
+          canvas.toBlob(
+            function (
+              blob
+            ) {
+
+              if (
+                blob
+              ) {
+
+                resolve(
+                  blob
+                );
+
+
+              } else {
+
+                reject(
+                  new Error(
+                    "結果画像を作成できませんでした。"
+                  )
+                );
+              }
+            },
+            "image/png"
+          );
+        }
+      );
+    }
+
+
+    function downloadResultImage(
+      blob,
+      filename
+    ) {
+
+      const objectUrl =
+        URL.createObjectURL(
+          blob
+        );
+
+
+      const link =
+        document.createElement(
+          "a"
+        );
+
+
+      link.href =
+        objectUrl;
+
+      link.download =
+        filename;
+
+
+      document.body.appendChild(
+        link
+      );
+
+
+      link.click();
+
+
+      link.remove();
+
+
+      setTimeout(
+        function () {
+
+          URL.revokeObjectURL(
+            objectUrl
+          );
+        },
+        1000
+      );
+    }
+
+
+    function formatShareHost(
+      value
+    ) {
+
+      try {
+
+        return new URL(
+          value
+        ).host;
+
+
+      } catch (error) {
+
+        return "";
+      }
+    }
+
+
+    function stripHtmlForShare(
+      value
+    ) {
+
+      const temp =
+        document.createElement(
+          "div"
+        );
+
+
+      temp.innerHTML =
+        String(
+          value || ""
+        )
+          .replace(
+            /<\s*\/p\s*>/gi,
+            "\n"
+          )
+          .replace(
+            /<\s*br\s*\/?\s*>/gi,
+            "\n"
+          );
+
+
+      const text =
+        (
+          temp.textContent ||
+          temp.innerText ||
+          ""
+        )
+          .replace(
+            /\n\s*\n+/g,
+            "\n"
+          )
+          .trim();
+
+
+      return text;
+    }
+
+
+    function drawWrappedText(
+      ctx,
+      text,
+      centerX,
+      startY,
+      maxWidth,
+      startSize,
+      minSize,
+      lineHeight,
+      maxLines
+    ) {
+
+      const paragraphs =
+        String(
+          text || ""
+        )
+          .split(
+            /\n+/
+          )
+          .map(
+            function (
+              line
+            ) {
+
+              return line.trim();
+            }
+          )
+          .filter(
+            Boolean
+          );
+
+
+      let fontSize =
+        startSize;
+
+      let lines =
+        [];
+
+
+      const buildLines =
+        function (
+          size
+        ) {
+
+          ctx.font =
+            `700 ${size}px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif`;
+
+
+          const built =
+            [];
+
+
+          paragraphs.forEach(
+            function (
+              paragraph
+            ) {
+
+              let current =
+                "";
+
+
+              Array.from(
+                paragraph
+              ).forEach(
+                function (
+                  char
+                ) {
+
+                  const test =
+                    current +
+                    char;
+
+
+                  if (
+                    current &&
+                    ctx.measureText(
+                      test
+                    ).width >
+                      maxWidth
+                  ) {
+
+                    built.push(
+                      current
+                    );
+
+                    current =
+                      char;
+
+
+                  } else {
+
+                    current =
+                      test;
+                  }
+                }
+              );
+
+
+              if (
+                current
+              ) {
+
+                built.push(
+                  current
+                );
+              }
+            }
+          );
+
+
+          return built;
+        };
+
+
+      while (
+        fontSize >
+          minSize
+      ) {
+
+        lines =
+          buildLines(
+            fontSize
+          );
+
+
+        if (
+          lines.length <=
+            maxLines
+        ) {
+
+          break;
+        }
+
+
+        fontSize -=
+          1;
+      }
+
+
+      lines =
+        buildLines(
+          fontSize
+        );
+
+
+      if (
+        lines.length >
+          maxLines
+      ) {
+
+        lines =
+          lines.slice(
+            0,
+            maxLines
+          );
+
+
+        const lastIndex =
+          lines.length -
+          1;
+
+
+        lines[
+          lastIndex
+        ] =
+          lines[
+            lastIndex
+          ]
+            .replace(
+              /[。！？!?、,\s]+$/g,
+              ""
+            ) +
+          "…";
+      }
+
+
+      ctx.font =
+        `700 ${fontSize}px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif`;
+
+      ctx.textAlign =
+        "center";
+
+      ctx.textBaseline =
+        "middle";
+
+
+      const actualLineHeight =
+        Math.max(
+          lineHeight,
+          fontSize +
+            6
+        );
+
+
+      lines.forEach(
+        function (
+          line,
+          index
+        ) {
+
+          ctx.fillText(
+            line,
+            centerX,
+            startY +
+              index *
+              actualLineHeight
+          );
+        }
+      );
+
+
+      ctx.textBaseline =
+        "alphabetic";
+    }
+
+
+    function drawFittedText(
+      ctx,
+      text,
+      x,
+      y,
+      maxWidth,
+      startSize,
+      minSize
+    ) {
+
+      let size =
+        startSize;
+
+
+      while (
+        size >
+          minSize
+      ) {
+
+        ctx.font =
+          `800 ${size}px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif`;
+
+
+        if (
+          ctx.measureText(
+            text
+          ).width <=
+            maxWidth
+        ) {
+
+          break;
+        }
+
+
+        size -=
+          1;
+      }
+
+
+      ctx.fillText(
+        text,
+        x,
+        y
+      );
+    }
+
+
+    function roundRect(
+      ctx,
+      x,
+      y,
+      width,
+      height,
+      radius
+    ) {
+
+      const safeRadius =
+        Math.min(
+          radius,
+          width /
+            2,
+          height /
+            2
+        );
+
+
+      ctx.beginPath();
+
+      ctx.moveTo(
+        x +
+          safeRadius,
+        y
+      );
+
+      ctx.lineTo(
+        x +
+          width -
+          safeRadius,
+        y
+      );
+
+      ctx.quadraticCurveTo(
+        x +
+          width,
+        y,
+        x +
+          width,
+        y +
+          safeRadius
+      );
+
+      ctx.lineTo(
+        x +
+          width,
+        y +
+          height -
+          safeRadius
+      );
+
+      ctx.quadraticCurveTo(
+        x +
+          width,
+        y +
+          height,
+        x +
+          width -
+          safeRadius,
+        y +
+          height
+      );
+
+      ctx.lineTo(
+        x +
+          safeRadius,
+        y +
+          height
+      );
+
+      ctx.quadraticCurveTo(
+        x,
+        y +
+          height,
+        x,
+        y +
+          height -
+          safeRadius
+      );
+
+      ctx.lineTo(
+        x,
+        y +
+          safeRadius
+      );
+
+      ctx.quadraticCurveTo(
+        x,
+        y,
+        x +
+          safeRadius,
+        y
+      );
+
+      ctx.closePath();
+    }
+
+
 
 
     /* =========================
