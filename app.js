@@ -1,3 +1,120 @@
+
+過去のメッセージを読み込み中…
+やってみましょう
+
+できました。今のSupabase版 app.js 全文に、X用結果カード生成＋シェア機能を組み込んだ版です。元の中断再開・集計・物申す・Supabase問題取得などは残しています。
+
+TXTを開いて、中身を全部コピー → GitHubの app.js を全選択して丸ごと置き換え → Commitしてください。style.css などは今回は変更不要です。
+
+更新後は、公開ページURLの末尾に
+
+?resulttest=1
+を付けてください。するとダミーの 69 / 100点 の結果画面が出て、そこに
+
+「Xで結果をシェア」
+
+ボタンが表示されます。
+
+押すと、1200×630のX用画像を自動生成します。内容は 点数・ランク・称号・カテゴリ別正答率・「あなたは何点取れる？」・検定サイト が一目で分かる構成にしています。
+
+スマホなどWeb Shareのファイル共有に対応している環境では、PNG画像を共有メニューに渡せます。ブラウザや端末によって対応差があるため、PCなど対応していない場合は結果画像を保存＋X投稿画面を開く方式に切り替わります。
+
+投稿文は現在、
+
+アスカ見参 廃人検定
+69 / 100点
+B「生粋のアスカっ子」
+
+あなたは何点取れる？
+#アスカ見参 #アスカ見参廃人検定
+
+という方向です。
+
+まず更新して ?resulttest=1 の結果画面を見てください。
+そのスクショを送ってもらえれば、次は「Xで見た瞬間にもっとやりたくなる結果カード」にデザインを詰めましょう。 
+
+
+app_X結果シェア機能付き_全文.txt
+ドキュメント
+更新しました。何を確認すればいい？
+確認するのは、この3つです。
+
+公開ページのURL末尾に
+?resulttest=1
+を付けて開いてください。**69 / 100点、B「生粋のアスカっ子」**のダミー結果画面が出ればOKです。
+
+結果画面に 「Xで結果をシェア」 ボタンが出ているか確認してください。
+
+そのボタンを押してください。
+
+スマホなら共有画面が開き、Xを選べるか
+PCなら結果画像がPNGで保存され、同時にXの投稿画面が開くか
+を確認します。
+特に見たいのは、生成された結果画像の見た目です。
+
+画像が出たら、その画像かスクショをここに送ってください。
+そこで「これをXで見た人が挑戦したくなるか」という観点で、文字サイズ・配色・情報量・キャッチコピーまで詰めます。
+
+ユーザーの添付画像
+まず、PC
+Xがない
+そうですね。このPCでは、いまの実装だとWindowsの共有画面が開いてしまっていて、Xが共有先に出ていません。
+
+PCはこの方式をやめた方がいいです。次の動きに変えます。
+
+PCの場合
+
+「Xで結果をシェア」を押す
+結果画像をクリップボードにコピー
+Xの投稿画面を自動で開く
+投稿文は入力済み
+ユーザーは Ctrl+V するだけで画像を添付
+PNG画像はブラウザからクリップボードへコピーできます。
+
+イメージとしては、
+
+ボタンを押す
+↓
+「結果画像をコピーしました。Xで Ctrl+V してください」
+↓
+Xの投稿画面が開く
+↓
+Ctrl+V
+↓
+画像付きで投稿
+
+です。
+
+スマホは今の共有機能を活かして、PCだけこの方式に分けるのが一番使いやすいです。
+
+この修正を入れましょう。次はまた、修正版の app.js 全文をTXT形式で出します。
+
+では、出してみて
+修正版を出しました。今回はPCではWindows共有画面を出さないようにしています。
+
+中身を全部コピーして、GitHubの app.js を丸ごと置き換えてください。
+
+更新後、もう一度
+
+?resulttest=1
+で結果画面を開き、**「Xで結果をシェア」**を押してください。
+
+PCでは今度、
+
+結果画像をクリップボードにコピーしました
+→ Xの投稿画面を開きます
+→ Ctrl+Vで画像を貼り付けてください
+
+という流れになるはずです。
+
+まずはそこまで確認してみてください。
+
+
+app_X結果シェア_PC修正版_全文.txt
+ドキュメント
+
+
+
 const SUPABASE_URL =
   "https://eiseszhremqmeodxbcuc.supabase.co";
 
@@ -3015,23 +3132,43 @@ ${escapeHtml(
 
             try {
 
-              await shareQuizResult(
-                {
-                  scoreValue,
-                  totalValue,
-                  rankResult,
-                  statsSource,
-                  statsComplete
-                }
-              );
+              const shareMode =
+                await shareQuizResult(
+                  {
+                    scoreValue,
+                    totalValue,
+                    rankResult,
+                    statsSource,
+                    statsComplete
+                  }
+                );
 
 
               if (
                 shareStatus
               ) {
 
-                shareStatus.textContent =
-                  "共有画面を開きました。Xを選んで投稿してください。";
+                if (
+                  shareMode ===
+                    "native-share"
+                ) {
+
+                  shareStatus.textContent =
+                    "共有画面を開きました。Xを選んで投稿してください。";
+
+                } else if (
+                  shareMode ===
+                    "desktop-clipboard"
+                ) {
+
+                  shareStatus.textContent =
+                    "結果画像をコピーしました。Xの投稿画面で Ctrl+V を押してください。";
+
+                } else {
+
+                  shareStatus.textContent =
+                    "結果画像を保存しました。Xの投稿画面で画像を添付してください。";
+                }
               }
 
 
@@ -3110,6 +3247,12 @@ ${escapeHtml(
         `#アスカ見参 #アスカ見参廃人検定`;
 
 
+      const intentUrl =
+        "https://x.com/intent/tweet" +
+        `?text=${encodeURIComponent(shareText)}` +
+        `&url=${encodeURIComponent(shareUrl)}`;
+
+
       const canvas =
         createResultShareCanvas(
           {
@@ -3157,7 +3300,12 @@ ${escapeHtml(
       };
 
 
+      const isMobile =
+        isMobileShareEnvironment();
+
+
       if (
+        isMobile &&
         navigator.share &&
         navigator.canShare &&
         navigator.canShare(
@@ -3173,7 +3321,29 @@ ${escapeHtml(
           shareData
         );
 
-        return;
+        return "native-share";
+      }
+
+
+      const copied =
+        await copyResultImageToClipboard(
+          blob
+        );
+
+
+      if (
+        copied
+      ) {
+
+        alert(
+          "結果画像をクリップボードにコピーしました。\n\nこれからXの投稿画面を開きます。\n投稿画面で Ctrl+V を押すと画像を添付できます。"
+        );
+
+        openXIntent(
+          intentUrl
+        );
+
+        return "desktop-clipboard";
       }
 
 
@@ -3183,34 +3353,136 @@ ${escapeHtml(
       );
 
 
-      const intentUrl =
-        "https://x.com/intent/tweet" +
-        `?text=${encodeURIComponent(shareText)}` +
-        `&url=${encodeURIComponent(shareUrl)}`;
+      alert(
+        "このブラウザでは画像をクリップボードへコピーできなかったため、結果画像をPNGで保存しました。\n\nこれからXの投稿画面を開きます。保存した画像を添付してください。"
+      );
 
+
+      openXIntent(
+        intentUrl
+      );
+
+
+      return "desktop-download";
+    }
+
+
+    function isMobileShareEnvironment() {
+
+      if (
+        navigator.userAgentData &&
+        typeof navigator.userAgentData.mobile ===
+          "boolean"
+      ) {
+
+        return navigator.userAgentData.mobile;
+      }
+
+
+      const userAgent =
+        navigator.userAgent ||
+        "";
+
+
+      if (
+        /Android|iPhone|iPod|Mobile/i.test(
+          userAgent
+        )
+      ) {
+
+        return true;
+      }
+
+
+      if (
+        /iPad/i.test(
+          userAgent
+        )
+      ) {
+
+        return true;
+      }
+
+
+      if (
+        /Macintosh/i.test(
+          userAgent
+        ) &&
+        navigator.maxTouchPoints >
+          1
+      ) {
+
+        return true;
+      }
+
+
+      return false;
+    }
+
+
+    async function copyResultImageToClipboard(
+      blob
+    ) {
+
+      if (
+        !navigator.clipboard ||
+        typeof navigator.clipboard.write !==
+          "function" ||
+        typeof ClipboardItem ===
+          "undefined"
+      ) {
+
+        return false;
+      }
+
+
+      try {
+
+        const clipboardItem =
+          new ClipboardItem(
+            {
+              "image/png":
+                blob
+            }
+          );
+
+
+        await navigator.clipboard.write(
+          [
+            clipboardItem
+          ]
+        );
+
+
+        return true;
+
+
+      } catch (error) {
+
+        console.warn(
+          "結果画像のクリップボードコピーに失敗しました:",
+          error
+        );
+
+        return false;
+      }
+    }
+
+
+    function openXIntent(
+      intentUrl
+    ) {
 
       const openedWindow =
         window.open(
           intentUrl,
-          "_blank",
-          "noopener,noreferrer"
+          "_blank"
         );
 
 
       if (
-        openedWindow
+        !openedWindow
       ) {
-
-        alert(
-          "結果画像を保存し、Xの投稿画面を開きました。保存した画像を投稿に添付してください。"
-        );
-
-
-      } else {
-
-        alert(
-          "結果画像を保存しました。続けてXの投稿画面を開きます。保存した画像を添付してください。"
-        );
 
         window.location.href =
           intentUrl;
@@ -5605,3 +5877,4 @@ async function submitQuestionReport(
     return false;
   }
 }
+
