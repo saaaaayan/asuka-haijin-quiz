@@ -3765,21 +3765,28 @@ ${escapeHtml(
         `/ ${totalValue}`;
 
 
-      ctx.textAlign =
-        "left";
+      const scoreAreaWidth =
+        265;
+
+
+      const scoreGap =
+        10;
+
+
+      const totalFontSize =
+        32;
+
+
+      let scoreFontSize =
+        126;
+
+
+      let scoreWidth =
+        0;
+
 
       ctx.font =
-        '900 126px "Noto Sans JP", "Yu Gothic", sans-serif';
-
-
-      const scoreWidth =
-        ctx.measureText(
-          scoreText
-        ).width;
-
-
-      ctx.font =
-        '800 36px "Noto Sans JP", "Yu Gothic", sans-serif';
+        `800 ${totalFontSize}px "Noto Sans JP", "Yu Gothic", sans-serif`;
 
 
       const totalWidth =
@@ -3788,8 +3795,45 @@ ${escapeHtml(
         ).width;
 
 
-      const scoreGap =
-        12;
+      while (
+        scoreFontSize >
+          88
+      ) {
+
+        ctx.font =
+          `900 ${scoreFontSize}px "Noto Sans JP", "Yu Gothic", sans-serif`;
+
+
+        scoreWidth =
+          ctx.measureText(
+            scoreText
+          ).width;
+
+
+        if (
+          scoreWidth +
+          scoreGap +
+          totalWidth <=
+            scoreAreaWidth
+        ) {
+
+          break;
+        }
+
+
+        scoreFontSize -=
+          2;
+      }
+
+
+      ctx.font =
+        `900 ${scoreFontSize}px "Noto Sans JP", "Yu Gothic", sans-serif`;
+
+
+      scoreWidth =
+        ctx.measureText(
+          scoreText
+        ).width;
 
 
       const combinedWidth =
@@ -3804,11 +3848,15 @@ ${escapeHtml(
         2;
 
 
+      ctx.textAlign =
+        "left";
+
+
       ctx.fillStyle =
         white;
 
       ctx.font =
-        '900 126px "Noto Sans JP", "Yu Gothic", sans-serif';
+        `900 ${scoreFontSize}px "Noto Sans JP", "Yu Gothic", sans-serif`;
 
       ctx.fillText(
         scoreText,
@@ -3821,7 +3869,7 @@ ${escapeHtml(
         gold;
 
       ctx.font =
-        '800 36px "Noto Sans JP", "Yu Gothic", sans-serif';
+        `800 ${totalFontSize}px "Noto Sans JP", "Yu Gothic", sans-serif`;
 
       ctx.fillText(
         totalText,
@@ -3912,6 +3960,18 @@ ${escapeHtml(
       ctx.fill();
 
 
+      const rankX =
+        456;
+
+
+      const rankLabelY =
+        174;
+
+
+      const rankBaselineY =
+        228;
+
+
       ctx.fillStyle =
         muted;
 
@@ -3923,22 +3983,71 @@ ${escapeHtml(
 
       ctx.fillText(
         "ランク",
-        456,
-        174
+        rankX,
+        rankLabelY
       );
+
+
+      let rankFontSize =
+        54;
+
+
+      ctx.font =
+        `900 ${rankFontSize}px "Noto Sans JP", "Yu Gothic", sans-serif`;
+
+
+      let rankWidth =
+        ctx.measureText(
+          rankResult.rank
+        ).width;
+
+
+      const maxRankWidth =
+        105;
+
+
+      while (
+        rankFontSize >
+          42 &&
+        rankWidth >
+          maxRankWidth
+      ) {
+
+        rankFontSize -=
+          2;
+
+
+        ctx.font =
+          `900 ${rankFontSize}px "Noto Sans JP", "Yu Gothic", sans-serif`;
+
+
+        rankWidth =
+          ctx.measureText(
+            rankResult.rank
+          ).width;
+      }
 
 
       ctx.fillStyle =
         "#f1d36a";
 
       ctx.font =
-        '900 54px "Noto Sans JP", "Yu Gothic", sans-serif';
+        `900 ${rankFontSize}px "Noto Sans JP", "Yu Gothic", sans-serif`;
 
       ctx.fillText(
         rankResult.rank,
-        456,
-        228
+        rankX,
+        rankBaselineY
       );
+
+
+      const dividerX =
+        Math.max(
+          575,
+          rankX +
+          rankWidth +
+          24
+        );
 
 
       ctx.strokeStyle =
@@ -3950,16 +4059,26 @@ ${escapeHtml(
       ctx.beginPath();
 
       ctx.moveTo(
-        555,
+        dividerX,
         164
       );
 
       ctx.lineTo(
-        555,
+        dividerX,
         234
       );
 
       ctx.stroke();
+
+
+      const titleX =
+        dividerX +
+        34;
+
+
+      const titleMaxWidth =
+        1090 -
+        titleX;
 
 
       ctx.fillStyle =
@@ -3970,7 +4089,7 @@ ${escapeHtml(
 
       ctx.fillText(
         "称号",
-        590,
+        titleX,
         174
       );
 
@@ -3978,11 +4097,11 @@ ${escapeHtml(
       drawRankTitleText(
         ctx,
         rankResult.title,
-        590,
+        titleX,
         221,
-        500,
+        titleMaxWidth,
         31,
-        21
+        19
       );
 
 
