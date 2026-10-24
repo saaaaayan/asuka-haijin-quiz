@@ -4633,6 +4633,61 @@ body {
 }
 
 
+.trial-top-button {
+  display:
+    block;
+
+  width:
+    min(
+      440px,
+      100%
+    );
+
+  margin:
+    10px auto
+    0;
+
+  border-color:
+    rgba(
+      255,
+      255,
+      255,
+      0.08
+    );
+
+  background:
+    transparent;
+
+  color:
+    #9ea5ad;
+
+  box-shadow:
+    none;
+}
+
+
+.trial-top-button:hover {
+  border-color:
+    rgba(
+      212,
+      175,
+      55,
+      0.24
+    );
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.025
+    );
+
+  color:
+    #d6d9dc;
+}
+
+
 /* =========================
    スマホ
 ========================= */
