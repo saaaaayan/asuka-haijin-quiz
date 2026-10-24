@@ -4,23 +4,20 @@ const SUPABASE_URL =
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_1mtFdVK6HheU4pVZ7D2wxg_7tb_9PDO";
 
-
 const QUIZ_SAVE_KEY =
   "asuka-haijin-quiz-progress-v1";
 
 const QUIZ_LAST_RESULT_KEY =
   "asuka-haijin-quiz-last-result-v1";
 
+const STORAGE_SCHEMA_VERSION = 2;
+const QUESTION_SET_VERSION = 1;
+const CATEGORY_STATS_VERSION = 1;
 
-const STORAGE_SCHEMA_VERSION =
-  3;
 
-const QUESTION_SET_VERSION =
-  2;
-
-const CATEGORY_STATS_VERSION =
-  1;
-
+/* =========================
+   カテゴリはこの5つで固定
+========================= */
 
 const VALID_QUESTION_CATEGORIES = [
   "モンスター",
@@ -37,417 +34,18 @@ const VALID_QUESTION_TYPES = [
 ];
 
 
-/* =========================================================
-   Supabase
-========================================================= */
-
 const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
 
-  window.supabase
-
-  &&
-
-  typeof window.supabase
-    .createClient ===
-    "function"
-
-    ? window.supabase
-        .createClient(
-          SUPABASE_URL,
-          SUPABASE_PUBLISHABLE_KEY
-        )
-
-    : null;
-
-
-let anonymousUserPromise =
-  null;
-
-
-/* =========================================================
-   Supabase
-   匿名ユーザー
-========================================================= */
-
-async function ensureAnonymousUser() {
-
-  if (
-    !supabaseClient
-  ) {
-
-    return null;
-  }
-
-
-  if (
-    anonymousUserPromise
-  ) {
-
-    return anonymousUserPromise;
-  }
-
-
-  anonymousUserPromise =
-    (
-      async function () {
-
-        try {
-
-          const {
-
-            data: {
-              user
-            },
-
-            error:
-              userError
-
-          } =
-
-            await supabaseClient
-              .auth
-              .getUser();
-
-
-          if (
-            !userError
-
-            &&
-
-            user
-          ) {
-
-            return user;
-          }
-
-
-          const {
-            data,
-            error
-          } =
-
-            await supabaseClient
-              .auth
-              .signInAnonymously();
-
-
-          if (
-            error
-          ) {
-
-            console.warn(
-              "匿名ログインエラー:",
-              error
-            );
-
-
-            return null;
-          }
-
-
-          return (
-            data?.user ||
-            null
-          );
-
-
-        } catch (
-          error
-        ) {
-
-          console.warn(
-            "匿名ログイン処理エラー:",
-            error
-          );
-
-
-          return null;
-        }
-      }
-    )();
-
-
-  const user =
-    await anonymousUserPromise;
-
-
-  if (
-    !user
-  ) {
-
-    anonymousUserPromise =
-      null;
-  }
-
-
-  return user;
-}
-
-
-/* =========================================================
-   初回回答保存
-   ＋
-   みんなの正答率取得
-========================================================= */
-
-async function saveFirstAnswer(
-  questionId,
-  selectedAnswer,
-  isCorrect
-) {
-
-  if (
-    !supabaseClient
-  ) {
-
-    return null;
-  }
-
-
-  try {
-
-    const user =
-      await ensureAnonymousUser();
-
-
-    if (
-      !user
-    ) {
-
-      return null;
-    }
-
-
-    const {
-      error:
-        insertError
-    } =
-
-      await supabaseClient
-
-        .from(
-          "first_answers"
-        )
-
-        .upsert(
-          {
-
-            user_id:
-              user.id,
-
-            question_id:
-              questionId,
-
-            is_correct:
-              isCorrect,
-
-            selected_answer:
-              selectedAnswer
-
-          },
-          {
-
-            onConflict:
-              "user_id,question_id",
-
-            ignoreDuplicates:
-              true
-          }
-        );
-
-
-    if (
-      insertError
-
-      &&
-
-      insertError.code !==
-        "23505"
-    ) {
-
-      console.warn(
-        "初回回答保存エラー:",
-        insertError
-      );
-    }
-
-
-    const {
-
-      data:
-        statsData,
-
-      error:
-        statsError
-
-    } =
-
-      await supabaseClient
-
-        .rpc(
-          "get_question_stats",
-          {
-
-            p_question_id:
-              questionId
-
-          }
-        );
-
-
-    if (
-      statsError
-    ) {
-
-      console.warn(
-        "正答率取得エラー:",
-        statsError
-      );
-
-
-      return null;
-    }
-
-
-    if (
-      !statsData
-    ) {
-
-      return null;
-    }
-
-
-    if (
-      Array.isArray(
-        statsData
-      )
-    ) {
-
-      return (
-        statsData[0] ||
-        null
-      );
-    }
-
-
-    return statsData;
-
-
-  } catch (
-    error
-  ) {
-
-    console.warn(
-      "初回回答処理エラー:",
-      error
-    );
-
-
-    return null;
-  }
-}
-
-
-/* =========================================================
-   物申す
-========================================================= */
-
-async function submitQuestionReport(
-  questionId,
-  reportType,
-  message
-) {
-
-  if (
-    !supabaseClient
-  ) {
-
-    return false;
-  }
-
-
-  try {
-
-    const user =
-      await ensureAnonymousUser();
-
-
-    if (
-      !user
-    ) {
-
-      return false;
-    }
-
-
-    const {
-      error
-    } =
-
-      await supabaseClient
-
-        .from(
-          "question_reports"
-        )
-
-        .insert(
-          {
-
-            user_id:
-              user.id,
-
-            question_id:
-              questionId,
-
-            report_type:
-              reportType,
-
-            message:
-              message
-
-          }
-        );
-
-
-    if (
-      error
-    ) {
-
-      console.warn(
-        "物申す投稿エラー:",
-        error
-      );
-
-
-      return false;
-    }
-
-
-    return true;
-
-
-  } catch (
-    error
-  ) {
-
-    console.warn(
-      "物申す投稿処理エラー:",
-      error
-    );
-
-
-    return false;
-  }
-}
-
-
-/* =========================================================
-   メイン
-========================================================= */
 
 document.addEventListener(
   "DOMContentLoaded",
   function () {
+
+    ensureAnonymousUser();
 
 
     const mainButton =
@@ -455,48 +53,40 @@ document.addEventListener(
         "#main-button"
       );
 
-
     const trialButton =
       document.querySelector(
         "#trial-button"
       );
-
 
     const quizCard =
       document.querySelector(
         ".quiz-card"
       );
 
-
     const resumeArea =
       document.querySelector(
         "#resume-area"
       );
-
 
     const resumeButton =
       document.querySelector(
         "#resume-button"
       );
 
-
     const resumeDetail =
       document.querySelector(
         "#resume-detail"
       );
-
 
     const resumeResetButton =
       document.querySelector(
         "#resume-reset-button"
       );
 
-
     const heroButtons =
       document.querySelector(
         ".hero-buttons"
       );
-
 
     const trialNote =
       document.querySelector(
@@ -504,141 +94,72 @@ document.addEventListener(
       );
 
 
-    if (
-      !quizCard
-    ) {
-
-      return;
-    }
-
-
     let previousResultArea =
       null;
-
 
     let quizQuestions =
       [];
 
-
     let currentQuestionIndex =
       0;
-
 
     let score =
       0;
 
-
     let quizMode =
       "main";
-
 
     let categoryStats =
       {};
 
-
     let categoryStatsComplete =
       true;
-
 
     let answerLocked =
       false;
 
-
-    /*
-      今回追加した
-      集計用セッションID
-    */
-
-    let currentSessionId =
+    let quizSessionId =
       null;
 
 
-    let sessionCompleted =
-      false;
-
-
-    /* =====================================================
-       開発用モード
-    ===================================================== */
+    /* =========================
+       開発用URL
+    ========================= */
 
     const urlParams =
       new URLSearchParams(
         window.location.search
       );
 
-
     const isTestMode =
-
-      urlParams.get(
-        "test"
-      ) ===
-      "1";
-
+      urlParams.get("test") === "1";
 
     const isResultTestMode =
-
-      urlParams.get(
-        "resulttest"
-      ) ===
-      "1";
-
+      urlParams.get("resulttest") === "1";
 
     const isDataTestMode =
-
-      urlParams.get(
-        "datatest"
-      ) ===
-      "1";
-
+      urlParams.get("datatest") === "1";
 
     const isLastResultTestMode =
-
-      urlParams.get(
-        "lastresulttest"
-      ) ===
-      "1";
+      urlParams.get("lastresulttest") === "1";
 
 
-    /*
-      開発用テストは
-      集計データに入れない
-    */
+    function shouldTrackAnalytics() {
 
-    const analyticsEnabled =
-
-      !isTestMode
-
-      &&
-
-      !isResultTestMode
-
-      &&
-
-      !isDataTestMode
-
-      &&
-
-      !isLastResultTestMode;
+      return (
+        !isTestMode &&
+        !isResultTestMode &&
+        !isDataTestMode &&
+        !isLastResultTestMode
+      );
+    }
 
 
-    /*
-      匿名ログインは先に開始するが、
-      完了を待たない。
+    /* =========================
+       トップページ
+    ========================= */
 
-      Supabaseが止まっていても
-      クイズ自体は遊べる。
-    */
-
-    ensureAnonymousUser();
-
-
-    /* =====================================================
-       イベント登録
-    ===================================================== */
-
-    if (
-      mainButton
-    ) {
+    if (mainButton) {
 
       mainButton.addEventListener(
         "click",
@@ -647,9 +168,7 @@ document.addEventListener(
     }
 
 
-    if (
-      trialButton
-    ) {
+    if (trialButton) {
 
       trialButton.addEventListener(
         "click",
@@ -664,9 +183,7 @@ document.addEventListener(
     }
 
 
-    if (
-      resumeButton
-    ) {
+    if (resumeButton) {
 
       resumeButton.addEventListener(
         "click",
@@ -675,24 +192,18 @@ document.addEventListener(
     }
 
 
-    if (
-      resumeResetButton
-    ) {
+    if (resumeResetButton) {
 
       resumeResetButton.addEventListener(
         "click",
-        async function () {
+        function () {
 
           const confirmed =
             confirm(
               "途中までのデータを削除しますか？"
             );
 
-
-          if (
-            !confirmed
-          ) {
-
+          if (!confirmed) {
             return;
           }
 
@@ -702,10 +213,11 @@ document.addEventListener(
 
 
           if (
-            saved?.sessionId
+            saved &&
+            saved.sessionId
           ) {
 
-            await markQuizSessionAbandoned(
+            abandonQuizSession(
               saved.sessionId
             );
           }
@@ -713,26 +225,18 @@ document.addEventListener(
 
           clearProgress();
 
-
           window.location.reload();
         }
       );
     }
 
 
-    /* =====================================================
-       初期表示
-    ===================================================== */
+    updateResumeArea();
 
     setupPreviousResultArea();
 
 
-    updateResumeArea();
-
-
-    if (
-      isLastResultTestMode
-    ) {
+    if (isLastResultTestMode) {
 
       runLastResultTest();
 
@@ -740,9 +244,7 @@ document.addEventListener(
     }
 
 
-    if (
-      isDataTestMode
-    ) {
+    if (isDataTestMode) {
 
       runDataValidationTest();
 
@@ -750,9 +252,7 @@ document.addEventListener(
     }
 
 
-    if (
-      isResultTestMode
-    ) {
+    if (isResultTestMode) {
 
       showResultTest();
 
@@ -760,691 +260,13 @@ document.addEventListener(
     }
 
 
-    /* =====================================================
-       集計用
-       quiz_sessions 作成
-    ===================================================== */
-
-    async function createQuizSession(
-      mode,
-      questionCount
-    ) {
-
-      if (
-        !analyticsEnabled
-
-        ||
-
-        !supabaseClient
-      ) {
-
-        return null;
-      }
-
-
-      try {
-
-        const user =
-          await ensureAnonymousUser();
-
-
-        if (
-          !user
-        ) {
-
-          return null;
-        }
-
-
-        const {
-
-          data,
-
-          error
-
-        } =
-
-          await supabaseClient
-
-            .from(
-              "quiz_sessions"
-            )
-
-            .insert(
-              {
-
-                user_id:
-                  user.id,
-
-                mode:
-                  mode,
-
-                question_count:
-                  questionCount,
-
-                question_set_version:
-                  QUESTION_SET_VERSION,
-
-                answered_count:
-                  0,
-
-                score:
-                  0,
-
-                last_activity_at:
-                  new Date()
-                    .toISOString()
-
-              }
-            )
-
-            .select(
-              "id"
-            )
-
-            .single();
-
-
-        if (
-          error
-        ) {
-
-          /*
-            重要：
-            集計が失敗しても
-            クイズは壊さない
-          */
-
-          console.warn(
-            "quiz_sessions 作成エラー:",
-            error
-          );
-
-
-          return null;
-        }
-
-
-        return (
-          data?.id ||
-          null
-        );
-
-
-      } catch (
-        error
-      ) {
-
-        console.warn(
-          "quiz_sessions 作成処理エラー:",
-          error
-        );
-
-
-        return null;
-      }
-    }
-
-
-    /* =====================================================
-       1回答ずつ記録
-    ===================================================== */
-
-    async function recordQuizAnswer(
-      question,
-      selectedAnswer,
-      isCorrect,
-      questionNumber
-    ) {
-
-      const sessionId =
-        currentSessionId;
-
-
-      if (
-        !analyticsEnabled
-
-        ||
-
-        !supabaseClient
-
-        ||
-
-        !sessionId
-      ) {
-
-        return;
-      }
-
-
-      try {
-
-        const user =
-          await ensureAnonymousUser();
-
-
-        if (
-          !user
-        ) {
-
-          return;
-        }
-
-
-        const {
-          error
-        } =
-
-          await supabaseClient
-
-            .from(
-              "quiz_answers"
-            )
-
-            .insert(
-              {
-
-                session_id:
-                  sessionId,
-
-                user_id:
-                  user.id,
-
-                question_id:
-                  String(
-                    question.id
-                  ),
-
-                question_number:
-                  questionNumber,
-
-                category:
-                  String(
-                    question.category ||
-                    "その他"
-                  ),
-
-                selected_answer:
-                  selectedAnswer,
-
-                is_correct:
-                  isCorrect
-
-              }
-            );
-
-
-        /*
-          UNIQUE(session_id, question_number)
-          による重複なら無視
-        */
-
-        if (
-          error
-
-          &&
-
-          error.code !==
-            "23505"
-        ) {
-
-          console.warn(
-            "quiz_answers 保存エラー:",
-            error
-          );
-        }
-
-
-      } catch (
-        error
-      ) {
-
-        console.warn(
-          "quiz_answers 保存処理エラー:",
-          error
-        );
-      }
-    }
-
-
-    /* =====================================================
-       セッション進捗更新
-    ===================================================== */
-
-    async function updateQuizSessionProgress(
-      answeredCount,
-      currentScore
-    ) {
-
-      const sessionId =
-        currentSessionId;
-
-
-      if (
-        !analyticsEnabled
-
-        ||
-
-        !supabaseClient
-
-        ||
-
-        !sessionId
-      ) {
-
-        return;
-      }
-
-
-      try {
-
-        const user =
-          await ensureAnonymousUser();
-
-
-        if (
-          !user
-        ) {
-
-          return;
-        }
-
-
-        const {
-          error
-        } =
-
-          await supabaseClient
-
-            .from(
-              "quiz_sessions"
-            )
-
-            .update(
-              {
-
-                answered_count:
-                  answeredCount,
-
-                score:
-                  currentScore,
-
-                last_activity_at:
-                  new Date()
-                    .toISOString()
-
-              }
-            )
-
-            .eq(
-              "id",
-              sessionId
-            )
-
-            .eq(
-              "user_id",
-              user.id
-            );
-
-
-        if (
-          error
-        ) {
-
-          console.warn(
-            "quiz_sessions 進捗更新エラー:",
-            error
-          );
-        }
-
-
-      } catch (
-        error
-      ) {
-
-        console.warn(
-          "quiz_sessions 進捗更新処理エラー:",
-          error
-        );
-      }
-    }
-
-
-    /* =====================================================
-       最終アクセス更新
-    ===================================================== */
-
-    async function touchQuizSession(
-      sessionId
-    ) {
-
-      if (
-        !analyticsEnabled
-
-        ||
-
-        !supabaseClient
-
-        ||
-
-        !sessionId
-      ) {
-
-        return;
-      }
-
-
-      try {
-
-        const user =
-          await ensureAnonymousUser();
-
-
-        if (
-          !user
-        ) {
-
-          return;
-        }
-
-
-        const {
-          error
-        } =
-
-          await supabaseClient
-
-            .from(
-              "quiz_sessions"
-            )
-
-            .update(
-              {
-
-                last_activity_at:
-                  new Date()
-                    .toISOString()
-
-              }
-            )
-
-            .eq(
-              "id",
-              sessionId
-            )
-
-            .eq(
-              "user_id",
-              user.id
-            );
-
-
-        if (
-          error
-        ) {
-
-          console.warn(
-            "quiz_sessions activity更新エラー:",
-            error
-          );
-        }
-
-
-      } catch (
-        error
-      ) {
-
-        console.warn(
-          "quiz_sessions activity更新処理エラー:",
-          error
-        );
-      }
-    }
-
-
-    /* =====================================================
-       セッション破棄
-    ===================================================== */
-
-    async function markQuizSessionAbandoned(
-      sessionId
-    ) {
-
-      if (
-        !analyticsEnabled
-
-        ||
-
-        !supabaseClient
-
-        ||
-
-        !sessionId
-      ) {
-
-        return;
-      }
-
-
-      try {
-
-        const user =
-          await ensureAnonymousUser();
-
-
-        if (
-          !user
-        ) {
-
-          return;
-        }
-
-
-        const now =
-          new Date()
-            .toISOString();
-
-
-        const {
-          error
-        } =
-
-          await supabaseClient
-
-            .from(
-              "quiz_sessions"
-            )
-
-            .update(
-              {
-
-                abandoned_at:
-                  now,
-
-                last_activity_at:
-                  now
-
-              }
-            )
-
-            .eq(
-              "id",
-              sessionId
-            )
-
-            .eq(
-              "user_id",
-              user.id
-            )
-
-            .is(
-              "completed_at",
-              null
-            );
-
-
-        if (
-          error
-        ) {
-
-          console.warn(
-            "quiz_sessions 離脱更新エラー:",
-            error
-          );
-        }
-
-
-      } catch (
-        error
-      ) {
-
-        console.warn(
-          "quiz_sessions 離脱更新処理エラー:",
-          error
-        );
-      }
-    }
-
-
-    /* =====================================================
-       完走記録
-    ===================================================== */
-
-    async function completeCurrentQuizSession() {
-
-      const sessionId =
-        currentSessionId;
-
-
-      if (
-        sessionCompleted
-
-        ||
-
-        !analyticsEnabled
-
-        ||
-
-        !supabaseClient
-
-        ||
-
-        !sessionId
-      ) {
-
-        return;
-      }
-
-
-      sessionCompleted =
-        true;
-
-
-      try {
-
-        const user =
-          await ensureAnonymousUser();
-
-
-        if (
-          !user
-        ) {
-
-          sessionCompleted =
-            false;
-
-          return;
-        }
-
-
-        const now =
-          new Date()
-            .toISOString();
-
-
-        const {
-          error
-        } =
-
-          await supabaseClient
-
-            .from(
-              "quiz_sessions"
-            )
-
-            .update(
-              {
-
-                completed_at:
-                  now,
-
-                abandoned_at:
-                  null,
-
-                last_activity_at:
-                  now,
-
-                answered_count:
-                  quizQuestions.length,
-
-                score:
-                  score
-
-              }
-            )
-
-            .eq(
-              "id",
-              sessionId
-            )
-
-            .eq(
-              "user_id",
-              user.id
-            );
-
-
-        if (
-          error
-        ) {
-
-          sessionCompleted =
-            false;
-
-
-          console.warn(
-            "quiz_sessions 完走更新エラー:",
-            error
-          );
-        }
-
-
-      } catch (
-        error
-      ) {
-
-        sessionCompleted =
-          false;
-
-
-        console.warn(
-          "quiz_sessions 完走更新処理エラー:",
-          error
-        );
-      }
-    }
-
-
-    /* =====================================================
-       前回結果表示エリア
-    ===================================================== */
+    /* =========================
+       前回結果
+    ========================= */
 
     function setupPreviousResultArea() {
 
-      if (
-        !heroButtons
-      ) {
-
+      if (!heroButtons) {
         return;
       }
 
@@ -1457,7 +279,6 @@ document.addEventListener(
 
       previousResultArea.id =
         "previous-result-area";
-
 
       previousResultArea.style.marginTop =
         "18px";
@@ -1475,10 +296,7 @@ document.addEventListener(
 
     function updatePreviousResultArea() {
 
-      if (
-        !previousResultArea
-      ) {
-
+      if (!previousResultArea) {
         return;
       }
 
@@ -1487,9 +305,7 @@ document.addEventListener(
         loadLastResult();
 
 
-      if (
-        !saved
-      ) {
+      if (!saved) {
 
         previousResultArea.innerHTML =
           "";
@@ -1512,56 +328,34 @@ document.addEventListener(
           type="button"
         >
 
-          <div
-            class="previous-result-head"
-          >
+          <div class="previous-result-head">
 
-            <span
-              class="previous-result-kicker"
-            >
+            <span class="previous-result-kicker">
               LAST RESULT
             </span>
 
-
             ${
               completedText
-
                 ? `
-
-                  <span
-                    class="previous-result-date"
-                  >
-                    ${escapeHtml(
-                      completedText
-                    )}
+                  <span class="previous-result-date">
+                    ${escapeHtml(completedText)}
                   </span>
-
                 `
-
                 : ""
             }
 
           </div>
 
 
-          <div
-            class="previous-result-main"
-          >
+          <div class="previous-result-main">
 
-            <div
-              class="previous-result-score"
-            >
+            <div class="previous-result-score">
 
-              <span
-                class="previous-result-score-value"
-              >
+              <span class="previous-result-score-value">
                 ${saved.score}
               </span>
 
-
-              <span
-                class="previous-result-score-total"
-              >
+              <span class="previous-result-score-total">
                 /
                 ${saved.total}
               </span>
@@ -1569,25 +363,14 @@ document.addEventListener(
             </div>
 
 
-            <div
-              class="previous-result-rank-block"
-            >
+            <div class="previous-result-rank-block">
 
-              <span
-                class="previous-result-rank"
-              >
-                ${escapeHtml(
-                  saved.rank
-                )}
+              <span class="previous-result-rank">
+                ${escapeHtml(saved.rank)}
               </span>
 
-
-              <span
-                class="previous-result-title"
-              >
-                ${escapeHtml(
-                  saved.title
-                )}
+              <span class="previous-result-title">
+                ${escapeHtml(saved.title)}
               </span>
 
             </div>
@@ -1595,17 +378,11 @@ document.addEventListener(
           </div>
 
 
-          <div
-            class="previous-result-footer"
-          >
+          <div class="previous-result-footer">
             前回の結果を見る
-
-            <span
-              aria-hidden="true"
-            >
+            <span aria-hidden="true">
               →
             </span>
-
           </div>
 
         </button>
@@ -1619,9 +396,7 @@ document.addEventListener(
         );
 
 
-      if (
-        button
-      ) {
+      if (button) {
 
         button.addEventListener(
           "click",
@@ -1630,10 +405,6 @@ document.addEventListener(
       }
     }
 
-
-    /* =====================================================
-       前回結果保存
-    ===================================================== */
 
     function saveLastResult(
       rankResult
@@ -1646,76 +417,56 @@ document.addEventListener(
           version:
             STORAGE_SCHEMA_VERSION,
 
-
           questionSetVersion:
             QUESTION_SET_VERSION,
-
 
           categoryStatsVersion:
             CATEGORY_STATS_VERSION,
 
-
           score:
             score,
-
 
           total:
             quizQuestions.length,
 
-
           rank:
             rankResult.rank,
-
 
           title:
             rankResult.title,
 
-
           comment:
             rankResult.comment,
-
 
           categoryStats:
             categoryStats,
 
-
           categoryStatsComplete:
             categoryStatsComplete,
 
-
           completedAt:
-            new Date()
-              .toISOString()
-
+            new Date().toISOString()
         };
 
 
         localStorage.setItem(
           QUIZ_LAST_RESULT_KEY,
-          JSON.stringify(
-            data
-          )
+          JSON.stringify(data)
         );
 
 
         updatePreviousResultArea();
 
 
-      } catch (
-        error
-      ) {
+      } catch (error) {
 
-        console.warn(
+        console.error(
           "前回結果保存エラー:",
           error
         );
       }
     }
 
-
-    /* =====================================================
-       前回結果読込
-    ===================================================== */
 
     function loadLastResult() {
 
@@ -1727,129 +478,58 @@ document.addEventListener(
           );
 
 
-        if (
-          !raw
-        ) {
-
+        if (!raw) {
           return null;
         }
 
 
         let data =
-          JSON.parse(
-            raw
-          );
+          JSON.parse(raw);
 
 
         if (
-          !data
-
-          ||
-
-          typeof data !==
-            "object"
-        ) {
-
-          return null;
-        }
-
-
-        /*
-          古い保存データを
-          version 3へ移行
-        */
-
-        if (
-          data.version ===
-            1
-
-          ||
-
-          data.version ===
-            2
+          data &&
+          data.version === 1
         ) {
 
           data = {
 
             ...data,
 
-
             version:
-              STORAGE_SCHEMA_VERSION,
-
+              2,
 
             questionSetVersion:
-              Number(
-                data.questionSetVersion ||
-                1
-              ),
-
+              1,
 
             categoryStatsVersion:
-              Number(
-                data.categoryStatsVersion ||
-                1
-              ),
-
-
-            categoryStats:
-
-              data.categoryStats
-
-              &&
-
-              typeof data.categoryStats ===
-                "object"
-
-                ? data.categoryStats
-
-                : {},
-
+              1,
 
             categoryStatsComplete:
-
-              typeof data
-                .categoryStatsComplete ===
-                "boolean"
-
-                ? data
-                    .categoryStatsComplete
-
+              typeof data.categoryStatsComplete ===
+              "boolean"
+                ? data.categoryStatsComplete
                 : true
-
           };
 
 
           localStorage.setItem(
             QUIZ_LAST_RESULT_KEY,
-            JSON.stringify(
-              data
-            )
+            JSON.stringify(data)
           );
         }
 
 
         if (
+          !data ||
           data.version !==
-            STORAGE_SCHEMA_VERSION
-
-          ||
-
+            STORAGE_SCHEMA_VERSION ||
           typeof data.score !==
-            "number"
-
-          ||
-
+            "number" ||
           typeof data.total !==
-            "number"
-
-          ||
-
+            "number" ||
           typeof data.rank !==
-            "string"
-
-          ||
-
+            "string" ||
           typeof data.title !==
             "string"
         ) {
@@ -1858,46 +538,20 @@ document.addEventListener(
         }
 
 
-        if (
-          data.categoryStatsVersion !==
-            CATEGORY_STATS_VERSION
-        ) {
-
-          data = {
-
-            ...data,
-
-            categoryStats:
-              {},
-
-            categoryStatsComplete:
-              false
-
-          };
-        }
-
-
         return data;
 
 
-      } catch (
-        error
-      ) {
+      } catch (error) {
 
-        console.warn(
+        console.error(
           "前回結果読込エラー:",
           error
         );
-
 
         return null;
       }
     }
 
-
-    /* =====================================================
-       前回結果表示
-    ===================================================== */
 
     function showPreviousResult() {
 
@@ -1905,12 +559,25 @@ document.addEventListener(
         loadLastResult();
 
 
-      if (
-        !saved
-      ) {
+      if (!saved) {
+
+        updatePreviousResultArea();
 
         return;
       }
+
+
+      const rankResult = {
+
+        rank:
+          saved.rank,
+
+        title:
+          saved.title,
+
+        comment:
+          saved.comment || ""
+      };
 
 
       renderMainResultScreen(
@@ -1919,60 +586,27 @@ document.addEventListener(
           scoreValue:
             saved.score,
 
-
           totalValue:
             saved.total,
 
-
-          rankResult: {
-
-            rank:
-              saved.rank,
-
-            title:
-              saved.title,
-
-            comment:
-              saved.comment ||
-              ""
-
-          },
-
+          rankResult:
+            rankResult,
 
           statsSource:
-            saved.categoryStats ||
-            {},
-
+            saved.categoryStats || {},
 
           statsComplete:
-
-            typeof saved
-              .categoryStatsComplete ===
-              "boolean"
-
-              ? saved
-                  .categoryStatsComplete
-
+            typeof saved.categoryStatsComplete ===
+            "boolean"
+              ? saved.categoryStatsComplete
               : true,
 
-
           resultTest:
-            false,
-
-
-          showCompletion:
-            saved.total ===
-              100
-
+            false
         }
       );
     }
 
-
-    /* =====================================================
-       前回結果テスト
-       ?lastresulttest=1
-    ===================================================== */
 
     function runLastResultTest() {
 
@@ -1981,91 +615,77 @@ document.addEventListener(
         const dummyScore =
           69;
 
-
         const rankResult =
-          safeGetRankResult(
+          getRankResult(
             dummyScore
           );
 
 
+        const dummyData = {
+
+          version:
+            STORAGE_SCHEMA_VERSION,
+
+          questionSetVersion:
+            QUESTION_SET_VERSION,
+
+          categoryStatsVersion:
+            CATEGORY_STATS_VERSION,
+
+          score:
+            69,
+
+          total:
+            100,
+
+          rank:
+            rankResult.rank,
+
+          title:
+            rankResult.title,
+
+          comment:
+            rankResult.comment,
+
+          categoryStats: {
+
+            モンスター: {
+              correct: 14,
+              total: 20
+            },
+
+            アイテム: {
+              correct: 17,
+              total: 25
+            },
+
+            ダンジョン: {
+              correct: 12,
+              total: 15
+            },
+
+            仕様: {
+              correct: 20,
+              total: 30
+            },
+
+            その他: {
+              correct: 6,
+              total: 10
+            }
+          },
+
+          categoryStatsComplete:
+            true,
+
+          completedAt:
+            new Date().toISOString()
+        };
+
+
         localStorage.setItem(
           QUIZ_LAST_RESULT_KEY,
-
-          JSON.stringify(
-            {
-
-              version:
-                STORAGE_SCHEMA_VERSION,
-
-
-              questionSetVersion:
-                QUESTION_SET_VERSION,
-
-
-              categoryStatsVersion:
-                CATEGORY_STATS_VERSION,
-
-
-              score:
-                dummyScore,
-
-
-              total:
-                100,
-
-
-              rank:
-                rankResult.rank,
-
-
-              title:
-                rankResult.title,
-
-
-              comment:
-                rankResult.comment,
-
-
-              categoryStats: {
-
-                モンスター: {
-                  correct: 19,
-                  total: 20
-                },
-
-                アイテム: {
-                  correct: 16,
-                  total: 20
-                },
-
-                ダンジョン: {
-                  correct: 15,
-                  total: 19
-                },
-
-                仕様: {
-                  correct: 18,
-                  total: 36
-                },
-
-                その他: {
-                  correct: 1,
-                  total: 5
-                }
-
-              },
-
-
-              categoryStatsComplete:
-                true,
-
-
-              completedAt:
-                new Date()
-                  .toISOString()
-
-            }
-          )
+          JSON.stringify(dummyData)
         );
 
 
@@ -2074,9 +694,7 @@ document.addEventListener(
         );
 
 
-      } catch (
-        error
-      ) {
+      } catch (error) {
 
         console.error(
           "前回結果テスト保存エラー:",
@@ -2091,26 +709,17 @@ document.addEventListener(
     }
 
 
-    /* =====================================================
-       完走日時
-    ===================================================== */
-
     function formatCompletedAt(
       value
     ) {
 
-      if (
-        !value
-      ) {
-
+      if (!value) {
         return "";
       }
 
 
       const date =
-        new Date(
-          value
-        );
+        new Date(value);
 
 
       if (
@@ -2126,7 +735,6 @@ document.addEventListener(
       return new Intl.DateTimeFormat(
         "ja-JP",
         {
-
           year:
             "numeric",
 
@@ -2141,17 +749,10 @@ document.addEventListener(
 
           minute:
             "2-digit"
-
         }
-      ).format(
-        date
-      );
+      ).format(date);
     }
 
-
-    /* =====================================================
-       トップへ戻る
-    ===================================================== */
 
     function goToTop() {
 
@@ -2160,537 +761,9 @@ document.addEventListener(
     }
 
 
-    /* =====================================================
-       questions.json 読込
-    ===================================================== */
-
-    async function loadQuestionsData() {
-
-      const response =
-        await fetch(
-          "data/questions.json",
-          {
-            cache:
-              "no-store"
-          }
-        );
-
-
-      if (
-        !response.ok
-      ) {
-
-        throw new Error(
-          `questions.json を読み込めませんでした。HTTP ${response.status}`
-        );
-      }
-
-
-      const data =
-        await response.json();
-
-
-      validateQuestionsData(
-        data
-      );
-
-
-      return data;
-    }
-
-
-    /* =====================================================
-       questions.json 検証
-    ===================================================== */
-
-    function validateQuestionsData(
-      data
-    ) {
-
-      if (
-        !Array.isArray(
-          data
-        )
-      ) {
-
-        throw new Error(
-          "questions.json の一番外側は配列にしてください。"
-        );
-      }
-
-
-      if (
-        data.length ===
-          0
-      ) {
-
-        throw new Error(
-          "questions.json に問題がありません。"
-        );
-      }
-
-
-      const seenIds =
-        new Set();
-
-
-      data.forEach(
-        function (
-          question,
-          arrayIndex
-        ) {
-
-          const label =
-            `配列${arrayIndex + 1}件目`;
-
-
-          if (
-            !question
-
-            ||
-
-            typeof question !==
-              "object"
-          ) {
-
-            throw new Error(
-              `${label}: 問題データがオブジェクトではありません。`
-            );
-          }
-
-
-          if (
-            question.id ===
-              undefined
-
-            ||
-
-            question.id ===
-              null
-
-            ||
-
-            String(
-              question.id
-            ).trim() ===
-              ""
-          ) {
-
-            throw new Error(
-              `${label}: id がありません。`
-            );
-          }
-
-
-          const normalizedId =
-            String(
-              question.id
-            );
-
-
-          if (
-            seenIds.has(
-              normalizedId
-            )
-          ) {
-
-            throw new Error(
-              `問題ID #${normalizedId}: id が重複しています。`
-            );
-          }
-
-
-          seenIds.add(
-            normalizedId
-          );
-
-
-          if (
-            typeof question.category !==
-              "string"
-
-            ||
-
-            question.category
-              .trim() ===
-              ""
-          ) {
-
-            throw new Error(
-              `問題ID #${normalizedId}: category が不正です。`
-            );
-          }
-
-
-          if (
-            !VALID_QUESTION_TYPES
-              .includes(
-                question.type
-              )
-          ) {
-
-            throw new Error(
-              `問題ID #${normalizedId}: type は single または multiple にしてください。`
-            );
-          }
-
-
-          if (
-            typeof question.question !==
-              "string"
-
-            ||
-
-            question.question
-              .trim() ===
-              ""
-          ) {
-
-            throw new Error(
-              `問題ID #${normalizedId}: question が空です。`
-            );
-          }
-
-
-          if (
-            !Array.isArray(
-              question.choices
-            )
-
-            ||
-
-            question.choices.length <
-              2
-          ) {
-
-            throw new Error(
-              `問題ID #${normalizedId}: choices が不正です。`
-            );
-          }
-
-
-          question.choices.forEach(
-            function (
-              choice,
-              choiceIndex
-            ) {
-
-              if (
-                typeof choice !==
-                  "string"
-
-                ||
-
-                choice.trim() ===
-                  ""
-              ) {
-
-                throw new Error(
-                  `問題ID #${normalizedId}: 選択肢${choiceIndex + 1}が空です。`
-                );
-              }
-            }
-          );
-
-
-          /* =====================
-             単一選択
-          ===================== */
-
-          if (
-            question.type ===
-              "single"
-          ) {
-
-            if (
-              !Number.isInteger(
-                question.answer
-              )
-
-              ||
-
-              question.answer <
-                0
-
-              ||
-
-              question.answer >=
-                question.choices.length
-            ) {
-
-              throw new Error(
-                `問題ID #${normalizedId}: answer が不正です。`
-              );
-            }
-          }
-
-
-          /* =====================
-             複数選択
-          ===================== */
-
-          if (
-            question.type ===
-              "multiple"
-          ) {
-
-            if (
-              !Array.isArray(
-                question.answer
-              )
-
-              ||
-
-              question.answer.length ===
-                0
-            ) {
-
-              throw new Error(
-                `問題ID #${normalizedId}: multiple の answer は配列にしてください。`
-              );
-            }
-
-
-            const uniqueAnswers =
-              new Set(
-                question.answer
-              );
-
-
-            if (
-              uniqueAnswers.size !==
-                question.answer.length
-            ) {
-
-              throw new Error(
-                `問題ID #${normalizedId}: answer に同じ番号が重複しています。`
-              );
-            }
-
-
-            question.answer.forEach(
-              function (
-                answerIndex
-              ) {
-
-                if (
-                  !Number.isInteger(
-                    answerIndex
-                  )
-
-                  ||
-
-                  answerIndex <
-                    0
-
-                  ||
-
-                  answerIndex >=
-                    question.choices.length
-                ) {
-
-                  throw new Error(
-                    `問題ID #${normalizedId}: answer の番号が選択肢の範囲外です。`
-                  );
-                }
-              }
-            );
-          }
-
-
-          /*
-            explanation は
-            空文字でも許可。
-
-            内容がまだ未入力の問題があっても
-            アプリ全体を止めない。
-          */
-
-          if (
-            question.explanation !==
-              undefined
-
-            &&
-
-            typeof question.explanation !==
-              "string"
-          ) {
-
-            throw new Error(
-              `問題ID #${normalizedId}: explanation が不正です。`
-            );
-          }
-
-
-          if (
-            question.instruction !==
-              undefined
-
-            &&
-
-            typeof question.instruction !==
-              "string"
-          ) {
-
-            throw new Error(
-              `問題ID #${normalizedId}: instruction が不正です。`
-            );
-          }
-        }
-      );
-    }
-
-
-    /* =====================================================
-       問題データエラー画面
-    ===================================================== */
-
-    function showQuestionDataError(
-      error,
-      isTest = false
-    ) {
-
-      console.error(
-        "問題データエラー:",
-        error
-      );
-
-
-      quizCard.innerHTML = `
-
-        <div
-          class="result-screen"
-        >
-
-          <p
-            class="hero-label"
-          >
-            ${
-              isTest
-                ? "DATA TEST"
-                : "ERROR"
-            }
-          </p>
-
-
-          <h1>
-            ${
-              isTest
-                ? "データ検証テスト"
-                : "問題データエラー"
-            }
-          </h1>
-
-
-          <p
-            class="explanation"
-          >
-            ${escapeHtml(
-              error?.message ||
-              "問題データを読み込めませんでした。"
-            )}
-          </p>
-
-
-          <button
-            class="
-              restart-button
-              error-top-button
-            "
-            type="button"
-          >
-            トップ画面へ戻る
-          </button>
-
-        </div>
-
-      `;
-
-
-      const button =
-        document.querySelector(
-          ".error-top-button"
-        );
-
-
-      if (
-        button
-      ) {
-
-        button.addEventListener(
-          "click",
-          goToTop
-        );
-      }
-    }
-
-
-    /* =====================================================
-       データ検証テスト
-       ?datatest=1
-    ===================================================== */
-
-    function runDataValidationTest() {
-
-      const intentionallyBrokenData = [
-
-        {
-
-          id:
-            "TEST-BROKEN",
-
-          category:
-            "仕様",
-
-          type:
-            "unknown",
-
-          question:
-            "type異常テスト",
-
-          choices: [
-            "A",
-            "B"
-          ],
-
-          answer:
-            0,
-
-          explanation:
-            "テスト"
-
-        }
-
-      ];
-
-
-      try {
-
-        validateQuestionsData(
-          intentionallyBrokenData
-        );
-
-
-        throw new Error(
-          "不正データを検出できませんでした。"
-        );
-
-
-      } catch (
-        error
-      ) {
-
-        showQuestionDataError(
-          error,
-          true
-        );
-      }
-    }
-
-
-    /* =====================================================
+    /* =========================
        クイズ開始
-    ===================================================== */
+    ========================= */
 
     async function startQuiz(
       questionCount = 100,
@@ -2701,14 +774,6 @@ document.addEventListener(
         mode;
 
 
-      sessionCompleted =
-        false;
-
-
-      currentSessionId =
-        null;
-
-
       try {
 
         const allQuestions =
@@ -2717,9 +782,7 @@ document.addEventListener(
 
         quizQuestions =
           shuffleArray(
-            [
-              ...allQuestions
-            ]
+            [...allQuestions]
           ).slice(
             0,
             Math.min(
@@ -2732,35 +795,38 @@ document.addEventListener(
         currentQuestionIndex =
           0;
 
-
         score =
           0;
-
 
         categoryStats =
           {};
 
-
         categoryStatsComplete =
           true;
-
 
         answerLocked =
           false;
 
+        quizSessionId =
+          null;
+
 
         /*
-          集計用セッションを作る。
-
-          失敗した場合は null になるだけで
-          クイズはそのまま続く。
+          挑戦開始をSupabaseへ記録
         */
 
-        currentSessionId =
-          await createQuizSession(
-            mode,
-            quizQuestions.length
-          );
+        if (
+          shouldTrackAnalytics()
+        ) {
+
+          quizSessionId =
+            await createQuizSession(
+              quizMode,
+              quizQuestions.length,
+              0,
+              0
+            );
+        }
 
 
         if (
@@ -2777,9 +843,7 @@ document.addEventListener(
         showQuestion();
 
 
-      } catch (
-        error
-      ) {
+      } catch (error) {
 
         showQuestionDataError(
           error
@@ -2788,9 +852,9 @@ document.addEventListener(
     }
 
 
-    /* =====================================================
+    /* =========================
        問題表示
-    ===================================================== */
+    ========================= */
 
     function showQuestion() {
 
@@ -2815,9 +879,7 @@ document.addEventListener(
         ];
 
 
-      if (
-        !question
-      ) {
+      if (!question) {
 
         showQuestionDataError(
           new Error(
@@ -2825,56 +887,37 @@ document.addEventListener(
           )
         );
 
-
         return;
       }
 
 
       const progress =
-
         (
           (
             currentQuestionIndex +
             1
-          )
-
-          /
-
+          ) /
           quizQuestions.length
-
-        ) * 100;
+        ) *
+        100;
 
 
       quizCard.innerHTML = `
 
-        <div
-          class="question-meta"
-        >
+        <div class="question-meta">
 
           <span>
-            第${currentQuestionIndex + 1}問
-            /
+            第${currentQuestionIndex + 1}問 /
             全${quizQuestions.length}問
           </span>
 
+          <div class="question-meta-right">
 
-          <div
-            class="question-meta-right"
-          >
-
-            <span
-              class="question-id"
-            >
-              問題ID
-              #${escapeHtml(
-                question.id
-              )}
+            <span class="question-id">
+              問題ID #${question.id}
             </span>
 
-
-            <span
-              class="category"
-            >
+            <span class="category">
               ${escapeHtml(
                 question.category
               )}
@@ -2885,16 +928,11 @@ document.addEventListener(
         </div>
 
 
-        <div
-          class="progress-wrap"
-        >
+        <div class="progress-wrap">
 
           <div
             class="progress-bar"
-            style="
-              width:
-                ${progress}%;
-            "
+            style="width:${progress}%;"
           ></div>
 
         </div>
@@ -2903,12 +941,8 @@ document.addEventListener(
         ${
           quizMode ===
             "main"
-
             ? `
-
-              <div
-                class="pause-row"
-              >
+              <div class="pause-row">
 
                 <button
                   class="pause-button"
@@ -2918,9 +952,7 @@ document.addEventListener(
                 </button>
 
               </div>
-
             `
-
             : ""
         }
 
@@ -2934,34 +966,23 @@ document.addEventListener(
 
         ${
           question.type ===
-            "multiple"
-
-          &&
-
+            "multiple" &&
           question.instruction
 
             ? `
-
-              <div
-                class="question-instruction"
-              >
+              <div class="question-instruction">
                 ${escapeHtml(
                   question.instruction
                 )}
               </div>
-
             `
-
             : ""
         }
 
 
-        <div
-          class="choices"
-        >
+        <div class="choices">
 
           ${question.choices
-
             .map(
               function (
                 choice,
@@ -2973,25 +994,16 @@ document.addEventListener(
                   <button
                     class="choice-button"
                     data-index="${index}"
-                    type="button"
                   >
 
-                    <span
-                      class="choice-label"
-                    >
+                    <span class="choice-label">
                       ${String.fromCharCode(
-                        65 +
-                        index
+                        65 + index
                       )}
                     </span>
 
-
-                    <span
-                      class="choice-text"
-                    >
-                      ${escapeHtml(
-                        choice
-                      )}
+                    <span class="choice-text">
+                      ${escapeHtml(choice)}
                     </span>
 
                   </button>
@@ -2999,7 +1011,6 @@ document.addEventListener(
                 `;
               }
             )
-
             .join("")}
 
         </div>
@@ -3010,81 +1021,42 @@ document.addEventListener(
             "multiple"
 
             ? `
-
               <button
                 class="submit-answer-button"
-                type="button"
                 disabled
               >
                 回答する
               </button>
-
             `
-
             : ""
         }
 
 
-        <div
-          id="answer-area"
-        ></div>
+        <div id="answer-area"></div>
 
       `;
 
 
-      /* ===================================================
-         中断
-      =================================================== */
-
-      if (
-        quizMode ===
-          "main"
-      ) {
-
-        const pauseButton =
-          document.querySelector(
-            ".pause-button"
-          );
+      const choiceButtons =
+        document.querySelectorAll(
+          ".choice-button"
+        );
 
 
-        if (
-          pauseButton
-        ) {
-
-          pauseButton.addEventListener(
-            "click",
-            async function () {
-
-              if (
-                currentSessionId
-              ) {
-
-                await touchQuizSession(
-                  currentSessionId
-                );
-              }
+      const pauseButton =
+        document.querySelector(
+          ".pause-button"
+        );
 
 
-              goToTop();
-            }
-          );
-        }
+      if (pauseButton) {
+
+        pauseButton.addEventListener(
+          "click",
+          goToTop
+        );
       }
 
-
-      const choiceButtons =
-
-        [
-          ...document
-            .querySelectorAll(
-              ".choice-button"
-            )
-        ];
-
-
-      /* ===================================================
-         複数選択
-      =================================================== */
 
       if (
         question.type ===
@@ -3135,9 +1107,11 @@ document.addEventListener(
                   );
 
 
-                  button.classList.remove(
-                    "selected"
-                  );
+                  button
+                    .classList
+                    .remove(
+                      "selected"
+                    );
 
 
                 } else {
@@ -3147,73 +1121,55 @@ document.addEventListener(
                   );
 
 
-                  button.classList.add(
-                    "selected"
-                  );
+                  button
+                    .classList
+                    .add(
+                      "selected"
+                    );
                 }
 
 
-                if (
-                  submitButton
-                ) {
-
-                  submitButton.disabled =
-                    selectedAnswers.size ===
-                      0;
-                }
+                submitButton.disabled =
+                  selectedAnswers.size ===
+                  0;
               }
             );
           }
         );
 
 
-        if (
-          submitButton
-        ) {
+        submitButton.addEventListener(
+          "click",
+          function () {
 
-          submitButton.addEventListener(
-            "click",
-            function () {
+            if (
+              answerLocked
+            ) {
 
-              if (
-                answerLocked
-              ) {
-
-                return;
-              }
-
-
-              const answers =
-
-                Array.from(
-                  selectedAnswers
-                )
-
-                .sort(
-                  function (
-                    a,
-                    b
-                  ) {
-
-                    return (
-                      a -
-                      b
-                    );
-                  }
-                );
-
-
-              checkAnswer(
-                answers
-              );
+              return;
             }
-          );
-        }
 
 
-      /* ===================================================
-         単一選択
-      =================================================== */
+            const answers =
+              Array.from(
+                selectedAnswers
+              ).sort(
+                function (
+                  a,
+                  b
+                ) {
+
+                  return a - b;
+                }
+              );
+
+
+            checkAnswer(
+              answers
+            );
+          }
+        );
+
 
       } else {
 
@@ -3247,9 +1203,9 @@ document.addEventListener(
     }
 
 
-    /* =====================================================
+    /* =========================
        正誤判定
-    ===================================================== */
+    ========================= */
 
     function checkAnswer(
       selectedAnswer
@@ -3273,18 +1229,14 @@ document.addEventListener(
 
       const question =
         quizQuestions[
-          answeredQuestionIndex
+          currentQuestionIndex
         ];
 
 
       const choiceButtons =
-
-        [
-          ...document
-            .querySelectorAll(
-              ".choice-button"
-            )
-        ];
+        document.querySelectorAll(
+          ".choice-button"
+        );
 
 
       const answerArea =
@@ -3300,18 +1252,6 @@ document.addEventListener(
 
 
       if (
-        !question
-
-        ||
-
-        !answerArea
-      ) {
-
-        return;
-      }
-
-
-      if (
         submitButton
       ) {
 
@@ -3321,67 +1261,48 @@ document.addEventListener(
 
 
       const correctAnswers =
-
-        (
-          Array.isArray(
-            question.answer
-          )
-
-            ? [
-                ...question.answer
-              ]
-
-            : [
-                question.answer
-              ]
+        Array.isArray(
+          question.answer
         )
 
-        .sort(
-          function (
-            a,
-            b
-          ) {
+          ? [...question.answer]
+              .sort(
+                function (
+                  a,
+                  b
+                ) {
 
-            return (
-              a -
-              b
-            );
-          }
-        );
+                  return a - b;
+                }
+              )
+
+          : [
+              question.answer
+            ];
 
 
       const selectedAnswers =
-
-        (
-          Array.isArray(
-            selectedAnswer
-          )
-
-            ? [
-                ...selectedAnswer
-              ]
-
-            : [
-                selectedAnswer
-              ]
+        Array.isArray(
+          selectedAnswer
         )
 
-        .sort(
-          function (
-            a,
-            b
-          ) {
+          ? [...selectedAnswer]
+              .sort(
+                function (
+                  a,
+                  b
+                ) {
 
-            return (
-              a -
-              b
-            );
-          }
-        );
+                  return a - b;
+                }
+              )
+
+          : [
+              selectedAnswer
+            ];
 
 
       const isCorrect =
-
         selectedAnswers.length ===
           correctAnswers.length
 
@@ -3395,9 +1316,7 @@ document.addEventListener(
 
             return (
               answer ===
-              correctAnswers[
-                index
-              ]
+              correctAnswers[index]
             );
           }
         );
@@ -3423,15 +1342,11 @@ document.addEventListener(
 
 
         saveProgress(
-          answeredQuestionIndex +
+          currentQuestionIndex +
           1
         );
       }
 
-
-      /* ===================================================
-         選択肢の色
-      =================================================== */
 
       choiceButtons.forEach(
         function (
@@ -3454,9 +1369,11 @@ document.addEventListener(
             )
           ) {
 
-            button.classList.add(
-              "correct"
-            );
+            button
+              .classList
+              .add(
+                "correct"
+              );
           }
 
 
@@ -3472,12 +1389,53 @@ document.addEventListener(
             )
           ) {
 
-            button.classList.add(
-              "incorrect"
-            );
+            button
+              .classList
+              .add(
+                "incorrect"
+              );
           }
         }
       );
+
+
+      /*
+        初回回答統計
+      */
+
+      const statsPromise =
+        saveFirstAnswer(
+          question.id,
+          selectedAnswer,
+          isCorrect
+        );
+
+
+      /*
+        挑戦集計
+      */
+
+      if (
+        shouldTrackAnalytics() &&
+        quizSessionId
+      ) {
+
+        recordQuizAnswer(
+          quizSessionId,
+          question.id,
+          currentQuestionIndex + 1,
+          question.category,
+          selectedAnswer,
+          isCorrect
+        );
+
+
+        updateQuizSessionProgress(
+          quizSessionId,
+          currentQuestionIndex + 1,
+          score
+        );
+      }
 
 
       const resultTitle =
@@ -3492,25 +1450,6 @@ document.addEventListener(
           : "result-incorrect";
 
 
-      const explanation =
-
-        typeof question.explanation ===
-          "string"
-
-        &&
-
-        question.explanation.trim()
-
-          ? question.explanation
-
-          : "解説は準備中です。";
-
-
-      /* ===================================================
-         回答結果
-         まず画面を即表示する
-      =================================================== */
-
       answerArea.innerHTML = `
 
         <div
@@ -3520,26 +1459,19 @@ document.addEventListener(
           "
         >
 
-          <div
-            class="result-title"
-          >
+          <div class="result-title">
             ${resultTitle}
           </div>
 
 
-          <div
-            class="correct-answer"
-          >
+          <div class="correct-answer">
 
-            <span
-              class="correct-answer-title"
-            >
+            <span class="correct-answer-title">
               正解
             </span>
 
 
             ${correctAnswers
-
               .map(
                 function (
                   answerIndex
@@ -3547,19 +1479,13 @@ document.addEventListener(
 
                   return `
 
-                    <span
-                      class="correct-answer-label"
-                    >
+                    <span class="correct-answer-label">
                       ${String.fromCharCode(
-                        65 +
-                        answerIndex
+                        65 + answerIndex
                       )}
                     </span>
 
-
-                    <span
-                      class="correct-answer-text"
-                    >
+                    <span class="correct-answer-text">
                       ${escapeHtml(
                         question.choices[
                           answerIndex
@@ -3570,63 +1496,59 @@ document.addEventListener(
                   `;
                 }
               )
-
               .join("")}
 
           </div>
 
 
-          <div
-            class="explanation-title"
-          >
+          <div class="explanation-title">
             解説
           </div>
 
 
-          <p
-            class="explanation"
-          >
+          <p class="explanation">
             ${escapeHtml(
-              explanation
+              question.explanation
             )}
           </p>
 
 
           <div
-            class="community-stats-slot"
-          ></div>
-
-
-          <div
-            class="current-score"
+            class="
+              community-stats
+              community-stats-slot
+            "
           >
 
-            <span
-              class="current-score-label"
-            >
+            <div class="community-stats-title">
+              みんなの正答率
+            </div>
+
+            <div class="community-stats-detail">
+              読み込み中...
+            </div>
+
+          </div>
+
+
+          <div class="current-score">
+
+            <span class="current-score-label">
               現在の成績
             </span>
 
-
-            <span
-              class="current-score-number"
-            >
+            <span class="current-score-number">
               ${score}
               /
-              ${answeredQuestionIndex + 1}
+              ${currentQuestionIndex + 1}
             </span>
 
           </div>
 
 
-          <div
-            class="report-section"
-          >
+          <div class="report-section">
 
-            <button
-              class="report-toggle-button"
-              type="button"
-            >
+            <button class="report-toggle-button">
               この問題に物申す
             </button>
 
@@ -3638,55 +1560,34 @@ document.addEventListener(
               "
             >
 
-              <div
-                class="report-heading"
-              >
+              <div class="report-heading">
                 この問題のどこが気になりますか？
               </div>
 
 
-              <select
-                class="report-type"
-              >
+              <select class="report-type">
 
-                <option
-                  value=""
-                >
+                <option value="">
                   指摘内容を選んでください
                 </option>
 
-
-                <option
-                  value="wrong_answer"
-                >
+                <option value="wrong_answer">
                   正解が違う
                 </option>
 
-
-                <option
-                  value="insufficient_condition"
-                >
+                <option value="insufficient_condition">
                   条件が不足している
                 </option>
 
-
-                <option
-                  value="alternate_answer"
-                >
+                <option value="alternate_answer">
                   別解がある
                 </option>
 
-
-                <option
-                  value="explanation_error"
-                >
+                <option value="explanation_error">
                   解説が不正確
                 </option>
 
-
-                <option
-                  value="other"
-                >
+                <option value="other">
                   その他
                 </option>
 
@@ -3700,25 +1601,18 @@ document.addEventListener(
               ></textarea>
 
 
-              <p
-                class="report-note"
-              >
+              <p class="report-note">
                 投稿内容は管理者に送信されます。
                 一般には公開されません。
               </p>
 
 
-              <button
-                class="report-submit-button"
-                type="button"
-              >
+              <button class="report-submit-button">
                 物申す！
               </button>
 
 
-              <div
-                class="report-status"
-              ></div>
+              <div class="report-status"></div>
 
             </div>
 
@@ -3732,16 +1626,13 @@ document.addEventListener(
             next-button
             answer-next-button
           "
-          type="button"
         >
 
           ${
-            answeredQuestionIndex +
-              1 <
-            quizQuestions.length
+            currentQuestionIndex + 1 <
+              quizQuestions.length
 
               ? "次の問題へ"
-
               : "結果を見る"
           }
 
@@ -3750,202 +1641,44 @@ document.addEventListener(
       `;
 
 
-      setupAnswerResultEvents(
-        question
-      );
-
-
-      /*
-        ここから下はSupabase。
-
-        重要：
-        正誤表示をした後に実行する。
-
-        Supabaseが遅い・失敗した等で
-        クイズ画面を止めない。
-      */
-
-      const statsPromise =
-
-        analyticsEnabled
-
-          ? saveFirstAnswer(
-              question.id,
-              selectedAnswer,
-              isCorrect
-            )
-
-          : Promise.resolve(
-              null
-            );
-
-
-      /*
-        1回答記録
-      */
-
-      if (
-        analyticsEnabled
-
-        &&
-
-        currentSessionId
-      ) {
-
-        void recordQuizAnswer(
-          question,
-          selectedAnswer,
-          isCorrect,
-          answeredQuestionIndex +
-            1
+      const resultBox =
+        document.querySelector(
+          ".result-box"
         );
 
 
-        void updateQuizSessionProgress(
-          answeredQuestionIndex +
-            1,
-          score
+      if (
+        resultBox
+      ) {
+
+        setTimeout(
+          function () {
+
+            resultBox.scrollIntoView(
+              {
+                behavior:
+                  "smooth",
+
+                block:
+                  "center"
+              }
+            );
+
+          },
+          80
         );
       }
 
 
-      /*
-        正答率取得後、
-        まだ同じ回答結果画面なら表示
-      */
-
-      statsPromise.then(
-        function (
-          stats
-        ) {
-
-          const slot =
-            document.querySelector(
-              ".community-stats-slot"
-            );
-
-
-          if (
-            !slot
-
-            ||
-
-            !slot.isConnected
-
-            ||
-
-            !stats
-          ) {
-
-            return;
-          }
-
-
-          const accuracy =
-            Number(
-              stats.accuracy
-            );
-
-
-          const attempts =
-            Number(
-              stats.attempts
-            );
-
-
-          const correct =
-            Number(
-              stats.correct
-            );
-
-
-          if (
-            !Number.isFinite(
-              accuracy
-            )
-
-            ||
-
-            !Number.isFinite(
-              attempts
-            )
-
-            ||
-
-            !Number.isFinite(
-              correct
-            )
-          ) {
-
-            return;
-          }
-
-
-          slot.innerHTML = `
-
-            <div
-              class="community-stats"
-            >
-
-              <div
-                class="community-stats-title"
-              >
-                みんなの正答率
-              </div>
-
-
-              <div
-                class="community-stats-number"
-              >
-                ${Math.round(
-                  accuracy
-                )}%
-              </div>
-
-
-              <div
-                class="community-stats-detail"
-              >
-                ${attempts}人中
-                ${correct}人正解
-              </div>
-
-            </div>
-
-          `;
-        }
-      );
-    }
-
-
-    /* =====================================================
-       回答後イベント
-    ===================================================== */
-
-    function setupAnswerResultEvents(
-      question
-    ) {
-
-      const nextButton =
-        document.querySelector(
+      document
+        .querySelector(
           ".answer-next-button"
-        );
-
-
-      if (
-        nextButton
-      ) {
-
-        nextButton.addEventListener(
+        )
+        .addEventListener(
           "click",
           nextQuestion
         );
-      }
 
-
-      /* ===================================================
-         物申す 開閉
-      =================================================== */
 
       const reportToggleButton =
         document.querySelector(
@@ -3959,178 +1692,197 @@ document.addEventListener(
         );
 
 
-      if (
-        reportToggleButton
-
-        &&
-
-        reportForm
-      ) {
-
-        reportToggleButton.addEventListener(
-          "click",
-          function () {
-
-            reportForm.classList.toggle(
-              "hidden"
-            );
-          }
-        );
-      }
-
-
-      /* ===================================================
-         物申す 送信
-      =================================================== */
-
       const reportSubmitButton =
         document.querySelector(
           ".report-submit-button"
         );
 
 
-      if (
-        reportSubmitButton
-      ) {
+      reportToggleButton.addEventListener(
+        "click",
+        function () {
 
-        reportSubmitButton.addEventListener(
-          "click",
-          async function () {
+          reportForm
+            .classList
+            .toggle(
+              "hidden"
+            );
+        }
+      );
 
-            const reportTypeElement =
-              document.querySelector(
-                ".report-type"
-              );
+
+      reportSubmitButton.addEventListener(
+        "click",
+        async function () {
+
+          const reportType =
+            document.querySelector(
+              ".report-type"
+            ).value;
 
 
-            const reportMessageElement =
-              document.querySelector(
+          const message =
+            document
+              .querySelector(
                 ".report-message"
-              );
+              )
+              .value
+              .trim();
 
 
-            const reportStatus =
-              document.querySelector(
-                ".report-status"
-              );
+          const reportStatus =
+            document.querySelector(
+              ".report-status"
+            );
 
 
-            if (
-              !reportTypeElement
+          if (
+            !reportType
+          ) {
 
-              ||
+            reportStatus.textContent =
+              "指摘内容を選んでください。";
 
-              !reportMessageElement
+            reportStatus.className =
+              "report-status error";
 
-              ||
-
-              !reportStatus
-            ) {
-
-              return;
-            }
+            return;
+          }
 
 
-            const reportType =
-              reportTypeElement.value;
+          if (
+            !message
+          ) {
+
+            reportStatus.textContent =
+              "具体的な内容を入力してください。";
+
+            reportStatus.className =
+              "report-status error";
+
+            return;
+          }
 
 
-            const message =
-              reportMessageElement
-                .value
-                .trim();
+          reportSubmitButton.disabled =
+            true;
+
+          reportSubmitButton.textContent =
+            "送信中...";
 
 
-            if (
-              !reportType
-            ) {
-
-              reportStatus.textContent =
-                "指摘内容を選んでください。";
-
-
-              reportStatus.className =
-                "report-status error";
+          const success =
+            await submitQuestionReport(
+              question.id,
+              reportType,
+              message
+            );
 
 
-              return;
-            }
+          if (
+            success
+          ) {
 
+            reportStatus.textContent =
+              "送信しました。ありがとうございます。";
 
-            if (
-              !message
-            ) {
-
-              reportStatus.textContent =
-                "具体的な内容を入力してください。";
-
-
-              reportStatus.className =
-                "report-status error";
-
-
-              return;
-            }
-
-
-            reportSubmitButton.disabled =
-              true;
-
+            reportStatus.className =
+              "report-status success";
 
             reportSubmitButton.textContent =
-              "送信中...";
+              "送信済み";
 
 
-            const success =
-              await submitQuestionReport(
-                question.id,
-                reportType,
-                message
-              );
+          } else {
 
+            reportStatus.textContent =
+              "送信できませんでした。もう一度お試しください。";
 
-            if (
-              success
-            ) {
+            reportStatus.className =
+              "report-status error";
 
-              reportStatus.textContent =
-                "送信しました。ありがとうございます。";
+            reportSubmitButton.disabled =
+              false;
 
-
-              reportStatus.className =
-                "report-status success";
-
-
-              reportSubmitButton.textContent =
-                "送信済み";
-
-
-            } else {
-
-              reportStatus.textContent =
-                "送信できませんでした。もう一度お試しください。";
-
-
-              reportStatus.className =
-                "report-status error";
-
-
-              reportSubmitButton.disabled =
-                false;
-
-
-              reportSubmitButton.textContent =
-                "物申す！";
-            }
+            reportSubmitButton.textContent =
+              "物申す！";
           }
-        );
-      }
+        }
+      );
+
+
+      statsPromise.then(
+        function (
+          stats
+        ) {
+
+          if (
+            currentQuestionIndex !==
+              answeredQuestionIndex
+          ) {
+
+            return;
+          }
+
+
+          const statsSlot =
+            document.querySelector(
+              ".community-stats-slot"
+            );
+
+
+          if (
+            !statsSlot
+          ) {
+
+            return;
+          }
+
+
+          if (
+            !stats
+          ) {
+
+            statsSlot.innerHTML = `
+
+              <div class="community-stats-title">
+                みんなの正答率
+              </div>
+
+              <div class="community-stats-detail">
+                正答率を取得できませんでした
+              </div>
+
+            `;
+
+            return;
+          }
+
+
+          statsSlot.innerHTML = `
+
+            <div class="community-stats-title">
+              みんなの正答率
+            </div>
+
+            <div class="community-stats-number">
+              ${stats.accuracy}%
+            </div>
+
+            <div class="community-stats-detail">
+              ${stats.attempts}人中
+              ${stats.correct}人正解
+            </div>
+
+          `;
+        }
+      );
     }
 
 
-    /* =====================================================
+    /* =========================
        次の問題
-    ===================================================== */
+    ========================= */
 
     function nextQuestion() {
 
@@ -4148,19 +1900,588 @@ document.addEventListener(
       } else {
 
         showResult();
+
+
+        requestAnimationFrame(
+          function () {
+
+            window.scrollTo(
+              {
+                top:
+                  0,
+
+                behavior:
+                  "auto"
+              }
+            );
+          }
+        );
       }
     }
 
 
-    /* =====================================================
-       結果画面テスト
-       ?resulttest=1
-    ===================================================== */
+    /* =========================
+       JSON読込
+    ========================= */
+
+    async function loadQuestionsData() {
+
+      let response;
+
+
+      try {
+
+        response =
+          await fetch(
+            "data/questions.json",
+            {
+              cache:
+                "no-store"
+            }
+          );
+
+
+      } catch (error) {
+
+        throw new Error(
+          "questions.json への通信に失敗しました。"
+        );
+      }
+
+
+      if (
+        !response.ok
+      ) {
+
+        throw new Error(
+          `questions.json の取得に失敗しました。HTTP ${response.status}`
+        );
+      }
+
+
+      const rawText =
+        await response.text();
+
+
+      let data;
+
+
+      try {
+
+        data =
+          JSON.parse(
+            rawText
+          );
+
+
+      } catch (error) {
+
+        throw new Error(
+          `questions.json のJSON形式が壊れています。${error.message}`
+        );
+      }
+
+
+      validateQuestionsData(
+        data
+      );
+
+
+      return data;
+    }
+
+
+    /* =========================
+       JSON検証
+    ========================= */
+
+    function validateQuestionsData(
+      data
+    ) {
+
+      const errors =
+        [];
+
+
+      if (
+        !Array.isArray(
+          data
+        )
+      ) {
+
+        throw new Error(
+          "questions.json の最上位は配列である必要があります。"
+        );
+      }
+
+
+      if (
+        data.length ===
+          0
+      ) {
+
+        throw new Error(
+          "questions.json に問題がありません。"
+        );
+      }
+
+
+      const seenIds =
+        new Set();
+
+
+      data.forEach(
+        function (
+          question,
+          index
+        ) {
+
+          const rowLabel =
+            `データ${index + 1}件目`;
+
+
+          if (
+            !question ||
+            typeof question !==
+              "object" ||
+            Array.isArray(
+              question
+            )
+          ) {
+
+            errors.push(
+              `${rowLabel}: 問題データが不正です。`
+            );
+
+            return;
+          }
+
+
+          const questionId =
+            question.id;
+
+
+          const hasId =
+            questionId !==
+              undefined &&
+            questionId !==
+              null &&
+            String(
+              questionId
+            ).trim() !==
+              "";
+
+
+          const idLabel =
+            hasId
+              ? `問題ID #${questionId}`
+              : rowLabel;
+
+
+          if (
+            !hasId
+          ) {
+
+            errors.push(
+              `${rowLabel}: id がありません。`
+            );
+
+
+          } else {
+
+            const normalizedId =
+              String(
+                questionId
+              );
+
+
+            if (
+              seenIds.has(
+                normalizedId
+              )
+            ) {
+
+              errors.push(
+                `${idLabel}: id が重複しています。`
+              );
+
+
+            } else {
+
+              seenIds.add(
+                normalizedId
+              );
+            }
+          }
+
+
+          /*
+            カテゴリは5カテゴリ以外禁止
+          */
+
+          if (
+            !VALID_QUESTION_CATEGORIES.includes(
+              question.category
+            )
+          ) {
+
+            errors.push(
+              `${idLabel}: category「${question.category}」は無効です。`
+            );
+          }
+
+
+          if (
+            !VALID_QUESTION_TYPES.includes(
+              question.type
+            )
+          ) {
+
+            errors.push(
+              `${idLabel}: type「${question.type}」は無効です。`
+            );
+          }
+
+
+          if (
+            typeof question.question !==
+              "string" ||
+            question.question
+              .trim() ===
+              ""
+          ) {
+
+            errors.push(
+              `${idLabel}: question が空です。`
+            );
+          }
+
+
+          if (
+            !Array.isArray(
+              question.choices
+            )
+          ) {
+
+            errors.push(
+              `${idLabel}: choices が配列ではありません。`
+            );
+
+            return;
+          }
+
+
+          if (
+            question.choices.length <
+              2 ||
+            question.choices.length >
+              4
+          ) {
+
+            errors.push(
+              `${idLabel}: choices は2～4個にしてください。`
+            );
+          }
+
+
+          question.choices.forEach(
+            function (
+              choice,
+              choiceIndex
+            ) {
+
+              if (
+                typeof choice !==
+                  "string" ||
+                choice.trim() ===
+                  ""
+              ) {
+
+                errors.push(
+                  `${idLabel}: 選択肢${String.fromCharCode(
+                    65 + choiceIndex
+                  )}が空です。`
+                );
+              }
+            }
+          );
+
+
+          const isValidAnswerIndex =
+            function (
+              answer
+            ) {
+
+              return (
+                Number.isInteger(
+                  answer
+                ) &&
+                answer >= 0 &&
+                answer <
+                  question
+                    .choices
+                    .length
+              );
+            };
+
+
+          if (
+            question.type ===
+              "single" &&
+            !isValidAnswerIndex(
+              question.answer
+            )
+          ) {
+
+            errors.push(
+              `${idLabel}: answer が選択肢の範囲外です。`
+            );
+          }
+
+
+          if (
+            question.type ===
+              "multiple"
+          ) {
+
+            if (
+              !Array.isArray(
+                question.answer
+              ) ||
+              question.answer.length ===
+                0
+            ) {
+
+              errors.push(
+                `${idLabel}: multiple の answer が不正です。`
+              );
+
+
+            } else {
+
+              const uniqueAnswers =
+                new Set(
+                  question.answer
+                );
+
+
+              if (
+                uniqueAnswers.size !==
+                  question.answer.length
+              ) {
+
+                errors.push(
+                  `${idLabel}: answer に重複があります。`
+                );
+              }
+
+
+              question.answer.forEach(
+                function (
+                  answer
+                ) {
+
+                  if (
+                    !isValidAnswerIndex(
+                      answer
+                    )
+                  ) {
+
+                    errors.push(
+                      `${idLabel}: answer「${answer}」が範囲外です。`
+                    );
+                  }
+                }
+              );
+            }
+          }
+
+
+          if (
+            typeof question.explanation !==
+              "string"
+          ) {
+
+            errors.push(
+              `${idLabel}: explanation が文字列ではありません。`
+            );
+          }
+        }
+      );
+
+
+      if (
+        errors.length >
+          0
+      ) {
+
+        throw new Error(
+          errors
+            .slice(
+              0,
+              20
+            )
+            .join(
+              "\n"
+            )
+        );
+      }
+    }
+
+
+    function showQuestionDataError(
+      error,
+      showDetail = false
+    ) {
+
+      console.error(
+        "問題データエラー:",
+        error
+      );
+
+
+      const safeMessage =
+        error &&
+        error.message
+          ? String(
+              error.message
+            )
+          : "不明なエラー";
+
+
+      quizCard.innerHTML = `
+
+        <div class="result-screen">
+
+          <p class="hero-label">
+            ERROR
+          </p>
+
+          <h1>
+            問題データエラー
+          </h1>
+
+          <p>
+            ${escapeHtml(
+              safeMessage
+            )}
+          </p>
+
+          <button
+            class="
+              restart-button
+              data-reload-button
+            "
+            type="button"
+          >
+            トップ画面へ戻る
+          </button>
+
+        </div>
+
+      `;
+
+
+      const reloadButton =
+        document.querySelector(
+          ".data-reload-button"
+        );
+
+
+      if (
+        reloadButton
+      ) {
+
+        reloadButton.addEventListener(
+          "click",
+          goToTop
+        );
+      }
+    }
+
+
+    function runDataValidationTest() {
+
+      loadQuestionsData()
+        .then(
+          function (
+            data
+          ) {
+
+            quizCard.innerHTML = `
+
+              <div class="result-screen">
+
+                <h1>
+                  JSONチェックOK
+                </h1>
+
+                <p>
+                  ${data.length}問読み込みました。
+                </p>
+
+              </div>
+
+            `;
+          }
+        )
+        .catch(
+          function (
+            error
+          ) {
+
+            showQuestionDataError(
+              error,
+              true
+            );
+          }
+        );
+    }
+
+
+    /* =========================
+       結果テスト
+    ========================= */
 
     function showResultTest() {
 
       const testScore =
         69;
+
+
+      const testStats = {
+
+        モンスター: {
+          correct: 14,
+          total: 20
+        },
+
+        アイテム: {
+          correct: 17,
+          total: 25
+        },
+
+        ダンジョン: {
+          correct: 12,
+          total: 15
+        },
+
+        仕様: {
+          correct: 20,
+          total: 30
+        },
+
+        その他: {
+          correct: 6,
+          total: 10
+        }
+      };
+
+
+      const rankResult =
+        getRankResult(
+          testScore
+        );
 
 
       renderMainResultScreen(
@@ -4169,80 +2490,51 @@ document.addEventListener(
           scoreValue:
             testScore,
 
-
           totalValue:
             100,
 
-
           rankResult:
-            safeGetRankResult(
-              testScore
-            ),
+            rankResult,
 
-
-          statsSource: {
-
-            モンスター: {
-              correct: 19,
-              total: 20
-            },
-
-            アイテム: {
-              correct: 16,
-              total: 20
-            },
-
-            ダンジョン: {
-              correct: 15,
-              total: 19
-            },
-
-            仕様: {
-              correct: 18,
-              total: 36
-            },
-
-            その他: {
-              correct: 1,
-              total: 5
-            }
-
-          },
-
+          statsSource:
+            testStats,
 
           statsComplete:
             true,
 
-
           resultTest:
-            true,
-
-
-          showCompletion:
-            false
-
+            true
         }
       );
     }
 
 
-    /* =====================================================
+    /* =========================
        結果
-    ===================================================== */
+    ========================= */
 
     function showResult() {
 
-      /*
-        Supabase完走処理は
-        結果表示を待たせない
-      */
+      if (
+        shouldTrackAnalytics() &&
+        quizSessionId
+      ) {
 
-      void completeCurrentQuizSession();
+        const completedSessionId =
+          quizSessionId;
 
 
-      /* ===================================================
-         お試し
-      =================================================== */
+        quizSessionId =
+          null;
+
+
+        completeQuizSession(
+          completedSessionId,
+          quizQuestions.length,
+          score
+        );
+      }
+
 
       if (
         quizMode ===
@@ -4263,32 +2555,23 @@ document.addEventListener(
           percentage
         );
 
-
         return;
       }
 
 
-      /* ===================================================
-         本番
-      =================================================== */
-
       const rankResult =
-        safeGetRankResult(
+        getRankResult(
           score
         );
 
 
       const isOfficialFullCompletion =
-
         quizMode ===
-          "main"
-
-        &&
-
-        analyticsEnabled
-
-        &&
-
+          "main" &&
+        !isTestMode &&
+        !isResultTestMode &&
+        !isDataTestMode &&
+        !isLastResultTestMode &&
         quizQuestions.length ===
           100;
 
@@ -4303,7 +2586,12 @@ document.addEventListener(
       }
 
 
-      clearProgress();
+      if (
+        !isResultTestMode
+      ) {
+
+        clearProgress();
+      }
 
 
       renderMainResultScreen(
@@ -4312,56 +2600,38 @@ document.addEventListener(
           scoreValue:
             score,
 
-
           totalValue:
             quizQuestions.length,
-
 
           rankResult:
             rankResult,
 
-
           statsSource:
             categoryStats,
-
 
           statsComplete:
             categoryStatsComplete,
 
-
           resultTest:
             false,
 
-
           showCompletion:
             isOfficialFullCompletion
-
         }
       );
     }
 
 
-    /* =====================================================
-       結果画面共通
-    ===================================================== */
-
     function renderMainResultScreen(
       {
 
         scoreValue,
-
         totalValue,
-
         rankResult,
-
         statsSource,
-
         statsComplete,
-
         resultTest = false,
-
         showCompletion = false
-
       }
     ) {
 
@@ -4377,13 +2647,9 @@ document.addEventListener(
 
       quizCard.innerHTML = `
 
-        <div
-          class="result-screen"
-        >
+        <div class="result-screen">
 
-          <p
-            class="hero-label"
-          >
+          <p class="hero-label">
             ${
               resultTest
                 ? "RESULT TEST"
@@ -4392,72 +2658,29 @@ document.addEventListener(
           </p>
 
 
-          <div
-            class="result-brand"
-          >
+          <div class="result-brand">
 
-            <div
-              class="result-brand-title"
-            >
+            <div class="result-brand-title">
 
-              <span
-                class="title-asuka"
-              >
+              <span class="title-asuka">
                 アスカ見参
               </span>
 
-
-              <span
-                class="title-haijin"
-              >
+              <span class="title-haijin">
                 廃人検定
               </span>
 
             </div>
 
 
-            <h1
-              class="result-heading"
-            >
+            <h1 class="result-heading">
               検定結果
             </h1>
 
           </div>
 
 
-          ${
-            resultTest
-
-              ? `
-
-                <div
-                  style="
-                    margin:
-                      -12px 0
-                      16px;
-
-                    color:
-                      #888;
-
-                    font-size:
-                      12px;
-
-                    letter-spacing:
-                      0.05em;
-                  "
-                >
-                  開発用結果画面テスト
-                </div>
-
-              `
-
-              : ""
-          }
-
-
-          <div
-            class="final-score"
-          >
+          <div class="final-score">
 
             ${scoreValue}
 
@@ -4469,9 +2692,7 @@ document.addEventListener(
           </div>
 
 
-          <div
-            class="percentage"
-          >
+          <div class="percentage">
             正答率
             ${percentage}%
           </div>
@@ -4479,67 +2700,43 @@ document.addEventListener(
 
           ${
             showCompletion
-
               ? `
+                <div class="full-completion-badge">
 
-                <div
-                  class="full-completion-badge"
-                >
-
-                  <span
-                    class="full-completion-en"
-                  >
+                  <span class="full-completion-en">
                     ALL 100 QUESTIONS COMPLETE
                   </span>
 
-
-                  <span
-                    class="full-completion-title"
-                  >
-                    全100問 完走
+                  <span class="full-completion-title">
+                    100問完走
                   </span>
 
                 </div>
-
               `
-
               : ""
           }
 
 
-          <div
-            class="rank-panel"
-          >
+          <div class="rank-panel">
 
-            <div
-              class="rank-label"
-            >
+            <div class="rank-label">
               あなたのランク・称号
             </div>
 
-
-            <div
-              class="rank-grade"
-            >
+            <div class="rank-grade">
               ${escapeHtml(
                 rankResult.rank
               )}
             </div>
 
-
-            <div
-              class="rank"
-            >
+            <div class="rank">
               ${escapeHtml(
                 rankResult.title
               )}
             </div>
 
-
-            <div
-              class="rank-comment"
-            >
-              ${rankResult.comment || ""}
+            <div class="rank-comment">
+              ${rankResult.comment}
             </div>
 
           </div>
@@ -4551,59 +2748,32 @@ document.addEventListener(
           )}
 
 
-          ${
-            resultTest
-
-              ? `
-
-                <button
-                  class="
-                    restart-button
-                    result-test-back-button
-                  "
-                  type="button"
-                >
-                  通常画面へ戻る
-                </button>
-
-              `
-
-              : `
-
-                <button
-                  class="
-                    restart-button
-                    result-top-button
-                  "
-                  type="button"
-                >
-                  トップ画面へ戻る
-                </button>
-
-              `
-          }
+          <button
+            class="
+              restart-button
+              result-top-button
+            "
+            type="button"
+          >
+            トップ画面へ戻る
+          </button>
 
         </div>
 
       `;
 
 
-      const backButton =
+      const topButton =
         document.querySelector(
-
-          resultTest
-
-            ? ".result-test-back-button"
-
-            : ".result-top-button"
+          ".result-top-button"
         );
 
 
       if (
-        backButton
+        topButton
       ) {
 
-        backButton.addEventListener(
+        topButton.addEventListener(
           "click",
           goToTop
         );
@@ -4611,111 +2781,75 @@ document.addEventListener(
     }
 
 
-    /* =====================================================
-       お試し結果
-    ===================================================== */
-
     function showTrialResult(
       percentage
     ) {
 
       quizCard.innerHTML = `
 
-        <div
-          class="result-screen"
-        >
+        <div class="result-screen">
 
-          <p
-            class="hero-label"
-          >
+          <p class="hero-label">
             TRIAL RESULT
           </p>
 
 
-          <div
-            class="result-brand"
-          >
+          <div class="result-brand">
 
-            <div
-              class="result-brand-title"
-            >
+            <div class="result-brand-title">
 
-              <span
-                class="title-asuka"
-              >
+              <span class="title-asuka">
                 アスカ見参
               </span>
 
-
-              <span
-                class="title-haijin"
-              >
+              <span class="title-haijin">
                 廃人検定
               </span>
 
             </div>
 
 
-            <h1
-              class="result-heading"
-            >
+            <h1 class="result-heading">
               お試し結果
             </h1>
 
           </div>
 
 
-          <div
-            class="final-score"
-          >
+          <div class="final-score">
 
             ${score}
 
             <span>
               /
-              5
+              ${quizQuestions.length}
             </span>
 
           </div>
 
 
-          <div
-            class="percentage"
-          >
+          <div class="percentage">
             正答率
             ${percentage}%
           </div>
 
 
-          <div
-            class="trial-complete-panel"
-          >
+          <div class="trial-complete-panel">
 
-            <div
-              class="trial-complete-title"
-            >
+            <div class="trial-complete-label">
+              TRIAL COMPLETE
+            </div>
+
+            <div class="trial-complete-title">
               5問完走
             </div>
 
-
-            <p
-              class="trial-complete-text"
-            >
+            <p class="trial-complete-text">
               ここまでは、まだウォーミングアップ。
               <br>
-
               正式なランク・称号は、
-              <strong>
-                全100問
-              </strong>
+              <strong>全100問</strong>
               で決まります。
-            </p>
-
-
-            <p
-              class="trial-complete-warning"
-            >
-              あなたは本当にアスカを理解しているか？
             </p>
 
           </div>
@@ -4730,16 +2864,11 @@ document.addEventListener(
             type="button"
           >
 
-            <span
-              class="trial-main-cta-main"
-            >
+            <span class="trial-main-cta-main">
               廃人検定100問に挑戦する
             </span>
 
-
-            <span
-              class="trial-main-cta-sub"
-            >
+            <span class="trial-main-cta-sub">
               正式ランク・称号を判定
             </span>
 
@@ -4761,34 +2890,21 @@ document.addEventListener(
       `;
 
 
-      const mainChallengeButton =
-        document.querySelector(
+      document
+        .querySelector(
           ".main-challenge-button"
-        );
-
-
-      const trialAgainButton =
-        document.querySelector(
-          ".trial-again-button"
-        );
-
-
-      if (
-        mainChallengeButton
-      ) {
-
-        mainChallengeButton.addEventListener(
+        )
+        .addEventListener(
           "click",
           startMainQuizFromBeginning
         );
-      }
 
 
-      if (
-        trialAgainButton
-      ) {
-
-        trialAgainButton.addEventListener(
+      document
+        .querySelector(
+          ".trial-again-button"
+        )
+        .addEventListener(
           "click",
           function () {
 
@@ -4798,15 +2914,14 @@ document.addEventListener(
             );
           }
         );
-      }
     }
 
 
-    /* =====================================================
-       本番を最初から開始
-    ===================================================== */
+    /* =========================
+       中断
+    ========================= */
 
-    async function startMainQuizFromBeginning() {
+    function startMainQuizFromBeginning() {
 
       const saved =
         loadProgress();
@@ -4834,7 +2949,7 @@ document.addEventListener(
           saved.sessionId
         ) {
 
-          await markQuizSessionAbandoned(
+          abandonQuizSession(
             saved.sessionId
           );
         }
@@ -4848,15 +2963,10 @@ document.addEventListener(
         isTestMode
           ? 5
           : 100,
-
         "main"
       );
     }
 
-
-    /* =====================================================
-       途中保存
-    ===================================================== */
 
     function saveProgress(
       nextQuestionIndex
@@ -4864,18 +2974,9 @@ document.addEventListener(
 
       if (
         quizMode !==
-          "main"
-
-        ||
-
-        isResultTestMode
-
-        ||
-
-        isDataTestMode
-
-        ||
-
+          "main" ||
+        isResultTestMode ||
+        isDataTestMode ||
         isLastResultTestMode
       ) {
 
@@ -4890,18 +2991,11 @@ document.addEventListener(
           version:
             STORAGE_SCHEMA_VERSION,
 
-
           questionSetVersion:
             QUESTION_SET_VERSION,
 
-
           categoryStatsVersion:
             CATEGORY_STATS_VERSION,
-
-
-          sessionId:
-            currentSessionId,
-
 
           questionIds:
             quizQuestions.map(
@@ -4909,62 +3003,48 @@ document.addEventListener(
                 question
               ) {
 
-                return (
-                  question.id
-                );
+                return question.id;
               }
             ),
-
 
           currentQuestionIndex:
             nextQuestionIndex,
 
-
           score:
             score,
-
 
           categoryStats:
             categoryStats,
 
-
           categoryStatsComplete:
             categoryStatsComplete,
 
+          sessionId:
+            quizSessionId,
 
           savedAt:
-            new Date()
-              .toISOString()
-
+            new Date().toISOString()
         };
 
 
         localStorage.setItem(
           QUIZ_SAVE_KEY,
-          JSON.stringify(
-            data
-          )
+          JSON.stringify(data)
         );
 
 
         updateResumeArea();
 
 
-      } catch (
-        error
-      ) {
+      } catch (error) {
 
-        console.warn(
+        console.error(
           "途中データ保存エラー:",
           error
         );
       }
     }
 
-
-    /* =====================================================
-       途中データ読込
-    ===================================================== */
 
     function loadProgress() {
 
@@ -4984,214 +3064,41 @@ document.addEventListener(
         }
 
 
-        let data =
-          JSON.parse(
-            raw
-          );
+        const data =
+          JSON.parse(raw);
 
 
         if (
-          !data
-
-          ||
-
-          typeof data !==
-            "object"
-        ) {
-
-          return null;
-        }
-
-
-        /*
-          version 1 / 2
-          ↓
-          version 3
-        */
-
-        if (
-          data.version ===
-            1
-
-          ||
-
-          data.version ===
-            2
-        ) {
-
-          data = {
-
-            ...data,
-
-
-            version:
-              STORAGE_SCHEMA_VERSION,
-
-
-            questionSetVersion:
-              Number(
-                data.questionSetVersion ||
-                1
-              ),
-
-
-            categoryStatsVersion:
-              Number(
-                data.categoryStatsVersion ||
-                1
-              ),
-
-
-            sessionId:
-              data.sessionId ||
-              null,
-
-
-            categoryStats:
-
-              data.categoryStats
-
-              &&
-
-              typeof data.categoryStats ===
-                "object"
-
-                ? data.categoryStats
-
-                : {},
-
-
-            categoryStatsComplete:
-
-              typeof data
-                .categoryStatsComplete ===
-                "boolean"
-
-                ? data
-                    .categoryStatsComplete
-
-                : Number(
-                    data.currentQuestionIndex ||
-                    0
-                  ) ===
-                  0
-
-          };
-
-
-          localStorage.setItem(
-            QUIZ_SAVE_KEY,
-            JSON.stringify(
-              data
-            )
-          );
-        }
-
-
-        if (
+          !data ||
           data.version !==
-            STORAGE_SCHEMA_VERSION
-
-          ||
-
+            STORAGE_SCHEMA_VERSION ||
           !Array.isArray(
             data.questionIds
-          )
-
-          ||
-
-          data.questionIds.length ===
-            0
-
-          ||
-
-          typeof data
-            .currentQuestionIndex !==
-            "number"
-
-          ||
-
+          ) ||
+          typeof data.currentQuestionIndex !==
+            "number" ||
           typeof data.score !==
-            "number"
-
-          ||
-
-          typeof data
-            .questionSetVersion !==
-            "number"
-
-          ||
-
-          typeof data
-            .categoryStatsVersion !==
             "number"
         ) {
 
           return null;
-        }
-
-
-        /*
-          カテゴリ集計仕様だけ変わった場合は
-          クイズは再開できる。
-
-          ただし古いカテゴリ集計は表示しない。
-        */
-
-        if (
-          data.categoryStatsVersion !==
-            CATEGORY_STATS_VERSION
-        ) {
-
-          data = {
-
-            ...data,
-
-
-            categoryStatsVersion:
-              CATEGORY_STATS_VERSION,
-
-
-            categoryStats:
-              {},
-
-
-            categoryStatsComplete:
-              false
-
-          };
-
-
-          localStorage.setItem(
-            QUIZ_SAVE_KEY,
-            JSON.stringify(
-              data
-            )
-          );
         }
 
 
         return data;
 
 
-      } catch (
-        error
-      ) {
+      } catch (error) {
 
-        console.warn(
+        console.error(
           "途中データ読込エラー:",
           error
         );
-
 
         return null;
       }
     }
 
-
-    /* =====================================================
-       途中データ削除
-    ===================================================== */
 
     function clearProgress() {
 
@@ -5202,11 +3109,9 @@ document.addEventListener(
         );
 
 
-      } catch (
-        error
-      ) {
+      } catch (error) {
 
-        console.warn(
+        console.error(
           "途中データ削除エラー:",
           error
         );
@@ -5217,17 +3122,10 @@ document.addEventListener(
     }
 
 
-    /* =====================================================
-       再開ボタン表示更新
-    ===================================================== */
-
     function updateResumeArea() {
 
       if (
-        !resumeArea
-
-        ||
-
+        !resumeArea ||
         !resumeDetail
       ) {
 
@@ -5243,18 +3141,22 @@ document.addEventListener(
         !saved
       ) {
 
-        resumeArea.classList.add(
-          "hidden"
-        );
+        resumeArea
+          .classList
+          .add(
+            "hidden"
+          );
 
 
         if (
           heroButtons
         ) {
 
-          heroButtons.classList.remove(
-            "hidden"
-          );
+          heroButtons
+            .classList
+            .remove(
+              "hidden"
+            );
         }
 
 
@@ -5262,9 +3164,11 @@ document.addEventListener(
           trialNote
         ) {
 
-          trialNote.classList.remove(
-            "hidden"
-          );
+          trialNote
+            .classList
+            .remove(
+              "hidden"
+            );
         }
 
 
@@ -5272,18 +3176,22 @@ document.addEventListener(
       }
 
 
-      resumeArea.classList.remove(
-        "hidden"
-      );
+      resumeArea
+        .classList
+        .remove(
+          "hidden"
+        );
 
 
       if (
         heroButtons
       ) {
 
-        heroButtons.classList.add(
-          "hidden"
-        );
+        heroButtons
+          .classList
+          .add(
+            "hidden"
+          );
       }
 
 
@@ -5291,51 +3199,27 @@ document.addEventListener(
         trialNote
       ) {
 
-        trialNote.classList.add(
-          "hidden"
-        );
-      }
-
-
-      if (
-        saved.questionSetVersion !==
-          QUESTION_SET_VERSION
-      ) {
-
-        resumeDetail.textContent =
-          "問題データ更新済み・この途中データは再開できません";
-
-
-        return;
+        trialNote
+          .classList
+          .add(
+            "hidden"
+          );
       }
 
 
       const total =
-        saved
-          .questionIds
-          .length;
+        saved.questionIds.length;
 
 
-      if (
+      resumeDetail.textContent =
         saved.currentQuestionIndex >=
           total
-      ) {
 
-        resumeDetail.textContent =
-          `全${total}問回答済み・結果を見る`;
+          ? `全${total}問回答済み・結果を見る`
 
-
-      } else {
-
-        resumeDetail.textContent =
-          `第${saved.currentQuestionIndex + 1}問から再開・現在 ${saved.score}点`;
-      }
+          : `第${saved.currentQuestionIndex + 1}問から再開・現在 ${saved.score}点`;
     }
 
-
-    /* =====================================================
-       再開
-    ===================================================== */
 
     async function resumeQuiz() {
 
@@ -5346,22 +3230,6 @@ document.addEventListener(
       if (
         !saved
       ) {
-
-        updateResumeArea();
-
-        return;
-      }
-
-
-      if (
-        saved.questionSetVersion !==
-          QUESTION_SET_VERSION
-      ) {
-
-        alert(
-          "問題データが更新されたため、この途中データは再開できません。途中データを削除して、最初から挑戦してください。"
-        );
-
 
         return;
       }
@@ -5375,40 +3243,30 @@ document.addEventListener(
 
         const questionMap =
           new Map(
-
             allQuestions.map(
               function (
                 question
               ) {
 
                 return [
-
                   String(
                     question.id
                   ),
-
                   question
-
                 ];
               }
             )
-
           );
 
 
         const restoredQuestions =
-
           saved.questionIds.map(
             function (
               id
             ) {
 
-              return (
-                questionMap.get(
-                  String(
-                    id
-                  )
-                )
+              return questionMap.get(
+                String(id)
               );
             }
           );
@@ -5420,17 +3278,16 @@ document.addEventListener(
               question
             ) {
 
-              return (
-                !question
-              );
+              return !question;
             }
           )
         ) {
 
           alert(
-            "問題データが更新されたため、この途中データは再開できません。途中データを削除して、最初から挑戦してください。"
+            "問題データが更新されたため、途中データを再開できません。"
           );
 
+          clearProgress();
 
           return;
         }
@@ -5439,102 +3296,41 @@ document.addEventListener(
         quizQuestions =
           restoredQuestions;
 
-
         currentQuestionIndex =
-          Math.max(
-            0,
-            saved.currentQuestionIndex
-          );
-
+          saved.currentQuestionIndex;
 
         score =
-          Math.max(
-            0,
-            saved.score
-          );
-
+          saved.score;
 
         categoryStats =
-
-          saved.categoryStats
-
-          &&
-
-          typeof saved.categoryStats ===
-            "object"
-
-            ? saved.categoryStats
-
-            : {};
-
+          saved.categoryStats || {};
 
         categoryStatsComplete =
-
-          typeof saved
-            .categoryStatsComplete ===
-            "boolean"
-
-            ? saved
-                .categoryStatsComplete
-
-            : currentQuestionIndex ===
-                0;
-
+          true;
 
         quizMode =
           "main";
 
+        quizSessionId =
+          saved.sessionId || null;
 
-        answerLocked =
-          false;
-
-
-        sessionCompleted =
-          false;
-
-
-        currentSessionId =
-          saved.sessionId ||
-          null;
-
-
-        /*
-          古い途中データで
-          sessionId がない場合は
-          新しく集計セッションを作る
-        */
 
         if (
-          !currentSessionId
+          shouldTrackAnalytics() &&
+          !quizSessionId
         ) {
 
-          currentSessionId =
+          quizSessionId =
             await createQuizSession(
               "main",
-              quizQuestions.length
-            );
-
-
-          if (
-            currentSessionId
-          ) {
-
-            await updateQuizSessionProgress(
+              quizQuestions.length,
               currentQuestionIndex,
               score
             );
 
 
-            saveProgress(
-              currentQuestionIndex
-            );
-          }
-
-
-        } else {
-
-          await touchQuizSession(
-            currentSessionId
+          saveProgress(
+            currentQuestionIndex
           );
         }
 
@@ -5553,15 +3349,7 @@ document.addEventListener(
         }
 
 
-      } catch (
-        error
-      ) {
-
-        console.error(
-          "再開エラー:",
-          error
-        );
-
+      } catch (error) {
 
         showQuestionDataError(
           error
@@ -5570,35 +3358,9 @@ document.addEventListener(
     }
 
 
-    /* =====================================================
-       カテゴリ
-    ===================================================== */
-
-    function getCategoryGroup(
-      category
-    ) {
-
-      const raw =
-        String(
-          category ||
-          "その他"
-        ).trim();
-
-
-      return (
-
-        VALID_QUESTION_CATEGORIES
-          .includes(
-            raw
-          )
-
-          ? raw
-
-          : "その他"
-
-      );
-    }
-
+    /* =========================
+       カテゴリ集計
+    ========================= */
 
     function updateCategoryStats(
       category,
@@ -5606,9 +3368,11 @@ document.addEventListener(
     ) {
 
       const group =
-        getCategoryGroup(
+        VALID_QUESTION_CATEGORIES.includes(
           category
-        );
+        )
+          ? category
+          : "その他";
 
 
       if (
@@ -5626,7 +3390,6 @@ document.addEventListener(
 
           total:
             0
-
         };
       }
 
@@ -5647,10 +3410,6 @@ document.addEventListener(
     }
 
 
-    /* =====================================================
-       カテゴリ別正答率
-    ===================================================== */
-
     function renderCategoryStatsFromData(
       statsSource,
       statsComplete = true
@@ -5660,86 +3419,34 @@ document.addEventListener(
         !statsComplete
       ) {
 
-        return `
-
-          <section
-            class="category-results"
-          >
-
-            <div
-              class="category-results-title"
-            >
-              カテゴリ別正答率
-            </div>
-
-
-            <p
-              class="category-results-note"
-            >
-              この挑戦はカテゴリ集計機能の追加前に開始されたため、
-              カテゴリ別正答率は表示できません。
-            </p>
-
-          </section>
-
-        `;
-      }
-
-
-      if (
-        !statsSource
-
-        ||
-
-        typeof statsSource !==
-          "object"
-      ) {
-
         return "";
       }
 
 
       const entries =
-
         VALID_QUESTION_CATEGORIES
-
           .map(
             function (
               category
             ) {
 
               return [
-
                 category,
-
                 statsSource[
                   category
                 ]
-
               ];
             }
           )
-
           .filter(
             function (
               entry
             ) {
 
-              const stats =
-                entry[1];
-
-
               return (
-
-                stats
-
-                &&
-
-                Number(
-                  stats.total
-                ) >
+                entry[1] &&
+                entry[1].total >
                   0
-
               );
             }
           );
@@ -5756,23 +3463,16 @@ document.addEventListener(
 
       return `
 
-        <section
-          class="category-results"
-        >
+        <section class="category-results">
 
-          <div
-            class="category-results-title"
-          >
+          <div class="category-results-title">
             カテゴリ別正答率
           </div>
 
 
-          <div
-            class="category-results-list"
-          >
+          <div class="category-results-list">
 
             ${entries
-
               .map(
                 function (
                   entry
@@ -5781,119 +3481,39 @@ document.addEventListener(
                   const category =
                     entry[0];
 
-
                   const stats =
                     entry[1];
 
 
-                  const correct =
-                    Number(
-                      stats.correct
-                    ) ||
-                    0;
-
-
-                  const total =
-                    Number(
-                      stats.total
-                    ) ||
-                    0;
-
-
                   const accuracy =
-
-                    total >
-                      0
-
-                      ? Math.round(
-                          (
-                            correct /
-                            total
-                          ) *
-                          100
-                        )
-
-                      : 0;
-
-
-                  let barBackground;
-
-
-                  let accuracyColor;
-
-
-                  if (
-                    accuracy >=
-                      80
-                  ) {
-
-                    barBackground =
-                      "linear-gradient(90deg, #b88a1d, #f0d26d)";
-
-
-                    accuracyColor =
-                      "#f0d26d";
-
-
-                  } else if (
-                    accuracy >=
-                      50
-                  ) {
-
-                    barBackground =
-                      "linear-gradient(90deg, #b96818, #e69a35)";
-
-
-                    accuracyColor =
-                      "#e69a35";
-
-
-                  } else {
-
-                    barBackground =
-                      "linear-gradient(90deg, #9f3733, #df625b)";
-
-
-                    accuracyColor =
-                      "#ef7772";
-                  }
+                    Math.round(
+                      (
+                        stats.correct /
+                        stats.total
+                      ) *
+                      100
+                    );
 
 
                   return `
 
-                    <div
-                      class="category-result-row"
-                    >
+                    <div class="category-result-row">
 
-                      <div
-                        class="category-result-top"
-                      >
+                      <div class="category-result-top">
 
-                        <span
-                          class="category-result-name"
-                        >
+                        <span class="category-result-name">
                           ${escapeHtml(
                             category
                           )}
                         </span>
 
+                        <span class="category-result-score">
 
-                        <span
-                          class="category-result-score"
-                        >
-
-                          ${correct}
+                          ${stats.correct}
                           /
-                          ${total}
+                          ${stats.total}
 
-
-                          <strong
-                            class="category-result-accuracy"
-                            style="
-                              color:
-                                ${accuracyColor};
-                            "
-                          >
+                          <strong class="category-result-accuracy">
                             ${accuracy}%
                           </strong>
 
@@ -5902,19 +3522,11 @@ document.addEventListener(
                       </div>
 
 
-                      <div
-                        class="category-result-bar-wrap"
-                      >
+                      <div class="category-result-bar-wrap">
 
                         <div
                           class="category-result-bar"
-                          style="
-                            width:
-                              ${accuracy}%;
-
-                            background:
-                              ${barBackground};
-                          "
+                          style="width:${accuracy}%;"
                         ></div>
 
                       </div>
@@ -5924,7 +3536,6 @@ document.addEventListener(
                   `;
                 }
               )
-
               .join("")}
 
           </div>
@@ -5935,63 +3546,9 @@ document.addEventListener(
     }
 
 
-    /* =====================================================
-       ランク取得
-    ===================================================== */
-
-    function safeGetRankResult(
-      scoreValue
-    ) {
-
-      if (
-        typeof window
-          .getRankResult ===
-          "function"
-      ) {
-
-        return window
-          .getRankResult(
-            scoreValue
-          );
-      }
-
-
-      if (
-        typeof getRankResult ===
-          "function"
-      ) {
-
-        return getRankResult(
-          scoreValue
-        );
-      }
-
-
-      /*
-        rank.jsが読み込めなかった場合も
-        JavaScript全体を落とさない
-      */
-
-      return {
-
-        rank:
-          "-",
-
-
-        title:
-          "ランク判定を読み込めませんでした",
-
-
-        comment:
-          "rank.js が正しく読み込まれているか確認してください。"
-
-      };
-    }
-
-
-    /* =====================================================
+    /* =========================
        シャッフル
-    ===================================================== */
+    ========================= */
 
     function shuffleArray(
       array
@@ -5999,22 +3556,15 @@ document.addEventListener(
 
       for (
         let i =
-          array.length -
-          1;
-
-        i >
-          0;
-
+          array.length - 1;
+        i > 0;
         i--
       ) {
 
         const j =
           Math.floor(
             Math.random() *
-            (
-              i +
-              1
-            )
+            (i + 1)
           );
 
 
@@ -6022,10 +3572,8 @@ document.addEventListener(
           array[i],
           array[j]
         ] = [
-
           array[j],
           array[i]
-
         ];
       }
 
@@ -6034,17 +3582,11 @@ document.addEventListener(
     }
 
 
-    /* =====================================================
-       HTMLエスケープ
-    ===================================================== */
-
     function escapeHtml(
       value
     ) {
 
-      return String(
-        value
-      )
+      return String(value)
 
         .replaceAll(
           "&",
@@ -6071,6 +3613,697 @@ document.addEventListener(
           "&#039;"
         );
     }
-
   }
 );
+
+
+/* =========================
+   Supabase 匿名ログイン
+========================= */
+
+async function ensureAnonymousUser() {
+
+  const {
+    data: {
+      user
+    },
+    error:
+      userError
+  } =
+
+    await supabaseClient
+      .auth
+      .getUser();
+
+
+  if (
+    !userError &&
+    user
+  ) {
+
+    return user;
+  }
+
+
+  const {
+    data,
+    error
+  } =
+
+    await supabaseClient
+      .auth
+      .signInAnonymously();
+
+
+  if (
+    error
+  ) {
+
+    console.error(
+      "匿名ログインエラー:",
+      error
+    );
+
+    return null;
+  }
+
+
+  return data.user;
+}
+
+
+/* =========================
+   挑戦開始
+========================= */
+
+async function createQuizSession(
+  mode,
+  questionCount,
+  answeredCount = 0,
+  score = 0
+) {
+
+  try {
+
+    const user =
+      await ensureAnonymousUser();
+
+
+    if (
+      !user
+    ) {
+
+      return null;
+    }
+
+
+    const now =
+      new Date().toISOString();
+
+
+    const {
+      data,
+      error
+    } =
+
+      await supabaseClient
+        .from(
+          "quiz_sessions"
+        )
+        .insert(
+          {
+
+            user_id:
+              user.id,
+
+            mode:
+              mode,
+
+            question_count:
+              questionCount,
+
+            question_set_version:
+              QUESTION_SET_VERSION,
+
+            answered_count:
+              answeredCount,
+
+            score:
+              score,
+
+            last_activity_at:
+              now
+          }
+        )
+        .select(
+          "id"
+        )
+        .single();
+
+
+    if (
+      error
+    ) {
+
+      console.error(
+        "quiz_sessions 作成エラー:",
+        error
+      );
+
+      return null;
+    }
+
+
+    return data.id;
+
+
+  } catch (error) {
+
+    console.error(
+      "quiz_sessions 作成処理エラー:",
+      error
+    );
+
+    return null;
+  }
+}
+
+
+/* =========================
+   1問回答記録
+========================= */
+
+async function recordQuizAnswer(
+  sessionId,
+  questionId,
+  questionNumber,
+  category,
+  selectedAnswer,
+  isCorrect
+) {
+
+  try {
+
+    if (
+      !sessionId
+    ) {
+
+      return false;
+    }
+
+
+    const user =
+      await ensureAnonymousUser();
+
+
+    if (
+      !user
+    ) {
+
+      return false;
+    }
+
+
+    const {
+      error
+    } =
+
+      await supabaseClient
+        .from(
+          "quiz_answers"
+        )
+        .insert(
+          {
+
+            session_id:
+              sessionId,
+
+            user_id:
+              user.id,
+
+            question_id:
+              questionId,
+
+            question_number:
+              questionNumber,
+
+            category:
+              category,
+
+            selected_answer:
+              selectedAnswer,
+
+            is_correct:
+              isCorrect
+          }
+        );
+
+
+    if (
+      error
+    ) {
+
+      console.error(
+        "quiz_answers 保存エラー:",
+        error
+      );
+
+      return false;
+    }
+
+
+    return true;
+
+
+  } catch (error) {
+
+    console.error(
+      "quiz_answers 保存処理エラー:",
+      error
+    );
+
+    return false;
+  }
+}
+
+
+/* =========================
+   進捗更新
+========================= */
+
+async function updateQuizSessionProgress(
+  sessionId,
+  answeredCount,
+  score
+) {
+
+  try {
+
+    if (
+      !sessionId
+    ) {
+
+      return false;
+    }
+
+
+    const {
+      error
+    } =
+
+      await supabaseClient
+        .from(
+          "quiz_sessions"
+        )
+        .update(
+          {
+
+            answered_count:
+              answeredCount,
+
+            score:
+              score,
+
+            last_activity_at:
+              new Date().toISOString()
+          }
+        )
+        .eq(
+          "id",
+          sessionId
+        );
+
+
+    if (
+      error
+    ) {
+
+      console.error(
+        "quiz_sessions 更新エラー:",
+        error
+      );
+
+      return false;
+    }
+
+
+    return true;
+
+
+  } catch (error) {
+
+    console.error(
+      "quiz_sessions 更新処理エラー:",
+      error
+    );
+
+    return false;
+  }
+}
+
+
+/* =========================
+   完走
+========================= */
+
+async function completeQuizSession(
+  sessionId,
+  answeredCount,
+  score
+) {
+
+  try {
+
+    if (
+      !sessionId
+    ) {
+
+      return false;
+    }
+
+
+    const now =
+      new Date().toISOString();
+
+
+    const {
+      error
+    } =
+
+      await supabaseClient
+        .from(
+          "quiz_sessions"
+        )
+        .update(
+          {
+
+            answered_count:
+              answeredCount,
+
+            score:
+              score,
+
+            completed_at:
+              now,
+
+            last_activity_at:
+              now
+          }
+        )
+        .eq(
+          "id",
+          sessionId
+        );
+
+
+    if (
+      error
+    ) {
+
+      console.error(
+        "完走記録エラー:",
+        error
+      );
+
+      return false;
+    }
+
+
+    return true;
+
+
+  } catch (error) {
+
+    console.error(
+      "完走記録処理エラー:",
+      error
+    );
+
+    return false;
+  }
+}
+
+
+/* =========================
+   挑戦破棄
+========================= */
+
+async function abandonQuizSession(
+  sessionId
+) {
+
+  try {
+
+    if (
+      !sessionId
+    ) {
+
+      return false;
+    }
+
+
+    const now =
+      new Date().toISOString();
+
+
+    const {
+      error
+    } =
+
+      await supabaseClient
+        .from(
+          "quiz_sessions"
+        )
+        .update(
+          {
+
+            abandoned_at:
+              now,
+
+            last_activity_at:
+              now
+          }
+        )
+        .eq(
+          "id",
+          sessionId
+        )
+        .is(
+          "completed_at",
+          null
+        );
+
+
+    if (
+      error
+    ) {
+
+      console.error(
+        "破棄記録エラー:",
+        error
+      );
+
+      return false;
+    }
+
+
+    return true;
+
+
+  } catch (error) {
+
+    console.error(
+      "破棄記録処理エラー:",
+      error
+    );
+
+    return false;
+  }
+}
+
+
+/* =========================
+   初回回答
+========================= */
+
+async function saveFirstAnswer(
+  questionId,
+  selectedIndex,
+  isCorrect
+) {
+
+  try {
+
+    const user =
+      await ensureAnonymousUser();
+
+
+    if (
+      !user
+    ) {
+
+      return null;
+    }
+
+
+    const {
+      error:
+        insertError
+    } =
+
+      await supabaseClient
+        .from(
+          "first_answers"
+        )
+        .upsert(
+          {
+
+            user_id:
+              user.id,
+
+            question_id:
+              questionId,
+
+            is_correct:
+              isCorrect,
+
+            selected_answer:
+              selectedIndex
+          },
+          {
+
+            onConflict:
+              "user_id,question_id",
+
+            ignoreDuplicates:
+              true
+          }
+        );
+
+
+    if (
+      insertError &&
+      insertError.code !==
+        "23505"
+    ) {
+
+      console.error(
+        "初回回答保存エラー:",
+        insertError
+      );
+
+      return null;
+    }
+
+
+    const {
+      data:
+        statsData,
+      error:
+        statsError
+    } =
+
+      await supabaseClient
+        .rpc(
+          "get_question_stats",
+          {
+            p_question_id:
+              questionId
+          }
+        );
+
+
+    if (
+      statsError
+    ) {
+
+      console.error(
+        "正答率取得エラー:",
+        statsError
+      );
+
+      return null;
+    }
+
+
+    if (
+      !statsData ||
+      statsData.length ===
+        0
+    ) {
+
+      return null;
+    }
+
+
+    return statsData[0];
+
+
+  } catch (error) {
+
+    console.error(
+      "初回回答処理エラー:",
+      error
+    );
+
+    return null;
+  }
+}
+
+
+/* =========================
+   物申す
+========================= */
+
+async function submitQuestionReport(
+  questionId,
+  reportType,
+  message
+) {
+
+  try {
+
+    const user =
+      await ensureAnonymousUser();
+
+
+    if (
+      !user
+    ) {
+
+      return false;
+    }
+
+
+    const {
+      error
+    } =
+
+      await supabaseClient
+        .from(
+          "question_reports"
+        )
+        .insert(
+          {
+
+            user_id:
+              user.id,
+
+            question_id:
+              questionId,
+
+            report_type:
+              reportType,
+
+            message:
+              message
+          }
+        );
+
+
+    if (
+      error
+    ) {
+
+      console.error(
+        "物申す投稿エラー:",
+        error
+      );
+
+      return false;
+    }
+
+
+    return true;
+
+
+  } catch (error) {
+
+    console.error(
+      "物申す投稿処理エラー:",
+      error
+    );
+
+    return false;
+  }
+}
