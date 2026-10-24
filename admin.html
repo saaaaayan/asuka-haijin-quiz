@@ -943,6 +943,119 @@
        物申す
     ========================= */
 
+    .report-status-filter-box {
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        flex-end;
+
+      gap:
+        7px;
+
+      flex-wrap:
+        wrap;
+    }
+
+
+    .report-filter-preset-button {
+      padding:
+        8px 11px;
+
+      border:
+        1px solid
+        #3a424b;
+
+      border-radius:
+        8px;
+
+      color:
+        #cfd5db;
+
+      background:
+        #151a20;
+
+      font-size:
+        11px;
+
+      font-weight:
+        800;
+
+      white-space:
+        nowrap;
+    }
+
+
+    .report-filter-preset-button:hover {
+      border-color:
+        #8d742e;
+
+      color:
+        #f1c957;
+    }
+
+
+    .report-status-filter-chip {
+      display:
+        inline-flex;
+
+      align-items:
+        center;
+
+      gap:
+        6px;
+
+      padding:
+        7px 9px;
+
+      border:
+        1px solid
+        #343c45;
+
+      border-radius:
+        999px;
+
+      background:
+        #14191e;
+
+      color:
+        #c9d0d7;
+
+      font-size:
+        11px;
+
+      font-weight:
+        800;
+
+      cursor:
+        pointer;
+
+      white-space:
+        nowrap;
+    }
+
+
+    .report-status-filter-chip input {
+      width:
+        auto;
+
+      margin:
+        0;
+
+      accent-color:
+        #d7ac35;
+    }
+
+
+    .report-status-filter-chip:has(input:not(:checked)) {
+      opacity:
+        0.46;
+    }
+
+
     .report-summary {
       display: flex;
       gap: 10px;
@@ -2015,31 +2128,90 @@
 
             <div class="toolbar">
 
-              <select
+              <div
                 id="report-status-filter"
+                class="report-status-filter-box"
+                aria-label="物申すステータス絞り込み"
               >
 
-                <option value="">
-                  全ステータス
-                </option>
+                <button
+                  type="button"
+                  class="report-filter-preset-button"
+                  data-report-filter-preset="all"
+                >
+                  全て
+                </button>
 
-                <option value="pending">
-                  未対応
-                </option>
 
-                <option value="reviewing">
-                  確認中
-                </option>
+                <button
+                  type="button"
+                  class="report-filter-preset-button"
+                  data-report-filter-preset="unresolved"
+                >
+                  対応済み以外
+                </button>
 
-                <option value="resolved">
-                  対応済み
-                </option>
 
-                <option value="rejected">
-                  却下
-                </option>
+                <label class="report-status-filter-chip">
 
-              </select>
+                  <input
+                    type="checkbox"
+                    value="pending"
+                    checked
+                  >
+
+                  <span>
+                    未対応
+                  </span>
+
+                </label>
+
+
+                <label class="report-status-filter-chip">
+
+                  <input
+                    type="checkbox"
+                    value="reviewing"
+                    checked
+                  >
+
+                  <span>
+                    確認中
+                  </span>
+
+                </label>
+
+
+                <label class="report-status-filter-chip">
+
+                  <input
+                    type="checkbox"
+                    value="resolved"
+                    checked
+                  >
+
+                  <span>
+                    対応済み
+                  </span>
+
+                </label>
+
+
+                <label class="report-status-filter-chip">
+
+                  <input
+                    type="checkbox"
+                    value="rejected"
+                    checked
+                  >
+
+                  <span>
+                    却下
+                  </span>
+
+                </label>
+
+              </div>
 
             </div>
 
@@ -2857,6 +3029,15 @@
       document.querySelector(
         "#report-status-filter"
       );
+
+
+    const reportStatusCheckboxes =
+      [
+        ...reportStatusFilter
+          .querySelectorAll(
+            'input[type="checkbox"]'
+          )
+      ];
 
 
     const questionsTable =
@@ -4734,7 +4915,83 @@
 
     reportStatusFilter.addEventListener(
       "change",
-      applyReportFilter
+      function (
+        event
+      ) {
+
+        if (
+          event.target.matches(
+            'input[type="checkbox"]'
+          )
+        ) {
+
+          applyReportFilter();
+        }
+      }
+    );
+
+
+    reportStatusFilter.addEventListener(
+      "click",
+      function (
+        event
+      ) {
+
+        const button =
+          event.target.closest(
+            "[data-report-filter-preset]"
+          );
+
+
+        if (
+          !button
+        ) {
+
+          return;
+        }
+
+
+        const preset =
+          button.dataset
+            .reportFilterPreset;
+
+
+        if (
+          preset ===
+          "all"
+        ) {
+
+          reportStatusCheckboxes.forEach(
+            function (
+              checkbox
+            ) {
+
+              checkbox.checked =
+                true;
+            }
+          );
+
+
+        } else if (
+          preset ===
+          "unresolved"
+        ) {
+
+          reportStatusCheckboxes.forEach(
+            function (
+              checkbox
+            ) {
+
+              checkbox.checked =
+                checkbox.value !==
+                "resolved";
+            }
+          );
+        }
+
+
+        applyReportFilter();
+      }
     );
 
 
@@ -4869,30 +5126,39 @@
 
     function applyReportFilter() {
 
-      const selected =
-        reportStatusFilter.value;
+      const selectedStatuses =
+        reportStatusCheckboxes
+          .filter(
+            function (
+              checkbox
+            ) {
+
+              return checkbox.checked;
+            }
+          )
+          .map(
+            function (
+              checkbox
+            ) {
+
+              return checkbox.value;
+            }
+          );
 
 
       const reports =
-        selected
+        allReports.filter(
+          function (
+            item
+          ) {
 
-          ? allReports.filter(
-              function (
-                item
-              ) {
-
-                return (
-                  normalizeReportStatus(
-                    item.status
-                  ) ===
-                  selected
-                );
-              }
-            )
-
-          : [
-              ...allReports
-            ];
+            return selectedStatuses.includes(
+              normalizeReportStatus(
+                item.status
+              )
+            );
+          }
+        );
 
 
       renderReports(
