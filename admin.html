@@ -822,7 +822,7 @@
         wrap;
 
       min-width:
-        210px;
+        220px;
     }
 
     .edit-question-button,
@@ -852,20 +852,72 @@
         #1b2025;
     }
 
-    .toggle-publish-button {
+    .edit-question-button:hover {
+      border-color:
+        #949ca4;
+    }
+
+    /* 公開するボタン：緑 */
+
+    .publish-action {
       border:
         1px solid
-        #806821;
+        #397f50;
 
       color:
-        #eec552;
+        #73df96;
 
       background:
         rgba(
-          205,
-          156,
-          32,
-          0.08
+          60,
+          175,
+          95,
+          0.12
+        );
+    }
+
+    .publish-action:hover {
+      border-color:
+        #58b574;
+
+      background:
+        rgba(
+          60,
+          175,
+          95,
+          0.22
+        );
+    }
+
+    /* 非公開にするボタン：オレンジ */
+
+    .unpublish-action {
+      border:
+        1px solid
+        #945e27;
+
+      color:
+        #f0a34d;
+
+      background:
+        rgba(
+          225,
+          125,
+          40,
+          0.13
+        );
+    }
+
+    .unpublish-action:hover {
+      border-color:
+        #c77c34;
+
+      background:
+        rgba(
+          225,
+          125,
+          40,
+          0.23
         );
     }
 
@@ -1455,10 +1507,6 @@
   <main class="container">
 
 
-    <!-- =========================
-         ログイン
-    ========================== -->
-
     <section
       id="login-screen"
       class="panel login-panel"
@@ -1526,10 +1574,6 @@
     </section>
 
 
-
-    <!-- =========================
-         管理画面
-    ========================== -->
 
     <section
       id="admin-screen"
@@ -1617,10 +1661,6 @@
 
 
 
-      <!-- =========================
-           集計
-      ========================== -->
-
       <section
         id="tab-dashboard"
         class="tab-content"
@@ -1661,10 +1701,6 @@
       </section>
 
 
-
-      <!-- =========================
-           問題別統計
-      ========================== -->
 
       <section
         id="tab-question-stats"
@@ -1777,10 +1813,6 @@
 
 
 
-      <!-- =========================
-           物申す
-      ========================== -->
-
       <section
         id="tab-reports"
         class="tab-content hidden"
@@ -1851,10 +1883,6 @@
       </section>
 
 
-
-      <!-- =========================
-           問題一覧
-      ========================== -->
 
       <section
         id="tab-questions"
@@ -2058,10 +2086,6 @@
   </main>
 
 
-
-  <!-- =========================
-       問題編集
-  ========================== -->
 
   <div
     id="question-editor-overlay"
@@ -2479,10 +2503,6 @@
 
   <script>
 
-    /* =========================
-       Supabase
-    ========================= */
-
     const SUPABASE_URL =
       "https://eiseszhremqmeodxbcuc.supabase.co";
 
@@ -2514,10 +2534,6 @@
       );
 
 
-
-    /* =========================
-       DOM
-    ========================= */
 
     const loginScreen =
       document.querySelector(
@@ -2832,10 +2848,6 @@
 
 
 
-    /* =========================
-       状態
-    ========================= */
-
     let allQuestions =
       [];
 
@@ -2865,11 +2877,8 @@
 
 
 
-    /* =========================
-       起動
-    ========================= */
-
     boot();
+
 
 
     async function boot() {
@@ -2918,10 +2927,6 @@
     }
 
 
-
-    /* =========================
-       ログイン
-    ========================= */
 
     loginForm.addEventListener(
       "submit",
@@ -3186,10 +3191,6 @@
 
 
 
-    /* =========================
-       タブ
-    ========================= */
-
     document
       .querySelectorAll(
         ".tab-button"
@@ -3260,10 +3261,6 @@
       );
 
 
-
-    /* =========================
-       全データ
-    ========================= */
 
     async function loadAllData() {
 
@@ -3502,10 +3499,6 @@
     }
 
 
-
-    /* =========================
-       集計
-    ========================= */
 
     function renderStats(
       sessions,
@@ -3944,10 +3937,6 @@
     }
 
 
-
-    /* =========================
-       問題統計
-    ========================= */
 
     function buildQuestionStats(
       questions,
@@ -4526,10 +4515,6 @@
     }
 
 
-
-    /* =========================
-       物申す
-    ========================= */
 
     reportStatusFilter.addEventListener(
       "change",
@@ -5326,10 +5311,6 @@
 
 
 
-    /* =========================
-       問題一覧
-    ========================= */
-
     questionSearch.addEventListener(
       "input",
       applyQuestionFilters
@@ -6098,7 +6079,14 @@
 
 
                           <button
-                            class="toggle-publish-button"
+                            class="
+                              toggle-publish-button
+                              ${
+                                question.is_published
+                                  ? "unpublish-action"
+                                  : "publish-action"
+                              }
+                            "
                             type="button"
                             data-action="toggle-publish"
                             data-id="${question.id}"
@@ -6494,10 +6482,6 @@
     }
 
 
-
-    /* =========================
-       問題編集
-    ========================= */
 
     newQuestionButton.addEventListener(
       "click",
@@ -7308,10 +7292,6 @@
     }
 
 
-
-    /* =========================
-       ユーティリティ
-    ========================= */
 
     function uniqueNonEmpty(
       values
