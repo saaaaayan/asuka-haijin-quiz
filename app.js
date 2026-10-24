@@ -2911,7 +2911,7 @@ ${escapeHtml(
                     </svg>
 
                     <span>
-                      結果をシェア
+                      Xで結果をシェア
                     </span>
                   </span>
                 </button>
