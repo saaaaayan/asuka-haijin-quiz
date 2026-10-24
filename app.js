@@ -3587,6 +3587,56 @@ ${escapeHtml(
       );
 
 
+      const scoreText =
+        String(
+          scoreValue
+        );
+
+
+      const totalText =
+        `/ ${totalValue}`;
+
+
+      ctx.textAlign =
+        "left";
+
+
+      ctx.font =
+        '900 126px "Arial", "Yu Gothic", sans-serif';
+
+
+      const scoreWidth =
+        ctx.measureText(
+          scoreText
+        ).width;
+
+
+      ctx.font =
+        '800 36px "Arial", "Yu Gothic", sans-serif';
+
+
+      const totalWidth =
+        ctx.measureText(
+          totalText
+        ).width;
+
+
+      const scoreGap =
+        12;
+
+
+      const combinedWidth =
+        scoreWidth +
+        scoreGap +
+        totalWidth;
+
+
+      const scoreStartX =
+        227 -
+        combinedWidth /
+        2;
+
+
       ctx.fillStyle =
         white;
 
@@ -3594,10 +3644,8 @@ ${escapeHtml(
         '900 126px "Arial", "Yu Gothic", sans-serif';
 
       ctx.fillText(
-        String(
-          scoreValue
-        ),
-        205,
+        scoreText,
+        scoreStartX,
         333
       );
 
@@ -3606,13 +3654,19 @@ ${escapeHtml(
         gold;
 
       ctx.font =
-        '800 38px "Arial", "Yu Gothic", sans-serif';
+        '800 36px "Arial", "Yu Gothic", sans-serif';
 
       ctx.fillText(
-        `/ ${totalValue}`,
-        318,
+        totalText,
+        scoreStartX +
+          scoreWidth +
+          scoreGap,
         330
       );
+
+
+      ctx.textAlign =
+        "center";
 
 
       const percentage =
