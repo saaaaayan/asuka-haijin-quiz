@@ -2885,7 +2885,35 @@ ${escapeHtml(
                   "
                   type="button"
                 >
-                  Xで結果をシェア
+                  <span
+                    style="
+                      display:inline-flex;
+                      align-items:center;
+                      justify-content:center;
+                      gap:10px;
+                    "
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="22"
+                      height="22"
+                      aria-hidden="true"
+                      focusable="false"
+                      style="
+                        display:block;
+                        fill:currentColor;
+                        flex:0 0 auto;
+                      "
+                    >
+                      <path
+                        d="M18.244 2H21.5l-7.1 8.114L22.75 22h-6.54l-5.12-6.71L5.33 22H2.07l7.6-8.69L1.25 2h6.71l4.63 6.12L18.244 2Zm-1.15 18h1.8L6.38 3.9H4.48L17.094 20Z"
+                      ></path>
+                    </svg>
+
+                    <span>
+                      結果をシェア
+                    </span>
+                  </span>
                 </button>
 
 
@@ -2958,8 +2986,8 @@ ${escapeHtml(
           "click",
           async function () {
 
-            const originalText =
-              shareButton.textContent;
+            const originalHtml =
+              shareButton.innerHTML;
 
 
             shareButton.disabled =
@@ -3060,8 +3088,8 @@ ${escapeHtml(
               shareButton.disabled =
                 false;
 
-              shareButton.textContent =
-                originalText;
+              shareButton.innerHTML =
+                originalHtml;
             }
           }
         );
