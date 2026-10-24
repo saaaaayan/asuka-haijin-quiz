@@ -2190,17 +2190,6 @@
 
 
             <select
-              id="question-verification-filter"
-            >
-
-              <option value="">
-                全検証状態
-              </option>
-
-            </select>
-
-
-            <select
               id="question-stage-filter"
             >
 
@@ -2607,55 +2596,26 @@
 
           <label>
 
-            検証状態
-
-            <select
-              id="editor-verification"
-            >
-
-              <option value="">
-                未設定
-              </option>
-
-              <option value="user_confirmed">
-                user_confirmed
-              </option>
-
-              <option value="source_checked">
-                source_checked
-              </option>
-
-            </select>
-
-          </label>
-
-
-          <label>
-
             制作段階
 
             <select
               id="editor-production-stage"
             >
 
-              <option value="">
-                未設定
+              <option value="下書き">
+                下書き
               </option>
 
-              <option value="仮作成">
-                仮作成
+              <option value="作成済み">
+                作成済み
               </option>
 
-              <option value="作成済">
-                作成済
+              <option value="内容検証済み">
+                内容検証済み
               </option>
 
-              <option value="確認・検証済み">
-                確認・検証済み
-              </option>
-
-              <option value="文言確認済み">
-                文言確認済み
+              <option value="公開準備完了">
+                公開準備完了
               </option>
 
             </select>
@@ -2935,12 +2895,6 @@
       );
 
 
-    const questionVerificationFilter =
-      document.querySelector(
-        "#question-verification-filter"
-      );
-
-
     const questionStageFilter =
       document.querySelector(
         "#question-stage-filter"
@@ -3034,12 +2988,6 @@
     const editorExplanation =
       document.querySelector(
         "#editor-explanation"
-      );
-
-
-    const editorVerification =
-      document.querySelector(
-        "#editor-verification"
       );
 
 
@@ -5603,12 +5551,6 @@
     );
 
 
-    questionVerificationFilter.addEventListener(
-      "change",
-      applyQuestionFilters
-    );
-
-
     questionStageFilter.addEventListener(
       "change",
       applyQuestionFilters
@@ -5622,78 +5564,51 @@
 
 
 
+    function normalizeProductionStage(
+      value
+    ) {
+
+      const stage =
+        String(
+          value ||
+          ""
+        ).trim();
+
+
+      return {
+        "仮作成":
+          "下書き",
+
+        "作成済":
+          "作成済み",
+
+        "確認・検証済み":
+          "内容検証済み",
+
+        "文言確認済み":
+          "公開準備完了"
+      }[
+        stage
+      ] ||
+      stage ||
+      "下書き";
+    }
+
+
+
     function buildQuestionFilterOptions() {
-
-      const oldVerification =
-        questionVerificationFilter.value;
-
 
       const oldStage =
         questionStageFilter.value;
 
 
-      const verificationValues =
-        uniqueNonEmpty(
-          allQuestions.map(
-            function (
-              item
-            ) {
-
-              return item.verification;
-            }
-          )
-        );
-
-
-      const stageValues =
-        uniqueNonEmpty(
-          allQuestions.map(
-            function (
-              item
-            ) {
-
-              return item.production_stage;
-            }
-          )
-        );
-
-
-      questionVerificationFilter.innerHTML = `
-
-        <option value="">
-          全検証状態
-        </option>
-
-        <option value="__empty__">
-          未設定
-        </option>
-
-        ${
-          verificationValues
-            .map(
-              function (
-                value
-              ) {
-
-                return `
-
-                  <option
-                    value="${escapeHtml(
-                      value
-                    )}"
-                  >
-                    ${escapeHtml(
-                      value
-                    )}
-                  </option>
-
-                `;
-              }
-            )
-            .join("")
-        }
-
-      `;
+      const stages =
+        [
+          "下書き",
+          "作成済み",
+          "内容検証済み",
+          "公開準備完了"
+        ];
 
 
       questionStageFilter.innerHTML = `
@@ -5702,72 +5617,35 @@
           全制作段階
         </option>
 
-        <option value="__empty__">
-          未設定
-        </option>
+        ${stages
+          .map(
+            function (
+              value
+            ) {
 
-        ${
-          stageValues
-            .map(
-              function (
-                value
-              ) {
+              return `
 
-                return `
+                <option
+                  value="${escapeHtml(
+                    value
+                  )}"
+                >
+                  ${escapeHtml(
+                    value
+                  )}
+                </option>
 
-                  <option
-                    value="${escapeHtml(
-                      value
-                    )}"
-                  >
-                    ${escapeHtml(
-                      value
-                    )}
-                  </option>
-
-                `;
-              }
-            )
-            .join("")
-        }
+              `;
+            }
+          )
+          .join("")}
 
       `;
 
 
       if (
-        [
-          ...questionVerificationFilter.options
-        ].some(
-          function (
-            option
-          ) {
-
-            return (
-              option.value ===
-              oldVerification
-            );
-          }
-        )
-      ) {
-
-        questionVerificationFilter.value =
-          oldVerification;
-      }
-
-
-      if (
-        [
-          ...questionStageFilter.options
-        ].some(
-          function (
-            option
-          ) {
-
-            return (
-              option.value ===
-              oldStage
-            );
-          }
+        stages.includes(
+          oldStage
         )
       ) {
 
@@ -5797,10 +5675,6 @@
 
       const difficulty =
         questionDifficultyFilter.value;
-
-
-      const verification =
-        questionVerificationFilter.value;
 
 
       const stage =
@@ -5885,18 +5759,9 @@
 
             if (
               !matchesOptionalFilter(
-                question.verification,
-                verification
-              )
-            ) {
-
-              return false;
-            }
-
-
-            if (
-              !matchesOptionalFilter(
-                question.production_stage,
+                normalizeProductionStage(
+                  question.production_stage
+                ),
                 stage
               )
             ) {
@@ -5915,8 +5780,9 @@
                   question.category,
                   question.question,
                   question.explanation,
-                  question.verification,
-                  question.production_stage
+                  normalizeProductionStage(
+                    question.production_stage
+                  )
                 ]
                   .join(
                     " "
@@ -6156,7 +6022,6 @@
               <th>難易度</th>
               <th>正答率</th>
               <th>回答者</th>
-              <th>検証</th>
               <th>制作段階</th>
               <th>操作</th>
 
@@ -6309,22 +6174,9 @@
                         <span class="meta-badge">
 
                           ${escapeHtml(
-                            question.verification ||
-                            "未設定"
-                          )}
-
-                        </span>
-
-                      </td>
-
-
-                      <td>
-
-                        <span class="meta-badge">
-
-                          ${escapeHtml(
-                            question.production_stage ||
-                            "未設定"
+                            normalizeProductionStage(
+                              question.production_stage
+                            )
                           )}
 
                         </span>
@@ -7766,14 +7618,10 @@
           "";
 
 
-        editorVerification.value =
-          question.verification ||
-          "";
-
-
         editorProductionStage.value =
-          question.production_stage ||
-          "";
+          normalizeProductionStage(
+            question.production_stage
+          );
 
 
         editorTags.value =
@@ -7908,7 +7756,7 @@
 
 
         editorProductionStage.value =
-          "仮作成";
+          "下書き";
 
 
         editorPublished.checked =
@@ -8398,11 +8246,6 @@
         source:
           emptyToNull(
             editorSource.value
-          ),
-
-        verification:
-          emptyToNull(
-            editorVerification.value
           ),
 
         production_stage:
