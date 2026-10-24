@@ -10,7 +10,10 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>廃人検定 管理画面</title>
+  <title>
+    廃人検定 管理画面
+  </title>
+
 
   <style>
 
@@ -18,8 +21,11 @@
       box-sizing: border-box;
     }
 
+
     body {
+
       margin: 0;
+
       min-height: 100vh;
 
       background:
@@ -40,21 +46,29 @@
         sans-serif;
     }
 
+
     button,
     input,
     select {
+
       font: inherit;
     }
 
+
     button {
+
       cursor: pointer;
     }
 
+
     .hidden {
+
       display: none !important;
     }
 
+
     .container {
+
       width:
         min(
           1500px,
@@ -68,7 +82,9 @@
         80px;
     }
 
+
     .panel {
+
       border:
         1px solid
         #3c3725;
@@ -94,6 +110,7 @@
     ========================= */
 
     .login-panel {
+
       width:
         min(
           520px,
@@ -107,7 +124,9 @@
         40px;
     }
 
+
     .kicker {
+
       color:
         #e8ba3d;
 
@@ -121,7 +140,9 @@
         0.18em;
     }
 
+
     h1 {
+
       margin:
         10px 0;
 
@@ -129,12 +150,16 @@
         34px;
     }
 
+
     .muted {
+
       color:
         #aab1ba;
     }
 
+
     .login-form {
+
       margin-top:
         30px;
 
@@ -145,7 +170,9 @@
         16px;
     }
 
+
     label {
+
       display:
         grid;
 
@@ -159,8 +186,10 @@
         13px;
     }
 
+
     input,
     select {
+
       width:
         100%;
 
@@ -184,18 +213,21 @@
         none;
     }
 
+
     input:focus,
     select:focus {
+
       border-color:
         #d4aa39;
     }
 
+
     .gold-button {
+
       padding:
         14px 18px;
 
-      border:
-        0;
+      border: 0;
 
       border-radius:
         10px;
@@ -214,7 +246,9 @@
         800;
     }
 
+
     .secondary-button {
+
       padding:
         10px 15px;
 
@@ -232,7 +266,9 @@
         #171b20;
     }
 
+
     .login-error {
+
       min-height:
         22px;
 
@@ -249,6 +285,7 @@
     ========================= */
 
     .admin-header {
+
       display:
         flex;
 
@@ -265,12 +302,16 @@
         28px;
     }
 
+
     .admin-title h1 {
+
       margin:
         5px 0;
     }
 
+
     .header-buttons {
+
       display:
         flex;
 
@@ -287,6 +328,7 @@
     ========================= */
 
     .nav-tabs {
+
       display:
         flex;
 
@@ -300,7 +342,9 @@
         25px;
     }
 
+
     .tab-button {
+
       padding:
         10px 17px;
 
@@ -321,7 +365,9 @@
         700;
     }
 
+
     .tab-button.active {
+
       border-color:
         #d6aa36;
 
@@ -343,6 +389,7 @@
     ========================= */
 
     .stats-grid {
+
       display:
         grid;
 
@@ -356,7 +403,9 @@
         14px;
     }
 
+
     .stat-card {
+
       padding:
         22px;
 
@@ -364,7 +413,9 @@
         130px;
     }
 
+
     .stat-label {
+
       color:
         #9ea5ad;
 
@@ -375,7 +426,9 @@
         700;
     }
 
+
     .stat-value {
+
       margin-top:
         10px;
 
@@ -392,7 +445,9 @@
         1;
     }
 
+
     .stat-sub {
+
       margin-top:
         10px;
 
@@ -409,16 +464,21 @@
     ========================= */
 
     .section {
+
       margin-top:
         25px;
     }
 
+
     .section-panel {
+
       padding:
         24px;
     }
 
+
     .section-head {
+
       display:
         flex;
 
@@ -435,15 +495,18 @@
         18px;
     }
 
+
     .section-title {
-      margin:
-        0;
+
+      margin: 0;
 
       font-size:
         20px;
     }
 
+
     .section-note {
+
       margin-top:
         6px;
 
@@ -460,11 +523,14 @@
     ========================= */
 
     .table-wrap {
+
       overflow-x:
         auto;
     }
 
+
     table {
+
       width:
         100%;
 
@@ -472,11 +538,13 @@
         collapse;
 
       min-width:
-        900px;
+        1000px;
     }
+
 
     th,
     td {
+
       padding:
         11px 12px;
 
@@ -494,7 +562,9 @@
         13px;
     }
 
+
     th {
+
       color:
         #d7b958;
 
@@ -505,12 +575,16 @@
         nowrap;
     }
 
+
     td {
+
       color:
         #d7dbe0;
     }
 
+
     tbody tr:hover {
+
       background:
         rgba(
           255,
@@ -526,6 +600,7 @@
     ========================= */
 
     .status {
+
       display:
         inline-block;
 
@@ -545,7 +620,9 @@
         nowrap;
     }
 
+
     .status-complete {
+
       color:
         #85e0a2;
 
@@ -558,7 +635,9 @@
         );
     }
 
+
     .status-abandoned {
+
       color:
         #f5a09b;
 
@@ -571,7 +650,9 @@
         );
     }
 
+
     .status-active {
+
       color:
         #f1cc64;
 
@@ -590,6 +671,7 @@
     ========================= */
 
     .toolbar {
+
       display:
         flex;
 
@@ -603,12 +685,16 @@
         center;
     }
 
+
     .toolbar input {
+
       width:
         320px;
     }
 
+
     .toolbar select {
+
       width:
         auto;
 
@@ -618,10 +704,11 @@
 
 
     /* =========================
-       問題別統計
+       正答率
     ========================= */
 
     .accuracy {
+
       font-weight:
         900;
 
@@ -629,27 +716,37 @@
         nowrap;
     }
 
+
     .accuracy-low {
+
       color:
         #ff7770;
     }
 
+
     .accuracy-mid {
+
       color:
         #e5b94b;
     }
 
+
     .accuracy-high {
+
       color:
         #74d890;
     }
 
+
     .accuracy-none {
+
       color:
         #737b84;
     }
 
+
     .accuracy-bar-wrap {
+
       width:
         120px;
 
@@ -669,7 +766,9 @@
         #2b3036;
     }
 
+
     .accuracy-bar {
+
       height:
         100%;
 
@@ -684,15 +783,127 @@
         );
     }
 
+
+    /* =========================
+       難易度
+    ========================= */
+
     .difficulty {
+
       font-weight:
-        800;
+        900;
 
       color:
         #e4c45f;
     }
 
+
+    .difficulty-measured {
+
+      display:
+        inline-flex;
+
+      align-items:
+        center;
+
+      gap:
+        6px;
+
+      white-space:
+        nowrap;
+    }
+
+
+    .difficulty-number {
+
+      display:
+        inline-flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      width:
+        30px;
+
+      height:
+        30px;
+
+      border:
+        1px solid
+        #78621e;
+
+      border-radius:
+        50%;
+
+      color:
+        #f0c94f;
+
+      background:
+        rgba(
+          218,
+          173,
+          46,
+          0.08
+        );
+
+      font-weight:
+        900;
+    }
+
+
+    .difficulty-provisional {
+
+      color:
+        #9da4ac;
+
+      font-size:
+        11px;
+    }
+
+
+    .difficulty-none {
+
+      color:
+        #707880;
+    }
+
+
+    .difficulty-difference {
+
+      font-size:
+        11px;
+
+      white-space:
+        nowrap;
+    }
+
+
+    .difficulty-harder {
+
+      color:
+        #ff807a;
+    }
+
+
+    .difficulty-easier {
+
+      color:
+        #7bd899;
+    }
+
+
+    .difficulty-same {
+
+      color:
+        #929aa3;
+    }
+
+
     .question-text {
+
       max-width:
         620px;
 
@@ -706,6 +917,7 @@
     ========================= */
 
     .report-card {
+
       padding:
         18px;
 
@@ -723,7 +935,9 @@
         12px;
     }
 
+
     .report-meta {
+
       display:
         flex;
 
@@ -743,7 +957,9 @@
         9px;
     }
 
+
     .report-type {
+
       color:
         #efc44c;
 
@@ -751,7 +967,9 @@
         800;
     }
 
+
     .report-question {
+
       margin-bottom:
         8px;
 
@@ -762,9 +980,10 @@
         700;
     }
 
+
     .report-message {
-      margin:
-        0;
+
+      margin: 0;
 
       color:
         #c8ced5;
@@ -782,6 +1001,7 @@
     ========================= */
 
     .question-count {
+
       color:
         #eac24d;
 
@@ -789,7 +1009,9 @@
         800;
     }
 
+
     .category-badge {
+
       display:
         inline-block;
 
@@ -815,6 +1037,7 @@
     ========================= */
 
     .loading {
+
       padding:
         50px;
 
@@ -825,7 +1048,9 @@
         #aeb5bc;
     }
 
+
     .empty {
+
       padding:
         30px;
 
@@ -836,7 +1061,9 @@
         #858d95;
     }
 
+
     .error-box {
+
       padding:
         15px;
 
@@ -868,6 +1095,7 @@
     ) {
 
       .container {
+
         width:
           min(
             100% - 18px,
@@ -878,7 +1106,9 @@
           18px;
       }
 
+
       .admin-header {
+
         align-items:
           flex-start;
 
@@ -886,12 +1116,16 @@
           column;
       }
 
+
       h1 {
+
         font-size:
           27px;
       }
 
+
       .login-panel {
+
         margin-top:
           30px;
 
@@ -899,18 +1133,24 @@
           25px;
       }
 
+
       .stat-value {
+
         font-size:
           32px;
       }
 
+
       .toolbar {
+
         width:
           100%;
       }
 
+
       .toolbar input,
       .toolbar select {
+
         width:
           100%;
       }
@@ -939,9 +1179,11 @@
         ASUKA KENZAN / ADMIN
       </div>
 
+
       <h1>
         廃人検定 管理画面
       </h1>
+
 
       <p class="muted">
         管理者アカウントでログインしてください。
@@ -1017,9 +1259,11 @@
             ASUKA KENZAN / ADMIN DASHBOARD
           </div>
 
+
           <h1>
             廃人検定 管理画面
           </h1>
+
 
           <div
             id="admin-user-label"
@@ -1037,6 +1281,7 @@
           >
             最新データを再読み込み
           </button>
+
 
           <button
             id="logout-button"
@@ -1065,6 +1310,7 @@
           集計
         </button>
 
+
         <button
           class="tab-button"
           data-tab="question-stats"
@@ -1072,12 +1318,14 @@
           問題別統計
         </button>
 
+
         <button
           class="tab-button"
           data-tab="reports"
         >
           物申す
         </button>
+
 
         <button
           class="tab-button"
@@ -1114,6 +1362,7 @@
               <h2 class="section-title">
                 最近の挑戦
               </h2>
+
 
               <span class="muted">
                 時刻は日本時間
@@ -1154,8 +1403,10 @@
                 問題別正答率
               </h2>
 
+
               <div class="section-note">
-                各プレイヤーの初回回答のみで集計
+                各プレイヤーの初回回答のみで集計。
+                20回答未満の実測難易度は暫定表示。
               </div>
 
             </div>
@@ -1217,6 +1468,10 @@
                   回答者数が多い順
                 </option>
 
+                <option value="measured-desc">
+                  実測難易度が高い順
+                </option>
+
                 <option value="difficulty-desc">
                   作者難易度が高い順
                 </option>
@@ -1266,6 +1521,7 @@
               物申す一覧
             </h2>
 
+
             <span
               id="report-count"
               class="question-count"
@@ -1303,10 +1559,17 @@
                 問題一覧
               </h2>
 
+
               <div
                 id="question-count"
                 class="question-count"
               ></div>
+
+
+              <div class="section-note">
+                作者難易度と、
+                実際の初回正答率から算出した実測難易度を併記。
+              </div>
 
             </div>
 
@@ -1391,105 +1654,126 @@
         "#login-screen"
       );
 
+
     const adminScreen =
       document.querySelector(
         "#admin-screen"
       );
+
 
     const loginForm =
       document.querySelector(
         "#login-form"
       );
 
+
     const emailInput =
       document.querySelector(
         "#admin-email"
       );
+
 
     const passwordInput =
       document.querySelector(
         "#admin-password"
       );
 
+
     const loginError =
       document.querySelector(
         "#login-error"
       );
+
 
     const logoutButton =
       document.querySelector(
         "#logout-button"
       );
 
+
     const refreshButton =
       document.querySelector(
         "#refresh-button"
       );
+
 
     const adminUserLabel =
       document.querySelector(
         "#admin-user-label"
       );
 
+
     const globalError =
       document.querySelector(
         "#global-error"
       );
+
 
     const statsGrid =
       document.querySelector(
         "#stats-grid"
       );
 
+
     const sessionsTable =
       document.querySelector(
         "#sessions-table"
       );
+
 
     const reportsList =
       document.querySelector(
         "#reports-list"
       );
 
+
     const reportCount =
       document.querySelector(
         "#report-count"
       );
+
 
     const questionsTable =
       document.querySelector(
         "#questions-table"
       );
 
+
     const questionCount =
       document.querySelector(
         "#question-count"
       );
+
 
     const questionSearch =
       document.querySelector(
         "#question-search"
       );
 
+
     const questionStatsTable =
       document.querySelector(
         "#question-stats-table"
       );
+
 
     const questionStatsSummary =
       document.querySelector(
         "#question-stats-summary"
       );
 
+
     const questionStatsSearch =
       document.querySelector(
         "#question-stats-search"
       );
 
+
     const questionStatsCategory =
       document.querySelector(
         "#question-stats-category"
       );
+
 
     const questionStatsSort =
       document.querySelector(
@@ -1500,8 +1784,13 @@
     let allQuestions =
       [];
 
+
     let allQuestionStats =
       [];
+
+
+    let questionStatsMap =
+      new Map();
 
 
 
@@ -1553,6 +1842,7 @@
 
 
       showAdmin();
+
 
       await loadAllData();
     }
@@ -1651,6 +1941,7 @@
 
           showAdmin();
 
+
           await loadAllData();
 
 
@@ -1692,6 +1983,7 @@
         data: {
           user
         },
+
         error:
           userError
       } =
@@ -1998,6 +2290,24 @@
           buildQuestionStats(
             questions,
             firstAnswers
+          );
+
+
+        questionStatsMap =
+          new Map(
+            allQuestionStats.map(
+              function (
+                item
+              ) {
+
+                return [
+                  String(
+                    item.id
+                  ),
+                  item
+                ];
+              }
+            )
           );
 
 
@@ -2542,19 +2852,33 @@
 
             <tr>
 
-              <th>開始日時</th>
+              <th>
+                開始日時
+              </th>
 
-              <th>種類</th>
+              <th>
+                種類
+              </th>
 
-              <th>状態</th>
+              <th>
+                状態
+              </th>
 
-              <th>回答</th>
+              <th>
+                回答
+              </th>
 
-              <th>得点</th>
+              <th>
+                得点
+              </th>
 
-              <th>最終操作</th>
+              <th>
+                最終操作
+              </th>
 
-              <th>プレイヤー</th>
+              <th>
+                プレイヤー
+              </th>
 
             </tr>
 
@@ -2617,7 +2941,9 @@
                           session.answered_count ??
                           0
                         }
+
                         /
+
                         ${
                           session.question_count ??
                           "-"
@@ -2626,22 +2952,28 @@
                       </td>
 
                       <td>
+
                         ${
                           session.score ??
                           0
                         }
+
                       </td>
 
                       <td>
+
                         ${formatJst(
                           session.last_activity_at
                         )}
+
                       </td>
 
                       <td>
+
                         ${shortId(
                           session.user_id
                         )}
+
                       </td>
 
                     </tr>
@@ -2749,6 +3081,9 @@
                 0,
 
               accuracy:
+                null,
+
+              measuredDifficulty:
                 null
             }
           );
@@ -2804,6 +3139,12 @@
               item.correct /
               item.attempts *
               100;
+
+
+            item.measuredDifficulty =
+              calculateMeasuredDifficulty(
+                item.accuracy
+              );
           }
         }
       );
@@ -2812,6 +3153,223 @@
       return Array.from(
         statsMap.values()
       );
+    }
+
+
+
+    /* =========================
+       実測難易度
+    ========================= */
+
+    function calculateMeasuredDifficulty(
+      accuracy
+    ) {
+
+      if (
+        accuracy ===
+          null ||
+        accuracy ===
+          undefined
+      ) {
+
+        return null;
+      }
+
+
+      if (
+        accuracy <
+          40
+      ) {
+
+        return 5;
+      }
+
+
+      if (
+        accuracy <
+          55
+      ) {
+
+        return 4;
+      }
+
+
+      if (
+        accuracy <
+          70
+      ) {
+
+        return 3;
+      }
+
+
+      if (
+        accuracy <
+          85
+      ) {
+
+        return 2;
+      }
+
+
+      return 1;
+    }
+
+
+
+    function renderMeasuredDifficulty(
+      item
+    ) {
+
+      if (
+        !item ||
+        item.measuredDifficulty ===
+          null
+      ) {
+
+        return `
+
+          <span class="difficulty-none">
+            -
+          </span>
+
+        `;
+      }
+
+
+      const provisional =
+        item.attempts <
+          20;
+
+
+      return `
+
+        <span class="difficulty-measured">
+
+          <span class="difficulty-number">
+
+            ${item.measuredDifficulty}
+
+          </span>
+
+          ${
+            provisional
+
+              ? `
+
+                <span class="difficulty-provisional">
+                  暫定
+                </span>
+
+              `
+
+              : ""
+          }
+
+        </span>
+
+      `;
+    }
+
+
+
+    /* =========================
+       作者難易度との差
+    ========================= */
+
+    function renderDifficultyDifference(
+      item
+    ) {
+
+      if (
+        !item ||
+        item.difficulty ===
+          null ||
+        item.difficulty ===
+          undefined ||
+        item.measuredDifficulty ===
+          null
+      ) {
+
+        return "";
+      }
+
+
+      const author =
+        Number(
+          item.difficulty
+        );
+
+
+      const measured =
+        Number(
+          item.measuredDifficulty
+        );
+
+
+      const diff =
+        measured -
+        author;
+
+
+      if (
+        diff ===
+          0
+      ) {
+
+        return `
+
+          <div
+            class="
+              difficulty-difference
+              difficulty-same
+            "
+          >
+            作者想定どおり
+          </div>
+
+        `;
+      }
+
+
+      if (
+        diff >
+          0
+      ) {
+
+        return `
+
+          <div
+            class="
+              difficulty-difference
+              difficulty-harder
+            "
+          >
+            実測の方が
+            ${diff}
+            段階難しい
+          </div>
+
+        `;
+      }
+
+
+      return `
+
+        <div
+          class="
+            difficulty-difference
+            difficulty-easier
+          "
+        >
+          実測の方が
+          ${Math.abs(
+            diff
+          )}
+          段階やさしい
+        </div>
+
+      `;
     }
 
 
@@ -2836,6 +3394,7 @@
       "change",
       applyQuestionStatsFilters
     );
+
 
 
     function applyQuestionStatsFilters() {
@@ -2877,9 +3436,13 @@
 
               const text =
                 [
+
                   item.id,
+
                   item.category,
+
                   item.question
+
                 ]
                   .join(
                     " "
@@ -3016,6 +3579,47 @@
 
       } else if (
         sort ===
+          "measured-desc"
+      ) {
+
+        rows.sort(
+          function (
+            a,
+            b
+          ) {
+
+            const av =
+              a.measuredDifficulty ??
+              0;
+
+
+            const bv =
+              b.measuredDifficulty ??
+              0;
+
+
+            if (
+              bv !==
+                av
+            ) {
+
+              return (
+                bv -
+                av
+              );
+            }
+
+
+            return (
+              b.attempts -
+              a.attempts
+            );
+          }
+        );
+
+
+      } else if (
+        sort ===
           "difficulty-desc"
       ) {
 
@@ -3109,19 +3713,37 @@
 
             <tr>
 
-              <th>ID</th>
+              <th>
+                ID
+              </th>
 
-              <th>カテゴリ</th>
+              <th>
+                カテゴリ
+              </th>
 
-              <th>問題文</th>
+              <th>
+                問題文
+              </th>
 
-              <th>回答者数</th>
+              <th>
+                回答者数
+              </th>
 
-              <th>正解数</th>
+              <th>
+                正解数
+              </th>
 
-              <th>正答率</th>
+              <th>
+                正答率
+              </th>
 
-              <th>作者難易度</th>
+              <th>
+                作者難易度
+              </th>
+
+              <th>
+                実測難易度
+              </th>
 
             </tr>
 
@@ -3178,29 +3800,42 @@
                         )}
                       </td>
 
+
                       <td>
 
                         <span class="category-badge">
+
                           ${escapeHtml(
                             item.category
                           )}
+
                         </span>
 
                       </td>
 
+
                       <td class="question-text">
+
                         ${escapeHtml(
                           item.question
                         )}
+
                       </td>
 
+
                       <td>
+
                         ${item.attempts}
+
                       </td>
 
+
                       <td>
+
                         ${item.correct}
+
                       </td>
+
 
                       <td>
 
@@ -3210,8 +3845,11 @@
                             ${accuracyClass}
                           "
                         >
+
                           ${accuracyText}
+
                         </div>
+
 
                         <div class="accuracy-bar-wrap">
 
@@ -3227,6 +3865,7 @@
 
                       </td>
 
+
                       <td>
 
                         <span class="difficulty">
@@ -3237,6 +3876,19 @@
                           }
 
                         </span>
+
+                      </td>
+
+
+                      <td>
+
+                        ${renderMeasuredDifficulty(
+                          item
+                        )}
+
+                        ${renderDifficultyDifference(
+                          item
+                        )}
 
                       </td>
 
@@ -3340,10 +3992,13 @@
             ) {
 
               return [
+
                 String(
                   question.id
                 ),
+
                 question
+
               ];
             }
           )
@@ -3423,6 +4078,7 @@
 
                     </span>
 
+
                     <span>
 
                       問題ID #
@@ -3432,13 +4088,17 @@
 
                     </span>
 
+
                     <span>
+
                       ${formatJst(
                         getReportDate(
                           report
                         )
                       )}
+
                     </span>
+
 
                     <span>
 
@@ -3641,19 +4301,45 @@
 
             <tr>
 
-              <th>ID</th>
+              <th>
+                ID
+              </th>
 
-              <th>カテゴリ</th>
+              <th>
+                カテゴリ
+              </th>
 
-              <th>種類</th>
+              <th>
+                種類
+              </th>
 
-              <th>問題文</th>
+              <th>
+                問題文
+              </th>
 
-              <th>難易度</th>
+              <th>
+                作者難易度
+              </th>
 
-              <th>検証</th>
+              <th>
+                実測難易度
+              </th>
 
-              <th>制作段階</th>
+              <th>
+                正答率
+              </th>
+
+              <th>
+                回答者数
+              </th>
+
+              <th>
+                検証
+              </th>
+
+              <th>
+                制作段階
+              </th>
 
             </tr>
 
@@ -3668,15 +4354,44 @@
                   question
                 ) {
 
+                  const stats =
+                    questionStatsMap.get(
+                      String(
+                        question.id
+                      )
+                    );
+
+
+                  const accuracy =
+                    stats &&
+                    stats.accuracy !==
+                      null
+
+                      ? `${formatAccuracy(
+                          stats.accuracy
+                        )}%`
+
+                      : "-";
+
+
+                  const attempts =
+                    stats
+                      ? stats.attempts
+                      : 0;
+
+
                   return `
 
                     <tr>
 
                       <td>
+
                         #${escapeHtml(
                           question.id
                         )}
+
                       </td>
+
 
                       <td>
 
@@ -3689,6 +4404,7 @@
                         </span>
 
                       </td>
+
 
                       <td>
 
@@ -3703,6 +4419,7 @@
 
                       </td>
 
+
                       <td class="question-text">
 
                         ${escapeHtml(
@@ -3711,14 +4428,62 @@
 
                       </td>
 
+
                       <td>
 
-                        ${
-                          question.difficulty_author ??
-                          "-"
-                        }
+                        <span class="difficulty">
+
+                          ${
+                            question.difficulty_author ??
+                            "-"
+                          }
+
+                        </span>
 
                       </td>
+
+
+                      <td>
+
+                        ${renderMeasuredDifficulty(
+                          stats
+                        )}
+
+                        ${renderDifficultyDifference(
+                          stats
+                        )}
+
+                      </td>
+
+
+                      <td>
+
+                        <span
+                          class="
+                            accuracy
+                            ${
+                              stats
+                                ? getAccuracyClass(
+                                    stats.accuracy
+                                  )
+                                : "accuracy-none"
+                            }
+                          "
+                        >
+
+                          ${accuracy}
+
+                        </span>
+
+                      </td>
+
+
+                      <td>
+
+                        ${attempts}
+
+                      </td>
+
 
                       <td>
 
@@ -3728,6 +4493,7 @@
                         )}
 
                       </td>
+
 
                       <td>
 
