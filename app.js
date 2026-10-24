@@ -5986,6 +5986,20 @@ ${escapeHtml(
                     );
 
 
+                  const accuracyClass =
+                    accuracy >=
+                      80
+
+                      ? "high"
+
+                      : accuracy >=
+                          50
+
+                        ? "middle"
+
+                        : "low";
+
+
                   return `
 
                     <div class="category-result-row">
@@ -6004,7 +6018,12 @@ ${escapeHtml(
                           /
                           ${stats.total}
 
-                          <strong class="category-result-accuracy">
+                          <strong
+                            class="
+                              category-result-accuracy
+                              ${accuracyClass}
+                            "
+                          >
                             ${accuracy}%
                           </strong>
 
@@ -6016,7 +6035,10 @@ ${escapeHtml(
                       <div class="category-result-bar-wrap">
 
                         <div
-                          class="category-result-bar"
+                          class="
+                            category-result-bar
+                            ${accuracyClass}
+                          "
                           style="width:${accuracy}%;"
                         ></div>
 
