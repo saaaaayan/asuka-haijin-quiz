@@ -4102,61 +4102,66 @@
         );
 
 
-      const completed =
-        sessions.filter(
-          function (
-            item
-          ) {
+      function isCompleted(
+        item
+      ) {
 
-            return !!item.completed_at;
-          }
+        return !!item.completed_at;
+      }
+
+
+      function isAbandoned(
+        item
+      ) {
+
+        return !!item.abandoned_at;
+      }
+
+
+      function isActive(
+        item
+      ) {
+
+        return (
+          !item.completed_at &&
+          !item.abandoned_at
         );
+      }
 
 
       const completedTrial =
         trial.filter(
-          function (
-            item
-          ) {
+          isCompleted
+        );
 
-            return !!item.completed_at;
-          }
+
+      const abandonedTrial =
+        trial.filter(
+          isAbandoned
+        );
+
+
+      const activeTrial =
+        trial.filter(
+          isActive
         );
 
 
       const completedMain =
         main.filter(
-          function (
-            item
-          ) {
-
-            return !!item.completed_at;
-          }
+          isCompleted
         );
 
 
-      const abandoned =
-        sessions.filter(
-          function (
-            item
-          ) {
-
-            return !!item.abandoned_at;
-          }
+      const abandonedMain =
+        main.filter(
+          isAbandoned
         );
 
 
-      const active =
-        sessions.filter(
-          function (
-            item
-          ) {
-
-            return (
-              !item.completed_at &&
-              !item.abandoned_at
-            );
-          }
+      const activeMain =
+        main.filter(
+          isActive
         );
 
 
@@ -4250,7 +4255,7 @@
             ${statCard(
               "お試し版",
               trial.length,
-              `完走 ${completedTrial.length}回 / 完走率 ${rate(
+              `完走率 ${rate(
                 completedTrial.length,
                 trial.length
               )}%`
@@ -4259,7 +4264,7 @@
             ${statCard(
               "100問版",
               main.length,
-              `完走 ${completedMain.length}回 / 完走率 ${rate(
+              `完走率 ${rate(
                 completedMain.length,
                 main.length
               )}%`
@@ -4275,11 +4280,11 @@
           <div class="stats-group-head">
 
             <div class="stats-group-title">
-              挑戦結果
+              お試し版の結果
             </div>
 
             <div class="stats-group-note">
-              総挑戦回数の内訳
+              お試し版 ${trial.length}回の内訳
             </div>
 
           </div>
@@ -4288,20 +4293,65 @@
 
             ${statCard(
               "完走",
-              completed.length,
-              `100問版 ${completedMain.length} / お試し ${completedTrial.length}`
+              completedTrial.length,
+              `完走率 ${rate(
+                completedTrial.length,
+                trial.length
+              )}%`
             )}
 
             ${statCard(
-              "途中破棄",
-              abandoned.length,
+              "途中棄権",
+              abandonedTrial.length,
               "途中データを破棄した挑戦"
             )}
 
             ${statCard(
               "進行中",
-              active.length,
-              "まだ完走・破棄の記録がない挑戦"
+              activeTrial.length,
+              "まだ完走・棄権の記録がない挑戦"
+            )}
+
+          </div>
+
+        </section>
+
+
+        <section class="stats-group">
+
+          <div class="stats-group-head">
+
+            <div class="stats-group-title">
+              100問版の結果
+            </div>
+
+            <div class="stats-group-note">
+              100問版 ${main.length}回の内訳
+            </div>
+
+          </div>
+
+          <div class="stats-group-cards">
+
+            ${statCard(
+              "完走",
+              completedMain.length,
+              `完走率 ${rate(
+                completedMain.length,
+                main.length
+              )}%`
+            )}
+
+            ${statCard(
+              "途中棄権",
+              abandonedMain.length,
+              "途中データを破棄した挑戦"
+            )}
+
+            ${statCard(
+              "進行中",
+              activeMain.length,
+              "まだ完走・棄権の記録がない挑戦"
             )}
 
           </div>
