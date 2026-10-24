@@ -1977,68 +1977,135 @@ document.addEventListener(
 
     async function loadQuestionsData() {
 
-      let response;
+      const pageSize =
+        1000;
 
 
-      try {
+      let from =
+        0;
 
-        response =
-          await fetch(
-            "data/questions.json",
-            {
-              cache:
-                "no-store"
+
+      const allQuestions =
+        [];
+
+
+      while (
+        true
+      ) {
+
+        const {
+          data,
+          error
+        } =
+
+          await supabaseClient
+            .from(
+              "questions"
+            )
+            .select(
+              "id,category,type,instruction,question,choices,answer,explanation,tags"
+            )
+            .eq(
+              "is_published",
+              true
+            )
+            .order(
+              "id",
+              {
+                ascending:
+                  true
+              }
+            )
+            .range(
+              from,
+              from +
+              pageSize -
+              1
+            );
+
+
+        if (
+          error
+        ) {
+
+          console.error(
+            "問題データ取得エラー:",
+            error
+          );
+
+
+          throw new Error(
+            "Supabaseから問題データを取得できませんでした。"
+          );
+        }
+
+
+        if (
+          !Array.isArray(
+            data
+          )
+        ) {
+
+          throw new Error(
+            "問題データの形式が不正です。"
+          );
+        }
+
+
+        const normalized =
+          data.map(
+            function (
+              question
+            ) {
+
+              return {
+
+                ...question,
+
+                instruction:
+                  question.instruction ??
+                  "",
+
+                explanation:
+                  question.explanation ??
+                  "",
+
+                tags:
+                  Array.isArray(
+                    question.tags
+                  )
+                    ? question.tags
+                    : []
+              };
             }
           );
 
 
-      } catch (error) {
-
-        throw new Error(
-          "questions.json への通信に失敗しました。"
+        allQuestions.push(
+          ...normalized
         );
-      }
 
 
-      if (
-        !response.ok
-      ) {
+        if (
+          data.length <
+          pageSize
+        ) {
 
-        throw new Error(
-          `questions.json の取得に失敗しました。HTTP ${response.status}`
-        );
-      }
-
-
-      const rawText =
-        await response.text();
+          break;
+        }
 
 
-      let data;
-
-
-      try {
-
-        data =
-          JSON.parse(
-            rawText
-          );
-
-
-      } catch (error) {
-
-        throw new Error(
-          `questions.json のJSON形式が壊れています。${error.message}`
-        );
+        from +=
+          pageSize;
       }
 
 
       validateQuestionsData(
-        data
+        allQuestions
       );
 
 
-      return data;
+      return allQuestions;
     }
 
 
@@ -2061,7 +2128,7 @@ document.addEventListener(
       ) {
 
         throw new Error(
-          "questions.json の最上位は配列である必要があります。"
+          "問題データの最上位は配列である必要があります。"
         );
       }
 
@@ -2072,7 +2139,7 @@ document.addEventListener(
       ) {
 
         throw new Error(
-          "questions.json に問題がありません。"
+          "公開中の問題が1問もありません。"
         );
       }
 
@@ -2474,7 +2541,7 @@ ${escapeHtml(
 
 
     /* =========================
-       JSON検証テスト
+       問題データ検証テスト
     ========================= */
 
     function runDataValidationTest() {
@@ -2490,7 +2557,7 @@ ${escapeHtml(
               <div class="result-screen">
 
                 <h1>
-                  JSONチェックOK
+                  問題データチェックOK
                 </h1>
 
                 <p>
