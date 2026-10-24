@@ -5310,6 +5310,17 @@ ${escapeHtml(
             もう一度5問やってみる
           </button>
 
+
+          <button
+            class="
+              trial-result-button
+              trial-top-button
+            "
+            type="button"
+          >
+            トップ画面へ戻る
+          </button>
+
         </div>
 
       `;
@@ -5338,6 +5349,16 @@ ${escapeHtml(
               "trial"
             );
           }
+        );
+
+
+      document
+        .querySelector(
+          ".trial-top-button"
+        )
+        .addEventListener(
+          "click",
+          goToTop
         );
     }
 
