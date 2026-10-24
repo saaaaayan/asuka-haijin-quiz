@@ -814,15 +814,32 @@
     }
 
     .row-actions {
-      display: flex;
+      display:
+        flex;
 
-      gap: 6px;
+      align-items:
+        center;
+
+      gap:
+        6px;
 
       flex-wrap:
-        wrap;
+        nowrap;
 
       min-width:
-        220px;
+        340px;
+
+      white-space:
+        nowrap;
+    }
+
+
+    .row-actions > button {
+      flex:
+        0 0 auto;
+
+      white-space:
+        nowrap;
     }
 
     .edit-question-button,
@@ -6439,6 +6456,7 @@
                 <button
                   class="choice-button"
                   type="button"
+                  data-index="${index}"
                 >
 
                   <span class="choice-label">
@@ -6665,6 +6683,25 @@
 
       <div id="answer-area"></div>
 
+
+      <div
+        style="
+          margin-top:14px;
+          padding:10px 12px;
+          border:1px solid rgba(84,164,218,.28);
+          border-radius:9px;
+          color:#9dd4f4;
+          background:rgba(64,139,190,.08);
+          font-family:'Noto Sans JP',sans-serif;
+          font-size:12px;
+          line-height:1.7;
+          text-align:center;
+        "
+      >
+        このプレビューでの回答は、
+        正答率・回答者数・挑戦回数などの集計には一切カウントされません。
+      </div>
+
     </section>
 
   </main>
@@ -6677,6 +6714,16 @@
 
       previewNote.textContent =
         `問題 #${question.id} ・ ${question.is_published ? "公開中" : "非公開"} ・ ${isMultiple ? "複数選択" : "単一選択"}`;
+
+
+      previewFrame.onload =
+        function () {
+
+          setupQuestionPreviewInteraction(
+            previewFrame,
+            question
+          );
+        };
 
 
       previewFrame.srcdoc =
@@ -6692,6 +6739,492 @@
 
       document.body.style.overflow =
         "hidden";
+    }
+
+
+
+    function setupQuestionPreviewInteraction(
+      frame,
+      question
+    ) {
+
+      const doc =
+        frame.contentDocument;
+
+
+      if (
+        !doc
+      ) {
+
+        return;
+      }
+
+
+      const choiceButtons =
+        [
+          ...doc.querySelectorAll(
+            ".choice-button"
+          )
+        ];
+
+
+      const submitButton =
+        doc.querySelector(
+          ".submit-answer-button"
+        );
+
+
+      const answerArea =
+        doc.querySelector(
+          "#answer-area"
+        );
+
+
+      if (
+        !choiceButtons.length ||
+        !answerArea
+      ) {
+
+        return;
+      }
+
+
+      const correctAnswers =
+        (
+          Array.isArray(
+            question.answer
+          )
+
+            ? [
+                ...question.answer
+              ]
+
+            : [
+                question.answer
+              ]
+        )
+          .map(
+            Number
+          )
+          .filter(
+            Number.isFinite
+          )
+          .sort(
+            function (
+              a,
+              b
+            ) {
+
+              return a - b;
+            }
+          );
+
+
+      const selectedAnswers =
+        new Set();
+
+
+      let answered =
+        false;
+
+
+      function finishPreviewAnswer(
+        selected
+      ) {
+
+        if (
+          answered
+        ) {
+
+          return;
+        }
+
+
+        answered =
+          true;
+
+
+        const selectedSorted =
+          [
+            ...selected
+          ]
+            .map(
+              Number
+            )
+            .sort(
+              function (
+                a,
+                b
+              ) {
+
+                return a - b;
+              }
+            );
+
+
+        const isCorrect =
+          selectedSorted.length ===
+            correctAnswers.length
+
+          &&
+
+          selectedSorted.every(
+            function (
+              value,
+              index
+            ) {
+
+              return (
+                value ===
+                correctAnswers[
+                  index
+                ]
+              );
+            }
+          );
+
+
+        choiceButtons.forEach(
+          function (
+            button
+          ) {
+
+            button.disabled =
+              true;
+
+
+            const index =
+              Number(
+                button.dataset.index
+              );
+
+
+            if (
+              correctAnswers.includes(
+                index
+              )
+            ) {
+
+              button.classList.add(
+                "correct"
+              );
+            }
+
+
+            if (
+              selectedSorted.includes(
+                index
+              ) &&
+              !correctAnswers.includes(
+                index
+              )
+            ) {
+
+              button.classList.add(
+                "incorrect"
+              );
+            }
+          }
+        );
+
+
+        if (
+          submitButton
+        ) {
+
+          submitButton.disabled =
+            true;
+        }
+
+
+        const resultBox =
+          doc.createElement(
+            "div"
+          );
+
+
+        resultBox.className =
+          "result-box " +
+          (
+            isCorrect
+
+              ? "result-correct"
+
+              : "result-incorrect"
+          );
+
+
+        const resultTitle =
+          doc.createElement(
+            "div"
+          );
+
+        resultTitle.className =
+          "result-title";
+
+        resultTitle.textContent =
+          isCorrect
+            ? "正解！"
+            : "不正解";
+
+        resultBox.appendChild(
+          resultTitle
+        );
+
+
+        const correctAnswer =
+          doc.createElement(
+            "div"
+          );
+
+        correctAnswer.className =
+          "correct-answer";
+
+
+        const correctAnswerTitle =
+          doc.createElement(
+            "span"
+          );
+
+        correctAnswerTitle.className =
+          "correct-answer-title";
+
+        correctAnswerTitle.textContent =
+          "正解";
+
+        correctAnswer.appendChild(
+          correctAnswerTitle
+        );
+
+
+        correctAnswers.forEach(
+          function (
+            answerIndex
+          ) {
+
+            const label =
+              doc.createElement(
+                "span"
+              );
+
+            label.className =
+              "correct-answer-label";
+
+            label.textContent =
+              String.fromCharCode(
+                65 +
+                answerIndex
+              );
+
+
+            const text =
+              doc.createElement(
+                "span"
+              );
+
+            text.className =
+              "correct-answer-text";
+
+            text.textContent =
+              (
+                Array.isArray(
+                  question.choices
+                )
+
+                  ? question.choices[
+                      answerIndex
+                    ]
+
+                  : ""
+              ) ||
+              "";
+
+
+            correctAnswer.appendChild(
+              label
+            );
+
+            correctAnswer.appendChild(
+              text
+            );
+          }
+        );
+
+
+        resultBox.appendChild(
+          correctAnswer
+        );
+
+
+        const explanationTitle =
+          doc.createElement(
+            "div"
+          );
+
+        explanationTitle.className =
+          "explanation-title";
+
+        explanationTitle.textContent =
+          "解説";
+
+        resultBox.appendChild(
+          explanationTitle
+        );
+
+
+        const explanation =
+          doc.createElement(
+            "p"
+          );
+
+        explanation.className =
+          "explanation";
+
+        explanation.textContent =
+          question.explanation ||
+          "解説は未入力です。";
+
+        resultBox.appendChild(
+          explanation
+        );
+
+
+        answerArea.innerHTML =
+          "";
+
+        answerArea.appendChild(
+          resultBox
+        );
+
+
+        setTimeout(
+          function () {
+
+            resultBox.scrollIntoView(
+              {
+                behavior:
+                  "smooth",
+
+                block:
+                  "center"
+              }
+            );
+          },
+          80
+        );
+      }
+
+
+      if (
+        question.type ===
+        "multiple"
+      ) {
+
+        choiceButtons.forEach(
+          function (
+            button
+          ) {
+
+            button.addEventListener(
+              "click",
+              function () {
+
+                if (
+                  answered
+                ) {
+
+                  return;
+                }
+
+
+                const index =
+                  Number(
+                    button.dataset.index
+                  );
+
+
+                if (
+                  selectedAnswers.has(
+                    index
+                  )
+                ) {
+
+                  selectedAnswers.delete(
+                    index
+                  );
+
+                  button.classList.remove(
+                    "selected"
+                  );
+
+
+                } else {
+
+                  selectedAnswers.add(
+                    index
+                  );
+
+                  button.classList.add(
+                    "selected"
+                  );
+                }
+
+
+                if (
+                  submitButton
+                ) {
+
+                  submitButton.disabled =
+                    selectedAnswers.size ===
+                    0;
+                }
+              }
+            );
+          }
+        );
+
+
+        if (
+          submitButton
+        ) {
+
+          submitButton.addEventListener(
+            "click",
+            function () {
+
+              finishPreviewAnswer(
+                [
+                  ...selectedAnswers
+                ]
+              );
+            }
+          );
+        }
+
+
+      } else {
+
+        choiceButtons.forEach(
+          function (
+            button
+          ) {
+
+            button.addEventListener(
+              "click",
+              function () {
+
+                finishPreviewAnswer(
+                  [
+                    Number(
+                      button.dataset.index
+                    )
+                  ]
+                );
+              }
+            );
+          }
+        );
+      }
     }
 
 
