@@ -32,15 +32,27 @@ body {
 ========================= */
 
 .container {
-  width: min(1000px, 92%);
-  margin: 0 auto;
-  padding: 80px 0;
+  width:
+    min(
+      1120px,
+      94%
+    );
+
+  margin:
+    0 auto;
+
+  padding:
+    56px 0
+    72px;
 }
 
 
 .quiz-card {
-  border-radius: 22px;
-  padding: 55px;
+  border-radius:
+    20px;
+
+  padding:
+    62px 68px;
 }
 
 
@@ -49,81 +61,193 @@ body {
 ========================= */
 
 .hero-card {
-  position: relative;
-  overflow: hidden;
+  position:
+    relative;
+
+  overflow:
+    hidden;
 
   background:
+    radial-gradient(
+      circle at 50% -10%,
+      rgba(
+        56,
+        79,
+        104,
+        0.18
+      ),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(
+        198,
+        151,
+        47,
+        0.07
+      ),
+      transparent 30%
+    ),
     linear-gradient(
-      145deg,
-      rgba(29, 33, 38, 0.985),
-      rgba(13, 15, 18, 0.985)
+      180deg,
+      rgba(
+        21,
+        26,
+        32,
+        0.995
+      ),
+      rgba(
+        10,
+        13,
+        17,
+        0.995
+      )
     );
 
   border:
     1px solid
-    rgba(185, 160, 88, 0.26);
+    rgba(
+      188,
+      151,
+      60,
+      0.28
+    );
 
   box-shadow:
-    0 25px 80px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    0 28px 90px
+      rgba(
+        0,
+        0,
+        0,
+        0.58
+      ),
+    inset 0 1px 0
+      rgba(
+        255,
+        255,
+        255,
+        0.035
+      );
 }
 
 
 .hero-card::before {
-  content: "";
+  content:
+    "";
 
-  position: absolute;
+  position:
+    absolute;
 
-  width: 420px;
-  height: 420px;
+  left:
+    50%;
 
-  right: -190px;
-  top: -210px;
+  top:
+    170px;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(212, 175, 55, 0.09),
-      transparent 68%
+  width:
+    min(
+      760px,
+      72%
     );
 
-  pointer-events: none;
+  height:
+    1px;
+
+  transform:
+    translateX(
+      -50%
+    );
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(
+        212,
+        175,
+        55,
+        0.22
+      ) 18%,
+      rgba(
+        212,
+        175,
+        55,
+        0.60
+      ) 50%,
+      rgba(
+        212,
+        175,
+        55,
+        0.22
+      ) 82%,
+      transparent
+    );
+
+  pointer-events:
+    none;
 }
 
 
 .hero-card::after {
-  content: "";
+  content:
+    "◆";
 
-  position: absolute;
+  position:
+    absolute;
 
-  width: 420px;
-  height: 420px;
+  left:
+    50%;
 
-  left: -240px;
-  top: -220px;
+  top:
+    158px;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(65, 105, 170, 0.08),
-      transparent 70%
+  transform:
+    translateX(
+      -50%
     );
 
-  pointer-events: none;
+  padding:
+    0 10px;
+
+  color:
+    #d8b34e;
+
+  background:
+    #11161b;
+
+  font-size:
+    10px;
+
+  line-height:
+    24px;
+
+  pointer-events:
+    none;
 }
 
 
 .hero-label {
-  position: relative;
+  position:
+    relative;
 
-  margin: 0 0 20px;
+  margin:
+    0 0
+    22px;
 
-  color: #d9b94e;
+  color:
+    #d9b94e;
 
-  font-size: 13px;
-  font-weight: 700;
+  font-size:
+    13px;
 
-  letter-spacing: 0.18em;
+  font-weight:
+    800;
+
+  letter-spacing:
+    0.19em;
+
+  text-align:
+    center;
 }
 
 
@@ -161,10 +285,17 @@ h1 {
 
   flex-wrap: nowrap;
 
-  margin-left: auto;
-  margin-right: auto;
+  margin-left:
+    auto;
 
-  text-align: center;
+  margin-right:
+    auto;
+
+  margin-bottom:
+    42px;
+
+  text-align:
+    center;
 
   font-family:
     "Yuji Syuku",
@@ -218,30 +349,63 @@ h1 {
 
 
 .hero-catch {
-  position: relative;
+  position:
+    relative;
 
-  margin: 0 0 28px;
+  max-width:
+    760px;
 
-  font-size: 24px;
-  line-height: 1.75;
+  margin:
+    0 auto
+    34px;
 
-  font-weight: 700;
+  color:
+    #f5f0df;
 
-  color: #f5f0df;
+  font-family:
+    "Shippori Mincho B1",
+    "Yu Mincho",
+    serif;
+
+  font-size:
+    24px;
+
+  font-weight:
+    700;
+
+  line-height:
+    1.75;
+
+  letter-spacing:
+    0.025em;
+
+  text-align:
+    center;
 }
 
 
 .subtitle {
-  position: relative;
+  position:
+    relative;
 
-  margin: 0 0 30px;
+  max-width:
+    860px;
 
-  max-width: 760px;
+  margin:
+    0 auto
+    34px;
 
-  font-size: 17px;
-  line-height: 2;
+  color:
+    #c7ccd2;
 
-  color: #c7ccd2;
+  font-size:
+    16px;
+
+  line-height:
+    1.95;
+
+  text-align:
+    center;
 }
 
 
@@ -249,46 +413,110 @@ h1 {
   position:
     relative;
 
+  max-width:
+    900px;
+
   margin:
-    32px 0;
+    36px auto
+    38px;
 
   padding:
-    20px 24px;
+    22px 34px;
 
   border:
     1px solid
     rgba(
-      212,
-      175,
-      55,
-      0.16
+      214,
+      174,
+      65,
+      0.40
     );
 
   border-radius:
-    10px;
+    4px;
 
   background:
-    rgba(
-      212,
-      175,
-      55,
-      0.035
+    linear-gradient(
+      90deg,
+      rgba(
+        212,
+        175,
+        55,
+        0.035
+      ),
+      rgba(
+        212,
+        175,
+        55,
+        0.018
+      )
     );
 
   color:
-    #eadb9c;
+    #ecd58d;
+
+  font-family:
+    "Shippori Mincho B1",
+    "Yu Mincho",
+    serif;
 
   font-size:
-    17px;
+    18px;
 
   font-weight:
-    600;
+    700;
 
   line-height:
-    1.85;
+    1.9;
 
   letter-spacing:
-    0.01em;
+    0.035em;
+
+  text-align:
+    center;
+
+  box-shadow:
+    inset 0 0 28px
+      rgba(
+        212,
+        175,
+        55,
+        0.018
+      );
+}
+
+
+.hero-warning::before,
+.hero-warning::after {
+  content:
+    "";
+
+  position:
+    absolute;
+
+  top:
+    -1px;
+
+  width:
+    52px;
+
+  height:
+    1px;
+
+  background:
+    #d5ad42;
+}
+
+
+.hero-warning::before {
+  left:
+    -1px;
+}
+
+
+.hero-warning::after {
+  right:
+    -1px;
 }
 
 
@@ -313,13 +541,16 @@ h1 {
     );
 
   gap:
-    20px;
+    18px;
 
   width:
-    100%;
+    min(
+      900px,
+      100%
+    );
 
-  margin-top:
-    36px;
+  margin:
+    0 auto;
 }
 
 
@@ -335,24 +566,25 @@ h1 {
     0;
 
   min-height:
-    98px;
+    94px;
 
   padding:
-    19px 34px;
+    18px 52px
+    18px 30px;
 
   border:
     1px solid
     rgba(255, 222, 115, 0.55);
 
   border-radius:
-    16px;
+    14px;
 
   background:
     linear-gradient(
       135deg,
-      #b9851f 0%,
-      #d8aa38 42%,
-      #f1d46f 100%
+      #b68118 0%,
+      #dfb33d 43%,
+      #f4d96d 100%
     );
 
   color: #171717;
@@ -362,8 +594,20 @@ h1 {
   cursor: pointer;
 
   box-shadow:
-    0 10px 32px rgba(212, 175, 55, 0.20),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    0 12px 30px
+      rgba(
+        212,
+        175,
+        55,
+        0.16
+      ),
+    inset 0 1px 0
+      rgba(
+        255,
+        255,
+        255,
+        0.28
+      );
 
   transition:
     transform 0.15s ease,
@@ -378,6 +622,41 @@ h1 {
   box-shadow:
     0 14px 38px rgba(212, 175, 55, 0.30),
     inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+
+.start-button::after {
+  content:
+    "›";
+
+  position:
+    absolute;
+
+  right:
+    24px;
+
+  top:
+    50%;
+
+  transform:
+    translateY(
+      -52%
+    );
+
+  font-size:
+    34px;
+
+  font-weight:
+    400;
+
+  line-height:
+    1;
+}
+
+
+.start-button {
+  position:
+    relative;
 }
 
 
@@ -421,23 +700,24 @@ h1 {
     0;
 
   min-height:
-    98px;
+    94px;
 
   padding:
-    17px 30px;
+    18px 52px
+    18px 30px;
 
   border:
     1px solid
     rgba(134, 160, 194, 0.30);
 
   border-radius:
-    16px;
+    14px;
 
   background:
     linear-gradient(
       145deg,
-      #313944,
-      #222830
+      #293541,
+      #1b2530
     );
 
   color: #f3f5f8;
@@ -474,6 +754,44 @@ h1 {
   box-shadow:
     0 8px 24px rgba(0, 0, 0, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+
+.trial-button {
+  position:
+    relative;
+}
+
+
+.trial-button::after {
+  content:
+    "›";
+
+  position:
+    absolute;
+
+  right:
+    24px;
+
+  top:
+    50%;
+
+  transform:
+    translateY(
+      -52%
+    );
+
+  color:
+    #f4f7fb;
+
+  font-size:
+    34px;
+
+  font-weight:
+    400;
+
+  line-height:
+    1;
 }
 
 
@@ -514,14 +832,30 @@ h1 {
 /* トップ注意書き */
 
 .trial-note {
-  position: relative;
+  position:
+    relative;
 
-  margin: 16px 0 0;
+  width:
+    min(
+      900px,
+      100%
+    );
 
-  color: #8f959d;
+  margin:
+    18px auto
+    0;
 
-  font-size: 13px;
-  line-height: 1.8;
+  color:
+    #89929c;
+
+  font-size:
+    12px;
+
+  line-height:
+    1.8;
+
+  text-align:
+    center;
 }
 
 
@@ -1700,18 +2034,28 @@ h1 {
 @media (max-width: 700px) {
 
   .container {
-    padding: 35px 0;
+    padding:
+      28px 0
+      40px;
   }
 
 
   .quiz-card {
-    padding: 32px 24px;
+    padding:
+      32px 22px;
   }
 
 
   /*
     トップタイトルだけスマホで1行表示
   */
+
+  .hero-card::before,
+  .hero-card::after {
+    display:
+      none;
+  }
+
 
   .hero-card > h1 {
     display: flex;
@@ -1741,21 +2085,29 @@ h1 {
 
 
   .hero-catch {
-    font-size: 20px;
+    margin-bottom:
+      26px;
+
+    font-size:
+      20px;
   }
 
 
   .subtitle {
-    font-size: 15px;
+    font-size:
+      15px;
+
+    text-align:
+      left;
   }
 
 
   .hero-warning {
     margin:
-      26px 0;
+      28px 0;
 
     padding:
-      18px;
+      18px 16px;
 
     font-size:
       15px;
@@ -1786,7 +2138,7 @@ h1 {
       0;
 
     min-height:
-      92px;
+      88px;
   }
 
 
