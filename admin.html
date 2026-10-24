@@ -1252,6 +1252,167 @@
 
 
     /* =========================
+       問題出題プレビュー
+    ========================= */
+
+    .preview-question-button {
+      padding:
+        7px 9px;
+
+      border:
+        1px solid
+        #3f6f98;
+
+      border-radius:
+        7px;
+
+      color:
+        #8fc9ff;
+
+      background:
+        rgba(
+          55,
+          125,
+          185,
+          0.12
+        );
+
+      font-size:
+        11px;
+
+      font-weight:
+        800;
+    }
+
+
+    .preview-question-button:hover {
+      border-color:
+        #68a6d8;
+
+      color:
+        #c5e6ff;
+
+      background:
+        rgba(
+          55,
+          125,
+          185,
+          0.20
+        );
+    }
+
+
+    .question-preview-modal {
+      width:
+        min(
+          1080px,
+          100%
+        );
+
+      margin:
+        0 auto;
+
+      overflow:
+        hidden;
+
+      border:
+        1px solid
+        #66572d;
+
+      border-radius:
+        18px;
+
+      background:
+        #101317;
+
+      box-shadow:
+        0 25px 80px
+        rgba(
+          0,
+          0,
+          0,
+          0.65
+        );
+    }
+
+
+    .question-preview-header {
+      display:
+        flex;
+
+      align-items:
+        flex-start;
+
+      justify-content:
+        space-between;
+
+      gap:
+        18px;
+
+      padding:
+        18px 20px;
+
+      border-bottom:
+        1px solid
+        #30363d;
+
+      background:
+        #171c21;
+    }
+
+
+    .question-preview-header h2 {
+      margin:
+        2px 0 0;
+
+      font-size:
+        20px;
+    }
+
+
+    .question-preview-note {
+      margin-top:
+        6px;
+
+      color:
+        #8e969f;
+
+      font-size:
+        12px;
+    }
+
+
+    .question-preview-frame {
+      display:
+        block;
+
+      width:
+        100%;
+
+      min-height:
+        720px;
+
+      border:
+        0;
+
+      background:
+        #090b0f;
+    }
+
+
+    @media (
+      max-width:
+      800px
+    ) {
+
+      .question-preview-frame {
+        min-height:
+          650px;
+      }
+    }
+
+
+    /* =========================
        問題編集モーダル
     ========================= */
 
@@ -2088,6 +2249,62 @@
 
 
   <div
+    id="question-preview-overlay"
+    class="modal-overlay hidden"
+  >
+
+    <section
+      class="question-preview-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="question-preview-title"
+    >
+
+      <div class="question-preview-header">
+
+        <div>
+
+          <div class="kicker">
+            QUESTION PREVIEW
+          </div>
+
+          <h2 id="question-preview-title">
+            出題画面プレビュー
+          </h2>
+
+          <div
+            id="question-preview-note"
+            class="question-preview-note"
+          ></div>
+
+        </div>
+
+
+        <button
+          id="close-question-preview-button"
+          class="close-editor"
+          type="button"
+          aria-label="プレビューを閉じる"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <iframe
+        id="question-preview-frame"
+        class="question-preview-frame"
+        title="問題の出題画面プレビュー"
+      ></iframe>
+
+    </section>
+
+  </div>
+
+
+
+  <div
     id="question-editor-overlay"
     class="modal-overlay hidden"
   >
@@ -2712,6 +2929,30 @@
     const newQuestionButton =
       document.querySelector(
         "#new-question-button"
+      );
+
+
+    const previewOverlay =
+      document.querySelector(
+        "#question-preview-overlay"
+      );
+
+
+    const previewFrame =
+      document.querySelector(
+        "#question-preview-frame"
+      );
+
+
+    const previewNote =
+      document.querySelector(
+        "#question-preview-note"
+      );
+
+
+    const closeQuestionPreviewButton =
+      document.querySelector(
+        "#close-question-preview-button"
       );
 
 
@@ -6069,6 +6310,16 @@
                         <div class="row-actions">
 
                           <button
+                            class="preview-question-button"
+                            type="button"
+                            data-action="preview"
+                            data-id="${question.id}"
+                          >
+                            プレビュー
+                          </button>
+
+
+                          <button
                             class="edit-question-button"
                             type="button"
                             data-action="edit"
@@ -6132,6 +6383,338 @@
 
 
 
+    function openQuestionPreview(
+      question
+    ) {
+
+      const choices =
+        Array.isArray(
+          question.choices
+        )
+
+          ? question.choices
+
+          : [];
+
+
+      const baseHref =
+        new URL(
+          ".",
+          window.location.href
+        ).href;
+
+
+      const isMultiple =
+        question.type ===
+        "multiple";
+
+
+      const instructionHtml =
+        isMultiple &&
+        question.instruction
+
+          ? `
+
+              <div class="question-instruction">
+                ${escapeHtml(
+                  question.instruction
+                )}
+              </div>
+
+            `
+
+          : "";
+
+
+      const choicesHtml =
+        choices
+          .map(
+            function (
+              choice,
+              index
+            ) {
+
+              return `
+
+                <button
+                  class="choice-button"
+                  type="button"
+                >
+
+                  <span class="choice-label">
+                    ${String.fromCharCode(
+                      65 + index
+                    )}
+                  </span>
+
+                  <span class="choice-text">
+                    ${escapeHtml(
+                      choice
+                    )}
+                  </span>
+
+                </button>
+
+              `;
+            }
+          )
+          .join(
+            ""
+          );
+
+
+      const submitHtml =
+        isMultiple
+
+          ? `
+
+              <button
+                class="submit-answer-button"
+                type="button"
+                disabled
+              >
+                回答する
+              </button>
+
+            `
+
+          : "";
+
+
+      const previewDocument = `
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <base
+    href="${escapeHtml(
+      baseHref
+    )}"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800;900&family=Reggae+One&family=Shippori+Mincho+B1:wght@500;600;700;800&family=Yuji+Syuku&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+  <style>
+
+    html,
+    body {
+      min-height:
+        100%;
+    }
+
+    body {
+      margin:
+        0;
+    }
+
+    .preview-only-note {
+      margin:
+        0 0
+        16px;
+
+      padding:
+        9px 12px;
+
+      border:
+        1px solid
+        rgba(
+          212,
+          175,
+          55,
+          0.22
+        );
+
+      border-radius:
+        9px;
+
+      color:
+        #c9b36b;
+
+      background:
+        rgba(
+          212,
+          175,
+          55,
+          0.045
+        );
+
+      font-family:
+        "Noto Sans JP",
+        sans-serif;
+
+      font-size:
+        12px;
+
+      line-height:
+        1.6;
+
+      text-align:
+        center;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+  <main class="container">
+
+    <section class="quiz-card hero-card">
+
+      <div class="preview-only-note">
+        管理画面プレビュー
+        （問題番号・進捗は表示イメージです）
+      </div>
+
+
+      <div class="question-meta">
+
+        <span>
+          第1問 /
+          全100問
+        </span>
+
+
+        <div class="question-meta-right">
+
+          <span class="question-id">
+            問題ID #${escapeHtml(
+              question.id
+            )}
+          </span>
+
+          <span class="category">
+            ${escapeHtml(
+              question.category
+            )}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="progress-wrap">
+
+        <div
+          class="progress-bar"
+          style="width:1%;"
+        ></div>
+
+      </div>
+
+
+      <div class="pause-row">
+
+        <button
+          class="pause-button"
+          type="button"
+        >
+          中断してトップへ戻る
+        </button>
+
+      </div>
+
+
+      <h2>
+        ${escapeHtml(
+          question.question
+        )}
+      </h2>
+
+
+      ${instructionHtml}
+
+
+      <div class="choices">
+        ${choicesHtml}
+      </div>
+
+
+      ${submitHtml}
+
+
+      <div id="answer-area"></div>
+
+    </section>
+
+  </main>
+
+</body>
+
+</html>
+      `;
+
+
+      previewNote.textContent =
+        `問題 #${question.id} ・ ${question.is_published ? "公開中" : "非公開"} ・ ${isMultiple ? "複数選択" : "単一選択"}`;
+
+
+      previewFrame.srcdoc =
+        previewDocument;
+
+
+      previewOverlay
+        .classList
+        .remove(
+          "hidden"
+        );
+
+
+      document.body.style.overflow =
+        "hidden";
+    }
+
+
+
+    function closeQuestionPreview() {
+
+      previewOverlay
+        .classList
+        .add(
+          "hidden"
+        );
+
+
+      previewFrame.srcdoc =
+        "";
+
+
+      document.body.style.overflow =
+        "";
+    }
+
+
+
     questionsTable.addEventListener(
       "click",
       async function (
@@ -6177,6 +6760,20 @@
         if (
           !question
         ) {
+
+          return;
+        }
+
+
+        if (
+          button.dataset.action ===
+          "preview"
+        ) {
+
+          openQuestionPreview(
+            question
+          );
+
 
           return;
         }
@@ -6495,6 +7092,30 @@
 
 
 
+    closeQuestionPreviewButton.addEventListener(
+      "click",
+      closeQuestionPreview
+    );
+
+
+    previewOverlay.addEventListener(
+      "click",
+      function (
+        event
+      ) {
+
+        if (
+          event.target ===
+          previewOverlay
+        ) {
+
+          closeQuestionPreview();
+        }
+      }
+    );
+
+
+
     editorType.addEventListener(
       "change",
       updateAnswerControlMode
@@ -6523,15 +7144,33 @@
 
         if (
           event.key ===
-          "Escape" &&
-          !editorOverlay
-            .classList
-            .contains(
-              "hidden"
-            )
+          "Escape"
         ) {
 
-          closeQuestionEditor();
+          if (
+            !previewOverlay
+              .classList
+              .contains(
+                "hidden"
+              )
+          ) {
+
+            closeQuestionPreview();
+
+            return;
+          }
+
+
+          if (
+            !editorOverlay
+              .classList
+              .contains(
+                "hidden"
+              )
+          ) {
+
+            closeQuestionEditor();
+          }
         }
       }
     );
