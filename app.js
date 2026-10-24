@@ -3137,7 +3137,9 @@ ${escapeHtml(
             rankResult,
             statsSource,
             statsComplete,
-            shareUrl
+            shareUrl,
+            comment:
+              rankResult.comment || ""
           }
         );
 
@@ -3373,7 +3375,8 @@ ${escapeHtml(
         rankResult,
         statsSource,
         statsComplete,
-        shareUrl
+        shareUrl,
+        comment
       }
     ) {
 
@@ -3623,40 +3626,72 @@ ${escapeHtml(
         605,
         350,
         525,
-        124,
+        170,
         24
       );
 
       ctx.fill();
 
 
-      ctx.fillStyle =
-        white;
-
-      ctx.font =
-        '800 31px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
-
-      ctx.textAlign =
-        "center";
-
-      ctx.fillText(
-        "あなたは何点取れる？",
-        867,
-        402
-      );
+      const plainComment =
+        stripHtmlForShare(
+          comment || ""
+        );
 
 
-      ctx.fillStyle =
-        gold;
+      if (
+        plainComment
+      ) {
 
-      ctx.font =
-        '700 20px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+        ctx.fillStyle =
+          white;
 
-      ctx.fillText(
-        "挑戦者、求む。",
-        867,
-        440
-      );
+        ctx.textAlign =
+          "center";
+
+        drawWrappedText(
+          ctx,
+          plainComment,
+          867,
+          384,
+          455,
+          26,
+          18,
+          31,
+          5
+        );
+
+
+      } else {
+
+        ctx.fillStyle =
+          white;
+
+        ctx.font =
+          '800 31px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+
+        ctx.textAlign =
+          "center";
+
+        ctx.fillText(
+          "あなたは何点取れる？",
+          867,
+          412
+        );
+
+
+        ctx.fillStyle =
+          gold;
+
+        ctx.font =
+          '700 20px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+
+        ctx.fillText(
+          "挑戦者、求む。",
+          867,
+          450
+        );
+      }
 
 
       if (
@@ -3704,7 +3739,7 @@ ${escapeHtml(
             70;
 
           const startY =
-            515;
+            548;
 
           const gap =
             212;
@@ -3832,7 +3867,7 @@ ${escapeHtml(
       ctx.fillText(
         "#アスカ見参  #廃人検定",
         70,
-        592
+        610
       );
 
 
@@ -3954,6 +3989,263 @@ ${escapeHtml(
 
         return "";
       }
+    }
+
+
+    function stripHtmlForShare(
+      value
+    ) {
+
+      const temp =
+        document.createElement(
+          "div"
+        );
+
+
+      temp.innerHTML =
+        String(
+          value || ""
+        )
+          .replace(
+            /<\s*\/p\s*>/gi,
+            "\n"
+          )
+          .replace(
+            /<\s*br\s*\/?\s*>/gi,
+            "\n"
+          );
+
+
+      const text =
+        (
+          temp.textContent ||
+          temp.innerText ||
+          ""
+        )
+          .replace(
+            /\n\s*\n+/g,
+            "\n"
+          )
+          .trim();
+
+
+      return text;
+    }
+
+
+    function drawWrappedText(
+      ctx,
+      text,
+      centerX,
+      startY,
+      maxWidth,
+      startSize,
+      minSize,
+      lineHeight,
+      maxLines
+    ) {
+
+      const paragraphs =
+        String(
+          text || ""
+        )
+          .split(
+            /\n+/
+          )
+          .map(
+            function (
+              line
+            ) {
+
+              return line.trim();
+            }
+          )
+          .filter(
+            Boolean
+          );
+
+
+      let fontSize =
+        startSize;
+
+      let lines =
+        [];
+
+
+      const buildLines =
+        function (
+          size
+        ) {
+
+          ctx.font =
+            `700 ${size}px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif`;
+
+
+          const built =
+            [];
+
+
+          paragraphs.forEach(
+            function (
+              paragraph
+            ) {
+
+              let current =
+                "";
+
+
+              Array.from(
+                paragraph
+              ).forEach(
+                function (
+                  char
+                ) {
+
+                  const test =
+                    current +
+                    char;
+
+
+                  if (
+                    current &&
+                    ctx.measureText(
+                      test
+                    ).width >
+                      maxWidth
+                  ) {
+
+                    built.push(
+                      current
+                    );
+
+                    current =
+                      char;
+
+
+                  } else {
+
+                    current =
+                      test;
+                  }
+                }
+              );
+
+
+              if (
+                current
+              ) {
+
+                built.push(
+                  current
+                );
+              }
+            }
+          );
+
+
+          return built;
+        };
+
+
+      while (
+        fontSize >
+          minSize
+      ) {
+
+        lines =
+          buildLines(
+            fontSize
+          );
+
+
+        if (
+          lines.length <=
+            maxLines
+        ) {
+
+          break;
+        }
+
+
+        fontSize -=
+          1;
+      }
+
+
+      lines =
+        buildLines(
+          fontSize
+        );
+
+
+      if (
+        lines.length >
+          maxLines
+      ) {
+
+        lines =
+          lines.slice(
+            0,
+            maxLines
+          );
+
+
+        const lastIndex =
+          lines.length -
+          1;
+
+
+        lines[
+          lastIndex
+        ] =
+          lines[
+            lastIndex
+          ]
+            .replace(
+              /[。！？!?、,\s]+$/g,
+              ""
+            ) +
+          "…";
+      }
+
+
+      ctx.font =
+        `700 ${fontSize}px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif`;
+
+      ctx.textAlign =
+        "center";
+
+      ctx.textBaseline =
+        "middle";
+
+
+      const actualLineHeight =
+        Math.max(
+          lineHeight,
+          fontSize +
+            6
+        );
+
+
+      lines.forEach(
+        function (
+          line,
+          index
+        ) {
+
+          ctx.fillText(
+            line,
+            centerX,
+            startY +
+              index *
+              actualLineHeight
+          );
+        }
+      );
+
+
+      ctx.textBaseline =
+        "alphabetic";
     }
 
 
