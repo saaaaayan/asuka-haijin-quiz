@@ -2,17 +2,13 @@
 <html lang="ja">
 
 <head>
-
   <meta charset="UTF-8">
-
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>
-    廃人検定 管理画面
-  </title>
+  <title>廃人検定 管理画面</title>
 
   <style>
 
@@ -44,7 +40,8 @@
 
     button,
     input,
-    select {
+    select,
+    textarea {
       font: inherit;
     }
 
@@ -134,9 +131,12 @@
     }
 
     input,
-    select {
+    select,
+    textarea {
       width: 100%;
-      padding: 12px 14px;
+
+      padding:
+        12px 14px;
 
       border:
         1px solid
@@ -149,14 +149,24 @@
       outline: none;
     }
 
+    textarea {
+      resize: vertical;
+      min-height: 82px;
+      line-height: 1.6;
+    }
+
     input:focus,
-    select:focus {
+    select:focus,
+    textarea:focus {
       border-color: #d4aa39;
     }
 
     .gold-button {
-      padding: 14px 18px;
+      padding:
+        14px 18px;
+
       border: 0;
+
       border-radius: 10px;
 
       background:
@@ -171,7 +181,8 @@
     }
 
     .secondary-button {
-      padding: 10px 15px;
+      padding:
+        10px 15px;
 
       border:
         1px solid
@@ -181,6 +192,10 @@
 
       color: #d7dbe0;
       background: #171b20;
+    }
+
+    .secondary-button:hover {
+      border-color: #696f78;
     }
 
     .login-error {
@@ -199,7 +214,8 @@
     }
 
     .admin-title h1 {
-      margin: 5px 0;
+      margin:
+        5px 0;
     }
 
     .header-buttons {
@@ -217,7 +233,8 @@
     }
 
     .tab-button {
-      padding: 10px 17px;
+      padding:
+        10px 17px;
 
       border:
         1px solid
@@ -323,7 +340,8 @@
 
     th,
     td {
-      padding: 11px 12px;
+      padding:
+        11px 12px;
 
       text-align: left;
 
@@ -332,6 +350,7 @@
         #2d333a;
 
       vertical-align: top;
+
       font-size: 13px;
     }
 
@@ -358,7 +377,8 @@
     .status {
       display: inline-block;
 
-      padding: 4px 8px;
+      padding:
+        4px 8px;
 
       border-radius: 999px;
 
@@ -448,7 +468,6 @@
       margin-top: 6px;
 
       border-radius: 999px;
-
       overflow: hidden;
 
       background: #2b3036;
@@ -492,12 +511,9 @@
       font-weight: 900;
     }
 
-    /* 難易度1：緑 */
     .difficulty-1 {
       color: #73df96;
-
-      border-color:
-        #397f50;
+      border-color: #397f50;
 
       background:
         rgba(
@@ -508,12 +524,9 @@
         );
     }
 
-    /* 難易度2：青緑 */
     .difficulty-2 {
       color: #5fd6c7;
-
-      border-color:
-        #347d75;
+      border-color: #347d75;
 
       background:
         rgba(
@@ -524,12 +537,9 @@
         );
     }
 
-    /* 難易度3：黄 */
     .difficulty-3 {
       color: #f0d05b;
-
-      border-color:
-        #8d772c;
+      border-color: #8d772c;
 
       background:
         rgba(
@@ -540,12 +550,9 @@
         );
     }
 
-    /* 難易度4：オレンジ */
     .difficulty-4 {
       color: #f0a34d;
-
-      border-color:
-        #945e27;
+      border-color: #945e27;
 
       background:
         rgba(
@@ -556,12 +563,9 @@
         );
     }
 
-    /* 難易度5：赤 */
     .difficulty-5 {
       color: #ff6f69;
-
-      border-color:
-        #9d3d39;
+      border-color: #9d3d39;
 
       background:
         rgba(
@@ -586,6 +590,59 @@
       line-height: 1.6;
     }
 
+    .question-count {
+      color: #eac24d;
+      font-weight: 800;
+    }
+
+    .category-badge {
+      display: inline-block;
+
+      padding:
+        3px 7px;
+
+      border-radius: 6px;
+
+      background: #262c33;
+      color: #e7c15a;
+
+      white-space: nowrap;
+    }
+
+    /* =========================
+       物申す
+    ========================= */
+
+    .report-summary {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+
+      margin-bottom: 18px;
+    }
+
+    .report-summary-item {
+      padding:
+        8px 12px;
+
+      border:
+        1px solid
+        #343a42;
+
+      border-radius: 999px;
+
+      background: #14181d;
+
+      color: #b8bec5;
+
+      font-size: 12px;
+    }
+
+    .report-summary-item strong {
+      margin-left: 5px;
+      color: #f0c64d;
+    }
+
     .report-card {
       padding: 18px;
 
@@ -596,6 +653,39 @@
       border-radius: 12px;
 
       background: #12161b;
+
+      margin-bottom: 14px;
+    }
+
+    .report-card.report-pending {
+      border-left:
+        4px solid
+        #e9b93e;
+    }
+
+    .report-card.report-reviewing {
+      border-left:
+        4px solid
+        #65aaf2;
+    }
+
+    .report-card.report-resolved {
+      border-left:
+        4px solid
+        #67ce87;
+    }
+
+    .report-card.report-rejected {
+      border-left:
+        4px solid
+        #e06d68;
+    }
+
+    .report-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
 
       margin-bottom: 12px;
     }
@@ -608,8 +698,6 @@
       color: #8e969f;
 
       font-size: 12px;
-
-      margin-bottom: 9px;
     }
 
     .report-type {
@@ -617,41 +705,177 @@
       font-weight: 800;
     }
 
+    .report-status-badge {
+      display: inline-block;
+
+      padding:
+        5px 9px;
+
+      border-radius: 999px;
+
+      font-size: 11px;
+      font-weight: 900;
+
+      white-space: nowrap;
+    }
+
+    .report-status-pending {
+      color: #efc34f;
+
+      background:
+        rgba(
+          222,
+          170,
+          35,
+          0.14
+        );
+    }
+
+    .report-status-reviewing {
+      color: #70b8ff;
+
+      background:
+        rgba(
+          62,
+          139,
+          215,
+          0.14
+        );
+    }
+
+    .report-status-resolved {
+      color: #78dd96;
+
+      background:
+        rgba(
+          62,
+          173,
+          96,
+          0.14
+        );
+    }
+
+    .report-status-rejected {
+      color: #f1847f;
+
+      background:
+        rgba(
+          210,
+          73,
+          67,
+          0.14
+        );
+    }
+
     .report-question {
-      margin-bottom: 8px;
+      margin-bottom: 9px;
 
       color: #dfe3e7;
 
       font-weight: 700;
+      line-height: 1.6;
     }
 
     .report-message {
-      margin: 0;
+      margin:
+        0 0 17px;
 
-      color: #c8ced5;
+      padding:
+        12px 14px;
+
+      border-radius: 9px;
+
+      background: #181d22;
+
+      color: #d0d5db;
 
       white-space: pre-wrap;
 
       line-height: 1.7;
     }
 
-    .question-count {
-      color: #eac24d;
+    .report-admin-area {
+      display: grid;
+
+      grid-template-columns:
+        minmax(150px, 200px)
+        1fr
+        auto;
+
+      gap: 12px;
+
+      align-items: end;
+
+      margin-top: 14px;
+    }
+
+    .report-admin-label {
+      display: grid;
+      gap: 6px;
+
+      color: #9fa7af;
+
+      font-size: 12px;
+    }
+
+    .report-save-button {
+      min-width: 95px;
+
+      padding:
+        12px 16px;
+
+      border:
+        1px solid
+        #947322;
+
+      border-radius: 9px;
+
+      color: #f4cb57;
+
+      background:
+        rgba(
+          211,
+          162,
+          34,
+          0.09
+        );
+
       font-weight: 800;
     }
 
-    .category-badge {
-      display: inline-block;
+    .report-save-button:hover {
+      background:
+        rgba(
+          211,
+          162,
+          34,
+          0.16
+        );
+    }
 
-      padding: 3px 7px;
+    .report-save-button:disabled {
+      opacity: 0.55;
+      cursor: default;
+    }
 
-      border-radius: 6px;
+    .report-save-result {
+      min-height: 17px;
 
-      background: #262c33;
+      margin-top: 8px;
 
-      color: #e7c15a;
+      color: #77d994;
 
-      white-space: nowrap;
+      font-size: 11px;
+
+      text-align: right;
+    }
+
+    .report-handled {
+      margin-top: 10px;
+
+      color: #7f8790;
+
+      font-size: 11px;
     }
 
     .loading {
@@ -690,6 +914,20 @@
       color: #ff9690;
 
       margin-bottom: 20px;
+    }
+
+    @media (
+      max-width: 800px
+    ) {
+
+      .report-admin-area {
+        grid-template-columns:
+          1fr;
+      }
+
+      .report-save-result {
+        text-align: left;
+      }
     }
 
     @media (
@@ -732,6 +970,10 @@
       .toolbar select {
         width: 100%;
       }
+
+      .report-top {
+        flex-direction: column;
+      }
     }
 
   </style>
@@ -743,6 +985,8 @@
 
   <main class="container">
 
+
+    <!-- ログイン -->
 
     <section
       id="login-screen"
@@ -812,6 +1056,8 @@
     </section>
 
 
+
+    <!-- 管理画面 -->
 
     <section
       id="admin-screen"
@@ -899,6 +1145,8 @@
 
 
 
+      <!-- 集計 -->
+
       <section
         id="tab-dashboard"
         class="tab-content"
@@ -939,6 +1187,8 @@
       </section>
 
 
+
+      <!-- 問題別統計 -->
 
       <section
         id="tab-question-stats"
@@ -1055,6 +1305,8 @@
 
 
 
+      <!-- 物申す -->
+
       <section
         id="tab-reports"
         class="tab-content hidden"
@@ -1064,16 +1316,56 @@
 
           <div class="section-head">
 
-            <h2 class="section-title">
-              物申す一覧
-            </h2>
+            <div>
 
-            <span
-              id="report-count"
-              class="question-count"
-            ></span>
+              <h2 class="section-title">
+                物申す一覧
+              </h2>
+
+              <div class="section-note">
+                投稿内容を確認して、対応状況と管理者メモを保存できます。
+              </div>
+
+            </div>
+
+
+            <div class="toolbar">
+
+              <select
+                id="report-status-filter"
+              >
+
+                <option value="">
+                  全ステータス
+                </option>
+
+                <option value="pending">
+                  未対応
+                </option>
+
+                <option value="reviewing">
+                  確認中
+                </option>
+
+                <option value="resolved">
+                  対応済み
+                </option>
+
+                <option value="rejected">
+                  却下
+                </option>
+
+              </select>
+
+            </div>
 
           </div>
+
+
+          <div
+            id="report-summary"
+            class="report-summary"
+          ></div>
 
 
           <div
@@ -1085,6 +1377,8 @@
       </section>
 
 
+
+      <!-- 問題一覧 -->
 
       <section
         id="tab-questions"
@@ -1141,12 +1435,17 @@
   </main>
 
 
+
   <script
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
   ></script>
 
 
   <script>
+
+    /* =========================
+       Supabase
+    ========================= */
 
     const SUPABASE_URL =
       "https://eiseszhremqmeodxbcuc.supabase.co";
@@ -1178,110 +1477,142 @@
       );
 
 
+
+    /* =========================
+       DOM
+    ========================= */
+
     const loginScreen =
       document.querySelector(
         "#login-screen"
       );
+
 
     const adminScreen =
       document.querySelector(
         "#admin-screen"
       );
 
+
     const loginForm =
       document.querySelector(
         "#login-form"
       );
+
 
     const emailInput =
       document.querySelector(
         "#admin-email"
       );
 
+
     const passwordInput =
       document.querySelector(
         "#admin-password"
       );
+
 
     const loginError =
       document.querySelector(
         "#login-error"
       );
 
+
     const logoutButton =
       document.querySelector(
         "#logout-button"
       );
+
 
     const refreshButton =
       document.querySelector(
         "#refresh-button"
       );
 
+
     const adminUserLabel =
       document.querySelector(
         "#admin-user-label"
       );
+
 
     const globalError =
       document.querySelector(
         "#global-error"
       );
 
+
     const statsGrid =
       document.querySelector(
         "#stats-grid"
       );
+
 
     const sessionsTable =
       document.querySelector(
         "#sessions-table"
       );
 
+
     const reportsList =
       document.querySelector(
         "#reports-list"
       );
 
-    const reportCount =
+
+    const reportSummary =
       document.querySelector(
-        "#report-count"
+        "#report-summary"
       );
+
+
+    const reportStatusFilter =
+      document.querySelector(
+        "#report-status-filter"
+      );
+
 
     const questionsTable =
       document.querySelector(
         "#questions-table"
       );
 
+
     const questionCount =
       document.querySelector(
         "#question-count"
       );
+
 
     const questionSearch =
       document.querySelector(
         "#question-search"
       );
 
+
     const questionStatsTable =
       document.querySelector(
         "#question-stats-table"
       );
+
 
     const questionStatsSummary =
       document.querySelector(
         "#question-stats-summary"
       );
 
+
     const questionStatsSearch =
       document.querySelector(
         "#question-stats-search"
       );
 
+
     const questionStatsCategory =
       document.querySelector(
         "#question-stats-category"
       );
+
 
     const questionStatsSort =
       document.querySelector(
@@ -1289,15 +1620,35 @@
       );
 
 
+
+    /* =========================
+       状態
+    ========================= */
+
     let allQuestions =
       [];
+
 
     let allQuestionStats =
       [];
 
+
     let questionStatsMap =
       new Map();
 
+
+    let allReports =
+      [];
+
+
+    let currentAdminUser =
+      null;
+
+
+
+    /* =========================
+       起動
+    ========================= */
 
     boot();
 
@@ -1347,6 +1698,11 @@
       await loadAllData();
     }
 
+
+
+    /* =========================
+       ログイン
+    ========================= */
 
     loginForm.addEventListener(
       "submit",
@@ -1467,12 +1823,18 @@
     );
 
 
+
+    /* =========================
+       管理者確認
+    ========================= */
+
     async function checkAdmin() {
 
       const {
         data: {
           user
         },
+
         error:
           userError
       } =
@@ -1526,6 +1888,10 @@
         data
       ) {
 
+        currentAdminUser =
+          user;
+
+
         adminUserLabel.textContent =
           user.email ||
           "管理者";
@@ -1536,6 +1902,11 @@
     }
 
 
+
+    /* =========================
+       ログアウト
+    ========================= */
+
     logoutButton.addEventListener(
       "click",
       async function () {
@@ -1545,10 +1916,19 @@
           .signOut();
 
 
+        currentAdminUser =
+          null;
+
+
         showLogin();
       }
     );
 
+
+
+    /* =========================
+       再読込
+    ========================= */
 
     refreshButton.addEventListener(
       "click",
@@ -1574,6 +1954,11 @@
       }
     );
 
+
+
+    /* =========================
+       画面
+    ========================= */
 
     function showLogin() {
 
@@ -1608,6 +1993,11 @@
         );
     }
 
+
+
+    /* =========================
+       タブ
+    ========================= */
 
     document
       .querySelectorAll(
@@ -1683,6 +2073,11 @@
       );
 
 
+
+    /* =========================
+       全データ読込
+    ========================= */
+
     async function loadAllData() {
 
       hideGlobalError();
@@ -1747,6 +2142,10 @@
           questions;
 
 
+        allReports =
+          reports;
+
+
         allQuestionStats =
           buildQuestionStats(
             questions,
@@ -1786,10 +2185,10 @@
         applyQuestionStatsFilters();
 
 
-        renderReports(
-          reports,
-          questions
-        );
+        renderReportSummary();
+
+
+        applyReportFilter();
 
 
         renderQuestions(
@@ -1813,6 +2212,11 @@
       }
     }
 
+
+
+    /* =========================
+       総回答数
+    ========================= */
 
     async function fetchAnswerCount() {
 
@@ -1847,6 +2251,11 @@
       return count || 0;
     }
 
+
+
+    /* =========================
+       問題JSON
+    ========================= */
 
     async function fetchQuestions() {
 
@@ -1889,6 +2298,11 @@
       return data;
     }
 
+
+
+    /* =========================
+       全件取得
+    ========================= */
 
     async function fetchAllRows(
       table,
@@ -1945,7 +2359,7 @@
 
         if (
           data.length <
-            pageSize
+          pageSize
         ) {
 
           break;
@@ -1960,6 +2374,11 @@
       return rows;
     }
 
+
+
+    /* =========================
+       集計
+    ========================= */
 
     function renderStats(
       sessions,
@@ -1981,10 +2400,6 @@
               Boolean
             )
         ).size;
-
-
-      const totalStarts =
-        sessions.length;
 
 
       const trialSessions =
@@ -2115,7 +2530,7 @@
             "ゲーム開始総数",
 
           value:
-            totalStarts,
+            sessions.length,
 
           sub:
             "同一プレイヤーの再挑戦を含む"
@@ -2208,19 +2623,15 @@
                   </div>
 
                   <div class="stat-value">
-
                     ${card.value.toLocaleString(
                       "ja-JP"
                     )}
-
                   </div>
 
                   <div class="stat-sub">
-
                     ${escapeHtml(
                       card.sub
                     )}
-
                   </div>
 
                 </div>
@@ -2231,6 +2642,11 @@
           .join("");
     }
 
+
+
+    /* =========================
+       最近の挑戦
+    ========================= */
 
     function renderSessions(
       sessions
@@ -2262,7 +2678,7 @@
 
       if (
         sorted.length ===
-          0
+        0
       ) {
 
         sessionsTable.innerHTML =
@@ -2280,33 +2696,13 @@
 
             <tr>
 
-              <th>
-                開始日時
-              </th>
-
-              <th>
-                種類
-              </th>
-
-              <th>
-                状態
-              </th>
-
-              <th>
-                回答
-              </th>
-
-              <th>
-                得点
-              </th>
-
-              <th>
-                最終操作
-              </th>
-
-              <th>
-                プレイヤー
-              </th>
+              <th>開始日時</th>
+              <th>種類</th>
+              <th>状態</th>
+              <th>回答</th>
+              <th>得点</th>
+              <th>最終操作</th>
+              <th>プレイヤー</th>
 
             </tr>
 
@@ -2332,24 +2728,20 @@
                     <tr>
 
                       <td>
-
                         ${formatJst(
                           session.started_at
                         )}
-
                       </td>
 
                       <td>
-
                         ${
                           session.mode ===
-                            "trial"
+                          "trial"
 
                             ? "お試し5問"
 
                             : "100問版"
                         }
-
                       </td>
 
                       <td>
@@ -2360,52 +2752,40 @@
                             ${status.className}
                           "
                         >
-
                           ${status.label}
-
                         </span>
 
                       </td>
 
                       <td>
-
                         ${
                           session.answered_count ??
                           0
                         }
-
                         /
-
                         ${
                           session.question_count ??
                           "-"
                         }
-
                       </td>
 
                       <td>
-
                         ${
                           session.score ??
                           0
                         }
-
                       </td>
 
                       <td>
-
                         ${formatJst(
                           session.last_activity_at
                         )}
-
                       </td>
 
                       <td>
-
                         ${shortId(
                           session.user_id
                         )}
-
                       </td>
 
                     </tr>
@@ -2464,6 +2844,11 @@
       };
     }
 
+
+
+    /* =========================
+       問題別統計
+    ========================= */
 
     function buildQuestionStats(
       questions,
@@ -2551,7 +2936,7 @@
 
           if (
             item.attempts >
-              0
+            0
           ) {
 
             item.accuracy =
@@ -2581,9 +2966,9 @@
 
       if (
         accuracy ===
-          null ||
+        null ||
         accuracy ===
-          undefined
+        undefined
       ) {
 
         return null;
@@ -2592,7 +2977,7 @@
 
       if (
         accuracy <
-          40
+        40
       ) {
 
         return 5;
@@ -2601,7 +2986,7 @@
 
       if (
         accuracy <
-          55
+        55
       ) {
 
         return 4;
@@ -2610,7 +2995,7 @@
 
       if (
         accuracy <
-          70
+        70
       ) {
 
         return 3;
@@ -2619,7 +3004,7 @@
 
       if (
         accuracy <
-          85
+        85
       ) {
 
         return 2;
@@ -2637,7 +3022,7 @@
       if (
         !item ||
         item.measuredDifficulty ===
-          null
+        null
       ) {
 
         return `
@@ -2652,7 +3037,7 @@
 
       const provisional =
         item.attempts <
-          20;
+        20;
 
 
       const difficulty =
@@ -2669,20 +3054,16 @@
               difficulty-${difficulty}
             "
           >
-
             ${difficulty}
-
           </span>
 
           ${
             provisional
 
               ? `
-
                 <span class="difficulty-provisional">
                   暫定
                 </span>
-
               `
 
               : ""
@@ -2693,6 +3074,11 @@
       `;
     }
 
+
+
+    /* =========================
+       問題別統計フィルタ
+    ========================= */
 
     questionStatsSearch.addEventListener(
       "input",
@@ -2738,7 +3124,7 @@
             if (
               category &&
               item.category !==
-                category
+              category
             ) {
 
               return false;
@@ -2783,7 +3169,7 @@
 
       if (
         sort ===
-          "accuracy-asc"
+        "accuracy-asc"
       ) {
 
         rows.sort(
@@ -2794,7 +3180,7 @@
 
             if (
               a.accuracy ===
-                null
+              null
             ) {
 
               return 1;
@@ -2803,7 +3189,7 @@
 
             if (
               b.accuracy ===
-                null
+              null
             ) {
 
               return -1;
@@ -2820,7 +3206,7 @@
 
       } else if (
         sort ===
-          "accuracy-desc"
+        "accuracy-desc"
       ) {
 
         rows.sort(
@@ -2831,7 +3217,7 @@
 
             if (
               a.accuracy ===
-                null
+              null
             ) {
 
               return 1;
@@ -2840,7 +3226,7 @@
 
             if (
               b.accuracy ===
-                null
+              null
             ) {
 
               return -1;
@@ -2857,7 +3243,7 @@
 
       } else if (
         sort ===
-          "attempts-desc"
+        "attempts-desc"
       ) {
 
         rows.sort(
@@ -2876,7 +3262,7 @@
 
       } else if (
         sort ===
-          "measured-desc"
+        "measured-desc"
       ) {
 
         rows.sort(
@@ -2897,7 +3283,7 @@
 
             if (
               bv !==
-                av
+              av
             ) {
 
               return (
@@ -2917,7 +3303,7 @@
 
       } else if (
         sort ===
-          "measured-asc"
+        "measured-asc"
       ) {
 
         rows.sort(
@@ -2938,7 +3324,7 @@
 
             if (
               av !==
-                bv
+              bv
             ) {
 
               return (
@@ -2983,6 +3369,7 @@
     }
 
 
+
     function renderQuestionStats(
       rows
     ) {
@@ -3007,7 +3394,7 @@
 
       if (
         rows.length ===
-          0
+        0
       ) {
 
         questionStatsTable.innerHTML =
@@ -3025,33 +3412,13 @@
 
             <tr>
 
-              <th>
-                ID
-              </th>
-
-              <th>
-                カテゴリ
-              </th>
-
-              <th>
-                問題文
-              </th>
-
-              <th>
-                回答者数
-              </th>
-
-              <th>
-                正解数
-              </th>
-
-              <th>
-                正答率
-              </th>
-
-              <th>
-                実測難易度
-              </th>
+              <th>ID</th>
+              <th>カテゴリ</th>
+              <th>問題文</th>
+              <th>回答者数</th>
+              <th>正解数</th>
+              <th>正答率</th>
+              <th>実測難易度</th>
 
             </tr>
 
@@ -3068,7 +3435,7 @@
 
                   const accuracyText =
                     item.accuracy ===
-                      null
+                    null
 
                       ? "-"
 
@@ -3085,7 +3452,7 @@
 
                   const barWidth =
                     item.accuracy ===
-                      null
+                    null
 
                       ? 0
 
@@ -3103,47 +3470,37 @@
                     <tr>
 
                       <td>
-
                         #${escapeHtml(
                           item.id
                         )}
-
                       </td>
 
 
                       <td>
 
                         <span class="category-badge">
-
                           ${escapeHtml(
                             item.category
                           )}
-
                         </span>
 
                       </td>
 
 
                       <td class="question-text">
-
                         ${escapeHtml(
                           item.question
                         )}
-
                       </td>
 
 
                       <td>
-
                         ${item.attempts}
-
                       </td>
 
 
                       <td>
-
                         ${item.correct}
-
                       </td>
 
 
@@ -3155,9 +3512,7 @@
                             ${accuracyClass}
                           "
                         >
-
                           ${accuracyText}
-
                         </div>
 
 
@@ -3177,11 +3532,9 @@
 
 
                       <td>
-
                         ${renderMeasuredDifficulty(
                           item
                         )}
-
                       </td>
 
                     </tr>
@@ -3199,68 +3552,186 @@
     }
 
 
-    function formatAccuracy(
-      value
+
+    /* =========================
+       物申す
+    ========================= */
+
+    reportStatusFilter.addEventListener(
+      "change",
+      applyReportFilter
+    );
+
+
+    function normalizeReportStatus(
+      status
     ) {
 
-      const rounded =
-        Math.round(
-          value *
-          10
-        ) /
-        10;
+      const allowed = [
+        "pending",
+        "reviewing",
+        "resolved",
+        "rejected"
+      ];
 
 
       if (
-        Number.isInteger(
-          rounded
+        allowed.includes(
+          status
         )
       ) {
 
-        return String(
-          rounded
-        );
+        return status;
       }
 
 
-      return rounded.toFixed(
-        1
+      return "pending";
+    }
+
+
+    function getReportStatusLabel(
+      status
+    ) {
+
+      const map = {
+
+        pending:
+          "未対応",
+
+        reviewing:
+          "確認中",
+
+        resolved:
+          "対応済み",
+
+        rejected:
+          "却下"
+      };
+
+
+      return (
+        map[
+          normalizeReportStatus(
+            status
+          )
+        ] ||
+        "未対応"
       );
     }
 
 
-    function getAccuracyClass(
-      value
-    ) {
+    function renderReportSummary() {
+
+      const counts = {
+
+        pending:
+          0,
+
+        reviewing:
+          0,
+
+        resolved:
+          0,
+
+        rejected:
+          0
+      };
+
+
+      allReports.forEach(
+        function (
+          report
+        ) {
+
+          const status =
+            normalizeReportStatus(
+              report.status
+            );
+
+
+          counts[
+            status
+          ]++;
+        }
+      );
+
+
+      reportSummary.innerHTML = `
+
+        <div class="report-summary-item">
+          全件
+          <strong>
+            ${allReports.length}
+          </strong>
+        </div>
+
+        <div class="report-summary-item">
+          未対応
+          <strong>
+            ${counts.pending}
+          </strong>
+        </div>
+
+        <div class="report-summary-item">
+          確認中
+          <strong>
+            ${counts.reviewing}
+          </strong>
+        </div>
+
+        <div class="report-summary-item">
+          対応済み
+          <strong>
+            ${counts.resolved}
+          </strong>
+        </div>
+
+        <div class="report-summary-item">
+          却下
+          <strong>
+            ${counts.rejected}
+          </strong>
+        </div>
+
+      `;
+    }
+
+
+    function applyReportFilter() {
+
+      const selected =
+        reportStatusFilter.value;
+
+
+      let reports =
+        [...allReports];
+
 
       if (
-        value ===
-          null
+        selected
       ) {
 
-        return "accuracy-none";
+        reports =
+          reports.filter(
+            function (
+              report
+            ) {
+
+              return (
+                normalizeReportStatus(
+                  report.status
+                ) ===
+                selected
+              );
+            }
+          );
       }
 
 
-      if (
-        value <
-          40
-      ) {
-
-        return "accuracy-low";
-      }
-
-
-      if (
-        value <
-          70
-      ) {
-
-        return "accuracy-mid";
-      }
-
-
-      return "accuracy-high";
+      renderReports(
+        reports,
+        allQuestions
+      );
     }
 
 
@@ -3287,6 +3758,22 @@
         );
 
 
+      const statusOrder = {
+
+        pending:
+          0,
+
+        reviewing:
+          1,
+
+        resolved:
+          2,
+
+        rejected:
+          3
+      };
+
+
       const sorted =
         [...reports]
           .sort(
@@ -3294,6 +3781,38 @@
               a,
               b
             ) {
+
+              const statusA =
+                normalizeReportStatus(
+                  a.status
+                );
+
+
+              const statusB =
+                normalizeReportStatus(
+                  b.status
+                );
+
+
+              if (
+                statusOrder[
+                  statusA
+                ] !==
+                statusOrder[
+                  statusB
+                ]
+              ) {
+
+                return (
+                  statusOrder[
+                    statusA
+                  ] -
+                  statusOrder[
+                    statusB
+                  ]
+                );
+              }
+
 
               return (
                 new Date(
@@ -3313,17 +3832,13 @@
           );
 
 
-      reportCount.textContent =
-        `${sorted.length}件`;
-
-
       if (
         sorted.length ===
-          0
+        0
       ) {
 
         reportsList.innerHTML =
-          `<div class="empty">まだ投稿はありません。</div>`;
+          `<div class="empty">該当する投稿はありません。</div>`;
 
         return;
       }
@@ -3333,7 +3848,8 @@
         sorted
           .map(
             function (
-              report
+              report,
+              index
             ) {
 
               const question =
@@ -3344,51 +3860,77 @@
                 );
 
 
+              const status =
+                normalizeReportStatus(
+                  report.status
+                );
+
+
+              const cardKey =
+                createReportDomKey(
+                  report,
+                  index
+                );
+
+
               return `
 
-                <article class="report-card">
+                <article
+                  class="
+                    report-card
+                    report-${status}
+                  "
+                  data-report-key="${escapeHtml(
+                    cardKey
+                  )}"
+                >
 
-                  <div class="report-meta">
+                  <div class="report-top">
 
-                    <span class="report-type">
+                    <div class="report-meta">
 
-                      ${escapeHtml(
-                        translateReportType(
-                          report.report_type
-                        )
+                      <span class="report-type">
+                        ${escapeHtml(
+                          translateReportType(
+                            report.report_type
+                          )
+                        )}
+                      </span>
+
+                      <span>
+                        問題ID #
+                        ${escapeHtml(
+                          report.question_id
+                        )}
+                      </span>
+
+                      <span>
+                        ${formatJst(
+                          getReportDate(
+                            report
+                          )
+                        )}
+                      </span>
+
+                      <span>
+                        投稿者
+                        ${shortId(
+                          report.user_id
+                        )}
+                      </span>
+
+                    </div>
+
+
+                    <span
+                      class="
+                        report-status-badge
+                        report-status-${status}
+                      "
+                    >
+                      ${getReportStatusLabel(
+                        status
                       )}
-
-                    </span>
-
-
-                    <span>
-
-                      問題ID #
-                      ${escapeHtml(
-                        report.question_id
-                      )}
-
-                    </span>
-
-
-                    <span>
-
-                      ${formatJst(
-                        getReportDate(
-                          report
-                        )
-                      )}
-
-                    </span>
-
-
-                    <span>
-
-                      投稿者
-                      ${shortId(
-                        report.user_id
-                      )}
-
                     </span>
 
                   </div>
@@ -3410,13 +3952,130 @@
 
 
                   <p class="report-message">
-
                     ${escapeHtml(
                       report.message ||
                       ""
                     )}
-
                   </p>
+
+
+                  <div class="report-admin-area">
+
+                    <label class="report-admin-label">
+
+                      対応状況
+
+                      <select
+                        class="report-status-select"
+                      >
+
+                        <option
+                          value="pending"
+                          ${
+                            status ===
+                            "pending"
+
+                              ? "selected"
+
+                              : ""
+                          }
+                        >
+                          未対応
+                        </option>
+
+                        <option
+                          value="reviewing"
+                          ${
+                            status ===
+                            "reviewing"
+
+                              ? "selected"
+
+                              : ""
+                          }
+                        >
+                          確認中
+                        </option>
+
+                        <option
+                          value="resolved"
+                          ${
+                            status ===
+                            "resolved"
+
+                              ? "selected"
+
+                              : ""
+                          }
+                        >
+                          対応済み
+                        </option>
+
+                        <option
+                          value="rejected"
+                          ${
+                            status ===
+                            "rejected"
+
+                              ? "selected"
+
+                              : ""
+                          }
+                        >
+                          却下
+                        </option>
+
+                      </select>
+
+                    </label>
+
+
+                    <label class="report-admin-label">
+
+                      管理者メモ
+
+                      <textarea
+                        class="report-admin-note"
+                        placeholder="例：問題文修正済み、仕様確認済み など"
+                      >${escapeHtml(
+                        report.admin_note ||
+                        ""
+                      )}</textarea>
+
+                    </label>
+
+
+                    <button
+                      type="button"
+                      class="report-save-button"
+                    >
+                      保存
+                    </button>
+
+                  </div>
+
+
+                  ${
+                    report.handled_at
+
+                      ? `
+
+                        <div class="report-handled">
+
+                          最終対応：
+                          ${formatJst(
+                            report.handled_at
+                          )}
+
+                        </div>
+
+                      `
+
+                      : ""
+                  }
+
+
+                  <div class="report-save-result"></div>
 
                 </article>
 
@@ -3424,6 +4083,431 @@
             }
           )
           .join("");
+
+
+      sorted.forEach(
+        function (
+          report,
+          index
+        ) {
+
+          const cardKey =
+            createReportDomKey(
+              report,
+              index
+            );
+
+
+          const card =
+            reportsList.querySelector(
+              `[data-report-key="${cssEscape(
+                cardKey
+              )}"]`
+            );
+
+
+          if (
+            !card
+          ) {
+
+            return;
+          }
+
+
+          const button =
+            card.querySelector(
+              ".report-save-button"
+            );
+
+
+          button.addEventListener(
+            "click",
+            async function () {
+
+              await saveReport(
+                report,
+                card,
+                button
+              );
+            }
+          );
+        }
+      );
+    }
+
+
+    function createReportDomKey(
+      report,
+      index
+    ) {
+
+      if (
+        report.id !==
+        undefined &&
+        report.id !==
+        null
+      ) {
+
+        return (
+          "id-" +
+          String(
+            report.id
+          )
+        );
+      }
+
+
+      return [
+        "report",
+        String(
+          report.user_id ||
+          ""
+        ),
+        String(
+          report.question_id ||
+          ""
+        ),
+        String(
+          getReportDate(
+            report
+          ) ||
+          ""
+        ),
+        String(
+          index
+        )
+      ].join("-");
+    }
+
+
+    async function saveReport(
+      report,
+      card,
+      button
+    ) {
+
+      const statusSelect =
+        card.querySelector(
+          ".report-status-select"
+        );
+
+
+      const noteInput =
+        card.querySelector(
+          ".report-admin-note"
+        );
+
+
+      const resultBox =
+        card.querySelector(
+          ".report-save-result"
+        );
+
+
+      const newStatus =
+        normalizeReportStatus(
+          statusSelect.value
+        );
+
+
+      const adminNote =
+        noteInput.value.trim();
+
+
+      button.disabled =
+        true;
+
+
+      button.textContent =
+        "保存中...";
+
+
+      resultBox.style.color =
+        "#77d994";
+
+
+      resultBox.textContent =
+        "";
+
+
+      try {
+
+        if (
+          !currentAdminUser
+        ) {
+
+          const {
+            data: {
+              user
+            },
+            error
+          } =
+            await adminClient
+              .auth
+              .getUser();
+
+
+          if (
+            error ||
+            !user
+          ) {
+
+            throw new Error(
+              "管理者情報を取得できませんでした。"
+            );
+          }
+
+
+          currentAdminUser =
+            user;
+        }
+
+
+        const isFinished =
+          newStatus ===
+            "resolved" ||
+          newStatus ===
+            "rejected";
+
+
+        const updateData = {
+
+          status:
+            newStatus,
+
+          admin_note:
+            adminNote ||
+            null,
+
+          handled_by:
+            currentAdminUser.id,
+
+          handled_at:
+            isFinished
+
+              ? new Date()
+                  .toISOString()
+
+              : null
+        };
+
+
+        let query =
+          adminClient
+            .from(
+              "question_reports"
+            )
+            .update(
+              updateData
+            );
+
+
+        if (
+          report.id !==
+          undefined &&
+          report.id !==
+          null
+        ) {
+
+          query =
+            query.eq(
+              "id",
+              report.id
+            );
+
+
+        } else {
+
+          query =
+            query
+              .eq(
+                "user_id",
+                report.user_id
+              )
+              .eq(
+                "question_id",
+                report.question_id
+              );
+
+
+          const reportDate =
+            getReportDate(
+              report
+            );
+
+
+          if (
+            reportDate &&
+            report.created_at
+          ) {
+
+            query =
+              query.eq(
+                "created_at",
+                report.created_at
+              );
+          }
+        }
+
+
+        const {
+          data,
+          error
+        } =
+          await query
+            .select()
+            .maybeSingle();
+
+
+        if (
+          error
+        ) {
+
+          throw error;
+        }
+
+
+        if (
+          !data
+        ) {
+
+          throw new Error(
+            "更新対象の投稿が見つかりませんでした。"
+          );
+        }
+
+
+        const reportIndex =
+          allReports.findIndex(
+            function (
+              item
+            ) {
+
+              return isSameReport(
+                item,
+                report
+              );
+            }
+          );
+
+
+        if (
+          reportIndex !==
+          -1
+        ) {
+
+          allReports[
+            reportIndex
+          ] = data;
+        }
+
+
+        renderReportSummary();
+
+
+        resultBox.textContent =
+          "保存しました";
+
+
+        setTimeout(
+          function () {
+
+            applyReportFilter();
+
+          },
+          450
+        );
+
+
+      } catch (
+        error
+      ) {
+
+        console.error(
+          error
+        );
+
+
+        resultBox.style.color =
+          "#ff7770";
+
+
+        resultBox.textContent =
+          error.message ||
+          "保存できませんでした。";
+
+
+      } finally {
+
+        button.disabled =
+          false;
+
+
+        button.textContent =
+          "保存";
+      }
+    }
+
+
+    function isSameReport(
+      a,
+      b
+    ) {
+
+      if (
+        a.id !==
+        undefined &&
+        a.id !==
+        null &&
+        b.id !==
+        undefined &&
+        b.id !==
+        null
+      ) {
+
+        return (
+          String(
+            a.id
+          ) ===
+          String(
+            b.id
+          )
+        );
+      }
+
+
+      return (
+        String(
+          a.user_id ||
+          ""
+        ) ===
+          String(
+            b.user_id ||
+            ""
+          ) &&
+
+        String(
+          a.question_id ||
+          ""
+        ) ===
+          String(
+            b.question_id ||
+            ""
+          ) &&
+
+        String(
+          getReportDate(
+            a
+          ) ||
+          ""
+        ) ===
+          String(
+            getReportDate(
+              b
+            ) ||
+            ""
+          )
+      );
     }
 
 
@@ -3470,6 +4554,11 @@
       );
     }
 
+
+
+    /* =========================
+       問題一覧
+    ========================= */
 
     questionSearch.addEventListener(
       "input",
@@ -3537,7 +4626,7 @@
 
       questionCount.textContent =
         total ===
-          null
+        null
 
           ? `全${questions.length}問`
 
@@ -3546,7 +4635,7 @@
 
       if (
         questions.length ===
-          0
+        0
       ) {
 
         questionsTable.innerHTML =
@@ -3564,41 +4653,15 @@
 
             <tr>
 
-              <th>
-                ID
-              </th>
-
-              <th>
-                カテゴリ
-              </th>
-
-              <th>
-                種類
-              </th>
-
-              <th>
-                問題文
-              </th>
-
-              <th>
-                実測難易度
-              </th>
-
-              <th>
-                正答率
-              </th>
-
-              <th>
-                回答者数
-              </th>
-
-              <th>
-                検証
-              </th>
-
-              <th>
-                制作段階
-              </th>
+              <th>ID</th>
+              <th>カテゴリ</th>
+              <th>種類</th>
+              <th>問題文</th>
+              <th>実測難易度</th>
+              <th>正答率</th>
+              <th>回答者数</th>
+              <th>検証</th>
+              <th>制作段階</th>
 
             </tr>
 
@@ -3624,7 +4687,7 @@
                   const accuracy =
                     stats &&
                     stats.accuracy !==
-                      null
+                    null
 
                       ? `${formatAccuracy(
                           stats.accuracy
@@ -3644,56 +4707,46 @@
                     <tr>
 
                       <td>
-
                         #${escapeHtml(
                           question.id
                         )}
-
                       </td>
 
 
                       <td>
 
                         <span class="category-badge">
-
                           ${escapeHtml(
                             question.category
                           )}
-
                         </span>
 
                       </td>
 
 
                       <td>
-
                         ${
                           question.type ===
-                            "multiple"
+                          "multiple"
 
                             ? "複数選択"
 
                             : "単一選択"
                         }
-
                       </td>
 
 
                       <td class="question-text">
-
                         ${escapeHtml(
                           question.question
                         )}
-
                       </td>
 
 
                       <td>
-
                         ${renderMeasuredDifficulty(
                           stats
                         )}
-
                       </td>
 
 
@@ -3713,38 +4766,30 @@
                             }
                           "
                         >
-
                           ${accuracy}
-
                         </span>
 
                       </td>
 
 
                       <td>
-
                         ${attempts}
-
                       </td>
 
 
                       <td>
-
                         ${escapeHtml(
                           question.verification ||
                           "-"
                         )}
-
                       </td>
 
 
                       <td>
-
                         ${escapeHtml(
                           question.production_stage ||
                           "-"
                         )}
-
                       </td>
 
                     </tr>
@@ -3761,6 +4806,81 @@
       `;
     }
 
+
+
+    /* =========================
+       正答率
+    ========================= */
+
+    function formatAccuracy(
+      value
+    ) {
+
+      const rounded =
+        Math.round(
+          value *
+          10
+        ) /
+        10;
+
+
+      if (
+        Number.isInteger(
+          rounded
+        )
+      ) {
+
+        return String(
+          rounded
+        );
+      }
+
+
+      return rounded.toFixed(
+        1
+      );
+    }
+
+
+    function getAccuracyClass(
+      value
+    ) {
+
+      if (
+        value ===
+        null
+      ) {
+
+        return "accuracy-none";
+      }
+
+
+      if (
+        value <
+        40
+      ) {
+
+        return "accuracy-low";
+      }
+
+
+      if (
+        value <
+        70
+      ) {
+
+        return "accuracy-mid";
+      }
+
+
+      return "accuracy-high";
+    }
+
+
+
+    /* =========================
+       日本時間
+    ========================= */
 
     function formatJst(
       value
@@ -3823,6 +4943,11 @@
     }
 
 
+
+    /* =========================
+       その他
+    ========================= */
+
     function shortId(
       value
     ) {
@@ -3843,7 +4968,7 @@
 
       if (
         text.length <=
-          12
+        12
       ) {
 
         return text;
@@ -3892,6 +5017,34 @@
         .replaceAll(
           "'",
           "&#039;"
+        );
+    }
+
+
+    function cssEscape(
+      value
+    ) {
+
+      if (
+        window.CSS &&
+        typeof window.CSS.escape ===
+        "function"
+      ) {
+
+        return window.CSS.escape(
+          String(
+            value
+          )
+        );
+      }
+
+
+      return String(
+        value
+      )
+        .replace(
+          /["\\]/g,
+          "\\$&"
         );
     }
 
