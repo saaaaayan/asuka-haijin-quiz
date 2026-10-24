@@ -333,47 +333,177 @@
     }
 
     .stats-grid {
-      display: grid;
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(
+          2,
+          minmax(
+            0,
+            1fr
+          )
+        );
+
+      gap:
+        16px;
+    }
+
+
+    .stats-group {
+      padding:
+        18px;
+
+      border:
+        1px solid
+        #343941;
+
+      border-radius:
+        14px;
+
+      background:
+        rgba(
+          17,
+          21,
+          26,
+          0.82
+        );
+    }
+
+
+    .stats-group-head {
+      display:
+        flex;
+
+      align-items:
+        baseline;
+
+      justify-content:
+        space-between;
+
+      gap:
+        12px;
+
+      margin-bottom:
+        12px;
+    }
+
+
+    .stats-group-title {
+      color:
+        #f0c64d;
+
+      font-size:
+        14px;
+
+      font-weight:
+        900;
+
+      letter-spacing:
+        0.03em;
+    }
+
+
+    .stats-group-note {
+      color:
+        #747d87;
+
+      font-size:
+        11px;
+    }
+
+
+    .stats-group-cards {
+      display:
+        grid;
 
       grid-template-columns:
         repeat(
           auto-fit,
-          minmax(190px, 1fr)
+          minmax(
+            145px,
+            1fr
+          )
         );
 
-      gap: 14px;
+      gap:
+        10px;
     }
+
 
     .stat-card {
-      padding: 22px;
+      padding:
+        16px;
 
-      min-height: 130px;
+      min-height:
+        112px;
+
+      border:
+        1px solid
+        #2c3239;
+
+      border-radius:
+        11px;
+
+      background:
+        #12161b;
     }
+
 
     .stat-label {
-      color: #9ea5ad;
+      color:
+        #aab1b8;
 
-      font-size: 13px;
-      font-weight: 700;
+      font-size:
+        12px;
+
+      font-weight:
+        800;
     }
+
 
     .stat-value {
-      margin-top: 10px;
+      margin-top:
+        9px;
 
-      color: #f1c44c;
+      color:
+        #f1c44c;
 
-      font-size: 38px;
-      font-weight: 900;
+      font-size:
+        34px;
 
-      line-height: 1;
+      font-weight:
+        900;
+
+      line-height:
+        1;
     }
 
+
     .stat-sub {
-      margin-top: 10px;
+      margin-top:
+        9px;
 
-      color: #858d96;
+      color:
+        #858d96;
 
-      font-size: 12px;
+      font-size:
+        11px;
+
+      line-height:
+        1.55;
+    }
+
+
+    @media (
+      max-width:
+      900px
+    ) {
+
+      .stats-grid {
+        grid-template-columns:
+          1fr;
+      }
     }
 
     .section {
@@ -4030,106 +4160,182 @@
         );
 
 
-      const cards = [
+      function statCard(
+        label,
+        value,
+        sub
+      ) {
 
-        [
-          "プレイヤー数",
-          uniquePlayers,
-          "ユニークユーザー"
-        ],
+        return `
 
-        [
-          "ゲーム開始総数",
-          sessions.length,
-          "再挑戦を含む"
-        ],
+          <div class="stat-card">
 
-        [
-          "お試し版",
-          trial.length,
-          `完走率 ${
-            rate(
-              completedTrial.length,
-              trial.length
-            )
-          }%`
-        ],
+            <div class="stat-label">
+              ${escapeHtml(
+                label
+              )}
+            </div>
 
-        [
-          "100問版",
-          main.length,
-          `完走率 ${
-            rate(
-              completedMain.length,
-              main.length
-            )
-          }%`
-        ],
+            <div class="stat-value">
+              ${Number(
+                value
+              ).toLocaleString(
+                "ja-JP"
+              )}
+            </div>
 
-        [
-          "完走回数",
-          completed.length,
-          `100問版 ${completedMain.length} / お試し ${completedTrial.length}`
-        ],
+            <div class="stat-sub">
+              ${escapeHtml(
+                sub
+              )}
+            </div>
 
-        [
-          "途中破棄",
-          abandoned.length,
-          "途中データを破棄"
-        ],
+          </div>
 
-        [
-          "進行中",
-          active.length,
-          "完走・破棄前"
-        ],
-
-        [
-          "全回答問題数",
-          totalAnswers,
-          "quiz_answers 総件数"
-        ]
-
-      ];
+        `;
+      }
 
 
-      statsGrid.innerHTML =
-        cards
-          .map(
-            function (
-              card
-            ) {
+      statsGrid.innerHTML = `
 
-              return `
+        <section class="stats-group">
 
-                <div class="panel stat-card">
+          <div class="stats-group-head">
 
-                  <div class="stat-label">
-                    ${escapeHtml(
-                      card[0]
-                    )}
-                  </div>
+            <div class="stats-group-title">
+              利用者
+            </div>
 
-                  <div class="stat-value">
+            <div class="stats-group-note">
+              人数ベース
+            </div>
 
-                    ${card[1].toLocaleString(
-                      "ja-JP"
-                    )}
+          </div>
 
-                  </div>
+          <div class="stats-group-cards">
 
-                  <div class="stat-sub">
-                    ${escapeHtml(
-                      card[2]
-                    )}
-                  </div>
+            ${statCard(
+              "プレイヤー数",
+              uniquePlayers,
+              "一度でも検定を開始したユニークユーザー数"
+            )}
 
-                </div>
+          </div>
 
-              `;
-            }
-          )
-          .join("");
+        </section>
+
+
+        <section class="stats-group">
+
+          <div class="stats-group-head">
+
+            <div class="stats-group-title">
+              挑戦数
+            </div>
+
+            <div class="stats-group-note">
+              再挑戦を含む
+            </div>
+
+          </div>
+
+          <div class="stats-group-cards">
+
+            ${statCard(
+              "総挑戦回数",
+              sessions.length,
+              `お試し ${trial.length} ＋ 100問版 ${main.length}`
+            )}
+
+            ${statCard(
+              "お試し版",
+              trial.length,
+              `完走 ${completedTrial.length}回 / 完走率 ${rate(
+                completedTrial.length,
+                trial.length
+              )}%`
+            )}
+
+            ${statCard(
+              "100問版",
+              main.length,
+              `完走 ${completedMain.length}回 / 完走率 ${rate(
+                completedMain.length,
+                main.length
+              )}%`
+            )}
+
+          </div>
+
+        </section>
+
+
+        <section class="stats-group">
+
+          <div class="stats-group-head">
+
+            <div class="stats-group-title">
+              挑戦結果
+            </div>
+
+            <div class="stats-group-note">
+              総挑戦回数の内訳
+            </div>
+
+          </div>
+
+          <div class="stats-group-cards">
+
+            ${statCard(
+              "完走",
+              completed.length,
+              `100問版 ${completedMain.length} / お試し ${completedTrial.length}`
+            )}
+
+            ${statCard(
+              "途中破棄",
+              abandoned.length,
+              "途中データを破棄した挑戦"
+            )}
+
+            ${statCard(
+              "進行中",
+              active.length,
+              "まだ完走・破棄の記録がない挑戦"
+            )}
+
+          </div>
+
+        </section>
+
+
+        <section class="stats-group">
+
+          <div class="stats-group-head">
+
+            <div class="stats-group-title">
+              回答量
+            </div>
+
+            <div class="stats-group-note">
+              全挑戦の合計
+            </div>
+
+          </div>
+
+          <div class="stats-group-cards">
+
+            ${statCard(
+              "総回答数",
+              totalAnswers,
+              "プレイヤーが実際に回答した問題数の合計"
+            )}
+
+          </div>
+
+        </section>
+
+      `;
     }
 
 
