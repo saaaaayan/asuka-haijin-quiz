@@ -2609,20 +2609,23 @@
 
             検証状態
 
-            <input
+            <select
               id="editor-verification"
-              type="text"
-              list="verification-options"
-              placeholder="例：user_confirmed"
             >
 
-            <datalist id="verification-options">
+              <option value="">
+                未設定
+              </option>
 
-              <option value="user_confirmed"></option>
+              <option value="user_confirmed">
+                user_confirmed
+              </option>
 
-              <option value="source_checked"></option>
+              <option value="source_checked">
+                source_checked
+              </option>
 
-            </datalist>
+            </select>
 
           </label>
 
@@ -2631,24 +2634,31 @@
 
             制作段階
 
-            <input
+            <select
               id="editor-production-stage"
-              type="text"
-              list="stage-options"
-              placeholder="例：仮作成"
             >
 
-            <datalist id="stage-options">
+              <option value="">
+                未設定
+              </option>
 
-              <option value="仮作成"></option>
+              <option value="仮作成">
+                仮作成
+              </option>
 
-              <option value="作成済"></option>
+              <option value="作成済">
+                作成済
+              </option>
 
-              <option value="確認・検証済み"></option>
+              <option value="確認・検証済み">
+                確認・検証済み
+              </option>
 
-              <option value="文言確認済み"></option>
+              <option value="文言確認済み">
+                文言確認済み
+              </option>
 
-            </datalist>
+            </select>
 
           </label>
 
