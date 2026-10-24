@@ -3507,14 +3507,14 @@ ${escapeHtml(
 
 
       /* =========================
-         タイトル
+         ヘッダー
       ========================= */
 
       ctx.fillStyle =
         goldSoft;
 
       ctx.font =
-        '700 20px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+        '700 18px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
 
       ctx.textAlign =
         "left";
@@ -3522,7 +3522,7 @@ ${escapeHtml(
       ctx.fillText(
         "ASUKA KENZAN",
         70,
-        68
+        62
       );
 
 
@@ -3530,12 +3530,12 @@ ${escapeHtml(
         white;
 
       ctx.font =
-        '800 40px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+        '800 38px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
 
       ctx.fillText(
         "アスカ見参 廃人検定",
         70,
-        111
+        102
       );
 
 
@@ -3543,17 +3543,17 @@ ${escapeHtml(
         muted;
 
       ctx.font =
-        '600 16px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+        '600 15px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
 
       ctx.fillText(
         "全100問・アスカ見参ガチ勢向け知識検定",
         72,
-        140
+        130
       );
 
 
       /* =========================
-         スコア
+         左：スコア
       ========================= */
 
       ctx.fillStyle =
@@ -3562,10 +3562,10 @@ ${escapeHtml(
       roundRect(
         ctx,
         65,
-        168,
-        440,
-        270,
-        26
+        154,
+        325,
+        330,
+        28
       );
 
       ctx.fill();
@@ -3582,8 +3582,8 @@ ${escapeHtml(
 
       ctx.fillText(
         "SCORE",
-        285,
-        210
+        227,
+        200
       );
 
 
@@ -3591,14 +3591,14 @@ ${escapeHtml(
         white;
 
       ctx.font =
-        '900 122px "Arial", "Yu Gothic", sans-serif';
+        '900 126px "Arial", "Yu Gothic", sans-serif';
 
       ctx.fillText(
         String(
           scoreValue
         ),
-        245,
-        342
+        205,
+        333
       );
 
 
@@ -3606,30 +3606,74 @@ ${escapeHtml(
         gold;
 
       ctx.font =
-        '800 40px "Arial", "Yu Gothic", sans-serif';
+        '800 38px "Arial", "Yu Gothic", sans-serif';
 
       ctx.fillText(
         `/ ${totalValue}`,
-        395,
-        340
+        318,
+        330
       );
+
+
+      const percentage =
+        Math.round(
+          (
+            scoreValue /
+            totalValue
+          ) *
+          100
+        );
 
 
       ctx.fillStyle =
         muted;
 
       ctx.font =
-        '700 19px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+        '700 17px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+
+      ctx.fillText(
+        `正答率 ${percentage}%`,
+        227,
+        392
+      );
+
+
+      ctx.strokeStyle =
+        "rgba(229,189,85,0.20)";
+
+      ctx.lineWidth =
+        1;
+
+      ctx.beginPath();
+
+      ctx.moveTo(
+        105,
+        418
+      );
+
+      ctx.lineTo(
+        350,
+        418
+      );
+
+      ctx.stroke();
+
+
+      ctx.fillStyle =
+        gold;
+
+      ctx.font =
+        '800 18px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
 
       ctx.fillText(
         "あなたは何点取れる？",
-        285,
-        405
+        227,
+        452
       );
 
 
       /* =========================
-         ランク・称号
+         右：ランク・称号
       ========================= */
 
       ctx.fillStyle =
@@ -3637,10 +3681,10 @@ ${escapeHtml(
 
       roundRect(
         ctx,
-        545,
-        168,
-        585,
-        104,
+        420,
+        154,
+        710,
+        100,
         24
       );
 
@@ -3651,37 +3695,34 @@ ${escapeHtml(
         gold;
 
       ctx.font =
-        '900 62px "Arial", "Yu Gothic", sans-serif';
+        '900 58px "Arial", "Yu Gothic", sans-serif';
 
       ctx.textAlign =
         "left";
 
       ctx.fillText(
         rankResult.rank,
-        580,
-        236
+        456,
+        220
       );
 
 
       ctx.fillStyle =
         white;
 
-      ctx.font =
-        '800 27px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
-
       drawFittedText(
         ctx,
         rankResult.title,
-        700,
-        231,
-        385,
-        27,
+        570,
+        215,
+        515,
+        30,
         20
       );
 
 
       /* =========================
-         ランクコメント
+         右：コメント
       ========================= */
 
       ctx.fillStyle =
@@ -3689,10 +3730,10 @@ ${escapeHtml(
 
       roundRect(
         ctx,
-        545,
-        288,
-        585,
-        212,
+        420,
+        270,
+        710,
+        214,
         24
       );
 
@@ -3718,11 +3759,11 @@ ${escapeHtml(
         drawWrappedText(
           ctx,
           plainComment,
-          837,
-          320,
-          515,
-          22,
-          14,
+          775,
+          302,
+          640,
+          21,
+          15,
           25,
           8
         );
@@ -3734,15 +3775,15 @@ ${escapeHtml(
           white;
 
         ctx.font =
-          '800 29px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+          '800 28px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
 
         ctx.textAlign =
           "center";
 
         ctx.fillText(
           "あなたは何点取れる？",
-          837,
-          374
+          775,
+          365
         );
 
 
@@ -3750,12 +3791,12 @@ ${escapeHtml(
           gold;
 
         ctx.font =
-          '700 19px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+          '700 18px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
 
         ctx.fillText(
           "挑戦者、求む。",
-          837,
-          414
+          775,
+          402
         );
       }
 
@@ -3809,7 +3850,7 @@ ${escapeHtml(
             70;
 
           const startY =
-            531;
+            520;
 
           const gap =
             212;
@@ -3873,7 +3914,7 @@ ${escapeHtml(
                   startY +
                     13,
                   142,
-                  9,
+                  10,
                   5
                 );
 
@@ -3897,7 +3938,7 @@ ${escapeHtml(
                       )
                     ) /
                     100,
-                  9,
+                  10,
                   5
                 );
 
@@ -3918,7 +3959,7 @@ ${escapeHtml(
                   x +
                     187,
                   startY +
-                    21
+                    22
                 );
               }
             );
@@ -3934,7 +3975,7 @@ ${escapeHtml(
         muted;
 
       ctx.font =
-        '600 15px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
+        '600 14px "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif';
 
       ctx.textAlign =
         "left";
