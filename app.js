@@ -1915,11 +1915,18 @@ document.addEventListener(
 
 
       const statsPromise =
-        saveFirstAnswer(
-          question.id,
-          selectedAnswer,
-          isCorrect
-        );
+        quizMode ===
+          "retry"
+
+          ? Promise.resolve(
+              null
+            )
+
+          : saveFirstAnswer(
+              question.id,
+              selectedAnswer,
+              isCorrect
+            );
 
 
       if (
@@ -2020,6 +2027,13 @@ document.addEventListener(
           </p>
 
 
+          ${
+            quizMode ===
+              "retry"
+
+              ? ""
+
+              : `
           <div
             class="
               community-stats
@@ -2036,6 +2050,8 @@ document.addEventListener(
             </div>
 
           </div>
+              `
+          }
 
 
           <div class="current-score">
