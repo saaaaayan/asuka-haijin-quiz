@@ -4166,9 +4166,7 @@ ${escapeHtml(
         (incorrectCount === 0 ? "全問正解！" : "あと" + String(incorrectCount) + "問") +
         '</div>' +
         retryAgainHtml +
-        (retryOriginResultArgs
-          ? '<button class="restart-button retry-origin-result-button" type="button">100問版の結果に戻る</button>'
-          : '') +
+        '<button class="restart-button retry-origin-result-button" type="button">100問版の結果に戻る</button>' +
         '<button class="restart-button retry-top-button" type="button">トップ画面へ戻る</button>' +
         '</div>';
 
@@ -4197,17 +4195,93 @@ ${escapeHtml(
 
 
       if (
-        originResultButton &&
-        retryOriginResultArgs
+        originResultButton
       ) {
 
         originResultButton.addEventListener(
           "click",
-          function () {
+          async function () {
 
-            renderMainResultScreen(
+            if (
               retryOriginResultArgs
-            );
+            ) {
+
+              renderMainResultScreen(
+                retryOriginResultArgs
+              );
+
+
+            } else if (
+              isResultTestMode
+            ) {
+
+              await showResultTest();
+
+
+            } else {
+
+              const saved =
+                loadLastResult();
+
+
+              if (
+                saved
+              ) {
+
+                renderMainResultScreen(
+                  {
+                    scoreValue:
+                      saved.score,
+
+                    totalValue:
+                      saved.total,
+
+                    rankResult: {
+                      rank:
+                        saved.rank,
+
+                      title:
+                        saved.title,
+
+                      comment:
+                        saved.comment || ""
+                    },
+
+                    statsSource:
+                      saved.categoryStats || {},
+
+                    statsComplete:
+                      typeof saved.categoryStatsComplete ===
+                        "boolean"
+                        ? saved.categoryStatsComplete
+                        : true,
+
+                    reviewData:
+                      Array.isArray(
+                        saved.reviewAnswers
+                      )
+                        ? saved.reviewAnswers
+                        : [],
+
+                    resultTest:
+                      false,
+
+                    showCompletion:
+                      true
+                  }
+                );
+
+
+              } else {
+
+                alert(
+                  "元の100問版の結果を読み込めませんでした。"
+                );
+
+                return;
+              }
+            }
+
 
             window.scrollTo(
               {
