@@ -879,13 +879,350 @@ document.addEventListener(
 
 
     /* =========================
+       表示直前の公開状態確認
+    ========================= */
+
+    async function loadPublishedQuestionById(
+      questionId
+    ) {
+
+      const {
+        data,
+        error
+      } =
+
+        await supabaseClient
+          .from(
+            "questions"
+          )
+          .select(
+            "id,category,type,instruction,question,choices,answer,explanation,tags"
+          )
+          .eq(
+            "id",
+            questionId
+          )
+          .eq(
+            "is_published",
+            true
+          )
+          .limit(
+            1
+          );
+
+
+      if (
+        error
+      ) {
+
+        console.error(
+          "公開状態確認エラー:",
+          error
+        );
+
+
+        throw new Error(
+          "問題の公開状態を確認できませんでした。"
+        );
+      }
+
+
+      if (
+        !Array.isArray(
+          data
+        ) ||
+        data.length ===
+          0
+      ) {
+
+        return null;
+      }
+
+
+      const question = {
+        ...data[0],
+
+        instruction:
+          data[0].instruction ??
+          "",
+
+        explanation:
+          data[0].explanation ??
+          "",
+
+        tags:
+          Array.isArray(
+            data[0].tags
+          )
+            ? data[0].tags
+            : []
+      };
+
+
+      validateQuestionsData(
+        [
+          question
+        ]
+      );
+
+
+      return question;
+    }
+
+
+
+    async function resolveQuestionForDisplay() {
+
+      const plannedQuestion =
+        quizQuestions[
+          currentQuestionIndex
+        ];
+
+
+      if (
+        !plannedQuestion ||
+        plannedQuestion.id ===
+          undefined ||
+        plannedQuestion.id ===
+          null
+      ) {
+
+        throw new Error(
+          "表示予定の問題データが見つかりません。"
+        );
+      }
+
+
+      const publishedQuestion =
+        await loadPublishedQuestionById(
+          plannedQuestion.id
+        );
+
+
+      if (
+        publishedQuestion
+      ) {
+
+        quizQuestions[
+          currentQuestionIndex
+        ] =
+          publishedQuestion;
+
+
+        return publishedQuestion;
+      }
+
+
+      /*
+        予定されていた問題が非公開・削除済みなら、
+        現在公開中の別問題へ差し替える。
+      */
+      const allPublishedQuestions =
+        await loadQuestionsData();
+
+
+      const plannedIds =
+        new Set(
+          quizQuestions
+            .map(
+              function (
+                question
+              ) {
+
+                return (
+                  question &&
+                  question.id !==
+                    undefined &&
+                  question.id !==
+                    null
+                )
+                  ? String(
+                      question.id
+                    )
+                  : null;
+              }
+            )
+            .filter(
+              Boolean
+            )
+        );
+
+
+      let candidates =
+        allPublishedQuestions.filter(
+          function (
+            question
+          ) {
+
+            return !plannedIds.has(
+              String(
+                question.id
+              )
+            );
+          }
+        );
+
+
+      /*
+        通常は未使用問題から補充する。
+        公開問題数が極端に減って未使用候補がない場合は、
+        挑戦を止めないことを優先して未回答の公開問題から救済する。
+      */
+      if (
+        candidates.length ===
+          0
+      ) {
+
+        const answeredIds =
+          new Set(
+            quizQuestions
+              .slice(
+                0,
+                currentQuestionIndex
+              )
+              .map(
+                function (
+                  question
+                ) {
+
+                  return (
+                    question &&
+                    question.id !==
+                      undefined &&
+                    question.id !==
+                      null
+                  )
+                    ? String(
+                        question.id
+                      )
+                    : null;
+                }
+              )
+              .filter(
+                Boolean
+              )
+          );
+
+
+        candidates =
+          allPublishedQuestions.filter(
+            function (
+              question
+            ) {
+
+              return (
+                String(
+                  question.id
+                ) !==
+                  String(
+                    plannedQuestion.id
+                  ) &&
+                !answeredIds.has(
+                  String(
+                    question.id
+                  )
+                )
+              );
+            }
+          );
+      }
+
+
+      if (
+        candidates.length ===
+          0
+      ) {
+
+        candidates =
+          allPublishedQuestions.filter(
+            function (
+              question
+            ) {
+
+              return (
+                String(
+                  question.id
+                ) !==
+                String(
+                  plannedQuestion.id
+                )
+              );
+            }
+          );
+      }
+
+
+      if (
+        candidates.length ===
+          0
+      ) {
+
+        throw new Error(
+          "差し替え可能な公開問題がありません。"
+        );
+      }
+
+
+      const replacement =
+        candidates[
+          Math.floor(
+            Math.random() *
+            candidates.length
+          )
+        ];
+
+
+      console.info(
+        `問題ID #${plannedQuestion.id} は現在非公開のため、問題ID #${replacement.id} に差し替えました。`
+      );
+
+
+      quizQuestions[
+        currentQuestionIndex
+      ] =
+        replacement;
+
+
+      return replacement;
+    }
+
+
+
+    /* =========================
        問題表示
     ========================= */
 
-    function showQuestion() {
+    async function showQuestion() {
 
       answerLocked =
         false;
+
+
+      let question;
+
+
+      try {
+
+        question =
+          await resolveQuestionForDisplay();
+
+
+      } catch (
+        error
+      ) {
+
+        console.error(
+          "問題表示前確認エラー:",
+          error
+        );
+
+
+        showQuestionDataError(
+          error
+        );
+
+        return;
+      }
 
 
       if (
@@ -893,16 +1230,13 @@ document.addEventListener(
           "main"
       ) {
 
+        /*
+          差し替え後の問題IDを保存してから表示する。
+        */
         saveProgress(
           currentQuestionIndex
         );
       }
-
-
-      const question =
-        quizQuestions[
-          currentQuestionIndex
-        ];
 
 
       if (!question) {
@@ -5735,43 +6069,25 @@ ${escapeHtml(
               id
             ) {
 
-              return questionMap.get(
-                String(id)
+              return (
+                questionMap.get(
+                  String(id)
+                ) ||
+                {
+                  /*
+                    非公開・削除済みでも挑戦は失効させない。
+                    実際にこの順番へ到達したとき、
+                    表示直前に公開問題へ差し替える。
+                  */
+                  id:
+                    id,
+
+                  needsReplacement:
+                    true
+                }
               );
             }
           );
-
-
-        if (
-          restoredQuestions.some(
-            function (
-              question
-            ) {
-
-              return !question;
-            }
-          )
-        ) {
-
-          alert(
-            "問題データが更新されたため、途中データを再開できません。最初から挑戦してください。"
-          );
-
-
-          if (
-            saved.sessionId
-          ) {
-
-            await abandonQuizSession(
-              saved.sessionId
-            );
-          }
-
-
-          clearProgress();
-
-          return;
-        }
 
 
         quizQuestions =
