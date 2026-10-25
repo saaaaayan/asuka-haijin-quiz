@@ -2793,31 +2793,27 @@
             >
 
               <option value="">
-                全難易度
+                全設定難易度
               </option>
 
               <option value="5">
-                難易度5
+                5：超難問
               </option>
 
               <option value="4">
-                難易度4
+                4：難問
               </option>
 
               <option value="3">
-                難易度3
+                3：標準
               </option>
 
               <option value="2">
-                難易度2
+                2：やや易
               </option>
 
               <option value="1">
-                難易度1
-              </option>
-
-              <option value="unrated">
-                未確定
+                1：易しめ
               </option>
 
             </select>
@@ -3257,6 +3253,44 @@
           </label>
 
 
+          <label>
+
+            設定難易度
+
+            <select
+              id="editor-difficulty"
+              required
+            >
+
+              <option value="1">
+                1：易しめ
+              </option>
+
+              <option value="2">
+                2：やや易
+              </option>
+
+              <option value="3" selected>
+                3：標準
+              </option>
+
+              <option value="4">
+                4：難問
+              </option>
+
+              <option value="5">
+                5：超難問
+              </option>
+
+            </select>
+
+            <span class="section-note">
+              100問版の危険階層への配置に使用
+            </span>
+
+          </label>
+
+
           <label class="editor-full">
 
             タグ
@@ -3675,6 +3709,11 @@
         "#editor-production-stage"
       );
 
+
+    const editorDifficulty =
+      document.querySelector(
+        "#editor-difficulty"
+      );
 
     const editorTags =
       document.querySelector(
@@ -5689,6 +5728,76 @@
 
 
 
+    function renderConfiguredDifficulty(
+      value
+    ) {
+
+      const difficulty =
+        Number(
+          value
+        );
+
+
+      const labels = {
+        1:
+          "易しめ",
+        2:
+          "やや易",
+        3:
+          "標準",
+        4:
+          "難問",
+        5:
+          "超難問"
+      };
+
+
+      if (
+        !Number.isInteger(
+          difficulty
+        ) ||
+        difficulty <
+          1 ||
+        difficulty >
+          5
+      ) {
+
+        return `
+
+          <span class="difficulty-none">
+            未設定
+          </span>
+
+        `;
+      }
+
+
+      return `
+
+        <span class="difficulty-measured">
+
+          <span
+            class="
+              difficulty-number
+              difficulty-${difficulty}
+            "
+          >
+            ${difficulty}
+          </span>
+
+          <span class="difficulty-provisional">
+            ${labels[
+              difficulty
+            ]}
+          </span>
+
+        </span>
+
+      `;
+    }
+
+
+
     function renderMeasuredDifficulty(
       item
     ) {
@@ -7269,34 +7378,14 @@
 
 
             if (
-              difficulty ===
-              "unrated"
-            ) {
-
-              if (
-                stats &&
-                stats.measuredDifficulty !==
-                null
-              ) {
-
-                return false;
-              }
-
-
-            } else if (
+              difficulty &&
+              String(
+                question.difficulty
+              ) !==
               difficulty
             ) {
 
-              if (
-                !stats ||
-                String(
-                  stats.measuredDifficulty
-                ) !==
-                difficulty
-              ) {
-
-                return false;
-              }
+              return false;
             }
 
 
@@ -7416,13 +7505,13 @@
           ) {
 
             return (
-              (
-                sb?.measuredDifficulty ??
-                -1
+              Number(
+                b.difficulty ??
+                3
               ) -
-              (
-                sa?.measuredDifficulty ??
-                -1
+              Number(
+                a.difficulty ??
+                3
               )
             );
           }
@@ -7562,7 +7651,8 @@
               <th>カテゴリ</th>
               <th>種類</th>
               <th>問題文</th>
-              <th>難易度</th>
+              <th>設定難易度</th>
+              <th>実測難易度</th>
               <th>正答率</th>
               <th>回答者</th>
               <th>制作段階</th>
@@ -7671,6 +7761,15 @@
 
                         ${escapeHtml(
                           question.question
+                        )}
+
+                      </td>
+
+
+                      <td>
+
+                        ${renderConfiguredDifficulty(
+                          question.difficulty
                         )}
 
                       </td>
@@ -9166,6 +9265,12 @@
             question.production_stage
           );
 
+        editorDifficulty.value =
+          String(
+            question.difficulty ??
+            3
+          );
+
 
         editorTags.value =
           Array.isArray(
@@ -9300,6 +9405,9 @@
 
         editorProductionStage.value =
           "下書き";
+
+        editorDifficulty.value =
+          "3";
 
 
         editorPublished.checked =
@@ -9794,6 +9902,11 @@
         production_stage:
           emptyToNull(
             editorProductionStage.value
+          ),
+
+        difficulty:
+          Number(
+            editorDifficulty.value
           ),
 
         is_published:
