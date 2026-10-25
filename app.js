@@ -1410,6 +1410,257 @@ document.addEventListener(
        表示直前の公開状態確認
     ========================= */
 
+    function isValidChoiceOrder(
+      order,
+      choiceCount
+    ) {
+
+      if (
+        !Array.isArray(
+          order
+        ) ||
+        order.length !==
+          choiceCount
+      ) {
+
+        return false;
+      }
+
+
+      const values =
+        new Set(
+          order
+        );
+
+
+      if (
+        values.size !==
+          choiceCount
+      ) {
+
+        return false;
+      }
+
+
+      return order.every(
+        function (
+          value
+        ) {
+
+          return (
+            Number.isInteger(
+              value
+            ) &&
+            value >=
+              0 &&
+            value <
+              choiceCount
+          );
+        }
+      );
+    }
+
+
+
+    function prepareQuestionChoices(
+      question,
+      savedOrder = null
+    ) {
+
+      if (
+        !question ||
+        !Array.isArray(
+          question.choices
+        )
+      ) {
+
+        return question;
+      }
+
+
+      const originalChoices =
+        [...question.choices];
+
+      const choiceCount =
+        originalChoices.length;
+
+      const identityOrder =
+        Array.from(
+          {
+            length:
+              choiceCount
+          },
+          function (
+            _,
+            index
+          ) {
+
+            return index;
+          }
+        );
+
+
+      let choiceOrder =
+        identityOrder;
+
+
+      if (
+        question.shuffle_choices !==
+          false
+      ) {
+
+        choiceOrder =
+          isValidChoiceOrder(
+            savedOrder,
+            choiceCount
+          )
+
+            ? [...savedOrder]
+
+            : shuffleArray(
+                [...identityOrder]
+              );
+      }
+
+
+      const originalToDisplayed =
+        new Map();
+
+
+      choiceOrder.forEach(
+        function (
+          originalIndex,
+          displayedIndex
+        ) {
+
+          originalToDisplayed.set(
+            originalIndex,
+            displayedIndex
+          );
+        }
+      );
+
+
+      const displayedAnswer =
+        Array.isArray(
+          question.answer
+        )
+
+          ? question.answer
+              .map(
+                function (
+                  originalIndex
+                ) {
+
+                  return originalToDisplayed.get(
+                    originalIndex
+                  );
+                }
+              )
+              .sort(
+                function (
+                  a,
+                  b
+                ) {
+
+                  return a - b;
+                }
+              )
+
+          : originalToDisplayed.get(
+              question.answer
+            );
+
+
+      return {
+
+        ...question,
+
+        choices:
+          choiceOrder.map(
+            function (
+              originalIndex
+            ) {
+
+              return originalChoices[
+                originalIndex
+              ];
+            }
+          ),
+
+        answer:
+          displayedAnswer,
+
+        choice_order:
+          choiceOrder
+      };
+    }
+
+
+
+    function getCanonicalSelectedAnswer(
+      question,
+      selectedAnswer
+    ) {
+
+      const choiceOrder =
+        question &&
+        isValidChoiceOrder(
+          question.choice_order,
+          Array.isArray(
+            question.choices
+          )
+            ? question.choices.length
+            : 0
+        )
+
+          ? question.choice_order
+
+          : null;
+
+
+      const toCanonical =
+        function (
+          displayedIndex
+        ) {
+
+          return choiceOrder
+            ? choiceOrder[
+                displayedIndex
+              ]
+            : displayedIndex;
+        };
+
+
+      if (
+        Array.isArray(
+          selectedAnswer
+        )
+      ) {
+
+        return selectedAnswer
+          .map(
+            toCanonical
+          )
+          .sort(
+            function (
+              a,
+              b
+            ) {
+
+              return a - b;
+            }
+          );
+      }
+
+
+      return toCanonical(
+        selectedAnswer
+      );
+    }
+
+
+
     async function loadPublishedQuestionById(
       questionId
     ) {
@@ -1424,7 +1675,7 @@ document.addEventListener(
             "questions"
           )
           .select(
-            "id,category,type,instruction,question,choices,answer,explanation,tags,difficulty,difficulty_answer_count,measured_difficulty"
+            "id,category,type,instruction,question,choices,answer,explanation,tags,difficulty,difficulty_answer_count,measured_difficulty,shuffle_choices"
           )
           .eq(
             "id",
@@ -1531,13 +1782,20 @@ document.addEventListener(
         publishedQuestion
       ) {
 
+        const preparedQuestion =
+          prepareQuestionChoices(
+            publishedQuestion,
+            plannedQuestion.choice_order
+          );
+
+
         quizQuestions[
           currentQuestionIndex
         ] =
-          publishedQuestion;
+          preparedQuestion;
 
 
-        return publishedQuestion;
+        return preparedQuestion;
       }
 
 
@@ -1772,13 +2030,19 @@ document.addEventListener(
       );
 
 
+      const preparedReplacement =
+        prepareQuestionChoices(
+          replacement
+        );
+
+
       quizQuestions[
         currentQuestionIndex
       ] =
-        replacement;
+        preparedReplacement;
 
 
-      return replacement;
+      return preparedReplacement;
     }
 
 
@@ -2514,6 +2778,13 @@ document.addEventListener(
       );
 
 
+      const canonicalSelectedAnswer =
+        getCanonicalSelectedAnswer(
+          question,
+          selectedAnswer
+        );
+
+
       const statsPromise =
         quizMode ===
           "retry"
@@ -2524,7 +2795,7 @@ document.addEventListener(
 
           : saveFirstAnswer(
               question.id,
-              selectedAnswer,
+              canonicalSelectedAnswer,
               isCorrect
             );
 
@@ -2539,7 +2810,7 @@ document.addEventListener(
           question.id,
           currentQuestionIndex + 1,
           question.category,
-          selectedAnswer,
+          canonicalSelectedAnswer,
           isCorrect
         );
 
@@ -3076,7 +3347,7 @@ document.addEventListener(
               "questions"
             )
             .select(
-              "id,category,type,instruction,question,choices,answer,explanation,tags,difficulty,difficulty_answer_count,measured_difficulty"
+              "id,category,type,instruction,question,choices,answer,explanation,tags,difficulty,difficulty_answer_count,measured_difficulty,shuffle_choices"
             )
             .eq(
               "is_published",
@@ -3362,11 +3633,11 @@ document.addEventListener(
             question.choices.length <
               2 ||
             question.choices.length >
-              4
+              5
           ) {
 
             errors.push(
-              `${idLabel}: choices は2～4個にしてください。`
+              `${idLabel}: choices は2～5個にしてください。`
             );
           }
 
@@ -8086,6 +8357,25 @@ ${escapeHtml(
               }
             ),
 
+          choiceOrders:
+            quizQuestions.map(
+              function (
+                question
+              ) {
+
+                return (
+                  question &&
+                  Array.isArray(
+                    question.choice_order
+                  )
+                )
+
+                  ? [...question.choice_order]
+
+                  : null;
+              }
+            ),
+
           currentQuestionIndex:
             nextQuestionIndex,
 
@@ -8364,10 +8654,11 @@ ${escapeHtml(
         const restoredQuestions =
           saved.questionIds.map(
             function (
-              id
+              id,
+              index
             ) {
 
-              return (
+              const question =
                 questionMap.get(
                   String(id)
                 ) ||
@@ -8382,8 +8673,35 @@ ${escapeHtml(
 
                   needsReplacement:
                     true
-                }
-              );
+                };
+
+
+              const savedOrder =
+                Array.isArray(
+                  saved.choiceOrders
+                ) &&
+                Array.isArray(
+                  saved.choiceOrders[
+                    index
+                  ]
+                )
+
+                  ? saved.choiceOrders[
+                      index
+                    ]
+
+                  : null;
+
+
+              return savedOrder
+
+                ? {
+                    ...question,
+                    choice_order:
+                      [...savedOrder]
+                  }
+
+                : question;
             }
           );
 
