@@ -5741,7 +5741,9 @@ ${escapeHtml(
     async function startMainQuizFromBeginning() {
 
       const saved =
-        loadProgress();
+        isReplacementTestMode
+          ? null
+          : loadProgress();
 
 
       if (
@@ -5973,7 +5975,9 @@ ${escapeHtml(
 
 
       const saved =
-        loadProgress();
+        isReplacementTestMode
+          ? null
+          : loadProgress();
 
 
       if (
