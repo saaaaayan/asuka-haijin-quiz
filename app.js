@@ -747,7 +747,7 @@ document.addEventListener(
               <div class="player-history-stat">
 
                 <span>
-                  挑戦
+                  挑戦回数
                 </span>
 
                 <strong>
@@ -764,7 +764,7 @@ document.addEventListener(
               <div class="player-history-stat">
 
                 <span>
-                  完走
+                  完走回数
                 </span>
 
                 <strong>
@@ -773,6 +773,23 @@ document.addEventListener(
 
                 <small>
                   回
+                </small>
+
+              </div>
+
+
+              <div class="player-history-stat">
+
+                <span>
+                  解いた問題数
+                </span>
+
+                <strong>
+                  ${totalAnswered}
+                </strong>
+
+                <small>
+                  問
                 </small>
 
               </div>
@@ -812,7 +829,7 @@ document.addEventListener(
               <div class="player-history-stat player-history-best">
 
                 <span>
-                  BEST
+                  ベストスコア
                 </span>
 
                 <strong>
@@ -831,7 +848,7 @@ document.addEventListener(
                     bestScore !==
                       null
 
-                      ? "/100"
+                      ? "点"
 
                       : ""
                   }
@@ -861,7 +878,7 @@ document.addEventListener(
               <div class="player-history-stat">
 
                 <span>
-                  平均
+                  平均スコア
                 </span>
 
                 <strong>
