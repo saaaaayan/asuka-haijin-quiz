@@ -144,18 +144,13 @@ document.addEventListener(
       urlParams.get("lastresulttest") === "1";
 
 
-    const isReplacementTestMode =
-      urlParams.get("replacetest") === "1";
-
-
     function shouldTrackAnalytics() {
 
       return (
         !isTestMode &&
         !isResultTestMode &&
         !isDataTestMode &&
-        !isLastResultTestMode &&
-        !isReplacementTestMode
+        !isLastResultTestMode
       );
     }
 
@@ -827,28 +822,6 @@ document.addEventListener(
           );
 
 
-        if (
-          isReplacementTestMode &&
-          quizQuestions.length >
-            0
-        ) {
-
-          /*
-            開発用テスト。
-            非公開の問題ID #124 を先頭に仮配置し、
-            表示直前の自動差し替えを確認する。
-            本番アクセスでは実行されない。
-          */
-          quizQuestions[0] = {
-            id:
-              124,
-
-            needsReplacement:
-              true
-          };
-        }
-
-
         currentQuestionIndex =
           0;
 
@@ -1202,16 +1175,6 @@ document.addEventListener(
       console.info(
         `問題ID #${plannedQuestion.id} は現在非公開のため、問題ID #${replacement.id} に差し替えました。`
       );
-
-
-      if (
-        isReplacementTestMode
-      ) {
-
-        alert(
-          `差し替えテスト成功：非公開の問題ID #${plannedQuestion.id} → 公開中の問題ID #${replacement.id}`
-        );
-      }
 
 
       quizQuestions[
@@ -5741,9 +5704,7 @@ ${escapeHtml(
     async function startMainQuizFromBeginning() {
 
       const saved =
-        isReplacementTestMode
-          ? null
-          : loadProgress();
+        loadProgress();
 
 
       if (
@@ -5779,10 +5740,7 @@ ${escapeHtml(
 
 
       await startQuiz(
-        (
-          isTestMode ||
-          isReplacementTestMode
-        )
+        isTestMode
           ? 5
           : 100,
         "main"
@@ -5803,8 +5761,7 @@ ${escapeHtml(
           "main" ||
         isResultTestMode ||
         isDataTestMode ||
-        isLastResultTestMode ||
-        isReplacementTestMode
+        isLastResultTestMode
       ) {
 
         return;
@@ -5975,9 +5932,7 @@ ${escapeHtml(
 
 
       const saved =
-        isReplacementTestMode
-          ? null
-          : loadProgress();
+        loadProgress();
 
 
       if (
