@@ -102,14 +102,56 @@
 
   <script>
     function openFloorTest(floor) {
-      window.location.hash = String(floor);
-      window.location.reload();
+      window.location.href =
+        window.location.pathname +
+        "#" +
+        String(floor);
     }
 
-    const floorFromHash = Number(window.location.hash.replace('#', ''));
-    if ([25, 61, 100].includes(floorFromHash)) {
-      window.__ASUKA_FLOOR_TEST__ = floorFromHash;
+    const floorFromHash =
+      Number(
+        window.location.hash.replace(
+          "#",
+          ""
+        )
+      );
+
+    if (
+      [25, 61, 100].includes(
+        floorFromHash
+      )
+    ) {
+      window.__ASUKA_FLOOR_TEST__ =
+        floorFromHash;
     }
+
+    window.addEventListener(
+      "DOMContentLoaded",
+      function () {
+        const debug =
+          document.createElement(
+            "div"
+          );
+
+        debug.id =
+          "floor-debug";
+
+        debug.style.cssText =
+          "width:min(900px,calc(100% - 32px));margin:10px auto 0;color:#9fb2c6;font:12px monospace;text-align:center;";
+
+        debug.textContent =
+          "hash=" +
+          window.location.hash +
+          " / floorFromHash=" +
+          String(floorFromHash) +
+          " / embedded=" +
+          String(window.__ASUKA_FLOOR_TEST__);
+
+        document.body.prepend(
+          debug
+        );
+      }
+    );
   </script>
 
   <main class="container">
