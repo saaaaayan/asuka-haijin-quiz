@@ -1029,6 +1029,30 @@ document.addEventListener(
       }
 
 
+      if (
+        quizMode ===
+          "retry"
+      ) {
+
+        quizQuestions.splice(
+          currentQuestionIndex,
+          1
+        );
+
+
+        if (
+          currentQuestionIndex >=
+            quizQuestions.length
+        ) {
+
+          return null;
+        }
+
+
+        return resolveQuestionForDisplay();
+      }
+
+
       /*
         予定されていた問題が非公開・削除済みなら、
         現在公開中の別問題へ差し替える。
@@ -1256,6 +1280,17 @@ document.addEventListener(
 
 
       if (!question) {
+
+        if (
+          quizMode ===
+            "retry"
+        ) {
+
+          showRetryResult();
+
+          return;
+        }
+
 
         showQuestionDataError(
           new Error(
@@ -1713,7 +1748,9 @@ document.addEventListener(
 
       if (
         quizMode ===
-          "main"
+          "main" ||
+        quizMode ===
+          "retry"
       ) {
 
         const reviewEntry = {
@@ -3265,6 +3302,17 @@ ${escapeHtml(
     function showResult() {
 
       if (
+        quizMode ===
+          "retry"
+      ) {
+
+        showRetryResult();
+
+        return;
+      }
+
+
+      if (
         shouldTrackAnalytics() &&
         quizSessionId
       ) {
@@ -3590,6 +3638,28 @@ ${escapeHtml(
 
 
           ${
+            reviewIncorrectCount >
+              0
+
+              ? `
+
+                <button
+                  class="
+                    next-button
+                    result-retry-button
+                  "
+                  type="button"
+                >
+                  間違えた${reviewIncorrectCount}問に再挑戦する
+                </button>
+
+              `
+
+              : ""
+          }
+
+
+          ${
             canShareResult
 
               ? `
@@ -3696,6 +3766,28 @@ ${escapeHtml(
                   showCompletion
                 }
               }
+            );
+          }
+        );
+      }
+
+
+      const retryButton =
+        document.querySelector(
+          ".result-retry-button"
+        );
+
+
+      if (
+        retryButton
+      ) {
+
+        retryButton.addEventListener(
+          "click",
+          function () {
+
+            startRetryQuiz(
+              normalizedReviewData
             );
           }
         );
@@ -3847,6 +3939,229 @@ ${escapeHtml(
           }
         );
       }
+    }
+
+
+    /* =========================
+       間違えた問題だけ再挑戦
+    ========================= */
+
+    async function startRetryQuiz(
+      sourceReviewData
+    ) {
+
+      const incorrectRows =
+        Array.isArray(
+          sourceReviewData
+        )
+          ? sourceReviewData.filter(
+              function (item) {
+                return item && !item.isCorrect;
+              }
+            )
+          : [];
+
+
+      if (
+        incorrectRows.length === 0
+      ) {
+        alert("再挑戦する不正解問題はありません。");
+        return;
+      }
+
+
+      try {
+
+        const publishedQuestions =
+          await loadQuestionsData();
+
+        const publishedMap =
+          new Map(
+            publishedQuestions.map(
+              function (question) {
+                return [String(question.id), question];
+              }
+            )
+          );
+
+        const usedIds =
+          new Set();
+
+        const retryQuestions =
+          incorrectRows
+            .map(
+              function (item) {
+                return publishedMap.get(String(item.questionId));
+              }
+            )
+            .filter(
+              function (question) {
+                if (!question) {
+                  return false;
+                }
+
+                const id =
+                  String(question.id);
+
+                if (usedIds.has(id)) {
+                  return false;
+                }
+
+                usedIds.add(id);
+                return true;
+              }
+            );
+
+        const skippedCount =
+          incorrectRows.length - retryQuestions.length;
+
+
+        if (
+          retryQuestions.length === 0
+        ) {
+          alert("間違えた問題は現在すべて非公開になっているため、再挑戦できません。");
+          return;
+        }
+
+
+        if (
+          skippedCount > 0
+        ) {
+          alert(String(skippedCount) + "問は現在非公開のため、再挑戦の対象から外しました。");
+        }
+
+
+        quizQuestions =
+          retryQuestions;
+
+        currentQuestionIndex =
+          0;
+
+        score =
+          0;
+
+        categoryStats =
+          {};
+
+        categoryStatsComplete =
+          true;
+
+        reviewAnswers =
+          [];
+
+        answerLocked =
+          false;
+
+        quizSessionId =
+          null;
+
+        quizMode =
+          "retry";
+
+        showQuestion();
+
+
+      } catch (error) {
+
+        console.error(
+          "再挑戦開始エラー:",
+          error
+        );
+
+        showQuestionDataError(
+          error
+        );
+      }
+    }
+
+
+
+    function showRetryResult() {
+
+      const total =
+        reviewAnswers.length;
+
+      const correctCount =
+        reviewAnswers.filter(
+          function (item) {
+            return !!item.isCorrect;
+          }
+        ).length;
+
+      const incorrectCount =
+        total - correctCount;
+
+      let retryAgainHtml =
+        "";
+
+      if (
+        incorrectCount > 0
+      ) {
+        retryAgainHtml =
+          '<button class="next-button retry-again-button" type="button">間違えた' +
+          String(incorrectCount) +
+          '問に再挑戦する</button>';
+      } else {
+        retryAgainHtml =
+          '<div class="retry-perfect-message">間違えた問題をすべて正解できました。</div>';
+      }
+
+      quizCard.innerHTML =
+        '<div class="result-screen retry-result-screen">' +
+        '<p class="hero-label">REVIEW RESULT</p>' +
+        '<div class="result-brand">' +
+        '<div class="result-brand-title">' +
+        '<span class="title-asuka">アスカ見参</span>' +
+        '<span class="title-haijin">廃人検定</span>' +
+        '</div>' +
+        '<h1 class="result-heading">復習結果</h1>' +
+        '</div>' +
+        '<div class="final-score">' +
+        String(correctCount) +
+        '<span> / ' + String(total) + '</span></div>' +
+        '<div class="percentage">' +
+        (incorrectCount === 0 ? "全問正解！" : "あと" + String(incorrectCount) + "問") +
+        '</div>' +
+        retryAgainHtml +
+        '<button class="restart-button retry-top-button" type="button">トップ画面へ戻る</button>' +
+        '</div>';
+
+      const retryAgainButton =
+        document.querySelector(
+          ".retry-again-button"
+        );
+
+      if (
+        retryAgainButton
+      ) {
+        retryAgainButton.addEventListener(
+          "click",
+          function () {
+            startRetryQuiz(
+              reviewAnswers
+            );
+          }
+        );
+      }
+
+      const topButton =
+        document.querySelector(
+          ".retry-top-button"
+        );
+
+      if (
+        topButton
+      ) {
+        topButton.addEventListener(
+          "click",
+          goToTop
+        );
+      }
+
+      window.scrollTo({
+        top: 0,
+        behavior: "auto"
+      });
     }
 
 
