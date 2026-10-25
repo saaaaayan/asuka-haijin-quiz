@@ -124,6 +124,9 @@ document.addEventListener(
     let reviewAnswers =
       [];
 
+    let retryOriginResultArgs =
+      null;
+
 
     /* =========================
        開発用URL
@@ -849,6 +852,9 @@ document.addEventListener(
 
         reviewAnswers =
           [];
+
+        retryOriginResultArgs =
+          null;
 
         answerLocked =
           false;
@@ -3803,7 +3809,18 @@ ${escapeHtml(
           function () {
 
             startRetryQuiz(
-              normalizedReviewData
+              normalizedReviewData,
+              {
+                scoreValue,
+                totalValue,
+                rankResult,
+                statsSource,
+                statsComplete,
+                reviewData:
+                  normalizedReviewData,
+                resultTest,
+                showCompletion
+              }
             );
           }
         );
@@ -3963,8 +3980,18 @@ ${escapeHtml(
     ========================= */
 
     async function startRetryQuiz(
-      sourceReviewData
+      sourceReviewData,
+      originResultArgs =
+        null
     ) {
+
+      if (
+        originResultArgs
+      ) {
+
+        retryOriginResultArgs =
+          originResultArgs;
+      }
 
       const incorrectRows =
         Array.isArray(
@@ -4139,6 +4166,9 @@ ${escapeHtml(
         (incorrectCount === 0 ? "全問正解！" : "あと" + String(incorrectCount) + "問") +
         '</div>' +
         retryAgainHtml +
+        (retryOriginResultArgs
+          ? '<button class="restart-button retry-origin-result-button" type="button">100問版の結果に戻る</button>'
+          : '') +
         '<button class="restart-button retry-top-button" type="button">トップ画面へ戻る</button>' +
         '</div>';
 
@@ -4159,6 +4189,39 @@ ${escapeHtml(
           }
         );
       }
+
+      const originResultButton =
+        document.querySelector(
+          ".retry-origin-result-button"
+        );
+
+
+      if (
+        originResultButton &&
+        retryOriginResultArgs
+      ) {
+
+        originResultButton.addEventListener(
+          "click",
+          function () {
+
+            renderMainResultScreen(
+              retryOriginResultArgs
+            );
+
+            window.scrollTo(
+              {
+                top:
+                  0,
+
+                behavior:
+                  "auto"
+              }
+            );
+          }
+        );
+      }
+
 
       const topButton =
         document.querySelector(
@@ -4867,7 +4930,8 @@ ${escapeHtml(
           function () {
 
             startRetryQuiz(
-              incorrectRows
+              incorrectRows,
+              resultScreenArgs
             );
           }
         );
