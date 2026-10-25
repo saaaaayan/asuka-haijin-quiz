@@ -97,6 +97,9 @@ document.addEventListener(
     let previousResultArea =
       null;
 
+    let playerHistoryArea =
+      null;
+
     let quizQuestions =
       [];
 
@@ -240,6 +243,8 @@ document.addEventListener(
     updateResumeArea();
 
     setupPreviousResultArea();
+
+    setupPlayerHistoryArea();
 
 
     if (isLastResultTestMode) {
@@ -420,6 +425,519 @@ document.addEventListener(
         );
       }
     }
+
+
+    /* =========================
+       プレイヤー戦歴
+    ========================= */
+
+    function setupPlayerHistoryArea() {
+
+      if (
+        !previousResultArea
+      ) {
+
+        return;
+      }
+
+
+      playerHistoryArea =
+        document.createElement(
+          "div"
+        );
+
+
+      playerHistoryArea.id =
+        "player-history-area";
+
+
+      previousResultArea
+        .insertAdjacentElement(
+          "afterend",
+          playerHistoryArea
+        );
+
+
+      loadPlayerHistory();
+    }
+
+
+
+    async function loadPlayerHistory() {
+
+      if (
+        !playerHistoryArea
+      ) {
+
+        return;
+      }
+
+
+      try {
+
+        const user =
+          await ensureAnonymousUser();
+
+
+        if (
+          !user
+        ) {
+
+          playerHistoryArea.innerHTML =
+            "";
+
+          return;
+        }
+
+
+        const {
+          data:
+            sessions,
+          error
+        } =
+
+          await supabaseClient
+            .from(
+              "quiz_sessions"
+            )
+            .select(
+              "id,score,started_at,completed_at,abandoned_at"
+            )
+            .eq(
+              "user_id",
+              user.id
+            )
+            .eq(
+              "mode",
+              "main"
+            )
+            .order(
+              "started_at",
+              {
+                ascending:
+                  false
+              }
+            );
+
+
+        if (
+          error
+        ) {
+
+          console.error(
+            "戦歴取得エラー:",
+            error
+          );
+
+          playerHistoryArea.innerHTML =
+            "";
+
+          return;
+        }
+
+
+        const mainSessions =
+          Array.isArray(
+            sessions
+          )
+            ? sessions
+            : [];
+
+
+        if (
+          mainSessions.length ===
+            0
+        ) {
+
+          playerHistoryArea.innerHTML =
+            "";
+
+          return;
+        }
+
+
+        const completedSessions =
+          mainSessions
+            .filter(
+              function (
+                session
+              ) {
+
+                return (
+                  session.completed_at &&
+                  typeof session.score ===
+                    "number"
+                );
+              }
+            )
+            .sort(
+              function (
+                a,
+                b
+              ) {
+
+                return (
+                  new Date(
+                    b.completed_at
+                  ).getTime() -
+                  new Date(
+                    a.completed_at
+                  ).getTime()
+                );
+              }
+            );
+
+
+        const attemptCount =
+          mainSessions.length;
+
+        const completionCount =
+          completedSessions.length;
+
+        const completionRate =
+          attemptCount >
+            0
+
+            ? Math.round(
+                (
+                  completionCount /
+                  attemptCount
+                ) *
+                100
+              )
+
+            : 0;
+
+
+        const bestScore =
+          completionCount >
+            0
+
+            ? Math.max(
+                ...completedSessions.map(
+                  function (
+                    session
+                  ) {
+
+                    return session.score;
+                  }
+                )
+              )
+
+            : null;
+
+
+        const averageScore =
+          completionCount >
+            0
+
+            ? (
+                completedSessions.reduce(
+                  function (
+                    total,
+                    session
+                  ) {
+
+                    return (
+                      total +
+                      session.score
+                    );
+                  },
+                  0
+                ) /
+                completionCount
+              )
+
+            : null;
+
+
+        const bestRank =
+          bestScore !==
+            null
+
+            ? getRankResult(
+                bestScore
+              )
+
+            : null;
+
+
+        const recentCompleted =
+          completedSessions.slice(
+            0,
+            5
+          );
+
+
+        playerHistoryArea.innerHTML = `
+
+          <section class="player-history-card">
+
+            <div class="player-history-head">
+
+              <div>
+
+                <div class="player-history-kicker">
+                  YOUR RECORD
+                </div>
+
+                <h2 class="player-history-title">
+                  あなたの戦歴
+                </h2>
+
+              </div>
+
+
+              <div class="player-history-note">
+                100問版のみ集計
+              </div>
+
+            </div>
+
+
+            <div class="player-history-stats">
+
+              <div class="player-history-stat">
+
+                <span>
+                  挑戦
+                </span>
+
+                <strong>
+                  ${attemptCount}
+                </strong>
+
+                <small>
+                  回
+                </small>
+
+              </div>
+
+
+              <div class="player-history-stat">
+
+                <span>
+                  完走
+                </span>
+
+                <strong>
+                  ${completionCount}
+                </strong>
+
+                <small>
+                  回
+                </small>
+
+              </div>
+
+
+              <div class="player-history-stat">
+
+                <span>
+                  完走率
+                </span>
+
+                <strong>
+                  ${completionRate}
+                </strong>
+
+                <small>
+                  %
+                </small>
+
+              </div>
+
+
+              <div class="player-history-stat player-history-best">
+
+                <span>
+                  BEST
+                </span>
+
+                <strong>
+                  ${
+                    bestScore !==
+                      null
+
+                      ? bestScore
+
+                      : "—"
+                  }
+                </strong>
+
+                <small>
+                  ${
+                    bestScore !==
+                      null
+
+                      ? "/100"
+
+                      : ""
+                  }
+                </small>
+
+                ${
+                  bestRank
+
+                    ? `
+                      <div class="player-history-best-rank">
+                        ${escapeHtml(
+                          bestRank.rank
+                        )}
+                        ・
+                        ${escapeHtml(
+                          bestRank.title
+                        )}
+                      </div>
+                    `
+
+                    : ""
+                }
+
+              </div>
+
+
+              <div class="player-history-stat">
+
+                <span>
+                  平均
+                </span>
+
+                <strong>
+                  ${
+                    averageScore !==
+                      null
+
+                      ? averageScore.toFixed(
+                          1
+                        )
+
+                      : "—"
+                  }
+                </strong>
+
+                <small>
+                  ${
+                    averageScore !==
+                      null
+
+                      ? "点"
+
+                      : ""
+                  }
+                </small>
+
+              </div>
+
+            </div>
+
+
+            ${
+              recentCompleted.length >
+                0
+
+                ? `
+
+                  <div class="player-history-recent">
+
+                    <div class="player-history-recent-title">
+                      直近の完走
+                    </div>
+
+
+                    <div class="player-history-recent-list">
+
+                      ${recentCompleted
+                        .map(
+                          function (
+                            session
+                          ) {
+
+                            const rank =
+                              getRankResult(
+                                session.score
+                              );
+
+                            return `
+
+                              <div class="player-history-row">
+
+                                <div class="player-history-row-date">
+                                  ${escapeHtml(
+                                    formatCompletedAt(
+                                      session.completed_at
+                                    )
+                                  )}
+                                </div>
+
+                                <div class="player-history-row-score">
+                                  ${session.score}
+                                  <span>
+                                    /100
+                                  </span>
+                                </div>
+
+                                <div class="player-history-row-rank">
+                                  <strong>
+                                    ${escapeHtml(
+                                      rank.rank
+                                    )}
+                                  </strong>
+
+                                  <span>
+                                    ${escapeHtml(
+                                      rank.title
+                                    )}
+                                  </span>
+                                </div>
+
+                              </div>
+
+                            `;
+                          }
+                        )
+                        .join("")}
+
+                    </div>
+
+                  </div>
+
+                `
+
+                : `
+
+                  <div class="player-history-empty">
+                    100問版を完走すると、ここにスコア履歴が表示されます。
+                  </div>
+
+                `
+            }
+
+          </section>
+
+        `;
+
+
+      } catch (
+        error
+      ) {
+
+        console.error(
+          "戦歴取得処理エラー:",
+          error
+        );
+
+
+        if (
+          playerHistoryArea
+        ) {
+
+          playerHistoryArea.innerHTML =
+            "";
+        }
+      }
+    }
+
 
 
     /* =========================
