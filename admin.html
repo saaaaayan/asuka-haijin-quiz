@@ -8073,6 +8073,7 @@
               <th>実測難易度</th>
               <th>正答率</th>
               <th>回答者</th>
+              <th>選択肢別</th>
               <th>制作段階</th>
               <th>操作</th>
 
@@ -8228,6 +8229,13 @@
                           stats?.attempts ??
                           0
                         }
+                      </td>
+
+
+                      <td>
+                        ${renderChoiceStats(
+                          stats
+                        )}
                       </td>
 
 
