@@ -1006,6 +1006,75 @@
         );
     }
 
+    .choice-stats-details {
+      min-width: 260px;
+    }
+
+    .choice-stats-details summary {
+      color: #e0c460;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .choice-stats-list {
+      display: grid;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .choice-stats-row {
+      display: grid;
+      grid-template-columns: 28px minmax(120px, 1fr) auto;
+      gap: 7px;
+      align-items: start;
+      padding: 7px 8px;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .choice-stats-row.correct-choice {
+      border-color: rgba(76, 175, 112, 0.45);
+      background: rgba(76, 175, 112, 0.07);
+    }
+
+    .choice-stats-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      color: #f0d26d;
+      background: rgba(212, 175, 55, 0.12);
+      font-weight: 900;
+    }
+
+    .choice-stats-text {
+      color: #d7dbe0;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    .choice-stats-count {
+      color: #aeb6bf;
+      font-size: 11px;
+      line-height: 1.45;
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .choice-stats-correct-badge {
+      display: inline-block;
+      margin-left: 4px;
+      padding: 1px 5px;
+      border-radius: 999px;
+      color: #85e0a2;
+      background: rgba(65, 180, 104, 0.13);
+      font-size: 10px;
+      font-weight: 900;
+    }
+
     .difficulty-measured {
       display: inline-flex;
 
@@ -4399,7 +4468,7 @@
 
               fetchAllRows(
                 "first_answers",
-                "question_id,is_correct,user_id"
+                "question_id,is_correct,user_id,selected_answer"
               ),
 
               fetchAllRows(
@@ -5683,6 +5752,39 @@
               question:
                 question.question,
 
+              type:
+                question.type,
+
+              choices:
+                Array.isArray(
+                  question.choices
+                )
+                  ? [...question.choices]
+                  : [],
+
+              correctAnswer:
+                Array.isArray(
+                  question.answer
+                )
+                  ? [...question.answer]
+                  : question.answer,
+
+              choiceCounts:
+                Array.from(
+                  {
+                    length:
+                      Array.isArray(
+                        question.choices
+                      )
+                        ? question.choices.length
+                        : 0
+                  },
+                  function () {
+
+                    return 0;
+                  }
+                ),
+
               attempts:
                 0,
 
@@ -5730,6 +5832,60 @@
 
             item.correct++;
           }
+
+
+          const selectedIndexes =
+            Array.isArray(
+              answer.selected_answer
+            )
+
+              ? answer.selected_answer
+
+              : [
+                  answer.selected_answer
+                ];
+
+
+          [
+            ...new Set(
+              selectedIndexes
+                .map(
+                  function (
+                    value
+                  ) {
+
+                    return Number(
+                      value
+                    );
+                  }
+                )
+                .filter(
+                  function (
+                    value
+                  ) {
+
+                    return (
+                      Number.isInteger(
+                        value
+                      ) &&
+                      value >=
+                        0 &&
+                      value <
+                        item.choiceCounts.length
+                    );
+                  }
+                )
+            )
+          ].forEach(
+            function (
+              choiceIndex
+            ) {
+
+              item.choiceCounts[
+                choiceIndex
+              ]++;
+            }
+          );
         }
       );
 
@@ -5957,6 +6113,150 @@
           }
 
         </span>
+
+      `;
+    }
+
+
+
+    function renderChoiceStats(
+      item
+    ) {
+
+      if (
+        !item ||
+        !Array.isArray(
+          item.choices
+        ) ||
+        item.choices.length ===
+          0
+      ) {
+
+        return "-";
+      }
+
+
+      const correctAnswers =
+        new Set(
+          (
+            Array.isArray(
+              item.correctAnswer
+            )
+
+              ? item.correctAnswer
+
+              : [
+                  item.correctAnswer
+                ]
+          )
+            .map(
+              Number
+            )
+            .filter(
+              Number.isInteger
+            )
+        );
+
+
+      const rows =
+        item.choices.map(
+          function (
+            choice,
+            index
+          ) {
+
+            const count =
+              Number(
+                item.choiceCounts?.[
+                  index
+                ] ||
+                0
+              );
+
+            const rate =
+              item.attempts >
+                0
+
+                ? count /
+                  item.attempts *
+                  100
+
+                : 0;
+
+            const isCorrect =
+              correctAnswers.has(
+                index
+              );
+
+
+            return `
+
+              <div
+                class="
+                  choice-stats-row
+                  ${
+                    isCorrect
+                      ? "correct-choice"
+                      : ""
+                  }
+                "
+              >
+
+                <span class="choice-stats-label">
+                  ${String.fromCharCode(
+                    65 + index
+                  )}
+                </span>
+
+                <span class="choice-stats-text">
+                  ${escapeHtml(
+                    choice
+                  )}
+
+                  ${
+                    isCorrect
+
+                      ? `
+                        <span class="choice-stats-correct-badge">
+                          正解
+                        </span>
+                      `
+
+                      : ""
+                  }
+                </span>
+
+                <span class="choice-stats-count">
+                  ${count}人
+                  <br>
+                  ${formatAccuracy(
+                    rate
+                  )}%
+                </span>
+
+              </div>
+
+            `;
+          }
+        )
+        .join(
+          ""
+        );
+
+
+      return `
+
+        <details class="choice-stats-details">
+
+          <summary>
+            選択肢別を見る
+          </summary>
+
+          <div class="choice-stats-list">
+            ${rows}
+          </div>
+
+        </details>
 
       `;
     }
