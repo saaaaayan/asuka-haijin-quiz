@@ -815,8 +815,18 @@
       font-size:
         11px;
 
-      white-space:
-        nowrap;
+      font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Consolas,
+        monospace;
+
+      overflow-wrap:
+        anywhere;
+
+      word-break:
+        break-all;
     }
 
 
@@ -5297,7 +5307,7 @@
                             </span>
 
                             <span class="player-id-short">
-                              ${shortId(
+                              ${escapeHtml(
                                 playerId
                               )}
                             </span>
@@ -6370,8 +6380,9 @@
                         </span>
 
                         <span class="player-id-short">
-                          ${shortId(
-                            report.user_id
+                          ${escapeHtml(
+                            report.user_id ||
+                            "-"
                           )}
                         </span>
 
