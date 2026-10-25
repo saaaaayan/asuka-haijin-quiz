@@ -33,6 +33,9 @@ create index if not exists player_profiles_nickname_idx
 alter table public.nickname_pool enable row level security;
 alter table public.player_profiles enable row level security;
 
+grant select on public.nickname_pool to authenticated;
+grant select on public.player_profiles to authenticated;
+
 drop policy if exists "admins can read nickname pool" on public.nickname_pool;
 create policy "admins can read nickname pool"
   on public.nickname_pool
@@ -677,34 +680,27 @@ set
   category = excluded.category,
   is_active = true;
 
-create or replace function public.get_or_assign_player_nickname()
-returns table (
-  nickname text,
-  nickname_category text
-)
+-- 新しい匿名プレイヤーには、Authユーザー作成時に未使用候補を1つ固定割当する。
+-- 候補が尽きた場合でも匿名ログイン自体は失敗させない。
+create or replace function public.assign_player_nickname_on_auth_user()
+returns trigger
 language plpgsql
 security definer
-set search_path = public, auth
+set search_path = ''
 as $$
 declare
-  v_user_id uuid;
   v_nickname_id bigint;
 begin
-  v_user_id := auth.uid();
-
-  if v_user_id is null then
-    raise exception 'authentication required';
+  if coalesce(new.is_anonymous, false) is not true then
+    return new;
   end if;
 
-  return query
-  select np.name, np.category
-  from public.player_profiles pp
-  join public.nickname_pool np
-    on np.id = pp.nickname_id
-  where pp.user_id = v_user_id;
-
-  if found then
-    return;
+  if exists (
+    select 1
+    from public.player_profiles pp
+    where pp.user_id = new.id
+  ) then
+    return new;
   end if;
 
   select np.id
@@ -721,7 +717,7 @@ begin
   for update skip locked;
 
   if v_nickname_id is null then
-    raise exception 'nickname pool exhausted';
+    return new;
   end if;
 
   insert into public.player_profiles (
@@ -729,24 +725,32 @@ begin
     nickname_id
   )
   values (
-    v_user_id,
+    new.id,
     v_nickname_id
   )
   on conflict (user_id) do nothing;
 
-  return query
-  select np.name, np.category
-  from public.player_profiles pp
-  join public.nickname_pool np
-    on np.id = pp.nickname_id
-  where pp.user_id = v_user_id;
+  return new;
+
+exception
+  when unique_violation then
+    -- 万一の同時割当競合でもAuth登録自体は止めない。
+    return new;
 end;
 $$;
 
-revoke all on function public.get_or_assign_player_nickname() from public;
-grant execute on function public.get_or_assign_player_nickname() to authenticated;
+revoke all on function public.assign_player_nickname_on_auth_user() from public;
+revoke all on function public.assign_player_nickname_on_auth_user() from anon;
+revoke all on function public.assign_player_nickname_on_auth_user() from authenticated;
 
--- 既存プレイヤーにも、現在の記録に出てくる user_id から固定名を割り当てる。
+drop trigger if exists assign_player_nickname_after_auth_user_insert on auth.users;
+
+create trigger assign_player_nickname_after_auth_user_insert
+after insert on auth.users
+for each row
+execute function public.assign_player_nickname_on_auth_user();
+
+-- 既存プレイヤーにも、現在の検定データに登場する匿名 user_id から固定名を割り当てる。
 do $$
 declare
   v_user_id uuid;
@@ -768,6 +772,7 @@ begin
     left join public.player_profiles pp
       on pp.user_id = u.user_id
     where pp.user_id is null
+      and coalesce(au.is_anonymous, false) = true
   loop
     select np.id
     into v_nickname_id
@@ -797,7 +802,7 @@ begin
 end;
 $$;
 
--- 初期投入件数の安全チェック。重複や生成漏れがあればマイグレーションを失敗させる。
+-- 初期投入件数の安全チェック。
 do $$
 declare
   v_count integer;
@@ -812,5 +817,3 @@ begin
   end if;
 end;
 $$;
-
-commit;
