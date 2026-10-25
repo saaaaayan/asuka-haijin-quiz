@@ -2576,6 +2576,7 @@
               <div class="section-note">
                 各プレイヤーの初回回答から集計。
                 20回答までは設定難易度を使用し、21回答目から実測難易度を優先します。
+                単一選択は2～5択の偶然正解率を補正して実測難易度を判定します。複数選択は従来基準です。
                 選択肢別の人数・割合も初回回答のみを集計します。複数選択問題では割合の合計が100%を超える場合があります。
               </div>
 
@@ -5909,7 +5910,9 @@
 
             item.measuredDifficulty =
               calculateMeasuredDifficulty(
-                item.accuracy
+                item.accuracy,
+                item.type,
+                item.choices.length
               );
           }
         }
@@ -5924,7 +5927,9 @@
 
 
     function calculateMeasuredDifficulty(
-      accuracy
+      accuracy,
+      type,
+      choiceCount
     ) {
 
       if (
@@ -5938,9 +5943,43 @@
       }
 
 
+      let adjustedAccuracy =
+        Number(
+          accuracy
+        );
+
+
       if (
-        accuracy <
-        40
+        type ===
+          "single" &&
+        Number.isInteger(
+          choiceCount
+        ) &&
+        choiceCount >=
+          2
+      ) {
+
+        const chanceRate =
+          100 /
+          choiceCount;
+
+
+        adjustedAccuracy =
+          100 *
+          (
+            adjustedAccuracy -
+            chanceRate
+          ) /
+          (
+            100 -
+            chanceRate
+          );
+      }
+
+
+      if (
+        adjustedAccuracy <
+        20
       ) {
 
         return 5;
@@ -5948,8 +5987,8 @@
 
 
       if (
-        accuracy <
-        55
+        adjustedAccuracy <
+        40
       ) {
 
         return 4;
@@ -5957,8 +5996,8 @@
 
 
       if (
-        accuracy <
-        70
+        adjustedAccuracy <
+        60
       ) {
 
         return 3;
@@ -5966,8 +6005,8 @@
 
 
       if (
-        accuracy <
-        85
+        adjustedAccuracy <
+        80
       ) {
 
         return 2;
