@@ -639,6 +639,18 @@
         );
     }
 
+    .status-stale {
+      color: #aeb6bf;
+
+      background:
+        rgba(
+          139,
+          148,
+          158,
+          0.14
+        );
+    }
+
     .toolbar,
     .question-toolbar {
       display: flex;
@@ -2329,7 +2341,7 @@
                 </h2>
 
                 <div class="section-note">
-                  開始日時の新しい順。時刻は日本時間です。
+                  開始日時の新しい順。時刻は日本時間です。最終操作から10日以上の未完走は「放置」表示（再開可能）です。
                 </div>
 
               </div>
@@ -2379,6 +2391,10 @@
 
                 <option value="active">
                   進行中
+                </option>
+
+                <option value="stale">
+                  放置
                 </option>
 
               </select>
@@ -4623,6 +4639,70 @@
 
 
 
+    const SESSION_STALE_DAYS =
+      10;
+
+
+    function isSessionStale(
+      session
+    ) {
+
+      if (
+        !session ||
+        session.completed_at ||
+        session.abandoned_at
+      ) {
+
+        return false;
+      }
+
+
+      const activityAt =
+        session.last_activity_at ||
+        session.started_at;
+
+
+      if (
+        !activityAt
+      ) {
+
+        return false;
+      }
+
+
+      const activityTime =
+        new Date(
+          activityAt
+        ).getTime();
+
+
+      if (
+        !Number.isFinite(
+          activityTime
+        )
+      ) {
+
+        return false;
+      }
+
+
+      const staleMs =
+        SESSION_STALE_DAYS *
+        24 *
+        60 *
+        60 *
+        1000;
+
+
+      return (
+        Date.now() -
+        activityTime >=
+        staleMs
+      );
+    }
+
+
+
     function renderStats(
       sessions,
       totalAnswers
@@ -4689,13 +4769,26 @@
       }
 
 
+      function isStale(
+        item
+      ) {
+
+        return isSessionStale(
+          item
+        );
+      }
+
+
       function isActive(
         item
       ) {
 
         return (
           !item.completed_at &&
-          !item.abandoned_at
+          !item.abandoned_at &&
+          !isSessionStale(
+            item
+          )
         );
       }
 
@@ -4718,6 +4811,12 @@
         );
 
 
+      const staleTrial =
+        trial.filter(
+          isStale
+        );
+
+
       const completedMain =
         main.filter(
           isCompleted
@@ -4733,6 +4832,12 @@
       const activeMain =
         main.filter(
           isActive
+        );
+
+
+      const staleMain =
+        main.filter(
+          isStale
         );
 
 
@@ -4883,6 +4988,13 @@
               "まだ完走・棄権の記録がない挑戦"
             )}
 
+
+            ${statCard(
+              "放置",
+              staleTrial.length,
+              "最終操作から10日以上経過した未完走の挑戦"
+            )}
+
           </div>
 
         </section>
@@ -4923,6 +5035,13 @@
               "進行中",
               activeMain.length,
               "まだ完走・棄権の記録がない挑戦"
+            )}
+
+
+            ${statCard(
+              "放置",
+              staleMain.length,
+              "最終操作から10日以上経過した未完走の挑戦"
             )}
 
           </div>
@@ -5000,6 +5119,16 @@
       ) {
 
         return "abandoned";
+      }
+
+
+      if (
+        isSessionStale(
+          session
+        )
+      ) {
+
+        return "stale";
       }
 
 
@@ -5362,6 +5491,22 @@
 
           className:
             "status-abandoned"
+        };
+      }
+
+
+      if (
+        isSessionStale(
+          session
+        )
+      ) {
+
+        return {
+          label:
+            "放置",
+
+          className:
+            "status-stale"
         };
       }
 
