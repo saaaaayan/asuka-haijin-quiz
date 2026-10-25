@@ -3425,6 +3425,87 @@ h1 {
 
 
 /* =========================
+   復習再挑戦
+========================= */
+
+.result-retry-button,
+.review-retry-button,
+.retry-again-button {
+  display: block;
+
+  width:
+    min(
+      100%,
+      520px
+    );
+
+  margin:
+    14px auto 0;
+}
+
+
+.review-retry-button {
+  margin-bottom: 22px;
+}
+
+
+.retry-perfect-message {
+  width:
+    min(
+      100%,
+      520px
+    );
+
+  margin:
+    24px auto 0;
+
+  padding:
+    16px 18px;
+
+  border:
+    1px solid
+    rgba(
+      74,
+      183,
+      105,
+      0.30
+    );
+
+  border-radius:
+    12px;
+
+  background:
+    rgba(
+      65,
+      163,
+      93,
+      0.08
+    );
+
+  color:
+    #7ce19a;
+
+  font-size:
+    14px;
+
+  font-weight:
+    800;
+}
+
+
+.review-item .report-section {
+  margin-top: 18px;
+
+  text-align: left;
+}
+
+
+.review-item .report-form {
+  margin-top: 14px;
+}
+
+
+/* =========================
    前回結果
 ========================= */
 
