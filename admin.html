@@ -1579,6 +1579,36 @@
         #f0c64d;
     }
 
+    #reports-list {
+      max-height:
+        calc(
+          100vh -
+          360px
+        );
+
+      overflow-y:
+        auto;
+
+      scrollbar-gutter:
+        stable;
+
+      padding-right:
+        6px;
+    }
+
+
+    @media (
+      max-height:
+      700px
+    ) {
+
+      #reports-list {
+        max-height:
+          58vh;
+      }
+    }
+
+
     .report-card {
       padding: 18px;
 
