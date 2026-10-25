@@ -148,10 +148,22 @@ document.addEventListener(
     const isLastResultTestMode =
       urlParams.get("lastresulttest") === "1";
 
+    const embeddedFloorTestValue =
+      window.__ASUKA_FLOOR_TEST__;
+
     const floorTestValue =
-      urlParams.get(
-        "floortest"
-      );
+      embeddedFloorTestValue !==
+        undefined &&
+      embeddedFloorTestValue !==
+        null
+
+        ? String(
+            embeddedFloorTestValue
+          )
+
+        : urlParams.get(
+            "floortest"
+          );
 
     const isFloorTestMode =
       floorTestValue !==
