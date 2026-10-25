@@ -1149,13 +1149,20 @@ document.addEventListener(
 
 
 
-    async function runFloorTest() {
+    async function runFloorTest(
+      requestedPosition = null
+    ) {
 
       try {
 
         const requestedFloor =
           Number(
-            floorTestValue
+            requestedPosition !==
+              null
+
+              ? requestedPosition
+
+              : floorTestValue
           );
 
         const position =
@@ -1237,6 +1244,17 @@ document.addEventListener(
       }
     }
 
+
+
+    window.runAsukaFloorTest =
+      function (
+        floor
+      ) {
+
+        runFloorTest(
+          floor
+        );
+      };
 
 
     /* =========================
