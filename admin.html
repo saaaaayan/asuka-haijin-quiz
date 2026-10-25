@@ -3236,15 +3236,69 @@
 
               </div>
 
+
+              <div class="choice-row">
+
+                <div class="choice-index">
+                  5
+                </div>
+
+                <div>
+
+                  <input
+                    class="single-answer"
+                    type="radio"
+                    name="single-answer"
+                    value="4"
+                  >
+
+                  <input
+                    class="multi-answer hidden"
+                    type="checkbox"
+                    value="4"
+                  >
+
+                </div>
+
+                <input
+                  class="choice-text"
+                  type="text"
+                  placeholder="選択肢5"
+                >
+
+              </div>
+
             </div>
 
 
             <div class="answer-help">
               左の○または□で正解を指定してください。
-              選択肢は最低2個必要です。
+              選択肢は2～5個です。
             </div>
 
           </div>
+
+
+          <label
+            class="
+              editor-full
+              publish-check
+            "
+          >
+
+            <input
+              id="editor-shuffle-choices"
+              type="checkbox"
+              checked
+            >
+
+            選択肢をランダム表示する
+
+            <span class="section-note">
+              通常はON。選択肢の位置や順番そのものに意味がある問題だけOFFにしてください。
+            </span>
+
+          </label>
 
 
           <label class="editor-full">
@@ -3764,6 +3818,12 @@
     const editorPublished =
       document.querySelector(
         "#editor-published"
+      );
+
+
+    const editorShuffleChoices =
+      document.querySelector(
+        "#editor-shuffle-choices"
       );
 
 
@@ -9345,6 +9405,11 @@
           !!question.is_published;
 
 
+        editorShuffleChoices.checked =
+          question.shuffle_choices !==
+          false;
+
+
         const choices =
           Array.isArray(
             question.choices
@@ -9464,6 +9529,10 @@
 
         editorPublished.checked =
           false;
+
+
+        editorShuffleChoices.checked =
+          true;
       }
 
 
@@ -9960,6 +10029,9 @@
           Number(
             editorDifficulty.value
           ),
+
+        shuffle_choices:
+          editorShuffleChoices.checked,
 
         is_published:
           editorPublished.checked
