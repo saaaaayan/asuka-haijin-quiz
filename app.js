@@ -1715,11 +1715,54 @@ document.addEventListener(
       }
 
 
+      const targetDifficulty =
+        getEffectiveQuestionDifficulty(
+          plannedQuestion
+        );
+
+
+      const closestDifference =
+        Math.min(
+          ...candidates.map(
+            function (
+              question
+            ) {
+
+              return Math.abs(
+                getEffectiveQuestionDifficulty(
+                  question
+                ) -
+                targetDifficulty
+              );
+            }
+          )
+        );
+
+
+      const closestCandidates =
+        candidates.filter(
+          function (
+            question
+          ) {
+
+            return (
+              Math.abs(
+                getEffectiveQuestionDifficulty(
+                  question
+                ) -
+                targetDifficulty
+              ) ===
+              closestDifference
+            );
+          }
+        );
+
+
       const replacement =
-        candidates[
+        closestCandidates[
           Math.floor(
             Math.random() *
-            candidates.length
+            closestCandidates.length
           )
         ];
 
