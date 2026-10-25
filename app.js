@@ -3533,7 +3533,7 @@ ${escapeHtml(
           <p class="hero-label">
             ${
               resultTest
-                ? "RESULT TEST"
+                ? "RESULT TEST / BUILD 1655"
                 : "RESULT"
             }
           </p>
