@@ -1387,7 +1387,7 @@ document.addEventListener(
             "questions"
           )
           .select(
-            "id,category,type,instruction,question,choices,answer,explanation,tags"
+            "id,category,type,instruction,question,choices,answer,explanation,tags,difficulty"
           )
           .eq(
             "id",
@@ -2996,7 +2996,7 @@ document.addEventListener(
               "questions"
             )
             .select(
-              "id,category,type,instruction,question,choices,answer,explanation,tags"
+              "id,category,type,instruction,question,choices,answer,explanation,tags,difficulty"
             )
             .eq(
               "is_published",
