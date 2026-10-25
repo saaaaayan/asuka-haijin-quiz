@@ -5307,7 +5307,7 @@
                             </span>
 
                             <span class="player-id-short">
-                              ${escapeHtml(
+                              ${shortId(
                                 playerId
                               )}
                             </span>
@@ -6380,9 +6380,8 @@
                         </span>
 
                         <span class="player-id-short">
-                          ${escapeHtml(
-                            report.user_id ||
-                            "-"
+                          ${shortId(
+                            report.user_id
                           )}
                         </span>
 
