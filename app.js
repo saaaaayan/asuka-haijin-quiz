@@ -6169,90 +6169,6 @@ ${escapeHtml(
 
 
 /* =========================
-   プレイヤーニックネーム確保
-========================= */
-
-let playerNicknameAssignmentPromise =
-  null;
-
-
-async function ensurePlayerNickname() {
-
-  if (
-    playerNicknameAssignmentPromise
-  ) {
-
-    return playerNicknameAssignmentPromise;
-  }
-
-
-  playerNicknameAssignmentPromise =
-    (async function () {
-
-      try {
-
-        const {
-          data,
-          error
-        } =
-
-          await supabaseClient
-            .rpc(
-              "get_or_assign_player_nickname"
-            );
-
-
-        if (
-          error
-        ) {
-
-          /*
-            DBマイグレーション未反映時も
-            検定本体を止めない。
-          */
-          console.warn(
-            "ニックネーム割当は未使用:",
-            error.message ||
-            error
-          );
-
-          return null;
-        }
-
-
-        if (
-          Array.isArray(
-            data
-          ) &&
-          data.length
-        ) {
-
-          return data[0];
-        }
-
-
-        return null;
-
-
-      } catch (
-        error
-      ) {
-
-        console.warn(
-          "ニックネーム割当処理は未使用:",
-          error
-        );
-
-        return null;
-      }
-    })();
-
-
-  return playerNicknameAssignmentPromise;
-}
-
-
-/* =========================
    匿名ログイン
 ========================= */
 
@@ -6278,8 +6194,6 @@ async function ensureAnonymousUser() {
       user
     ) {
 
-      ensurePlayerNickname();
-
       return user;
     }
 
@@ -6304,14 +6218,6 @@ async function ensureAnonymousUser() {
       );
 
       return null;
-    }
-
-
-    if (
-      data.user
-    ) {
-
-      ensurePlayerNickname();
     }
 
 
