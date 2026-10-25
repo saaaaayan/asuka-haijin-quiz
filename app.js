@@ -997,6 +997,64 @@ document.addEventListener(
 
 
 
+    function getEffectiveQuestionDifficulty(
+      question
+    ) {
+
+      const configured =
+        Number(
+          question?.difficulty
+        );
+
+      const answerCount =
+        Number(
+          question?.difficulty_answer_count
+        );
+
+      const measured =
+        Number(
+          question?.measured_difficulty
+        );
+
+
+      if (
+        Number.isFinite(
+          answerCount
+        ) &&
+        answerCount >
+          20 &&
+        Number.isInteger(
+          measured
+        ) &&
+        measured >=
+          1 &&
+        measured <=
+          5
+      ) {
+
+        return measured;
+      }
+
+
+      if (
+        Number.isInteger(
+          configured
+        ) &&
+        configured >=
+          1 &&
+        configured <=
+          5
+      ) {
+
+        return configured;
+      }
+
+
+      return 3;
+    }
+
+
+
     function arrangeQuestionsForUrahaku(
       questions
     ) {
@@ -1014,31 +1072,10 @@ document.addEventListener(
 
 
       /*
-        難易度が全100問に設定されたら、
-        最難関23問を危険階層へ優先配置する。
-        現在は difficulty 未導入のためランダム順を維持。
+        有効難易度で並べ替える。
+        回答数20以下は設定難易度、
+        21回答以上は実測難易度を優先する。
       */
-      const allHaveDifficulty =
-        questions.every(
-          function (
-            question
-          ) {
-
-            return Number.isFinite(
-              Number(
-                question.difficulty
-              )
-            );
-          }
-        );
-
-
-      if (
-        !allHaveDifficulty
-      ) {
-
-        return questions;
-      }
 
 
       const shuffled =
@@ -1055,11 +1092,11 @@ document.addEventListener(
           ) {
 
             return (
-              Number(
-                b.difficulty
+              getEffectiveQuestionDifficulty(
+                b
               ) -
-              Number(
-                a.difficulty
+              getEffectiveQuestionDifficulty(
+                a
               )
             );
           }
@@ -1387,7 +1424,7 @@ document.addEventListener(
             "questions"
           )
           .select(
-            "id,category,type,instruction,question,choices,answer,explanation,tags,difficulty"
+            "id,category,type,instruction,question,choices,answer,explanation,tags,difficulty,difficulty_answer_count,measured_difficulty"
           )
           .eq(
             "id",
@@ -2996,7 +3033,7 @@ document.addEventListener(
               "questions"
             )
             .select(
-              "id,category,type,instruction,question,choices,answer,explanation,tags,difficulty"
+              "id,category,type,instruction,question,choices,answer,explanation,tags,difficulty,difficulty_answer_count,measured_difficulty"
             )
             .eq(
               "is_published",
