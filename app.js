@@ -4254,9 +4254,18 @@ ${escapeHtml(
           }
         ).length;
 
+      const incorrectRows =
+        rows.filter(
+          function (
+            item
+          ) {
+
+            return !item.isCorrect;
+          }
+        );
+
       const incorrectCount =
-        rows.length -
-        correctCount;
+        incorrectRows.length;
 
 
       function reviewChoiceHtml(
@@ -4382,7 +4391,7 @@ ${escapeHtml(
               </p>
 
               <h1 class="review-title">
-                100問を振り返る
+                ${rows.length}問を振り返る
               </h1>
 
               <p class="review-intro">
@@ -4455,6 +4464,28 @@ ${escapeHtml(
           </div>
 
 
+          ${
+            incorrectCount >
+              0
+
+              ? `
+
+                <button
+                  class="
+                    next-button
+                    review-retry-button
+                  "
+                  type="button"
+                >
+                  間違えた${incorrectCount}問に再挑戦する
+                </button>
+
+              `
+
+              : ""
+          }
+
+
           <div class="review-list">
 
             ${rows
@@ -4494,6 +4525,7 @@ ${escapeHtml(
                         ${statusClass}
                       "
                       data-review-status="${filterValue}"
+                      data-question-id="${escapeHtml(String(item.questionId))}"
                     >
 
                       <summary class="review-item-summary">
@@ -4580,6 +4612,85 @@ ${escapeHtml(
                             ${escapeHtml(
                               item.explanation || "解説はありません。"
                             )}
+                          </div>
+
+                        </div>
+
+
+                        <div class="report-section review-report-section">
+
+                          <button
+                            class="report-toggle-button review-report-toggle-button"
+                            type="button"
+                          >
+                            この問題に物申す
+                          </button>
+
+
+                          <div
+                            class="
+                              report-form
+                              review-report-form
+                              hidden
+                            "
+                          >
+
+                            <div class="report-heading">
+                              この問題のどこが気になりますか？
+                            </div>
+
+
+                            <select class="report-type review-report-type">
+
+                              <option value="">
+                                指摘内容を選んでください
+                              </option>
+
+                              <option value="wrong_answer">
+                                正解が違う
+                              </option>
+
+                              <option value="insufficient_condition">
+                                条件が不足している
+                              </option>
+
+                              <option value="alternate_answer">
+                                別解がある
+                              </option>
+
+                              <option value="explanation_error">
+                                解説が不正確
+                              </option>
+
+                              <option value="other">
+                                その他
+                              </option>
+
+                            </select>
+
+
+                            <textarea
+                              class="report-message review-report-message"
+                              maxlength="2000"
+                              placeholder="具体的な内容を入力してください"
+                            ></textarea>
+
+
+                            <p class="report-note">
+                              投稿内容は管理者に送信されます。一般には公開されません。
+                            </p>
+
+
+                            <button
+                              class="report-submit-button review-report-submit-button"
+                              type="button"
+                            >
+                              物申す！
+                            </button>
+
+
+                            <div class="report-status review-report-status"></div>
+
                           </div>
 
                         </div>
@@ -4723,6 +4834,167 @@ ${escapeHtml(
           );
         }
       );
+
+
+      const reviewRetryButton =
+        document.querySelector(
+          ".review-retry-button"
+        );
+
+
+      if (
+        reviewRetryButton
+      ) {
+
+        reviewRetryButton.addEventListener(
+          "click",
+          function () {
+
+            startRetryQuiz(
+              incorrectRows
+            );
+          }
+        );
+      }
+
+
+      document
+        .querySelectorAll(
+          ".review-item"
+        )
+        .forEach(
+          function (
+            reviewItem
+          ) {
+
+            const toggleButton =
+              reviewItem.querySelector(
+                ".review-report-toggle-button"
+              );
+
+            const form =
+              reviewItem.querySelector(
+                ".review-report-form"
+              );
+
+            const submitButton =
+              reviewItem.querySelector(
+                ".review-report-submit-button"
+              );
+
+            const typeSelect =
+              reviewItem.querySelector(
+                ".review-report-type"
+              );
+
+            const messageInput =
+              reviewItem.querySelector(
+                ".review-report-message"
+              );
+
+            const status =
+              reviewItem.querySelector(
+                ".review-report-status"
+              );
+
+
+            if (
+              toggleButton &&
+              form
+            ) {
+
+              toggleButton.addEventListener(
+                "click",
+                function () {
+
+                  form.classList.toggle(
+                    "hidden"
+                  );
+                }
+              );
+            }
+
+
+            if (
+              !submitButton ||
+              !typeSelect ||
+              !messageInput ||
+              !status
+            ) {
+              return;
+            }
+
+
+            submitButton.addEventListener(
+              "click",
+              async function () {
+
+                const reportType =
+                  typeSelect.value;
+
+                const message =
+                  messageInput.value.trim();
+
+
+                if (
+                  !reportType
+                ) {
+                  status.textContent =
+                    "指摘内容を選んでください。";
+                  status.className =
+                    "report-status review-report-status error";
+                  return;
+                }
+
+
+                if (
+                  !message
+                ) {
+                  status.textContent =
+                    "具体的な内容を入力してください。";
+                  status.className =
+                    "report-status review-report-status error";
+                  return;
+                }
+
+
+                submitButton.disabled =
+                  true;
+                submitButton.textContent =
+                  "送信中...";
+
+
+                const success =
+                  await submitQuestionReport(
+                    reviewItem.dataset.questionId,
+                    reportType,
+                    message
+                  );
+
+
+                if (
+                  success
+                ) {
+                  status.textContent =
+                    "送信しました。ありがとうございます。";
+                  status.className =
+                    "report-status review-report-status success";
+                  submitButton.textContent =
+                    "送信済み";
+                } else {
+                  status.textContent =
+                    "送信できませんでした。もう一度お試しください。";
+                  status.className =
+                    "report-status review-report-status error";
+                  submitButton.disabled =
+                    false;
+                  submitButton.textContent =
+                    "物申す！";
+                }
+              }
+            );
+          }
+        );
 
 
       window.scrollTo(
