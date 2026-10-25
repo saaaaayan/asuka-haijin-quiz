@@ -501,7 +501,7 @@ document.addEventListener(
               "quiz_sessions"
             )
             .select(
-              "id,score,started_at,completed_at,abandoned_at"
+              "id,score,answered_count,started_at,completed_at,abandoned_at"
             )
             .eq(
               "user_id",
@@ -594,19 +594,71 @@ document.addEventListener(
         const completionCount =
           completedSessions.length;
 
-        const completionRate =
-          attemptCount >
+        const totalAnswered =
+          mainSessions.reduce(
+            function (
+              total,
+              session
+            ) {
+
+              return (
+                total +
+                (
+                  Number.isFinite(
+                    Number(
+                      session.answered_count
+                    )
+                  )
+                    ? Number(
+                        session.answered_count
+                      )
+                    : 0
+                )
+              );
+            },
+            0
+          );
+
+        const totalCorrect =
+          mainSessions.reduce(
+            function (
+              total,
+              session
+            ) {
+
+              return (
+                total +
+                (
+                  Number.isFinite(
+                    Number(
+                      session.score
+                    )
+                  )
+                    ? Number(
+                        session.score
+                      )
+                    : 0
+                )
+              );
+            },
+            0
+          );
+
+        const overallAccuracy =
+          totalAnswered >
             0
 
-            ? Math.round(
+            ? (
                 (
-                  completionCount /
-                  attemptCount
+                  totalCorrect /
+                  totalAnswered
                 ) *
                 100
+              ).toFixed(
+                1
               )
 
-            : 0;
+            : null;
 
 
         const bestScore =
@@ -734,15 +786,29 @@ document.addEventListener(
               <div class="player-history-stat">
 
                 <span>
-                  完走率
+                  総合正答率
                 </span>
 
                 <strong>
-                  ${completionRate}
+                  ${
+                    overallAccuracy !==
+                      null
+
+                      ? overallAccuracy
+
+                      : "—"
+                  }
                 </strong>
 
                 <small>
-                  %
+                  ${
+                    overallAccuracy !==
+                      null
+
+                      ? "%"
+
+                      : ""
+                  }
                 </small>
 
               </div>
