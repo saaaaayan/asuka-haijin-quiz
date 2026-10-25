@@ -542,6 +542,55 @@
       overflow-x: auto;
     }
 
+
+    #questions-table {
+      max-height:
+        calc(
+          100vh -
+          360px
+        );
+
+      overflow:
+        auto;
+
+      scrollbar-gutter:
+        stable;
+    }
+
+
+    #questions-table thead th {
+      position:
+        sticky;
+
+      top:
+        0;
+
+      z-index:
+        5;
+
+      background:
+        #171c21;
+
+      box-shadow:
+        0
+        1px
+        0
+        #343b43;
+    }
+
+
+    @media (
+      max-height:
+      700px
+    ) {
+
+      #questions-table {
+        max-height:
+          58vh;
+      }
+    }
+
+
     table {
       width: 100%;
 
