@@ -8016,16 +8016,159 @@
 
 
 
+    function prepareQuestionPreview(
+      question
+    ) {
+
+      const originalChoices =
+        Array.isArray(
+          question?.choices
+        )
+
+          ? [...question.choices]
+
+          : [];
+
+
+      if (
+        question?.shuffle_choices ===
+          false ||
+        originalChoices.length <
+          2
+      ) {
+
+        return {
+          ...question,
+          choices:
+            originalChoices
+        };
+      }
+
+
+      const order =
+        originalChoices.map(
+          function (
+            _,
+            index
+          ) {
+
+            return index;
+          }
+        );
+
+
+      for (
+        let i =
+          order.length - 1;
+        i >
+          0;
+        i--
+      ) {
+
+        const j =
+          Math.floor(
+            Math.random() *
+            (i + 1)
+          );
+
+
+        [
+          order[i],
+          order[j]
+        ] = [
+          order[j],
+          order[i]
+        ];
+      }
+
+
+      const originalToDisplayed =
+        new Map();
+
+
+      order.forEach(
+        function (
+          originalIndex,
+          displayedIndex
+        ) {
+
+          originalToDisplayed.set(
+            originalIndex,
+            displayedIndex
+          );
+        }
+      );
+
+
+      const displayedAnswer =
+        Array.isArray(
+          question.answer
+        )
+
+          ? question.answer
+              .map(
+                function (
+                  originalIndex
+                ) {
+
+                  return originalToDisplayed.get(
+                    originalIndex
+                  );
+                }
+              )
+              .sort(
+                function (
+                  a,
+                  b
+                ) {
+
+                  return a - b;
+                }
+              )
+
+          : originalToDisplayed.get(
+              question.answer
+            );
+
+
+      return {
+        ...question,
+
+        choices:
+          order.map(
+            function (
+              originalIndex
+            ) {
+
+              return originalChoices[
+                originalIndex
+              ];
+            }
+          ),
+
+        answer:
+          displayedAnswer
+      };
+    }
+
+
+
     function openQuestionPreview(
       question
     ) {
 
+      const previewQuestion =
+        prepareQuestionPreview(
+          question
+        );
+
+
       const choices =
         Array.isArray(
-          question.choices
+          previewQuestion.choices
         )
 
-          ? question.choices
+          ? previewQuestion.choices
 
           : [];
 
@@ -8337,7 +8480,7 @@
 
           setupQuestionPreviewInteraction(
             previewFrame,
-            question
+            previewQuestion
           );
         };
 
