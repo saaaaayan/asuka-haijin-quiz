@@ -714,11 +714,6 @@ document.addEventListener(
             : null;
 
 
-        const recentCompleted =
-          completedSessions.slice(
-            0,
-            5
-          );
 
 
         playerHistoryArea.innerHTML = `
@@ -898,86 +893,7 @@ document.addEventListener(
             </div>
 
 
-            ${
-              recentCompleted.length >
-                0
 
-                ? `
-
-                  <div class="player-history-recent">
-
-                    <div class="player-history-recent-title">
-                      直近の完走
-                    </div>
-
-
-                    <div class="player-history-recent-list">
-
-                      ${recentCompleted
-                        .map(
-                          function (
-                            session
-                          ) {
-
-                            const rank =
-                              getRankResult(
-                                session.score
-                              );
-
-                            return `
-
-                              <div class="player-history-row">
-
-                                <div class="player-history-row-date">
-                                  ${escapeHtml(
-                                    formatCompletedAt(
-                                      session.completed_at
-                                    )
-                                  )}
-                                </div>
-
-                                <div class="player-history-row-score">
-                                  ${session.score}
-                                  <span>
-                                    /100
-                                  </span>
-                                </div>
-
-                                <div class="player-history-row-rank">
-                                  <strong>
-                                    ${escapeHtml(
-                                      rank.rank
-                                    )}
-                                  </strong>
-
-                                  <span>
-                                    ${escapeHtml(
-                                      rank.title
-                                    )}
-                                  </span>
-                                </div>
-
-                              </div>
-
-                            `;
-                          }
-                        )
-                        .join("")}
-
-                    </div>
-
-                  </div>
-
-                `
-
-                : `
-
-                  <div class="player-history-empty">
-                    100問版を完走すると、ここにスコア履歴が表示されます。
-                  </div>
-
-                `
-            }
 
           </section>
 
