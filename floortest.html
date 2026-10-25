@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>アスカ見参 廃人検定</title>
+
+  <meta
+    name="description"
+    content="『風来のシレン外伝 女剣士アスカ見参！』のガチ勢向け知識検定。全100問で、細かな仕様やモンスター、アイテム、ダンジョン知識まで容赦なく出題します。"
+  >
+
+  <link
+    rel="canonical"
+    href="https://saaaaayan.github.io/asuka-haijin-quiz/"
+  >
+
+  <meta
+    property="og:type"
+    content="website"
+  >
+
+  <meta
+    property="og:site_name"
+    content="アスカ見参 廃人検定"
+  >
+
+  <meta
+    property="og:title"
+    content="アスカ見参 廃人検定"
+  >
+
+  <meta
+    property="og:description"
+    content="にわか知識では、まず通用しない。あなたは本当にアスカを理解しているか？ 全100問のガチ勢向け知識検定。"
+  >
+
+  <meta
+    property="og:url"
+    content="https://saaaaayan.github.io/asuka-haijin-quiz/"
+  >
+
+  <meta
+    name="twitter:card"
+    content="summary"
+  >
+
+  <meta
+    name="twitter:title"
+    content="アスカ見参 廃人検定"
+  >
+
+  <meta
+    name="twitter:description"
+    content="にわか知識では、まず通用しない。あなたは本当にアスカを理解しているか？ 全100問のガチ勢向け知識検定。"
+  >
+
+  <meta
+    name="theme-color"
+    content="#0b0d10"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800;900&family=Reggae+One&family=Shippori+Mincho+B1:wght@500;600;700;800&family=Yuji+Syuku&display=swap"
+  rel="stylesheet"
+>
+
+  <link
+    rel="stylesheet"
+    href="style.css?v=20261025-1845"
+  >
+</head>
+
+
+<body>
+
+  <div style="width:min(900px,calc(100% - 32px));margin:20px auto 0;padding:14px;border:1px solid rgba(212,175,55,.25);border-radius:12px;background:#12161b;color:#ddd;font-family:'Noto Sans JP',sans-serif;text-align:center;">
+    <div style="margin-bottom:10px;font-weight:800;">フロア表示テスト</div>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+      <button type="button" onclick="openFloorTest(25)" style="padding:9px 16px;border-radius:8px;border:1px solid #666;background:#232a32;color:#fff;cursor:pointer;">25F</button>
+      <button type="button" onclick="openFloorTest(61)" style="padding:9px 16px;border-radius:8px;border:1px solid #a65b56;background:#332323;color:#fff;cursor:pointer;">61F</button>
+      <button type="button" onclick="openFloorTest(100)" style="padding:9px 16px;border-radius:8px;border:1px solid #b89c45;background:#332f20;color:#fff;cursor:pointer;">100問目</button>
+    </div>
+  </div>
+
+  <script>
+    function openFloorTest(floor) {
+      window.location.hash = String(floor);
+      window.location.reload();
+    }
+
+    const floorFromHash = Number(window.location.hash.replace('#', ''));
+    if ([25, 61, 100].includes(floorFromHash)) {
+      window.__ASUKA_FLOOR_TEST__ = floorFromHash;
+    }
+  </script>
+
+  <main class="container">
+
+    <section class="quiz-card hero-card">
+
+      <p class="hero-label">
+        ASUKA KENZAN / HAIJIN TEST
+      </p>
+
+
+      <h1>
+        <span class="title-asuka">
+          アスカ見参
+        </span>
+
+        <span class="title-haijin">
+          廃人検定
+        </span>
+      </h1>
+
+
+      <p class="hero-catch">
+        にわか知識では、まず通用しない。<br>
+        あなたは本当にアスカを理解しているか？
+      </p>
+
+
+      <p class="subtitle">
+        問題は毎回ランダムで出題。<br>
+        普通に遊んでいるだけでは気づきにくい細かな仕様や、忘れやすい挙動まで出題します。<br>
+        「知っているつもり」を容赦なく暴く、アスカ見参ガチ勢向け検定です。
+      </p>
+
+
+      <p class="hero-warning">
+        クリア回数だけでは語れない・・・<br>
+        知識と理解で、本物かどうかがバレる・・・
+      </p>
+
+
+      <div
+        class="resume-area hidden"
+        id="resume-area"
+      >
+
+        <div class="resume-heading">
+          中断中の100問検定があります
+        </div>
+
+
+        <button
+          class="resume-button"
+          id="resume-button"
+          type="button"
+        >
+
+          <span class="resume-main">
+            続きから再開する
+          </span>
+
+
+          <span
+            class="resume-detail"
+            id="resume-detail"
+          ></span>
+
+        </button>
+
+
+        <button
+          class="resume-reset-button"
+          id="resume-reset-button"
+          type="button"
+        >
+          途中データを捨てて最初から
+        </button>
+
+      </div>
+
+
+      <div class="hero-buttons">
+
+        <button
+          class="start-button"
+          id="main-button"
+          type="button"
+        >
+
+          <span class="button-main">
+            廃人検定に挑戦する
+          </span>
+
+
+          <span class="button-sub">
+            全100問・正式ランク判定
+          </span>
+
+        </button>
+
+
+        <button
+          class="trial-button"
+          id="trial-button"
+          type="button"
+        >
+
+          <span class="trial-label">
+            お試し版
+          </span>
+
+
+          <span class="trial-main">
+            まずは5問やってみる
+          </span>
+
+        </button>
+
+      </div>
+
+
+      <p class="trial-note">
+        ※お試し版は正式ランク判定の対象外です<br>
+        ※100問版は途中で中断でき、同じ端末・同じブラウザの場合は続きから再開できます<br>
+        ※所要時間の目安：お試し版（5問）約1～2分／100問版 約30分
+      </p>
+
+    </section>
+
+  </main>
+
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+
+  <script src="rank.js?v=20261024-2024"></script>
+
+  <script src="app.js?v=20261025-1920"></script>
+
+</body>
+
+</html>
