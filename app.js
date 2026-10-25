@@ -148,8 +148,14 @@ document.addEventListener(
     const isLastResultTestMode =
       urlParams.get("lastresulttest") === "1";
 
+    const floorTestValue =
+      urlParams.get(
+        "floortest"
+      );
+
     const isFloorTestMode =
-      urlParams.get("floortest") === "1";
+      floorTestValue !==
+        null;
 
 
     function shouldTrackAnalytics() {
@@ -1137,9 +1143,7 @@ document.addEventListener(
 
         const requestedFloor =
           Number(
-            urlParams.get(
-              "floor"
-            )
+            floorTestValue
           );
 
         const position =
