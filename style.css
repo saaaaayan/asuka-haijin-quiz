@@ -3449,6 +3449,75 @@ h1 {
 }
 
 
+.retry-origin-result-button,
+.retry-top-button {
+  display: block;
+
+  width:
+    min(
+      100%,
+      360px
+    );
+
+  margin-left:
+    auto;
+
+  margin-right:
+    auto;
+}
+
+
+.retry-origin-result-button {
+  margin-top:
+    28px;
+}
+
+
+.retry-top-button {
+  margin-top:
+    14px;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.18
+    );
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.05
+    );
+
+  color:
+    #d8d8d8;
+}
+
+
+.retry-top-button:hover {
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.09
+    );
+
+  border-color:
+    rgba(
+      255,
+      255,
+      255,
+      0.30
+    );
+}
+
+
 .retry-perfect-message {
   width:
     min(
