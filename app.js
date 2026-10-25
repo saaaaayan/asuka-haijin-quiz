@@ -1505,21 +1505,25 @@ document.addEventListener(
 
 
       if (
+        isValidChoiceOrder(
+          savedOrder,
+          choiceCount
+        )
+      ) {
+
+        choiceOrder =
+          [...savedOrder];
+
+
+      } else if (
         question.shuffle_choices !==
           false
       ) {
 
         choiceOrder =
-          isValidChoiceOrder(
-            savedOrder,
-            choiceCount
-          )
-
-            ? [...savedOrder]
-
-            : shuffleArray(
-                [...identityOrder]
-              );
+          shuffleArray(
+            [...identityOrder]
+          );
       }
 
 
