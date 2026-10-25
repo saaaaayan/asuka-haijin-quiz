@@ -121,6 +121,9 @@ document.addEventListener(
     let quizSessionId =
       null;
 
+    let reviewAnswers =
+      [];
+
 
     /* =========================
        開発用URL
@@ -458,6 +461,9 @@ document.addEventListener(
           categoryStatsComplete:
             categoryStatsComplete,
 
+          reviewAnswers:
+            reviewAnswers,
+
           completedAt:
             new Date().toISOString()
         };
@@ -622,6 +628,13 @@ document.addEventListener(
             "boolean"
               ? saved.categoryStatsComplete
               : true,
+
+          reviewData:
+            Array.isArray(
+              saved.reviewAnswers
+            )
+              ? saved.reviewAnswers
+              : [],
 
           resultTest:
             false
@@ -833,6 +846,9 @@ document.addEventListener(
 
         categoryStatsComplete =
           true;
+
+        reviewAnswers =
+          [];
 
         answerLocked =
           false;
@@ -1693,6 +1709,95 @@ document.addEventListener(
             );
           }
         );
+
+
+      if (
+        quizMode ===
+          "main"
+      ) {
+
+        const reviewEntry = {
+
+          questionNumber:
+            currentQuestionIndex + 1,
+
+          questionId:
+            question.id,
+
+          category:
+            question.category,
+
+          type:
+            question.type,
+
+          instruction:
+            question.instruction || "",
+
+          question:
+            question.question || "",
+
+          choices:
+            Array.isArray(
+              question.choices
+            )
+              ? [...question.choices]
+              : [],
+
+          correctAnswer:
+            Array.isArray(
+              question.answer
+            )
+              ? [...question.answer]
+              : question.answer,
+
+          explanation:
+            question.explanation || "",
+
+          selectedAnswer:
+            Array.isArray(
+              selectedAnswer
+            )
+              ? [...selectedAnswer]
+              : selectedAnswer,
+
+          isCorrect:
+            isCorrect
+        };
+
+
+        const existingReviewIndex =
+          reviewAnswers.findIndex(
+            function (
+              item
+            ) {
+
+              return (
+                item &&
+                item.questionNumber ===
+                  reviewEntry.questionNumber
+              );
+            }
+          );
+
+
+        if (
+          existingReviewIndex >=
+            0
+        ) {
+
+          reviewAnswers[
+            existingReviewIndex
+          ] =
+            reviewEntry;
+
+
+        } else {
+
+          reviewAnswers.push(
+            reviewEntry
+          );
+        }
+      }
 
 
       if (
@@ -2898,7 +3003,7 @@ ${escapeHtml(
        結果画面テスト
     ========================= */
 
-    function showResultTest() {
+    async function showResultTest() {
 
       const requestedScore =
         Number(
@@ -2960,6 +3065,161 @@ ${escapeHtml(
       };
 
 
+      let testReviewData =
+        [];
+
+
+      try {
+
+        const questions =
+          (
+            await loadQuestionsData()
+          ).slice(
+            0,
+            100
+          );
+
+
+        testReviewData =
+          questions.map(
+            function (
+              question,
+              index
+            ) {
+
+              const correctAnswers =
+                Array.isArray(
+                  question.answer
+                )
+                  ? [...question.answer]
+                  : [
+                      question.answer
+                    ];
+
+              let selectedAnswer;
+
+
+              if (
+                index <
+                  testScore
+              ) {
+
+                selectedAnswer =
+                  Array.isArray(
+                    question.answer
+                  )
+                    ? [...question.answer]
+                    : question.answer;
+
+
+              } else {
+
+                const wrongIndex =
+                  question.choices.findIndex(
+                    function (
+                      choice,
+                      choiceIndex
+                    ) {
+
+                      return !correctAnswers.includes(
+                        choiceIndex
+                      );
+                    }
+                  );
+
+
+                if (
+                  wrongIndex >=
+                    0
+                ) {
+
+                  selectedAnswer =
+                    question.type ===
+                      "multiple"
+                      ? [
+                          wrongIndex
+                        ]
+                      : wrongIndex;
+
+
+                } else {
+
+                  selectedAnswer =
+                    question.type ===
+                      "multiple"
+                      ? [
+                          correctAnswers[0]
+                        ]
+                      : (
+                          (
+                            correctAnswers[0] +
+                            1
+                          ) %
+                          question.choices.length
+                        );
+                }
+              }
+
+
+              return {
+
+                questionNumber:
+                  index + 1,
+
+                questionId:
+                  question.id,
+
+                category:
+                  question.category,
+
+                type:
+                  question.type,
+
+                instruction:
+                  question.instruction || "",
+
+                question:
+                  question.question || "",
+
+                choices:
+                  Array.isArray(
+                    question.choices
+                  )
+                    ? [...question.choices]
+                    : [],
+
+                correctAnswer:
+                  Array.isArray(
+                    question.answer
+                  )
+                    ? [...question.answer]
+                    : question.answer,
+
+                explanation:
+                  question.explanation || "",
+
+                selectedAnswer:
+                  selectedAnswer,
+
+                isCorrect:
+                  index <
+                    testScore
+              };
+            }
+          );
+
+
+      } catch (
+        error
+      ) {
+
+        console.warn(
+          "振り返りテストデータの作成に失敗しました:",
+          error
+        );
+      }
+
+
       const rankResult =
         getRankResult(
           testScore
@@ -2984,6 +3244,9 @@ ${escapeHtml(
           statsComplete:
             true,
 
+          reviewData:
+            testReviewData,
+
           resultTest:
             true,
 
@@ -2992,6 +3255,7 @@ ${escapeHtml(
         }
       );
     }
+
 
 
     /* =========================
@@ -3097,6 +3361,9 @@ ${escapeHtml(
           statsComplete:
             categoryStatsComplete,
 
+          reviewData:
+            reviewAnswers,
+
           resultTest:
             false,
 
@@ -3119,6 +3386,7 @@ ${escapeHtml(
         rankResult,
         statsSource,
         statsComplete,
+        reviewData = [],
         resultTest = false,
         showCompletion = false
       }
@@ -3136,6 +3404,56 @@ ${escapeHtml(
 
       const canShareResult =
         totalValue === 100;
+
+      const normalizedReviewData =
+        Array.isArray(
+          reviewData
+        )
+          ? reviewData
+              .filter(
+                function (
+                  item
+                ) {
+
+                  return (
+                    item &&
+                    typeof item.questionNumber ===
+                      "number"
+                  );
+                }
+              )
+              .sort(
+                function (
+                  a,
+                  b
+                ) {
+
+                  return (
+                    a.questionNumber -
+                    b.questionNumber
+                  );
+                }
+              )
+          : [];
+
+      const canReviewResult =
+        totalValue === 100 &&
+        normalizedReviewData.length >
+          0;
+
+      const reviewCorrectCount =
+        normalizedReviewData.filter(
+          function (
+            item
+          ) {
+
+            return !!item.isCorrect;
+          }
+        ).length;
+
+      const reviewIncorrectCount =
+        normalizedReviewData.length -
+        reviewCorrectCount;
 
 
       quizCard.innerHTML = `
@@ -3246,6 +3564,32 @@ ${escapeHtml(
 
 
           ${
+            canReviewResult
+
+              ? `
+
+                <button
+                  class="
+                    next-button
+                    result-review-button
+                  "
+                  type="button"
+                >
+                  全100問を振り返る
+                </button>
+
+                <div class="result-review-summary">
+                  正解 ${reviewCorrectCount}問 /
+                  不正解 ${reviewIncorrectCount}問
+                </div>
+
+              `
+
+              : ""
+          }
+
+
+          ${
             canShareResult
 
               ? `
@@ -3319,6 +3663,43 @@ ${escapeHtml(
         </div>
 
       `;
+
+
+      const reviewButton =
+        document.querySelector(
+          ".result-review-button"
+        );
+
+
+      if (
+        reviewButton
+      ) {
+
+        reviewButton.addEventListener(
+          "click",
+          function () {
+
+            renderReviewScreen(
+              {
+                reviewData:
+                  normalizedReviewData,
+
+                resultScreenArgs: {
+                  scoreValue,
+                  totalValue,
+                  rankResult,
+                  statsSource,
+                  statsComplete,
+                  reviewData:
+                    normalizedReviewData,
+                  resultTest,
+                  showCompletion
+                }
+              }
+            );
+          }
+        );
+      }
 
 
       const topButton =
@@ -3467,6 +3848,579 @@ ${escapeHtml(
         );
       }
     }
+
+
+    /* =========================
+       全問題振り返り
+    ========================= */
+
+    function normalizeReviewAnswerIndices(
+      value
+    ) {
+
+      const values =
+        Array.isArray(
+          value
+        )
+          ? value
+          : [
+              value
+            ];
+
+
+      return values
+        .map(
+          function (
+            item
+          ) {
+
+            return Number(
+              item
+            );
+          }
+        )
+        .filter(
+          function (
+            item
+          ) {
+
+            return Number.isInteger(
+              item
+            );
+          }
+        )
+        .sort(
+          function (
+            a,
+            b
+          ) {
+
+            return a - b;
+          }
+        );
+    }
+
+
+
+    function renderReviewScreen(
+      {
+        reviewData,
+        resultScreenArgs
+      }
+    ) {
+
+      const rows =
+        Array.isArray(
+          reviewData
+        )
+          ? [...reviewData]
+              .sort(
+                function (
+                  a,
+                  b
+                ) {
+
+                  return (
+                    a.questionNumber -
+                    b.questionNumber
+                  );
+                }
+              )
+          : [];
+
+
+      const correctCount =
+        rows.filter(
+          function (
+            item
+          ) {
+
+            return !!item.isCorrect;
+          }
+        ).length;
+
+      const incorrectCount =
+        rows.length -
+        correctCount;
+
+
+      function reviewChoiceHtml(
+        item,
+        choice,
+        choiceIndex
+      ) {
+
+        const correctAnswers =
+          normalizeReviewAnswerIndices(
+            item.correctAnswer
+          );
+
+        const selectedAnswers =
+          normalizeReviewAnswerIndices(
+            item.selectedAnswer
+          );
+
+        const isCorrectChoice =
+          correctAnswers.includes(
+            choiceIndex
+          );
+
+        const isSelectedChoice =
+          selectedAnswers.includes(
+            choiceIndex
+          );
+
+
+        let choiceClass =
+          "";
+
+        if (
+          isCorrectChoice &&
+          isSelectedChoice
+        ) {
+
+          choiceClass =
+            "review-choice-selected-correct";
+
+
+        } else if (
+          isCorrectChoice
+        ) {
+
+          choiceClass =
+            "review-choice-correct";
+
+
+        } else if (
+          isSelectedChoice
+        ) {
+
+          choiceClass =
+            "review-choice-selected-wrong";
+        }
+
+
+        return `
+
+          <div
+            class="
+              review-choice
+              ${choiceClass}
+            "
+          >
+
+            <span class="review-choice-label">
+              ${String.fromCharCode(
+                65 + choiceIndex
+              )}
+            </span>
+
+            <span class="review-choice-text">
+              ${escapeHtml(
+                choice
+              )}
+            </span>
+
+            <span class="review-choice-tags">
+
+              ${
+                isCorrectChoice
+
+                  ? `
+                    <span class="review-choice-tag review-choice-tag-correct">
+                      正解
+                    </span>
+                  `
+
+                  : ""
+              }
+
+              ${
+                isSelectedChoice
+
+                  ? `
+                    <span class="review-choice-tag review-choice-tag-selected">
+                      あなたの回答
+                    </span>
+                  `
+
+                  : ""
+              }
+
+            </span>
+
+          </div>
+
+        `;
+      }
+
+
+      quizCard.innerHTML = `
+
+        <div class="review-screen">
+
+          <div class="review-head">
+
+            <div>
+              <p class="hero-label">
+                ANSWER REVIEW
+              </p>
+
+              <h1 class="review-title">
+                100問を振り返る
+              </h1>
+
+              <p class="review-intro">
+                問題を開くと、自分の回答・正解・解説を確認できます。
+              </p>
+            </div>
+
+            <button
+              class="review-back-button"
+              type="button"
+            >
+              結果に戻る
+            </button>
+
+          </div>
+
+
+          <div class="review-score-summary">
+
+            <div class="review-score-card">
+              <span>正解</span>
+              <strong>
+                ${correctCount}
+              </strong>
+            </div>
+
+            <div class="review-score-card review-score-card-wrong">
+              <span>不正解</span>
+              <strong>
+                ${incorrectCount}
+              </strong>
+            </div>
+
+            <div class="review-score-card">
+              <span>記録済み</span>
+              <strong>
+                ${rows.length}
+              </strong>
+            </div>
+
+          </div>
+
+
+          <div class="review-filters">
+
+            <button
+              class="review-filter-button active"
+              type="button"
+              data-filter="all"
+            >
+              全て（${rows.length}）
+            </button>
+
+            <button
+              class="review-filter-button"
+              type="button"
+              data-filter="incorrect"
+            >
+              不正解だけ（${incorrectCount}）
+            </button>
+
+            <button
+              class="review-filter-button"
+              type="button"
+              data-filter="correct"
+            >
+              正解だけ（${correctCount}）
+            </button>
+
+          </div>
+
+
+          <div class="review-list">
+
+            ${rows
+              .map(
+                function (
+                  item
+                ) {
+
+                  const statusClass =
+                    item.isCorrect
+                      ? "review-item-correct"
+                      : "review-item-incorrect";
+
+                  const statusLabel =
+                    item.isCorrect
+                      ? "○ 正解"
+                      : "× 不正解";
+
+                  const filterValue =
+                    item.isCorrect
+                      ? "correct"
+                      : "incorrect";
+
+                  const choices =
+                    Array.isArray(
+                      item.choices
+                    )
+                      ? item.choices
+                      : [];
+
+
+                  return `
+
+                    <details
+                      class="
+                        review-item
+                        ${statusClass}
+                      "
+                      data-review-status="${filterValue}"
+                    >
+
+                      <summary class="review-item-summary">
+
+                        <span class="review-item-number">
+                          第${item.questionNumber}問
+                        </span>
+
+                        <span class="review-item-status">
+                          ${statusLabel}
+                        </span>
+
+                        <span class="review-item-question">
+                          ${escapeHtml(
+                            item.question || ""
+                          )}
+                        </span>
+
+                      </summary>
+
+
+                      <div class="review-item-body">
+
+                        <div class="review-item-meta">
+
+                          <span>
+                            問題ID #${escapeHtml(
+                              item.questionId
+                            )}
+                          </span>
+
+                          <span>
+                            ${escapeHtml(
+                              item.category || "その他"
+                            )}
+                          </span>
+
+                        </div>
+
+
+                        ${
+                          item.instruction
+
+                            ? `
+                              <div class="review-instruction">
+                                ${escapeHtml(
+                                  item.instruction
+                                )}
+                              </div>
+                            `
+
+                            : ""
+                        }
+
+
+                        <div class="review-choices">
+
+                          ${choices
+                            .map(
+                              function (
+                                choice,
+                                choiceIndex
+                              ) {
+
+                                return reviewChoiceHtml(
+                                  item,
+                                  choice,
+                                  choiceIndex
+                                );
+                              }
+                            )
+                            .join("")}
+
+                        </div>
+
+
+                        <div class="review-explanation">
+
+                          <div class="review-explanation-title">
+                            解説
+                          </div>
+
+                          <div class="review-explanation-text">
+                            ${escapeHtml(
+                              item.explanation || "解説はありません。"
+                            )}
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                    </details>
+
+                  `;
+                }
+              )
+              .join("")}
+
+          </div>
+
+
+          <button
+            class="
+              restart-button
+              review-bottom-back-button
+            "
+            type="button"
+          >
+            結果に戻る
+          </button>
+
+        </div>
+
+      `;
+
+
+      const returnToResult =
+        function () {
+
+          renderMainResultScreen(
+            resultScreenArgs
+          );
+
+          window.scrollTo(
+            {
+              top:
+                0,
+
+              behavior:
+                "auto"
+            }
+          );
+        };
+
+
+      document
+        .querySelectorAll(
+          ".review-back-button, .review-bottom-back-button"
+        )
+        .forEach(
+          function (
+            button
+          ) {
+
+            button.addEventListener(
+              "click",
+              returnToResult
+            );
+          }
+        );
+
+
+      const filterButtons =
+        [
+          ...document.querySelectorAll(
+            ".review-filter-button"
+          )
+        ];
+
+      const reviewItems =
+        [
+          ...document.querySelectorAll(
+            ".review-item"
+          )
+        ];
+
+
+      filterButtons.forEach(
+        function (
+          button
+        ) {
+
+          button.addEventListener(
+            "click",
+            function () {
+
+              const filter =
+                button.dataset.filter;
+
+
+              filterButtons.forEach(
+                function (
+                  item
+                ) {
+
+                  item.classList.remove(
+                    "active"
+                  );
+                }
+              );
+
+
+              button.classList.add(
+                "active"
+              );
+
+
+              reviewItems.forEach(
+                function (
+                  item
+                ) {
+
+                  const visible =
+                    filter ===
+                      "all" ||
+                    item.dataset.reviewStatus ===
+                      filter;
+
+
+                  item.classList.toggle(
+                    "hidden",
+                    !visible
+                  );
+
+
+                  if (
+                    !visible
+                  ) {
+
+                    item.open =
+                      false;
+                  }
+                }
+              );
+            }
+          );
+        }
+      );
+
+
+      window.scrollTo(
+        {
+          top:
+            0,
+
+          behavior:
+            "auto"
+        }
+      );
+    }
+
 
 
     /* =========================
@@ -5803,6 +6757,9 @@ ${escapeHtml(
           categoryStatsComplete:
             categoryStatsComplete,
 
+          reviewAnswers:
+            reviewAnswers,
+
           sessionId:
             quizSessionId,
 
@@ -6121,6 +7078,13 @@ ${escapeHtml(
             ? saved.categoryStatsComplete
 
             : true;
+
+        reviewAnswers =
+          Array.isArray(
+            saved.reviewAnswers
+          )
+            ? saved.reviewAnswers
+            : [];
 
         quizMode =
           "main";
