@@ -8329,7 +8329,7 @@
 
 
       previewNote.textContent =
-        `問題 #${question.id} ・ ${question.is_published ? "公開中" : "非公開"} ・ ${isMultiple ? "複数選択" : "単一選択"}`;
+        `問題 #${question.id} ・ ${question.is_published ? "公開中" : "非公開"} ・ ${isMultiple ? "複数選択" : "単一選択"} ・ ランダム表示${question.shuffle_choices !== false ? "ON" : "OFF"}`;
 
 
       previewFrame.onload =
