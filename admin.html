@@ -2472,7 +2472,7 @@
 
               <div class="section-note">
                 各プレイヤーの初回回答から集計。
-                20回答未満の難易度は暫定。
+                20回答までは設定難易度を使用し、21回答目から実測難易度を優先します。
               </div>
 
             </div>
@@ -2843,7 +2843,7 @@
               </option>
 
               <option value="difficulty-desc">
-                難易度が高い順
+                設定難易度が高い順
               </option>
 
               <option value="accuracy-asc">
@@ -3285,7 +3285,7 @@
             </select>
 
             <span class="section-note">
-              100問版の危険階層への配置に使用
+              20回答まではこの設定値を使用。21回答目から実測難易度を優先。
             </span>
 
           </label>
@@ -5832,7 +5832,7 @@
           </span>
 
           ${
-            item.attempts <
+            item.attempts <=
             20
 
               ? `
