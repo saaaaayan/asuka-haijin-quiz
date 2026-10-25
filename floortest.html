@@ -94,64 +94,14 @@
   <div style="width:min(900px,calc(100% - 32px));margin:20px auto 0;padding:14px;border:1px solid rgba(212,175,55,.25);border-radius:12px;background:#12161b;color:#ddd;font-family:'Noto Sans JP',sans-serif;text-align:center;">
     <div style="margin-bottom:10px;font-weight:800;">フロア表示テスト</div>
     <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
-      <button type="button" onclick="openFloorTest(25)" style="padding:9px 16px;border-radius:8px;border:1px solid #666;background:#232a32;color:#fff;cursor:pointer;">25F</button>
-      <button type="button" onclick="openFloorTest(61)" style="padding:9px 16px;border-radius:8px;border:1px solid #a65b56;background:#332323;color:#fff;cursor:pointer;">61F</button>
-      <button type="button" onclick="openFloorTest(100)" style="padding:9px 16px;border-radius:8px;border:1px solid #b89c45;background:#332f20;color:#fff;cursor:pointer;">100問目</button>
+      <button type="button" onclick="window.runAsukaFloorTest(25)" style="padding:9px 16px;border-radius:8px;border:1px solid #666;background:#232a32;color:#fff;cursor:pointer;">25F</button>
+      <button type="button" onclick="window.runAsukaFloorTest(61)" style="padding:9px 16px;border-radius:8px;border:1px solid #a65b56;background:#332323;color:#fff;cursor:pointer;">61F</button>
+      <button type="button" onclick="window.runAsukaFloorTest(100)" style="padding:9px 16px;border-radius:8px;border:1px solid #b89c45;background:#332f20;color:#fff;cursor:pointer;">100問目</button>
     </div>
   </div>
 
   <script>
-    function openFloorTest(floor) {
-      window.location.href =
-        window.location.pathname +
-        "#" +
-        String(floor);
-    }
-
-    const floorFromHash =
-      Number(
-        window.location.hash.replace(
-          "#",
-          ""
-        )
-      );
-
-    if (
-      [25, 61, 100].includes(
-        floorFromHash
-      )
-    ) {
-      window.__ASUKA_FLOOR_TEST__ =
-        floorFromHash;
-    }
-
-    window.addEventListener(
-      "DOMContentLoaded",
-      function () {
-        const debug =
-          document.createElement(
-            "div"
-          );
-
-        debug.id =
-          "floor-debug";
-
-        debug.style.cssText =
-          "width:min(900px,calc(100% - 32px));margin:10px auto 0;color:#9fb2c6;font:12px monospace;text-align:center;";
-
-        debug.textContent =
-          "hash=" +
-          window.location.hash +
-          " / floorFromHash=" +
-          String(floorFromHash) +
-          " / embedded=" +
-          String(window.__ASUKA_FLOOR_TEST__);
-
-        document.body.prepend(
-          debug
-        );
-      }
-    );
+    window.__ASUKA_FLOOR_TEST__ = 25;
   </script>
 
   <main class="container">
@@ -290,7 +240,7 @@
 
   <script src="rank.js?v=20261024-2024"></script>
 
-  <script src="app.js?v=20261025-1920"></script>
+  <script src="app.js?v=20261025-1935"></script>
 
 </body>
 
