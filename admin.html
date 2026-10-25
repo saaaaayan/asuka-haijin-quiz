@@ -4545,7 +4545,7 @@
 
         const [
           sessions,
-          totalAnswers,
+          answerSummary,
           firstAnswers,
           reports,
           questions,
@@ -4559,7 +4559,7 @@
                 "*"
               ),
 
-              fetchAnswerCount(),
+              fetchAnswerSummary(),
 
               fetchAllRows(
                 "first_answers",
@@ -4624,7 +4624,7 @@
 
         renderStats(
           sessions,
-          totalAnswers
+          answerSummary
         );
 
 
@@ -4829,18 +4829,22 @@
 
 
 
-    async function fetchAnswerCount() {
+    async function fetchAnswerMetric(
+      mode = null,
+      correctOnly = false
+    ) {
 
-      const {
-        count,
-        error
-      } =
-        await adminClient
+      let query =
+        adminClient
           .from(
             "quiz_answers"
           )
           .select(
-            "*",
+            mode
+
+              ? "id,quiz_sessions!inner(mode)"
+
+              : "id",
             {
               count:
                 "exact",
@@ -4851,10 +4855,32 @@
           );
 
 
-      if (
-        error
-      ) {
+      if (mode) {
+        query =
+          query.eq(
+            "quiz_sessions.mode",
+            mode
+          );
+      }
 
+
+      if (correctOnly) {
+        query =
+          query.eq(
+            "is_correct",
+            true
+          );
+      }
+
+
+      const {
+        count,
+        error
+      } =
+        await query;
+
+
+      if (error) {
         throw error;
       }
 
@@ -4862,6 +4888,43 @@
       return count || 0;
     }
 
+
+
+    async function fetchAnswerSummary() {
+
+      const [
+        total,
+        correct,
+        trialTotal,
+        trialCorrect,
+        mainTotal,
+        mainCorrect
+      ] =
+        await Promise.all(
+          [
+            fetchAnswerMetric(),
+            fetchAnswerMetric(null, true),
+            fetchAnswerMetric("trial"),
+            fetchAnswerMetric("trial", true),
+            fetchAnswerMetric("main"),
+            fetchAnswerMetric("main", true)
+          ]
+        );
+
+
+      return {
+        total,
+        correct,
+        trial: {
+          total: trialTotal,
+          correct: trialCorrect
+        },
+        main: {
+          total: mainTotal,
+          correct: mainCorrect
+        }
+      };
+    }
 
 
     async function fetchAllRows(
@@ -5002,7 +5065,7 @@
 
     function renderStats(
       sessions,
-      totalAnswers
+      answerSummary
     ) {
 
       const uniquePlayers =
@@ -5138,10 +5201,36 @@
         );
 
 
+      const totalAnswers = Number(answerSummary?.total || 0);
+      const totalCorrect = Number(answerSummary?.correct || 0);
+
+
+      function answerRate(correct, total) {
+        if (!total) {
+          return 0;
+        }
+
+        return Number(
+          (correct / total * 100).toFixed(1)
+        );
+      }
+
+
+      const trialAnswerCount = Number(answerSummary?.trial?.total || 0);
+      const trialCorrectCount = Number(answerSummary?.trial?.correct || 0);
+      const mainAnswerCount = Number(answerSummary?.main?.total || 0);
+      const mainCorrectCount = Number(answerSummary?.main?.correct || 0);
+
+      const totalAccuracy = answerRate(totalCorrect, totalAnswers);
+      const trialAccuracy = answerRate(trialCorrectCount, trialAnswerCount);
+      const mainAccuracy = answerRate(mainCorrectCount, mainAnswerCount);
+
+
       function statCard(
         label,
         value,
-        sub
+        sub,
+        suffix = ""
       ) {
 
         return `
@@ -5155,11 +5244,17 @@
             </div>
 
             <div class="stat-value">
-              ${Number(
-                value
-              ).toLocaleString(
-                "ja-JP"
+              ${Number(value).toLocaleString(
+                "ja-JP",
+                {
+                  maximumFractionDigits: 1
+                }
               )}
+              ${
+                suffix
+                  ? `<span class="stat-value-suffix">${escapeHtml(suffix)}</span>`
+                  : ""
+              }
             </div>
 
             <div class="stat-sub">
@@ -5231,7 +5326,7 @@
               `完走率 ${rate(
                 completedTrial.length,
                 trial.length
-              )}%`
+              )}% / 正答率 ${trialAccuracy}%`
             )}
 
             ${statCard(
@@ -5240,7 +5335,7 @@
               `完走率 ${rate(
                 completedMain.length,
                 main.length
-              )}%`
+              )}% / 正答率 ${mainAccuracy}%`
             )}
 
           </div>
@@ -5346,16 +5441,16 @@
         </section>
 
 
-        <section class="stats-group">
+        <section class="stats-group stats-group-wide">
 
           <div class="stats-group-head">
 
             <div class="stats-group-title">
-              回答量
+              回答実績
             </div>
 
             <div class="stats-group-note">
-              全挑戦の合計
+              実際の回答ログから集計
             </div>
 
           </div>
@@ -5365,7 +5460,34 @@
             ${statCard(
               "総回答数",
               totalAnswers,
-              "プレイヤーが実際に回答した問題数の合計"
+              "全挑戦で回答された問題数"
+            )}
+
+            ${statCard(
+              "総正解数",
+              totalCorrect,
+              "全挑戦で正解した問題数"
+            )}
+
+            ${statCard(
+              "全体正答率",
+              totalAccuracy,
+              `${totalCorrect} / ${totalAnswers}問正解`,
+              "%"
+            )}
+
+            ${statCard(
+              "お試し版 正答率",
+              trialAccuracy,
+              `${trialCorrectCount} / ${trialAnswerCount}問正解`,
+              "%"
+            )}
+
+            ${statCard(
+              "100問版 正答率",
+              mainAccuracy,
+              `${mainCorrectCount} / ${mainAnswerCount}問正解`,
+              "%"
             )}
 
           </div>
