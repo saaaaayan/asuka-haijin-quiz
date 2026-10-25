@@ -148,6 +148,9 @@ document.addEventListener(
     const isLastResultTestMode =
       urlParams.get("lastresulttest") === "1";
 
+    const isFloorTestMode =
+      urlParams.get("floortest") === "1";
+
 
     function shouldTrackAnalytics() {
 
@@ -155,7 +158,8 @@ document.addEventListener(
         !isTestMode &&
         !isResultTestMode &&
         !isDataTestMode &&
-        !isLastResultTestMode
+        !isLastResultTestMode &&
+        !isFloorTestMode
       );
     }
 
@@ -259,6 +263,14 @@ document.addEventListener(
     if (isResultTestMode) {
 
       showResultTest();
+
+      return;
+    }
+
+
+    if (isFloorTestMode) {
+
+      runFloorTest();
 
       return;
     }
@@ -806,6 +818,412 @@ document.addEventListener(
 
 
     /* =========================
+       裏白蛇フロア構成
+    ========================= */
+
+    const URAHAKU_DANGER_FLOOR_RANGES = [
+      [51, 52],
+      [61, 65],
+      [71, 75],
+      [82, 86],
+      [94, 99]
+    ];
+
+
+    function isUrahakuDangerFloor(
+      floor
+    ) {
+
+      return URAHAKU_DANGER_FLOOR_RANGES.some(
+        function (
+          range
+        ) {
+
+          return (
+            floor >=
+              range[0] &&
+            floor <=
+              range[1]
+          );
+        }
+      );
+    }
+
+
+
+    function getQuizStageMeta(
+      questionIndex,
+      totalQuestions,
+      mode
+    ) {
+
+      if (
+        mode ===
+          "main" &&
+        totalQuestions ===
+          100
+      ) {
+
+        if (
+          questionIndex ===
+            99
+        ) {
+
+          return {
+            kind:
+              "bonus",
+
+            primary:
+              "BONUS STAGE",
+
+            secondary:
+              "第100問 / 全100問",
+
+            isDanger:
+              false
+          };
+        }
+
+
+        const floor =
+          questionIndex + 1;
+
+
+        return {
+          kind:
+            "floor",
+
+          floor:
+            floor,
+
+          primary:
+            `${floor}F`,
+
+          secondary:
+            `第${questionIndex + 1}問 / 全100問`,
+
+          isDanger:
+            isUrahakuDangerFloor(
+              floor
+            )
+        };
+      }
+
+
+      return {
+        kind:
+          "question",
+
+        primary:
+          `第${questionIndex + 1}問 / 全${totalQuestions}問`,
+
+        secondary:
+          "",
+
+        isDanger:
+          false
+      };
+    }
+
+
+
+    function getReviewStageLabel(
+      questionNumber,
+      totalQuestions
+    ) {
+
+      if (
+        totalQuestions ===
+          100
+      ) {
+
+        if (
+          questionNumber ===
+            100
+        ) {
+
+          return "BONUS";
+        }
+
+
+        if (
+          questionNumber >=
+            1 &&
+          questionNumber <=
+            99
+        ) {
+
+          return `${questionNumber}F`;
+        }
+      }
+
+
+      return `第${questionNumber}問`;
+    }
+
+
+
+    function arrangeQuestionsForUrahaku(
+      questions
+    ) {
+
+      if (
+        !Array.isArray(
+          questions
+        ) ||
+        questions.length !==
+          100
+      ) {
+
+        return questions;
+      }
+
+
+      /*
+        難易度が全100問に設定されたら、
+        最難関23問を危険階層へ優先配置する。
+        現在は difficulty 未導入のためランダム順を維持。
+      */
+      const allHaveDifficulty =
+        questions.every(
+          function (
+            question
+          ) {
+
+            return Number.isFinite(
+              Number(
+                question.difficulty
+              )
+            );
+          }
+        );
+
+
+      if (
+        !allHaveDifficulty
+      ) {
+
+        return questions;
+      }
+
+
+      const shuffled =
+        shuffleArray(
+          [...questions]
+        );
+
+
+      const sortedByDifficulty =
+        [...shuffled].sort(
+          function (
+            a,
+            b
+          ) {
+
+            return (
+              Number(
+                b.difficulty
+              ) -
+              Number(
+                a.difficulty
+              )
+            );
+          }
+        );
+
+
+      const dangerIndexes =
+        [];
+
+      const normalIndexes =
+        [];
+
+
+      for (
+        let index =
+          0;
+        index <
+          100;
+        index++
+      ) {
+
+        const questionNumber =
+          index + 1;
+
+
+        if (
+          questionNumber <=
+            99 &&
+          isUrahakuDangerFloor(
+            questionNumber
+          )
+        ) {
+
+          dangerIndexes.push(
+            index
+          );
+
+
+        } else {
+
+          normalIndexes.push(
+            index
+          );
+        }
+      }
+
+
+      const arranged =
+        new Array(
+          100
+        );
+
+      const hardQuestions =
+        sortedByDifficulty.slice(
+          0,
+          dangerIndexes.length
+        );
+
+      const otherQuestions =
+        sortedByDifficulty.slice(
+          dangerIndexes.length
+        );
+
+
+      shuffleArray(
+        dangerIndexes
+      ).forEach(
+        function (
+          index,
+          position
+        ) {
+
+          arranged[
+            index
+          ] =
+            hardQuestions[
+              position
+            ];
+        }
+      );
+
+
+      shuffleArray(
+        normalIndexes
+      ).forEach(
+        function (
+          index,
+          position
+        ) {
+
+          arranged[
+            index
+          ] =
+            otherQuestions[
+              position
+            ];
+        }
+      );
+
+
+      return arranged;
+    }
+
+
+
+    async function runFloorTest() {
+
+      try {
+
+        const requestedFloor =
+          Number(
+            urlParams.get(
+              "floor"
+            )
+          );
+
+        const position =
+          Number.isInteger(
+            requestedFloor
+          ) &&
+          requestedFloor >=
+            1 &&
+          requestedFloor <=
+            100
+
+            ? requestedFloor
+
+            : 61;
+
+
+        const allQuestions =
+          await loadQuestionsData();
+
+
+        quizQuestions =
+          shuffleArray(
+            [...allQuestions]
+          ).slice(
+            0,
+            Math.min(
+              100,
+              allQuestions.length
+            )
+          );
+
+
+        if (
+          quizQuestions.length <
+            100
+        ) {
+
+          throw new Error(
+            "フロア表示テストには公開問題が100問以上必要です。"
+          );
+        }
+
+
+        quizMode =
+          "main";
+
+        currentQuestionIndex =
+          position - 1;
+
+        score =
+          0;
+
+        categoryStats =
+          {};
+
+        categoryStatsComplete =
+          true;
+
+        reviewAnswers =
+          [];
+
+        answerLocked =
+          false;
+
+        quizSessionId =
+          null;
+
+
+        showQuestion();
+
+
+      } catch (
+        error
+      ) {
+
+        showQuestionDataError(
+          error
+        );
+      }
+    }
+
+
+
+    /* =========================
        クイズ開始
     ========================= */
 
@@ -834,6 +1252,20 @@ document.addEventListener(
               allQuestions.length
             )
           );
+
+
+        if (
+          quizMode ===
+            "main" &&
+          quizQuestions.length ===
+            100
+        ) {
+
+          quizQuestions =
+            arrangeQuestionsForUrahaku(
+              quizQuestions
+            );
+        }
 
 
         currentQuestionIndex =
@@ -1306,6 +1738,14 @@ document.addEventListener(
       }
 
 
+      const stageMeta =
+        getQuizStageMeta(
+          currentQuestionIndex,
+          quizQuestions.length,
+          quizMode
+        );
+
+
       const progress =
         (
           (
@@ -1321,10 +1761,47 @@ document.addEventListener(
 
         <div class="question-meta">
 
-          <span>
-            第${currentQuestionIndex + 1}問 /
-            全${quizQuestions.length}問
-          </span>
+          <div
+            class="
+              question-stage
+              question-stage-${stageMeta.kind}
+              ${
+                stageMeta.isDanger
+                  ? "question-stage-danger"
+                  : ""
+              }
+            "
+          >
+
+            <span class="question-stage-primary">
+              ${stageMeta.primary}
+            </span>
+
+            ${
+              stageMeta.isDanger
+
+                ? `
+                  <span class="danger-floor-badge">
+                    DANGER FLOOR
+                  </span>
+                `
+
+                : ""
+            }
+
+            ${
+              stageMeta.secondary
+
+                ? `
+                  <span class="question-stage-secondary">
+                    ${stageMeta.secondary}
+                  </span>
+                `
+
+                : ""
+            }
+
+          </div>
 
 
           <div class="question-meta-right">
@@ -4682,7 +5159,12 @@ ${escapeHtml(
                       <summary class="review-item-summary">
 
                         <span class="review-item-number">
-                          第${item.questionNumber}問
+                          ${escapeHtml(
+                            getReviewStageLabel(
+                              item.questionNumber,
+                              rows.length
+                            )
+                          )}
                         </span>
 
                         <span class="review-item-status">
@@ -7454,7 +7936,8 @@ ${escapeHtml(
           "main" ||
         isResultTestMode ||
         isDataTestMode ||
-        isLastResultTestMode
+        isLastResultTestMode ||
+        isFloorTestMode
       ) {
 
         return;
