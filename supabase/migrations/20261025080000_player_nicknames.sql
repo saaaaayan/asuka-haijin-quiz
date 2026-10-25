@@ -1,6 +1,6 @@
 -- アスカ見参 廃人検定
 -- プレイヤー固定ニックネーム用マスタ・割当テーブル
--- 初期候補: 通常名称 560件 + 99段階モンスター派生 294件 = 合計854件
+-- 初期候補: 通常名称 560件 + ンドゥバ固有年齢名 8件 = 合計568件
 --
 -- 方針:
 -- 1. 匿名Authの user_id ごとに一度だけニックネームを割り当てる
@@ -636,45 +636,17 @@ set
   category = excluded.category,
   is_active = true;
 
--- 火炎入道: Lv1 は「火炎入道」、Lv2〜99 は「火炎入道N」
+-- ンドゥバの年齢別名称は、固有名に変化するものだけ候補にする。
 insert into public.nickname_pool (name, category)
-select
-  '火炎入道' || gs::text,
-  'モンスター'
-from generate_series(2, 99) as gs
-on conflict (name) do update
-set
-  category = excluded.category,
-  is_active = true;
-
--- キグニ族: Lv1 は「キグニ族」、Lv2〜99 は「キグニ族N」
-insert into public.nickname_pool (name, category)
-select
-  'キグニ族' || gs::text,
-  'モンスター'
-from generate_series(2, 99) as gs
-on conflict (name) do update
-set
-  category = excluded.category,
-  is_active = true;
-
--- ンドゥバ: Lv1 は「ンドゥバ」。
--- 一部の年齢には専用名称がある。
-insert into public.nickname_pool (name, category)
-select
-  case gs
-    when 20 then 'ンドゥバはたち'
-    when 30 then 'ンドゥバみそじ'
-    when 60 then 'ンドゥバかんれき'
-    when 70 then 'ンドゥバこき'
-    when 77 then 'ンドゥバきじゅ'
-    when 88 then 'ンドゥバべいじゅ'
-    when 90 then 'ンドゥバそつじゅ'
-    when 99 then 'ンドゥバはくじゅ'
-    else 'ンドゥバ' || gs::text || '才'
-  end,
-  'モンスター'
-from generate_series(2, 99) as gs
+values
+  ('ンドゥバはたち', 'モンスター'),
+  ('ンドゥバみそじ', 'モンスター'),
+  ('ンドゥバかんれき', 'モンスター'),
+  ('ンドゥバこき', 'モンスター'),
+  ('ンドゥバきじゅ', 'モンスター'),
+  ('ンドゥバべいじゅ', 'モンスター'),
+  ('ンドゥバそつじゅ', 'モンスター'),
+  ('ンドゥバはくじゅ', 'モンスター')
 on conflict (name) do update
 set
   category = excluded.category,
