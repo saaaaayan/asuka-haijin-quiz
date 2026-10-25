@@ -802,6 +802,175 @@ h1 {
 
 
 /* =========================
+   裏白蛇フロア表示
+========================= */
+
+.question-stage {
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    10px;
+
+  flex-wrap:
+    wrap;
+}
+
+
+.question-stage-primary {
+  color:
+    #f0d26d;
+
+  font-family:
+    "Shippori Mincho B1",
+    "Yu Mincho",
+    serif;
+
+  font-size:
+    26px;
+
+  font-weight:
+    800;
+
+  line-height:
+    1;
+
+  letter-spacing:
+    0.04em;
+}
+
+
+.question-stage-secondary {
+  color:
+    #858c93;
+
+  font-size:
+    11px;
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    0.03em;
+}
+
+
+.danger-floor-badge {
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  min-height:
+    24px;
+
+  padding:
+    4px 8px;
+
+  border:
+    1px solid
+    rgba(
+      224,
+      88,
+      82,
+      0.38
+    );
+
+  border-radius:
+    999px;
+
+  background:
+    rgba(
+      190,
+      58,
+      54,
+      0.10
+    );
+
+  color:
+    #ef8d87;
+
+  font-size:
+    9px;
+
+  font-weight:
+    900;
+
+  letter-spacing:
+    0.11em;
+}
+
+
+.question-stage-danger
+.question-stage-primary {
+  color:
+    #f08b84;
+}
+
+
+.question-stage-bonus
+.question-stage-primary {
+  color:
+    #f0d26d;
+
+  font-family:
+    "Reggae One",
+    "Noto Sans JP",
+    sans-serif;
+
+  font-size:
+    19px;
+
+  letter-spacing:
+    0.08em;
+}
+
+
+@media (max-width: 700px) {
+
+  .question-stage {
+    gap:
+      7px;
+  }
+
+
+  .question-stage-primary {
+    font-size:
+      22px;
+  }
+
+
+  .question-stage-secondary {
+    width:
+      100%;
+  }
+
+
+  .danger-floor-badge {
+    min-height:
+      21px;
+
+    padding:
+      3px 7px;
+
+    font-size:
+      8px;
+  }
+
+
+  .question-stage-bonus
+  .question-stage-primary {
+    font-size:
+      17px;
+  }
+}
+
+
+/* =========================
    問題表示
 ========================= */
 
