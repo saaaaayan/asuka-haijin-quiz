@@ -262,6 +262,18 @@ document.addEventListener(
 
     setupPreviousResultArea();
 
+
+    window.runAsukaFloorTest =
+      function (
+        floor
+      ) {
+
+        runFloorTest(
+          floor
+        );
+      };
+
+
     if (isLastResultTestMode) {
 
       runLastResultTest();
@@ -1244,17 +1256,6 @@ document.addEventListener(
       }
     }
 
-
-
-    window.runAsukaFloorTest =
-      function (
-        floor
-      ) {
-
-        runFloorTest(
-          floor
-        );
-      };
 
 
     /* =========================
