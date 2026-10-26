@@ -10336,6 +10336,16 @@
         "multiple";
 
 
+      if (
+        multiple &&
+        !editorInstruction.value.trim()
+      ) {
+
+        editorInstruction.value =
+          "正しいものをすべて選べ";
+      }
+
+
       singleAnswers.forEach(
         function (
           input
@@ -10704,9 +10714,18 @@
           editorType.value,
 
         instruction:
-          emptyToNull(
-            editorInstruction.value
-          ),
+          editorType.value ===
+            "multiple"
+
+            ? (
+                editorInstruction.value
+                  .trim() ||
+                "正しいものをすべて選べ"
+              )
+
+            : emptyToNull(
+                editorInstruction.value
+              ),
 
         question:
           question,
