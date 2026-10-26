@@ -2055,7 +2055,36 @@ document.addEventListener(
        問題表示
     ========================= */
 
-    async function showQuestion() {
+    function getQuestionInstruction(
+  question
+) {
+
+  const instruction =
+    String(
+      question?.instruction ||
+      ""
+    ).trim();
+
+
+  if (instruction) {
+    return instruction;
+  }
+
+
+  if (
+    question?.type ===
+      "multiple"
+  ) {
+
+    return "正しいものをすべて選べ";
+  }
+
+
+  return "";
+}
+
+
+async function showQuestion() {
 
       answerLocked =
         false;
@@ -2142,6 +2171,12 @@ document.addEventListener(
           quizQuestions.length
         ) *
         100;
+
+
+      const questionInstruction =
+        getQuestionInstruction(
+          question
+        );
 
 
       quizCard.innerHTML = `
@@ -2249,15 +2284,13 @@ document.addEventListener(
 
 
         ${
-          question.type ===
-            "multiple" &&
-          question.instruction
+          questionInstruction
 
             ? `
 
               <div class="question-instruction">
                 ${escapeHtml(
-                  question.instruction
+                  questionInstruction
                 )}
               </div>
 
@@ -2636,7 +2669,9 @@ document.addEventListener(
             question.type,
 
           instruction:
-            question.instruction || "",
+            getQuestionInstruction(
+              question
+            ),
 
           question:
             question.question || "",
