@@ -2202,6 +2202,21 @@
         1 / -1;
     }
 
+    #editor-instruction-settings {
+      display:
+        grid;
+
+      gap:
+        12px;
+    }
+
+
+    #editor-instruction-settings.hidden {
+      display:
+        none;
+    }
+
+
     .choice-editor {
       display: grid;
 
@@ -3251,16 +3266,49 @@
           </label>
 
 
-          <label class="editor-full">
+          <div
+            id="editor-instruction-settings"
+            class="editor-full hidden"
+          >
 
-            補足・指示文
+            <label>
 
-            <textarea
-              id="editor-instruction"
-              placeholder="例：正しいものをすべて選びなさい"
-            ></textarea>
+              指示タイプ
 
-          </label>
+              <select id="editor-instruction-type">
+
+                <option value="correct">
+                  正しいものをすべて選べ
+                </option>
+
+                <option value="incorrect">
+                  間違っているものをすべて選べ
+                </option>
+
+                <option value="custom">
+                  その他（自由入力）
+                </option>
+
+              </select>
+
+            </label>
+
+
+            <label
+              id="editor-instruction-custom-wrap"
+              class="hidden"
+            >
+
+              その他の指示文
+
+              <textarea
+                id="editor-instruction"
+                placeholder="表示したい指示文を入力"
+              ></textarea>
+
+            </label>
+
+          </div>
 
 
           <div class="editor-full">
@@ -3945,6 +3993,24 @@
     const editorQuestion =
       document.querySelector(
         "#editor-question"
+      );
+
+
+    const editorInstructionSettings =
+      document.querySelector(
+        "#editor-instruction-settings"
+      );
+
+
+    const editorInstructionType =
+      document.querySelector(
+        "#editor-instruction-type"
+      );
+
+
+    const editorInstructionCustomWrap =
+      document.querySelector(
+        "#editor-instruction-custom-wrap"
       );
 
 
@@ -9981,6 +10047,12 @@
     );
 
 
+    editorInstructionType.addEventListener(
+      "change",
+      updateInstructionControlMode
+    );
+
+
 
     closeEditorButton.addEventListener(
       "click",
@@ -10072,9 +10144,9 @@
           "";
 
 
-        editorInstruction.value =
-          question.instruction ||
-          "";
+        setInstructionEditorFromQuestion(
+          question
+        );
 
 
         editorExplanation.value =
@@ -10230,6 +10302,14 @@
           "single";
 
 
+        editorInstructionType.value =
+          "correct";
+
+
+        editorInstruction.value =
+          "";
+
+
         editorProductionStage.value =
           "下書き";
 
@@ -10336,16 +10416,6 @@
         "multiple";
 
 
-      if (
-        multiple &&
-        !editorInstruction.value.trim()
-      ) {
-
-        editorInstruction.value =
-          "正しいものをすべて選べ";
-      }
-
-
       singleAnswers.forEach(
         function (
           input
@@ -10374,6 +10444,155 @@
             );
         }
       );
+
+
+      updateInstructionControlMode();
+    }
+
+
+
+    function updateInstructionControlMode() {
+
+      const multiple =
+        editorType.value ===
+        "multiple";
+
+
+      editorInstructionSettings
+        .classList
+        .toggle(
+          "hidden",
+          !multiple
+        );
+
+
+      const custom =
+        multiple &&
+        editorInstructionType.value ===
+          "custom";
+
+
+      editorInstructionCustomWrap
+        .classList
+        .toggle(
+          "hidden",
+          !custom
+        );
+    }
+
+
+
+    function setInstructionEditorFromQuestion(
+      question
+    ) {
+
+      const instruction =
+        String(
+          question?.instruction ||
+          ""
+        ).trim();
+
+
+      if (
+        question?.type !==
+          "multiple"
+      ) {
+
+        editorInstructionType.value =
+          "correct";
+
+        editorInstruction.value =
+          instruction;
+
+        return;
+      }
+
+
+      if (
+        instruction ===
+          "間違っているものをすべて選べ"
+      ) {
+
+        editorInstructionType.value =
+          "incorrect";
+
+        editorInstruction.value =
+          "";
+
+        return;
+      }
+
+
+      if (
+        !instruction ||
+        instruction ===
+          "正しいものをすべて選べ"
+      ) {
+
+        editorInstructionType.value =
+          "correct";
+
+        editorInstruction.value =
+          "";
+
+        return;
+      }
+
+
+      editorInstructionType.value =
+        "custom";
+
+      editorInstruction.value =
+        instruction;
+    }
+
+
+
+    function getEditorInstruction() {
+
+      if (
+        editorType.value !==
+          "multiple"
+      ) {
+
+        return null;
+      }
+
+
+      if (
+        editorInstructionType.value ===
+          "correct"
+      ) {
+
+        return "正しいものをすべて選べ";
+      }
+
+
+      if (
+        editorInstructionType.value ===
+          "incorrect"
+      ) {
+
+        return "間違っているものをすべて選べ";
+      }
+
+
+      const customInstruction =
+        editorInstruction.value
+          .trim();
+
+
+      if (
+        !customInstruction
+      ) {
+
+        throw new Error(
+          "その他の指示文を入力してください。"
+        );
+      }
+
+
+      return customInstruction;
     }
 
 
@@ -10714,18 +10933,7 @@
           editorType.value,
 
         instruction:
-          editorType.value ===
-            "multiple"
-
-            ? (
-                editorInstruction.value
-                  .trim() ||
-                "正しいものをすべて選べ"
-              )
-
-            : emptyToNull(
-                editorInstruction.value
-              ),
+          getEditorInstruction(),
 
         question:
           question,
