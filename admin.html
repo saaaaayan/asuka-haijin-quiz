@@ -732,6 +732,120 @@
       min-width: 150px;
     }
 
+    .stage-guide {
+      margin:
+        12px 0 4px;
+
+      border:
+        1px solid
+        #343b43;
+
+      border-radius:
+        12px;
+
+      background:
+        rgba(
+          10,
+          13,
+          16,
+          0.40
+        );
+
+      overflow:
+        hidden;
+    }
+
+    .stage-guide summary {
+      padding:
+        13px 15px;
+
+      color:
+        #d8bd61;
+
+      font-size:
+        13px;
+
+      font-weight:
+        800;
+
+      cursor:
+        pointer;
+
+      user-select:
+        none;
+    }
+
+    .stage-guide[open] summary {
+      border-bottom:
+        1px solid
+        #30363d;
+    }
+
+    .stage-guide-grid {
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(
+          2,
+          minmax(
+            0,
+            1fr
+          )
+        );
+
+      gap:
+        1px;
+
+      background:
+        #30363d;
+    }
+
+    .stage-guide-item {
+      display:
+        grid;
+
+      gap:
+        5px;
+
+      padding:
+        13px 15px;
+
+      background:
+        #171c21;
+    }
+
+    .stage-guide-name {
+      color:
+        #e7c15a;
+
+      font-size:
+        12px;
+    }
+
+    .stage-guide-desc {
+      color:
+        #aab1b9;
+
+      font-size:
+        11px;
+
+      line-height:
+        1.7;
+    }
+
+    @media (
+      max-width:
+      700px
+    ) {
+
+      .stage-guide-grid {
+        grid-template-columns:
+          1fr;
+      }
+    }
+
+
     .question-toolbar {
       margin:
         16px 0 10px;
@@ -2942,6 +3056,54 @@
           </div>
 
 
+          <details class="stage-guide">
+
+            <summary>
+              制作段階の説明
+            </summary>
+
+            <div class="stage-guide-grid">
+
+              <div class="stage-guide-item">
+                <strong class="stage-guide-name">下書き</strong>
+                <span class="stage-guide-desc">ただの下書き。問題文・選択肢・解説などを作成途中の状態。</span>
+              </div>
+
+              <div class="stage-guide-item">
+                <strong class="stage-guide-name">作成済</strong>
+                <span class="stage-guide-desc">問題としては一通り作成済み。ただし、仕様や情報の確認・実機検証が終わっていない状態。</span>
+              </div>
+
+              <div class="stage-guide-item">
+                <strong class="stage-guide-name">確認・検証済</strong>
+                <span class="stage-guide-desc">仕様・情報の確認や実機検証は完了。文章・選択肢・解説・プレビューなどの最終確認が残っている状態。</span>
+              </div>
+
+              <div class="stage-guide-item">
+                <strong class="stage-guide-name">公開準備完了</strong>
+                <span class="stage-guide-desc">内容・検証・文章・プレビューなど、すべての確認が終わり公開可能な状態。</span>
+              </div>
+
+              <div class="stage-guide-item">
+                <strong class="stage-guide-name">要修正</strong>
+                <span class="stage-guide-desc">問題としては成立しているが、条件・選択肢・解説・文章などに修正が必要な状態。</span>
+              </div>
+
+              <div class="stage-guide-item">
+                <strong class="stage-guide-name">保留</strong>
+                <span class="stage-guide-desc">追加確認や検証などが必要で、現時点では判断できないため保留している状態。</span>
+              </div>
+
+              <div class="stage-guide-item">
+                <strong class="stage-guide-name">廃止</strong>
+                <span class="stage-guide-desc">問題不成立・重複・難易度が易しすぎる・検証不能などの理由で使用しない問題。</span>
+              </div>
+
+            </div>
+
+          </details>
+
+
           <div class="question-toolbar">
 
             <input
@@ -3536,16 +3698,24 @@
                 下書き
               </option>
 
-              <option value="作成済み">
-                作成済み
+              <option value="作成済">
+                作成済
               </option>
 
-              <option value="内容検証済み">
-                内容検証済み
+              <option value="確認・検証済">
+                確認・検証済
               </option>
 
               <option value="公開準備完了">
                 公開準備完了
+              </option>
+
+              <option value="要修正">
+                要修正
+              </option>
+
+              <option value="保留">
+                保留
               </option>
 
               <option value="廃止">
@@ -7973,11 +8143,14 @@
         "仮作成":
           "下書き",
 
-        "作成済":
-          "作成済み",
+        "作成済み":
+          "作成済",
+
+        "内容検証済み":
+          "確認・検証済",
 
         "確認・検証済み":
-          "内容検証済み",
+          "確認・検証済",
 
         "文言確認済み":
           "公開準備完了"
@@ -7999,9 +8172,11 @@
       const stages =
         [
           "下書き",
-          "作成済み",
-          "内容検証済み",
+          "作成済",
+          "確認・検証済",
           "公開準備完了",
+          "要修正",
+          "保留",
           "廃止"
         ];
 
