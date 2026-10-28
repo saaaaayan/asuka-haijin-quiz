@@ -3981,13 +3981,14 @@ body {
 
 .resume-heading {
   font-family:
-    "Shippori Mincho B1",
-    "Yu Mincho",
-    serif;
+    "Noto Sans JP",
+    "Yu Gothic",
+    "Meiryo",
+    sans-serif;
 
   font-weight: 700;
 
-  letter-spacing: 0.025em;
+  letter-spacing: 0.015em;
 }
 
 
