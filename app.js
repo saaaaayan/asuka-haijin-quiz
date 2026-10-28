@@ -893,9 +893,7 @@ document.addEventListener(
 
       if (
         mode ===
-          "main" &&
-        totalQuestions ===
-          100
+          "main"
       ) {
 
         if (
@@ -911,7 +909,7 @@ document.addEventListener(
               "BONUS STAGE",
 
             secondary:
-              "第100問 / 全100問",
+              `第100問 / 全${totalQuestions}問`,
 
             isDanger:
               false
@@ -934,9 +932,11 @@ document.addEventListener(
             `${floor}F`,
 
           secondary:
-            `第${questionIndex + 1}問 / 全100問`,
+            `第${questionIndex + 1}問 / 全${totalQuestions}問`,
 
           isDanger:
+            floor <=
+              99 &&
             isUrahakuDangerFloor(
               floor
             )
@@ -1063,8 +1063,8 @@ document.addEventListener(
         !Array.isArray(
           questions
         ) ||
-        questions.length !==
-          100
+        questions.length ===
+          0
       ) {
 
         return questions;
@@ -1114,7 +1114,7 @@ document.addEventListener(
         let index =
           0;
         index <
-          100;
+          questions.length;
         index++
       ) {
 
@@ -1146,7 +1146,7 @@ document.addEventListener(
 
       const arranged =
         new Array(
-          100
+          questions.length
         );
 
       const hardQuestions =
@@ -1332,9 +1332,7 @@ document.addEventListener(
 
         if (
           quizMode ===
-            "main" &&
-          quizQuestions.length ===
-            100
+            "main"
         ) {
 
           quizQuestions =
