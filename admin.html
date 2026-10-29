@@ -2566,6 +2566,38 @@
       width: auto;
     }
 
+    .publish-check.publish-locked {
+      opacity:
+        0.58;
+    }
+
+    .publish-rule-note {
+      display:
+        block;
+
+      margin-top:
+        4px;
+    }
+
+    .publish-locked-action,
+    .publish-locked-action:hover {
+      border:
+        1px solid
+        #444b53;
+
+      color:
+        #777f88;
+
+      background:
+        #20252b;
+
+      cursor:
+        not-allowed;
+
+      opacity:
+        0.72;
+    }
+
     .editor-footer {
       display: flex;
       justify-content:
@@ -3965,7 +3997,13 @@
               type="checkbox"
             >
 
-            この問題を公開する
+            <span>
+              この問題を公開する
+
+              <span class="section-note publish-rule-note">
+                公開準備完了の場合のみ公開できます。制作段階を変更すると自動で非公開になります。
+              </span>
+            </span>
 
           </label>
 
@@ -8988,13 +9026,38 @@
                               toggle-publish-button
                               ${
                                 question.is_published
+
                                   ? "unpublish-action"
-                                  : "publish-action"
+
+                                  : productionStage ===
+                                      "公開準備完了"
+
+                                    ? "publish-action"
+
+                                    : "publish-locked-action"
                               }
                             "
                             type="button"
                             data-action="toggle-publish"
                             data-id="${question.id}"
+                            ${
+                              !question.is_published &&
+                              productionStage !==
+                                "公開準備完了"
+
+                                ? "disabled"
+
+                                : ""
+                            }
+                            title="${
+                              !question.is_published &&
+                              productionStage !==
+                                "公開準備完了"
+
+                                ? "制作段階が「公開準備完了」の問題だけ公開できます"
+
+                                : ""
+                            }"
                           >
 
                             ${
@@ -9002,7 +9065,12 @@
 
                                 ? "非公開にする"
 
-                                : "公開する"
+                                : productionStage ===
+                                    "公開準備完了"
+
+                                  ? "公開する"
+
+                                  : "公開不可"
                             }
 
                           </button>
@@ -10145,6 +10213,18 @@
         !question.is_published;
 
 
+      if (
+        newValue &&
+        normalizeProductionStage(
+          question.production_stage
+        ) !==
+          "公開準備完了"
+      ) {
+
+        return;
+      }
+
+
       button.disabled =
         true;
 
@@ -10435,6 +10515,12 @@
     );
 
 
+    editorProductionStage.addEventListener(
+      "change",
+      updateEditorPublishState
+    );
+
+
     editorInstructionType.addEventListener(
       "change",
       updateInstructionControlMode
@@ -10717,6 +10803,9 @@
       updateAnswerControlMode();
 
 
+      updateEditorPublishState();
+
+
       editorOverlay
         .classList
         .remove(
@@ -10726,6 +10815,47 @@
 
       document.body.style.overflow =
         "hidden";
+    }
+
+
+
+    function updateEditorPublishState() {
+
+      const canPublish =
+        normalizeProductionStage(
+          editorProductionStage.value
+        ) ===
+        "公開準備完了";
+
+
+      if (
+        !canPublish
+      ) {
+
+        editorPublished.checked =
+          false;
+      }
+
+
+      editorPublished.disabled =
+        !canPublish;
+
+
+      const publishCheck =
+        editorPublished.closest(
+          ".publish-check"
+        );
+
+
+      if (
+        publishCheck
+      ) {
+
+        publishCheck.classList.toggle(
+          "publish-locked",
+          !canPublish
+        );
+      }
     }
 
 
@@ -11350,6 +11480,10 @@
           editorShuffleChoices.checked,
 
         is_published:
+          normalizeProductionStage(
+            editorProductionStage.value
+          ) ===
+            "公開準備完了" &&
           editorPublished.checked
       };
     }
