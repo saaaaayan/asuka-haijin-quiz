@@ -1125,6 +1125,170 @@
         11px;
     }
 
+
+    /* 制作段階ごとの行色 */
+    .question-stage-row.stage-draft {
+      background:
+        rgba(111, 126, 145, 0.055);
+    }
+
+    .question-stage-row.stage-draft td:first-child {
+      box-shadow:
+        inset 4px 0 0 #748398;
+    }
+
+    .question-stage-row.stage-created {
+      background:
+        rgba(208, 158, 52, 0.075);
+    }
+
+    .question-stage-row.stage-created td:first-child {
+      box-shadow:
+        inset 4px 0 0 #d0a13c;
+    }
+
+    .question-stage-row.stage-verified {
+      background:
+        rgba(70, 158, 204, 0.075);
+    }
+
+    .question-stage-row.stage-verified td:first-child {
+      box-shadow:
+        inset 4px 0 0 #54a5d4;
+    }
+
+    .question-stage-row.stage-ready {
+      background:
+        rgba(62, 173, 102, 0.075);
+    }
+
+    .question-stage-row.stage-ready td:first-child {
+      box-shadow:
+        inset 4px 0 0 #4fbd79;
+    }
+
+    .question-stage-row.stage-fix {
+      background:
+        rgba(218, 87, 64, 0.09);
+    }
+
+    .question-stage-row.stage-fix td:first-child {
+      box-shadow:
+        inset 4px 0 0 #e06c58;
+    }
+
+    .question-stage-row.stage-hold {
+      background:
+        rgba(143, 104, 197, 0.085);
+    }
+
+    .question-stage-row.stage-hold td:first-child {
+      box-shadow:
+        inset 4px 0 0 #9c79cf;
+    }
+
+    .question-stage-row.stage-retired {
+      background:
+        rgba(128, 68, 76, 0.08);
+    }
+
+    .question-stage-row.stage-retired td:first-child {
+      box-shadow:
+        inset 4px 0 0 #99525d;
+    }
+
+    .question-stage-row.stage-draft:hover {
+      background:
+        rgba(111, 126, 145, 0.105);
+    }
+
+    .question-stage-row.stage-created:hover {
+      background:
+        rgba(208, 158, 52, 0.125);
+    }
+
+    .question-stage-row.stage-verified:hover {
+      background:
+        rgba(70, 158, 204, 0.125);
+    }
+
+    .question-stage-row.stage-ready:hover {
+      background:
+        rgba(62, 173, 102, 0.125);
+    }
+
+    .question-stage-row.stage-fix:hover {
+      background:
+        rgba(218, 87, 64, 0.145);
+    }
+
+    .question-stage-row.stage-hold:hover {
+      background:
+        rgba(143, 104, 197, 0.135);
+    }
+
+    .question-stage-row.stage-retired:hover {
+      background:
+        rgba(128, 68, 76, 0.13);
+    }
+
+    .stage-badge.stage-draft {
+      background:
+        rgba(116, 131, 152, 0.18);
+
+      color:
+        #b7c1ce;
+    }
+
+    .stage-badge.stage-created {
+      background:
+        rgba(208, 161, 60, 0.16);
+
+      color:
+        #e4bd62;
+    }
+
+    .stage-badge.stage-verified {
+      background:
+        rgba(84, 165, 212, 0.16);
+
+      color:
+        #7bc3ea;
+    }
+
+    .stage-badge.stage-ready {
+      background:
+        rgba(79, 189, 121, 0.16);
+
+      color:
+        #7bd99e;
+    }
+
+    .stage-badge.stage-fix {
+      background:
+        rgba(224, 108, 88, 0.17);
+
+      color:
+        #f19a89;
+    }
+
+    .stage-badge.stage-hold {
+      background:
+        rgba(156, 121, 207, 0.17);
+
+      color:
+        #c2a8e8;
+    }
+
+    .stage-badge.stage-retired {
+      background:
+        rgba(153, 82, 93, 0.18);
+
+      color:
+        #d18b96;
+    }
+
+
     .question-text {
       max-width: 600px;
 
@@ -8163,6 +8327,45 @@
 
 
 
+    function getProductionStageClass(
+      value
+    ) {
+
+      const stage =
+        normalizeProductionStage(
+          value
+        );
+
+
+      return {
+        "下書き":
+          "stage-draft",
+
+        "作成済":
+          "stage-created",
+
+        "確認・検証済":
+          "stage-verified",
+
+        "公開準備完了":
+          "stage-ready",
+
+        "要修正":
+          "stage-fix",
+
+        "保留":
+          "stage-hold",
+
+        "廃止":
+          "stage-retired"
+      }[
+        stage
+      ] ||
+      "stage-unknown";
+    }
+
+
+
     function buildQuestionFilterOptions() {
 
       const oldStage =
@@ -8609,9 +8812,21 @@
                       : "-";
 
 
+                  const productionStage =
+                    normalizeProductionStage(
+                      question.production_stage
+                    );
+
+
+                  const productionStageClass =
+                    getProductionStageClass(
+                      productionStage
+                    );
+
+
                   return `
 
-                    <tr>
+                    <tr class="question-stage-row ${productionStageClass}">
 
                       <td>
                         #${escapeHtml(
@@ -8733,12 +8948,10 @@
 
                       <td>
 
-                        <span class="meta-badge">
+                        <span class="meta-badge stage-badge ${productionStageClass}">
 
                           ${escapeHtml(
-                            normalizeProductionStage(
-                              question.production_stage
-                            )
+                            productionStage
                           )}
 
                         </span>
